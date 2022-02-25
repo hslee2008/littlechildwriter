@@ -161,7 +161,7 @@ export default {
         this.username = user.displayName
 
         db.ref('/users/' + user.uid).update({
-          libris: this.libris + 0.5,
+          libris: parseInt(this.libris) + 0.5,
         })
       })
 

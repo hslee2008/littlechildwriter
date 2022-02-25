@@ -233,7 +233,7 @@ export default {
           ).set(true)
 
           db.ref(`/users/${user.uid}`).update({
-            libris: this.libris + 0.5,
+            libris: parseInt(this.libris) + 0.5,
           })
 
           await db.ref(`users/${this.$route.query.uid}/notification`).push({
