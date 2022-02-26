@@ -84,7 +84,7 @@ export default {
             this.$fire.auth
               .signInWithEmailAndPassword(this.email, this.password)
               .then(() => {
-                db.ref(`/users/${auth.currentUser.uid}`).update({
+                db.ref(`/users/${auth.currentUser.uid}`).set({
                   username: this.userDisplayName,
                   photoURL: 'https://littlechildwriter.web.app/icon.png',
                   libris: 0,

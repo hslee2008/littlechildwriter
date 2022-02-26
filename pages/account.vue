@@ -1,92 +1,124 @@
 <template>
-  <div>
-    <h1>Edit Account</h1>
-    <h1 v-if="error">{{ error.message }}</h1>
-    <v-divider></v-divider>
-    <br />
+  <div class="account">
     <v-form v-model="valid">
-      <v-text-field
-        label="Name"
-        placeholder="Name"
-        filled
-        required
-        dense
-        solo
-        validate-on-blur
-        v-model="name"
-        :rules="nameRules"
-        value="name"
-        prepend-inner-icon="mdi-account"
-      ></v-text-field>
-      <v-text-field
-        label="Email"
-        placeholder="Email"
-        filled
-        required
-        dense
-        disabled
-        solo
-        validate-on-blur
-        v-model="emaili"
-        :rules="emailRules"
-        value="email"
-        prepend-inner-icon="mdi-email"
-      ></v-text-field>
-      <v-btn @click="resetPassword" block tile
-        ><v-icon left>mdi-email</v-icon>암호 바꾸기</v-btn
-      >
-      <v-card tile justify-center>
+      <h1>Edit Account</h1>
+      <h1 v-if="error">{{ error.message }}</h1>
+
+      <v-divider></v-divider>
+      <br />
+
+      <div>
         <v-text-field
-          label="URL"
-          placeholder="URL"
+          label="Name"
+          placeholder="Name"
           filled
           required
-          shaped
-          flat
           dense
           solo
           validate-on-blur
-          v-model="photo"
-          :rules="photoRules"
-          value="photo"
-          prepend-inner-icon="mdi-camera"
+          v-model="name"
+          :rules="nameRules"
+          value="name"
+          prepend-inner-icon="mdi-account"
         ></v-text-field>
-        <v-card-text style="display: flex; justify-content: center">
-          <v-avatar size="100"><v-img :src="photo" /></v-avatar>
-        </v-card-text>
-      </v-card>
+        <v-text-field
+          label="Email"
+          placeholder="Email"
+          filled
+          required
+          dense
+          disabled
+          solo
+          validate-on-blur
+          v-model="emaili"
+          :rules="emailRules"
+          value="email"
+          prepend-inner-icon="mdi-email"
+        ></v-text-field>
+        <div
+          :style="
+            'display: ' + $vuetify.breakpoint.mobile
+              ? 'block'
+              : 'flex' + '; gap: 10px'
+          "
+        >
+          <v-card tile justify-center style="margin-bottom: 3px">
+            <v-text-field
+              label="URL"
+              placeholder="URL"
+              filled
+              required
+              shaped
+              flat
+              dense
+              solo
+              validate-on-blur
+              v-model="photo"
+              :rules="photoRules"
+              value="photo"
+              prepend-inner-icon="mdi-camera"
+            ></v-text-field>
+            <v-card-text style="display: flex; justify-content: center">
+              <v-avatar size="100"><v-img :src="photo" /></v-avatar>
+            </v-card-text>
+          </v-card>
+          <v-card tile justify-center>
+            <v-card-title>자신을 소개하세요!</v-card-title>
+            <v-card-text style="display: flex; justify-content: center">
+              <v-textarea
+                required
+                flat
+                outlined
+                dense
+                solo
+                validate-on-blur
+                label="Bio"
+                v-model="bio"
+                placeholder="나의 소개"
+                no-resize
+              ></v-textarea>
+            </v-card-text>
+          </v-card>
+        </div>
+      </div>
 
       <br />
 
-      <v-btn @click="update" color="primary"
-        ><v-icon left>mdi-account</v-icon>Update</v-btn
-      >
-      <v-btn @click="email" v-if="!verified"
-        ><v-icon left>mdi-email</v-icon>Verify Email</v-btn
-      >
-      <v-dialog width="500">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="error" v-bind="attrs" v-on="on"
-            ><v-icon left>mdi-alert-rhombus</v-icon>Delete Account</v-btn
-          >
-        </template>
+      <br />
 
-        <v-card>
-          <v-card-title> You are about to delete your account! </v-card-title>
+      <v-row justify="center" style="gap: 10px">
+        <v-btn @click="update" color="primary"
+          ><v-icon left>mdi-account</v-icon>Update</v-btn
+        >
+        <v-btn @click="email" v-if="!verified"
+          ><v-icon left>mdi-email</v-icon>Verify Email</v-btn
+        >
+        <v-dialog width="500">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="error" v-bind="attrs" v-on="on"
+              ><v-icon left>mdi-alert-rhombus</v-icon>Delete</v-btn
+            >
+          </template>
 
-          <v-card-text> This is permanent and cannot be undone. </v-card-text>
+          <v-card>
+            <v-card-title> You are about to delete your account! </v-card-title>
 
-          <v-divider></v-divider>
+            <v-card-text> This is permanent and cannot be undone. </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="delete_danger">
-              Whatever
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="delete_danger">
+                Whatever
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </v-form>
+
+    <br />
   </div>
 </template>
 
@@ -96,7 +128,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 135px);
 }
 </style>
 
@@ -114,6 +145,7 @@ export default {
       bio: '',
       verified: false,
       valid: true,
+      uid: '',
       nameRules: [
         (v) => !!v || 'Name is required',
         (v) => v.length <= 30 || 'Name must be less than 30 characters',
@@ -145,6 +177,7 @@ export default {
           this.photo = user.photoURL
           this.emaili = user.email
           this.verified = user.emailVerified
+          this.uid = user.uid
 
           db.ref(`/users/${user.uid}`)
             .once('value')
@@ -166,15 +199,14 @@ export default {
           db.ref(`/users/${currentUser.uid}`).update({
             username: this.name,
             photoURL: this.photo,
+            bio: this.bio,
           })
 
           this.getUserInfo()
 
-          this.$router.push('/')
+          this.$router.push('/loadaccount?uid=' + this.uid)
         })
-        .catch((error) => {
-          this.error = error.message
-        })
+        .catch((error) => alert(error.message))
     },
     async email() {
       const currentUser = auth.currentUser
@@ -193,16 +225,6 @@ export default {
         if (user) {
           deleteUser(user)
           this.$router.push('/')
-        }
-      })
-    },
-    resetPassword() {
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          user.sendPasswordResetEmail().then(() => {
-            auth.signOut()
-            this.$router.push('/login')
-          })
         }
       })
     },

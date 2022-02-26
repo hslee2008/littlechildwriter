@@ -8,9 +8,12 @@
       :sort-by="sortBy.toLowerCase()"
       :sort-desc="sortDesc"
       hide-default-footer
+      no-results-text="아무것도 없습니다..."
+      no-data-text="로딩 중..."
+      loading-text="로딩 중..."
     >
       <template v-slot:header>
-        <v-toolbar dark style="background-color: transparent" class="mb-1">
+        <v-toolbar dark class="mb-1" style="background-color: transparent">
           <v-text-field
             v-model="search"
             clearable
@@ -45,12 +48,24 @@
       </template>
 
       <template v-slot:default="props">
-        <v-row style="gap: 10px; margin-top: 10px">
+        <v-row style="gap: 10px; margin-top: 5px">
           <v-card
             v-for="item in props.items"
             :key="item.uid + item.time"
-            :width="$vuetify.breakpoint.xs ? 155 : 225"
-            class="mx-auto"
+            :width="
+              $vuetify.breakpoint.width < 330
+                ? '90%'
+                : $vuetify.breakpoint.width < 400
+                ? 150
+                : $vuetify.breakpoint.xs
+                ? 185
+                : $vuetify.breakpoint.sm
+                ? 215
+                : $vuetify.breakpoint.md
+                ? 215
+                : 225
+            "
+            class="mx-auto my-3"
             elevation="20"
           >
             <v-img
@@ -59,7 +74,19 @@
                   ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXeHDt7iweZ7AdiGtllZWINfZ0_5fPcntSiA&usqp=CAU'
                   : item.image
               "
-              height="325"
+              :height="
+                $vuetify.breakpoint.width < 330
+                  ? 300
+                  : $vuetify.breakpoint.width < 400
+                  ? 220
+                  : $vuetify.breakpoint.xs
+                  ? 265
+                  : $vuetify.breakpoint.sm
+                  ? 300
+                  : $vuetify.breakpoint.md
+                  ? 330
+                  : 345
+              "
               style="margin: auto"
             ></v-img>
 
@@ -73,16 +100,25 @@
                   : item.title
               }}</v-card-title
             >
+            <v-card-subtitle style="font-size: 0.9rem">{{
+              item.username
+            }}</v-card-subtitle>
+
+            <v-divider></v-divider>
 
             <v-card-text>
-              <v-divider></v-divider>
-              <br />
-              <p>[{{ item.username.split(' ')[0] }}]</p>
               <p>
-                {{ new Date(parseInt(item.time)).toLocaleDateString() }}
+                {{
+                  new Date(parseInt(item.time)).getMonth() +
+                  '월 ' +
+                  new Date(parseInt(item.time)).getDate() +
+                  '일'
+                }}<br />
+                {{ new Date(parseInt(item.time)).toLocaleTimeString() }}
               </p>
-              <p class="text-truncate">{{ item.content }}</p>
-              <br />
+              <div style="margin-right: 10px">
+                <v-icon>mdi-eye</v-icon> {{ item.views }}
+              </div>
               <v-rating
                 :value="item.rating"
                 dense
@@ -93,15 +129,12 @@
                 :size="$vuetify.breakpoint.xs ? 15 : 20"
                 class="mr-1"
               ></v-rating>
-              <div style="margin-right: 10px">
-                <v-icon>mdi-eye</v-icon> {{ item.views }}
-              </div>
             </v-card-text>
 
             <v-divider></v-divider>
 
             <v-card-actions>
-              <v-btn @click="loadPost(item)" color="primary" elevation="0"
+              <v-btn @click="openPost(item)" color="primary" elevation="0"
                 ><v-icon left>mdi-open-in-new</v-icon>열기</v-btn
               >
               <v-btn
@@ -109,6 +142,7 @@
                 text
                 @click="likeThis(item)"
                 :disabled="item.liked[uid]"
+                v-if="uid"
               >
                 <v-icon>mdi-thumb-up</v-icon> {{ item.likes }}
               </v-btn></v-card-actions
@@ -166,7 +200,7 @@
       </template>
     </v-data-iterator>
 
-    <br /><br />
+    <br /><br /><br />
   </div>
 </template>
 
@@ -177,7 +211,7 @@ export default {
   data() {
     return {
       listev: [],
-      itemsPerPageArray: [10, 15, 20],
+      itemsPerPageArray: [10, 20, 30, 40],
       search: '',
       filter: {},
       sortDesc: true,
@@ -208,7 +242,7 @@ export default {
     updateItemsPerPage(number) {
       this.itemsPerPage = number
     },
-    loadPost(item) {
+    openPost(item) {
       const { uid, time, views, pageCount } = item
 
       this.$router.push({
@@ -216,7 +250,7 @@ export default {
         query: {
           uid,
           time,
-          views,
+          views: views + 1,
           pageCount,
         },
       })
@@ -227,24 +261,36 @@ export default {
           db.ref(`/contents/${item.uid}/posts/${item.time}/likes`).set(
             item.likes + 1
           )
-
           db.ref(
             `contents/${item.uid}/posts/${item.time}/liked/${user.uid}`
           ).set(true)
 
-          db.ref(`/users/${user.uid}`).update({
-            libris: parseInt(this.libris) + 0.5,
-          })
-
-          await db.ref(`users/${this.$route.query.uid}/notification`).push({
-            title: `${user.displayName}님이 글을 좋아합니다`,
-            time: timestamp,
-            link: `/loadpost?uid=${item.uid}&time=${item.time}&views=${item.views}&pageCount=${item.pageCount}`,
-          })
+          this.updateLibris(user.uid)
+          this.notify()
 
           item.likes++
           item.liked[this.uid] = true
         }
+      })
+    },
+    async updateLibris(uid) {
+      await db
+        .ref(`/users/${uid}/libris`)
+        .once('value')
+        .then(
+          async (snapshot) =>
+            await db
+              .ref(`/users/${uid}/libris`)
+              .set(parseInt(snapshot.val()) + 0.1)
+        )
+    },
+    async notify() {
+      auth.onAuthStateChanged(async (user) => {
+        await db.ref(`users/${this.$route.query.uid}/notification`).push({
+          title: `${user.displayName}님이 글을 좋아합니다`,
+          time: Date.now(),
+          link: `/loadpost?uid=${item.uid}&time=${item.time}&views=${item.views}&pageCount=${item.pageCount}`,
+        })
       })
     },
     getUserInfo() {
@@ -264,7 +310,7 @@ export default {
     },
     fetchContent() {
       db.ref('/contents/')
-        .orderByChild('/time')
+        .orderByChild('/posts/time')
         .on('child_added', async (snapshot) => {
           const data = await snapshot.val().posts
 
@@ -272,11 +318,17 @@ export default {
             this.listev.unshift(data[Object.keys(data)[i]])
           }
         })
-      this.listev.sort((val) => val.views / 2 + val.likes / 3 + this.libris / 4)
+      this.listev.sort((a, b) => {
+        return a.time + a.likes / 2 - (b.time + a.likes / 2)
+      })
     },
   },
-  mounted() {
-    this.fetchContent()
+  async mounted() {
+    if (this.$route.query.username) this.search = this.$route.query.username
+    if (this.$route.query.time) this.search = this.$route.query.time
+
+    await this.fetchContent()
+
     this.getUserInfo()
   },
 }

@@ -59,7 +59,7 @@
           >{{ error }}</v-alert
         >
       </v-card>
-      <div style="margin: auto">
+      <div style="margin: auto" class="my-5">
         <v-img :src="post.image" />
       </div>
     </v-row>

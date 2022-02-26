@@ -3,19 +3,14 @@
     <v-app-bar fixed app style="z-index: 99">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <NuxtLink
-            to="/"
-            v-bind="attrs"
-            v-on="on"
-            style="text-decoration: none; color: white"
-          >
-            <v-avatar size="30">
+          <NuxtLink to="/" style="text-decoration: none; color: white">
+            <v-avatar size="30" v-bind="attrs" v-on="on">
               <v-img src="/icon.png"></v-img>
             </v-avatar>
-            <span class="ml-1">Little 작가</span>
+            <span class="ml-1" v-bind="attrs" v-on="on">Little 작가</span>
           </NuxtLink>
         </template>
-        <span class="white--text">Home</span>
+        <span class="white--text">홈으로 이동하기</span>
       </v-tooltip>
 
       <v-spacer />
@@ -31,7 +26,7 @@
             <v-icon>mdi-brightness-6</v-icon>
           </v-btn>
         </template>
-        <span>Light / Dark Mode</span>
+        <span>밝은/어두운 모드</span>
       </v-tooltip>
 
       <v-btn to="/notification" icon style="color: gold">
@@ -43,7 +38,7 @@
       <v-menu v-if="login.photo" bottom min-width="200px" rounded offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon x-large v-on="on">
-            <v-avatar>
+            <v-avatar size="35">
               <v-img :src="login.photo" />
             </v-avatar>
           </v-btn>
@@ -58,6 +53,9 @@
               <p class="text-caption mt-1">
                 {{ login.email }}
               </p>
+              <NuxtLink :to="'/loadaccount?uid=' + login.uid">
+                <v-btn color="primary">나의 프로필 페이지</v-btn>
+              </NuxtLink>
 
               <v-divider class="my-3"></v-divider>
 
@@ -84,8 +82,8 @@
       </v-container>
     </v-main>
 
-    <v-footer :absolute="false" app style="z-index: 100">
-      <span>&copy; {{ new Date().getFullYear() }} Little 작가</span>
+    <v-footer :fixed="true" style="z-index: 100">
+      &copy; {{ new Date().getFullYear() }} Little 작가
     </v-footer>
   </v-app>
 </template>
@@ -95,29 +93,6 @@ import { db } from '../plugins/firebase'
 
 export default {
   name: 'DefaultLayout',
-  mounted() {
-    this.$fire.auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        this.login = {
-          name: user.displayName,
-          email: user.email,
-          photo: user.photoURL,
-          notification: Object.keys(
-            (await db
-              .ref(`/users/${user.uid}/notification`)
-              .once('value')
-              .then((s) => s.val())) ?? {}
-          ).length,
-          libris: await db
-            .ref('users/' + user.uid)
-            .once('value')
-            .then((s) => s.val().libris),
-        }
-      } else {
-        this.login = {}
-      }
-    })
-  },
   data() {
     return {
       login: {
@@ -126,6 +101,7 @@ export default {
         photo: '',
         libris: 0,
         notification: 0,
+        uid: '',
       },
       drawer: false,
       sheet: false,
@@ -139,6 +115,33 @@ export default {
     gotoHome() {
       this.$router.push('/')
     },
+    getUserInfo() {
+      this.$fire.auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          this.login = {
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL,
+            uid: user.uid,
+            notification: Object.keys(
+              (await db
+                .ref(`/users/${user.uid}/notification`)
+                .once('value')
+                .then((s) => s.val())) ?? false
+            ).length,
+            libris: await db
+              .ref('users/' + user.uid)
+              .once('value')
+              .then((s) => s.val().libris),
+          }
+        } else {
+          this.login = {}
+        }
+      })
+    },
+  },
+  mounted() {
+    this.getUserInfo()
   },
 }
 </script>
