@@ -258,17 +258,16 @@ export default {
     likeThis(it) {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
+          it.likes++
+          it.liked[this.uid] = true
+
           db.ref(`/contents/${it.uid}/posts/${it.time}/likes`).set(it.likes + 1)
 
           db.ref(`contents/${it.uid}/posts/${it.time}/liked/${user.uid}`).set(
             true
           )
 
-          this.updateLibris(user.uid)
           this.notify(it)
-
-          it.likes++
-          it.liked[this.uid] = true
         }
       })
     },

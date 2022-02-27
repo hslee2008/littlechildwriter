@@ -1,13 +1,15 @@
 <template>
   <div class="login">
-    <NuxtLink to="/create">Make an Account</NuxtLink>
-    <h1>Login</h1>
-    <v-divider></v-divider>
-    <br />
+    <NuxtLink to="/create">계정 만들기</NuxtLink>
+
+    <h1>로그인</h1>
+
+    <v-divider class="my-5"></v-divider>
+
     <v-form v-model="valid">
       <v-text-field
-        label="Email"
-        placeholder="Email"
+        label="이메일"
+        placeholder="이메일"
         filled
         required
         clearable
@@ -17,11 +19,12 @@
         v-model="email"
         :rules="emailRules"
         prepend-inner-icon="mdi-email"
-        v-on:keyup.enter="pressed"
+        v-on:keyup.enter="onSubmit"
       ></v-text-field>
+
       <v-text-field
-        label="Password"
-        placeholder="Password"
+        label="암호"
+        placeholder="암호"
         filled
         required
         clearable
@@ -31,28 +34,18 @@
         v-model="password"
         :rules="passwordRules"
         prepend-inner-icon="mdi-key"
-        v-on:keyup.enter="pressed"
+        v-on:keyup.enter="onSubmit"
       ></v-text-field>
-      <v-btn @click="pressed" color="primary"
-        ><v-icon left>mdi-account</v-icon>Login</v-btn
+      <v-btn @click="onSubmit" color="primary"
+        ><v-icon left>mdi-account</v-icon>로그인</v-btn
       >
+
       <div class="error" v-if="error">{{ error.message }}</div>
 
-      <br /><br />
+      <v-divider class="my-5"></v-divider>
 
-      <v-divider></v-divider>
-
-      <br />
-
-      <div style="display: flex; gap: 10px; justify-content: center">
-        <v-btn
-          style="color: rgb(219, 69, 54)"
-          @click="google"
-          outlined
-          dense
-          ripple
-          small
-        >
+      <div class="d-flex justify-center" style="gap: 10px">
+        <v-btn style="color: red" @click="google" outlined ripple>
           <v-icon left>mdi-google</v-icon>
           Google
         </v-btn>
@@ -60,16 +53,6 @@
     </v-form>
   </div>
 </template>
-
-<style scoped>
-.login {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 88px);
-}
-</style>
 
 <script>
 import firebase, { auth } from '../plugins/firebase.js'
@@ -93,21 +76,18 @@ export default {
     }
   },
   methods: {
-    async pressed() {
+    onSubmit() {
       if (this.valid)
-        await auth
+        auth
           .signInWithEmailAndPassword(this.email, this.password)
-          .then(() => {
-            this.$router.push('/')
-          })
-          .catch((error) => {
-            this.error = error
-          })
+          .then(() => this.$router.push('/'))
+          .catch((error) => (this.error = error))
     },
     google() {
-      auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {
-        this.$router.push('/')
-      })
+      auth
+        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+        .then(() => this.$router.push('/'))
+        .catch((error) => (this.error = error))
     },
   },
 }

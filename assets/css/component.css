@@ -6,3 +6,35 @@
   align-items: center;
   justify-content: center;
 }
+
+/*login.vue*/
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 100px);
+}
+
+/*loadpost.vue*/
+
+.cardy {
+  display: flex;
+  padding: 10px;
+}
+
+@media screen and (max-width: 605px) {
+  .cardy {
+    display: block;
+  }
+}
+
+/*index.vue*/
+
+.v-card--reveal {
+  bottom: 0;
+  opacity: 1 !important;
+  position: absolute;
+  width: 100%;
+}

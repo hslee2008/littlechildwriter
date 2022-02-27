@@ -39,7 +39,7 @@
 
           <span v-if="userInfo.loginInfo">
             <v-btn to="/post" color="rgb(2, 79, 70)" class="my-3"
-              >글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon></v-btn
+              >지금 글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon></v-btn
             >
           </span>
           <span v-else>
@@ -399,19 +399,15 @@ export default {
     likeThis(item) {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          db.ref(`/contents/${item.uid}/posts/${item.time}/likes`).set(
-            item.likes + 1
-          )
+          const likesRoot = `/contents/${item.uid}/posts/${item.time}`,
+            librisRoot = `/users/${user.uid}/libris`
 
-          db.ref(
-            `contents/${item.uid}/posts/${item.time}/liked/${user.uid}`
-          ).set(true)
+          db.ref(`${likesRoot}/likes`).set(item.likes + 1)
+          db.ref(`${likesRoot}/liked/${user.uid}`).set(true)
 
-          db.ref(`/users/${user.uid}/libris`)
+          db.ref(librisRoot)
             .once('value')
-            .then((snapshot) => {
-              db.ref(`/users/${user.uid}/libris`).set(snapshot.val() + 1)
-            })
+            .then((s) => db.ref(librisRoot).set(s.val() + 1))
 
           await db.ref(`users/${this.$route.query.uid}/notification`).push({
             title: `${user.displayName}님이 글을 좋아합니다`,
@@ -421,22 +417,6 @@ export default {
 
           item.likes++
           item.liked[user.uid] = true
-        }
-      })
-    },
-    getUserInfo() {
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          this.userInfo.loginInfo = user.uid
-          this.userInfo.name = user.displayName
-          this.userInfo.image = user.photoURL
-
-          this.userInfo.subscriber = await db
-            .ref(`/users/${this.userInfo.loginInfo}/subscriber`)
-            .once('value')
-            .then((s) => {
-              return s.numChildren()
-            })
         }
       })
     },
@@ -456,17 +436,16 @@ export default {
     async postlist() {
       db.ref('/contents/')
         .orderByKey()
-        .on('child_added', async (snapshot) => {
-          const data = await snapshot.val().posts
+        .on('child_added', async (s) => {
+          const data = await s.val().posts
+          const keys = Object.keys(data)
 
-          for (let i = 0; i < Object.keys(data).length; i++) {
-            this.recent.unshift(data[Object.keys(data)[i]])
+          for (let i = 0; i < keys.length; i++) {
+            this.recent.unshift(data[keys[i]])
           }
         })
 
-      this.recent.sort((a, b) => {
-        return a.time - b.time
-      })
+      this.recent.sort((a, b) => a.time - b.time)
     },
     userlist() {
       db.ref('/users')
@@ -479,24 +458,37 @@ export default {
           })
         })
     },
-    awaitLibris() {
-      auth.onAuthStateChanged(async (user) => {
-        await db
-          .ref(`/users/${user.uid}/libris`)
-          .once('value')
-          .then((snapshot) => {
-            this.userInfo.libris = snapshot.val()
-          })
-      })
+    awaitLibris(uid) {
+      db.ref(`/users/${uid}/libris`)
+        .once('value')
+        .then((s) => (this.userInfo.libris = s.val()))
     },
   },
   mounted() {
     this.loading = true
 
-    this.getUserInfo()
     this.userlist()
     this.postlist()
-    this.awaitLibris()
+
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        this.awaitLibris(user.uid)
+
+        this.userInfo = {
+          loginInfo: user.uid,
+          name: user.displayName,
+          image: user.photoURL,
+          subscriber: 0,
+        }
+
+        this.userInfo.subscriber = await db
+          .ref(`/users/${this.userInfo.loginInfo}/subscriber`)
+          .once('value')
+          .then((s) => {
+            return s.numChildren()
+          })
+      }
+    })
 
     setTimeout(() => (this.loading = false), 500)
   },
@@ -504,13 +496,6 @@ export default {
 </script>
 
 <style>
-.v-card--reveal {
-  bottom: 0;
-  opacity: 1 !important;
-  position: absolute;
-  width: 100%;
-}
-
 h1 {
   font-size: 60px;
 }

@@ -71,6 +71,13 @@ export default {
         }
       })
 
+      this.notifiactionsList.splice(e, 1)
+
+      if (this.notifiactionsList.length === 0) this.$router.push('/')
+
+      this.notifiactionsList[e].title = '삭제 되었습니다.'
+      this.notifiactionsList[e].time = '삭제 되었습니다'
+
       this.getNotification()
     },
     getNotification() {

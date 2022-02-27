@@ -1,97 +1,39 @@
 <template>
   <div>
-    <v-fab-transition v-if="$vuetify.breakpoint.mobile">
-      <v-btn
-        fab
-        small
-        bottom
-        right
-        fixed
-        ripple
-        style="margin-bottom: 35px"
-        elevation="20"
-        color="primary"
-        @click="sharePost"
-      >
-        <v-icon>mdi-share-variant</v-icon>
-      </v-btn>
-    </v-fab-transition>
+    <shareButtonFab :title="post.title" :username="post.username" />
 
-    <v-card class="mx-auto my-6">
-      <v-progress-linear
-        v-if="loading"
-        indeterminate
-        color="primary"
-      ></v-progress-linear>
+    <v-card class="mx-auto my-3">
+      <v-progress-linear v-if="loading" indeterminate color="primary" />
 
       <v-btn
         tile
-        block
-        elevation="0"
+        small
         to="/list"
-        v-if="$vuetify.breakpoint.mobile"
+        elevation="0"
+        :block="$vuetify.breakpoint.mobile"
+        :color="!$vuetify.breakpoint.mobile ? 'rgb(0, 0, 0, 0)' : 'normal'"
       >
-        <v-icon left>mdi-arrow-left</v-icon> 뒤로가기</v-btn
-      >
-      <v-btn tile small elevation="0" to="/list" v-else>
         <v-icon left>mdi-arrow-left</v-icon> 뒤로가기</v-btn
       >
 
       <div class="cardy">
-        <div style="margin: auto; text-align: center">
-          <v-btn-toggle>
-            <v-btn :href="post.previewLink" class="my-5" elevation="0">
-              <v-icon left>mdi-book</v-icon> 구글 정보
-            </v-btn>
-            <v-btn
-              :href="`https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=${post.isbn.replaceAll(
-                '-',
-                ''
-              )}&x=2&y=12`"
-              class="my-5"
-              elevation="0"
-            >
-              <v-icon left>mdi-oil-lamp</v-icon> 알라딘
-            </v-btn> </v-btn-toggle
-          ><br />
+        <div class="mx-auto text-center">
+          <div>
+            <v-btn-toggle class="my-5">
+              <v-btn :href="post.previewLink">
+                <v-icon left>mdi-book</v-icon> 구글 정보
+              </v-btn>
+              <v-btn
+                :href="`https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=${post.isbn.replaceAll(
+                  '-',
+                  ''
+                )}&x=2&y=12`"
+              >
+                <v-icon left>mdi-oil-lamp</v-icon> 알라딘
+              </v-btn>
+            </v-btn-toggle>
 
-          <v-rating
-            :value="post.rating"
-            color="amber"
-            dense
-            half-increments
-            readonly
-            size="20"
-            class="my-4"
-            v-if="$vuetify.breakpoint.xs"
-          ></v-rating>
-
-          <img
-            :src="
-              post.image === undefined
-                ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXeHDt7iweZ7AdiGtllZWINfZ0_5fPcntSiA&usqp=CAU'
-                : post.image
-            "
-            width="200"
-            style="margin: 10px; border-radius: 10px"
-          />
-          <h2>{{ post.title }}</h2>
-          <div class="text-subtitle-1" v-if="$vuetify.breakpoint.xs">
-            by
-            <NuxtLink :to="`/loadaccount?uid=${post.uid}`">
-              {{ post.username }}
-            </NuxtLink>
-          </div>
-        </div>
-
-        <div style="margin: auto">
-          <v-card-text>
-            <div class="text-subtitle-1" v-if="!$vuetify.breakpoint.xs">
-              by
-              <NuxtLink :to="`/loadaccount?uid=${post.uid}`">
-                {{ post.username }}
-              </NuxtLink>
-            </div>
+            <br />
 
             <v-rating
               :value="post.rating"
@@ -101,55 +43,80 @@
               readonly
               size="20"
               class="my-4"
+              v-if="$vuetify.breakpoint.xs"
+            />
+
+            <img
+              :src="post.image === undefined ? '' : post.image"
+              width="200"
+              class="mx-auto my-4 rounded-lg"
+            />
+          </div>
+        </div>
+
+        <div style="margin: auto; padding: 10px">
+          <v-card-title> {{ post.title }} </v-card-title>
+
+          <v-card-subtitle>
+            by
+            <NuxtLink :to="`/loadaccount?uid=${post.uid}`">
+              {{ post.username }}
+            </NuxtLink></v-card-subtitle
+          >
+
+          <v-card-text>
+            <v-rating
+              :value="post.rating"
+              color="amber"
+              dense
+              half-increments
+              readonly
+              size="20"
+              class="my-4"
               v-if="!$vuetify.breakpoint.xs"
-            ></v-rating>
+            />
 
             <p class="my-5">{{ post.content }}</p>
 
-            <v-chip-group active-class="primary--text" class="my-6" column>
+            <v-chip-group class="my-5" column>
               <v-chip v-for="tag in tags" :key="tag.icon" label>
                 <v-icon style="margin-right: 5px">mdi-{{ tag.icon }}</v-icon>
                 {{ tag.val }}
               </v-chip>
             </v-chip-group>
           </v-card-text>
-
-          <v-divider class="ml-3 mr-5" v-if="this.isuser"></v-divider>
-
-          <div class="my-5" v-if="this.isuser">
-            <v-card-actions>
-              <v-dialog v-model="dialog" width="500">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    @click="dialog = true"
-                    color="red lighten-2"
-                    v-bind="attrs"
-                    v-on="on"
-                    ><v-icon left>mdi-delete</v-icon>삭제</v-btn
-                  >
-                </template>
-
-                <v-card>
-                  <v-card-title> 진짜로 삭제하시겠습니까? </v-card-title>
-
-                  <v-card-text> 삭제하면 복구할 수 없습니다. </v-card-text>
-
-                  <v-divider></v-divider>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" text @click="del"> 👌 OK </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-              <v-btn @click="edit" class="ml-3" color="blue lighten-2"
-                ><v-icon left>mdi-pencil</v-icon>편집</v-btn
-              >
-            </v-card-actions>
-          </div>
         </div>
       </div>
     </v-card>
+
+    <div class="text-center my-10" v-if="userInfo.isuser">
+      <v-dialog v-model="dialog" width="500">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            @click="dialog = true"
+            color="red lighten-2"
+            v-bind="attrs"
+            v-on="on"
+            ><v-icon left>mdi-delete</v-icon>삭제</v-btn
+          >
+        </template>
+
+        <v-card>
+          <v-card-title> 진짜로 삭제하시겠습니까? </v-card-title>
+
+          <v-card-text> 삭제하면 복구할 수 없습니다. </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="del"> 👌 OK </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-btn @click="edit" class="ml-3" color="blue lighten-2"
+        ><v-icon left>mdi-pencil</v-icon>편집</v-btn
+      >
+    </div>
 
     <v-text-field
       label="댓글"
@@ -169,156 +136,49 @@
         v-for="(message, index) in comments"
         :key="message.time"
         small
-        :color="username.includes(message.username) ? 'blue' : 'red'"
+        :color="userInfo.username.includes(message.username) ? 'blue' : 'red'"
         :icon="message.badWord ? 'mdi-alert' : ''"
       >
-        <div>
-          <div style="display: flex">
-            <div class="font-weight-normal">
-              <strong>{{ message.username }}</strong> ({{
-                new Date(message.time).toLocaleDateString() +
-                ' ' +
-                new Date(message.time).toLocaleTimeString()
-              }})
+        <div class="d-flex">
+          <div class="font-weight-normal">
+            <strong>{{ message.username }}</strong> ({{
+              new Date(message.time).toLocaleDateString() +
+              ' ' +
+              new Date(message.time).toLocaleTimeString()
+            }})
 
-              <v-menu offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    v-on="on"
-                    v-if="username.includes(message.username)"
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                  v-if="userInfo.username.includes(message.username)"
+                >
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <v-list dense>
+                <v-list-item>
+                  <v-list-item-title @click="delcomment(message, index)"
+                    ><v-icon color="error"
+                      >mdi-delete</v-icon
+                    ></v-list-item-title
                   >
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list dense>
-                  <v-list-item>
-                    <v-list-item-title @click="delcomment(message, index)"
-                      ><v-icon color="error"
-                        >mdi-delete</v-icon
-                      ></v-list-item-title
-                    >
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-            <v-alert dense outlined type="error" v-if="message.badWord">
-              나쁜 말이 있습니다. 필터 되었습니다.
-            </v-alert>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </div>
-
-          <div>{{ message.content }}</div>
         </div>
+        <v-alert dense outlined dense type="warning" v-if="message.badWord">
+          필터됨.
+        </v-alert>
+
+        <div>{{ message.content }}</div>
       </v-timeline-item>
     </v-timeline>
 
     <br /><br /><br /><br />
-
-    <v-divider></v-divider>
-
-    <br /><br /><br /><br />
-
-    <v-row>
-      <v-card
-        v-if="beforeOfRecentPost.title !== post.title"
-        class="mx-auto my-3"
-        elevation="20"
-        style="float: left; display: flex"
-      >
-        <div>
-          <v-card-title
-            class="primary--text col-11 text-truncate"
-            style="font-size: 1rem"
-          >
-            {{ beforeOfRecentPost.title }}</v-card-title
-          >
-          <v-card-subtitle style="font-size: 0.9rem"
-            >by {{ beforeOfRecentPost.username }}</v-card-subtitle
-          >
-
-          <v-divider v-if="!$vuetify.breakpoint.mobile"></v-divider>
-
-          <v-card-text v-if="!$vuetify.breakpoint.mobile">
-            <p>
-              {{
-                new Date(parseInt(beforeOfRecentPost.time)).toLocaleDateString()
-              }}
-            </p>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn
-              @click="
-                $router.push(
-                  `/loadpost?uid=${beforeOfRecentPost.uid}&time=${beforeOfRecentPost.time}&views=${beforeOfRecentPost.views}&pageCount=${beforeOfRecentPost.pageCount}`
-                )
-              "
-              color="primary"
-              elevation="0"
-              ><v-icon left>mdi-arrow-left</v-icon>이전</v-btn
-            >
-          </v-card-actions>
-        </div>
-
-        <v-img
-          v-if="!$vuetify.breakpoint.mobile"
-          :src="beforeOfRecentPost.image"
-          style="margin: auto"
-        ></v-img>
-      </v-card>
-
-      <v-card
-        v-if="nextOfRecentPost.title !== post.title"
-        class="mx-auto my-3"
-        elevation="20"
-        style="float: right; display: flex"
-      >
-        <v-img
-          v-if="!$vuetify.breakpoint.mobile"
-          :src="nextOfRecentPost.image"
-          style="margin: auto"
-        ></v-img>
-
-        <div>
-          <v-card-title
-            class="primary--text col-11 text-truncate"
-            style="font-size: 1rem"
-          >
-            {{ nextOfRecentPost.title }}</v-card-title
-          >
-          <v-card-subtitle style="font-size: 0.9rem"
-            >by {{ nextOfRecentPost.username }}</v-card-subtitle
-          >
-
-          <v-divider v-if="!$vuetify.breakpoint.mobile"></v-divider>
-
-          <v-card-text v-if="!$vuetify.breakpoint.mobile">
-            <p>
-              {{
-                new Date(parseInt(nextOfRecentPost.time)).toLocaleDateString()
-              }}
-            </p>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn
-              @click="
-                $router.push(
-                  `/loadpost?uid=${nextOfRecentPost.uid}&time=${nextOfRecentPost.time}&views=${nextOfRecentPost.views}&pageCount=${nextOfRecentPost.pageCount}`
-                )
-              "
-              color="primary"
-              elevation="0"
-              >다음<v-icon right>mdi-arrow-right</v-icon></v-btn
-            >
-          </v-card-actions>
-        </div>
-      </v-card>
-    </v-row>
-
-    <br /><br />
-    <br /><br />
   </div>
 </template>
 
@@ -330,9 +190,14 @@ export default {
   data() {
     return {
       comment: '',
-      commentUpdate: false,
+      comments: [],
 
-      username: '',
+      userInfo: {
+        uid: '',
+        username: '',
+        isuser: false,
+      },
+
       post: {
         title: '',
         content: '',
@@ -344,54 +209,25 @@ export default {
         pageCount: 0,
         isbn: '',
       },
-      tags: {
-        views: {
-          icon: 'eye',
-          val: '',
-        },
-        time: {
-          icon: 'calendar-clock',
-          val: '',
-        },
-        page: {
-          icon: 'book-open-page-variant',
-          val: '',
-        },
-        liked: {
-          icon: 'thumb-up',
-          val: '',
-        },
-        isbn: {
-          icon: 'bookmark',
-          val: '',
-        },
-      },
-      comments: [],
-      isuser: false,
+      tags: {},
       loading: true,
       dialog: false,
-      useruid: '',
-
-      nextOfRecentPost: {},
-      beforeOfRecentPost: {},
     }
   },
   methods: {
     async delcomment(message, index) {
-      const comments = db.ref(
-        `comments/${this.$route.query.uid + this.$route.query.time}/comments/`
-      )
+      const { uid, time } = this.$route.query
+      const comments = db.ref(`contents/${uid}/posts/${time}/comments`)
 
-      comments.once('value', (s) => {
-        s.forEach((child) => {
+      comments.once('value', (s) =>
+        s.forEach((c) => {
           if (
-            child.val().uid === this.useruid &&
-            child.val().time === message.time
-          ) {
-            comments.child(child.key).remove()
-          }
+            c.val().uid === this.userInfo.uid &&
+            c.val().time === message.time
+          )
+            comments.child(c.key).remove()
         })
-      })
+      )
 
       this.comments[index].content = '삭제된 댓글입니다.'
       this.comments[index].username = '삭제된 댓글입니다.'
@@ -400,30 +236,26 @@ export default {
     },
     async librisUpdate(useruid) {
       await auth.onAuthStateChanged(async (user) => {
-        if (user) {
+        if (user)
           db.ref(`users/${user.uid}/libris`)
             .once('value')
-            .then((s) => {
-              db.ref('/users/' + user.uid + '/libris').set(
-                parseInt(s.val()) + 0.5
-              )
-            })
-        }
+            .then((s) =>
+              db.ref(`users/${user.uid}/libris`).set(parseInt(s.val()) + 0.5)
+            )
       })
     },
     async commentpost() {
       if (this.comment.length > 0) {
         const timestamp = Date.now()
+        const { uid, time } = this.$route.query
 
-        const comments = await db.ref(
-          `comments/${this.$route.query.uid + this.$route.query.time}/comments`
-        )
+        const comments = await db.ref(`contents/${uid}/posts/${time}/comments`)
 
         filter.loadDictionary('en-us')
         filter.loadDictionary('ko-kr')
 
         comments.push({
-          username: this.username,
+          username: this.userInfo.username,
           content: filter.clean(this.comment),
           time: timestamp,
           uid: this.$fire.auth.currentUser.uid,
@@ -439,48 +271,30 @@ export default {
       }
     },
     async notify() {
-      const timestamp = Date.now()
-
       await db.ref(`users/${this.$route.query.uid}/notification`).push({
-        title: `${this.username}님이 댓글를 작성했습니다습니다`,
-        time: timestamp,
+        title: `${this.userInfo.username}님이 댓글를 작성했습니다습니다`,
+        time: Date.now(),
         link: `/loadpost?uid=${this.$route.query.uid}&time=${this.$route.query.time}&views=${this.post.views}&pageCount=${this.post.pageCount}`,
       })
     },
     async del() {
+      const { uid, time } = this.$route.query
       this.dialog = false
 
+      await db.ref(`contents/${uid}/posts/${time}`).remove()
       await db
-        .ref(
-          `contents/${this.$route.query.uid}/posts/${this.$route.query.time}`
-        )
-        .remove()
-
-      await db.ref(`comments/${this.$route.path}/comments`).remove()
-
-      await db
-        .ref(`users/${this.useruid}/libris`)
-        .transaction((currentValue) => {
-          return currentValue - 1
-        })
+        .ref(`users/${this.userInfo.uid}/libris`)
+        .transaction((cv) => cv - 1)
 
       this.$router.push('/list')
     },
     async edit() {
+      const { uid, time } = this.$route.query
+
       this.$router.push({
         path: '/editpost',
-        query: {
-          uid: this.$route.query.uid,
-          time: this.$route.query.time,
-        },
+        query: { uid, time },
       })
-    },
-    sharePost() {
-      if (navigator.canShare)
-        navigator.share({
-          title: `Little 작가 포스트 (${this.post.title} by ${this.post.username})`,
-          url: window.location.href,
-        })
     },
     async getQueryChips() {
       const { uid, time, views, pageCount } = this.$route.query
@@ -517,33 +331,36 @@ export default {
       }
     },
     async getComments() {
+      const { uid, time } = this.$route.query
+
       this.comments = Object.values(
         await db
-          .ref(
-            `comments/${
-              this.$route.query.uid + this.$route.query.time
-            }/comments`
-          )
+          .ref(`contents/${uid}/posts/${time}/comments`)
           .once('value')
           .then((s) => s.val() ?? [])
       )
     },
     async getUser() {
       auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          this.username = user.displayName
-          this.isuser = this.$route.query.uid === user.uid
-          this.useruid = user.uid
-        }
+        if (user)
+          this.userInfo = {
+            uid: user.uid,
+            username: user.displayName,
+            isuser: this.$route.query.uid === user.uid,
+          }
       })
     },
     async getPost() {
+      const { uid, time } = this.$route.query
+
       this.post = await db
-        .ref(
-          `contents/${this.$route.query.uid}/posts/${this.$route.query.time}`
-        )
+        .ref(`contents/${uid}/posts/${time}`)
         .once('value')
         .then((s) => s.val())
+        .catch((err) => {
+          alert('글이 존재하지 않습니다')
+          this.$router.push('/list')
+        })
     },
     async growView() {
       const viewLink = `contents/${this.$route.query.uid}/posts/${this.$route.query.time}/views`
@@ -556,107 +373,19 @@ export default {
         })
 
       this.librisUpdate(this.$route.query.uid)
-      this.librisUpdate(this.useruid)
-    },
-
-    getNextOfRecentPostFirebaseDatabase() {
-      db.ref('/contents/')
-        .orderByChild('/posts/time')
-        .on('child_added', async (snapshot) => {
-          const data = await snapshot.val().posts
-
-          for (let i = 0; i < Object.keys(data).length; i++) {
-            if (data[Object.keys(data)[i]].time == this.$route.query.time) {
-              if (Object.keys(data).length - 1 > i) {
-                this.nextOfRecentPost = {
-                  uid: snapshot.key,
-                  time: Object.keys(data)[i + 1],
-                  image: data[Object.keys(data)[i + 1]].image,
-                  title: data[Object.keys(data)[i + 1]].title,
-                  username: data[Object.keys(data)[i + 1]].username,
-                  views: data[Object.keys(data)[i + 1]].views,
-                  pageCount: data[Object.keys(data)[i + 1]].pageCount,
-                }
-              } else {
-                this.nextOfRecentPost = {
-                  uid: snapshot.key,
-                  time: Object.keys(data)[0],
-                  image: data[Object.keys(data)[0]].image,
-                  title: data[Object.keys(data)[0]].title,
-                  username: data[Object.keys(data)[0]].username,
-                  views: data[Object.keys(data)[0]].views,
-                  pageCount: data[Object.keys(data)[0]].pageCount,
-                }
-              }
-            }
-          }
-        })
-    },
-    getBeforeOfRecentPostFirebaseDatabase() {
-      db.ref('/contents/')
-        .orderByChild('/posts/time')
-        .on('child_added', async (snapshot) => {
-          const data = await snapshot.val().posts
-
-          for (let i = 0; i < Object.keys(data).length; i++) {
-            if (data[Object.keys(data)[i]].time == this.$route.query.time) {
-              if (Object.keys(data).length - 1 > i) {
-                this.beforeOfRecentPost = {
-                  uid: snapshot.key,
-                  time: Object.keys(data)[i - 1],
-                  image: data[Object.keys(data)[i - 1]].image,
-                  title: data[Object.keys(data)[i - 1]].title,
-                  username: data[Object.keys(data)[i - 1]].username,
-                  views: data[Object.keys(data)[i - 1]].views,
-                  pageCount: data[Object.keys(data)[i - 1]].pageCount,
-                }
-              } else {
-                this.beforeOfRecentPost = {
-                  uid: snapshot.key,
-                  time: Object.keys(data)[0],
-                  image: data[Object.keys(data)[0]].image,
-                  title: data[Object.keys(data)[0]].title,
-                  username: data[Object.keys(data)[0]].username,
-                  views: data[Object.keys(data)[0]].views,
-                  pageCount: data[Object.keys(data)[0]].pageCount,
-                }
-              }
-            }
-          }
-        })
+      this.librisUpdate(this.userInfo.uid)
     },
   },
   async mounted() {
     this.getUser()
 
-    try {
-      this.getPost()
-    } catch (err) {
-      alert('글이 존재하지 않습니다')
-      this.$router.push('/list')
-    }
+    this.getPost()
 
     this.growView()
     this.getQueryChips()
     this.getComments()
 
-    this.getNextOfRecentPostFirebaseDatabase()
-    this.getBeforeOfRecentPostFirebaseDatabase()
-
     setTimeout(() => (this.loading = false), 500)
   },
 }
 </script>
-
-<style scoped>
-.cardy {
-  display: flex;
-  padding: 10px;
-}
-
-@media screen and (max-width: 605px) {
-  .cardy {
-    display: block;
-  }
-}
-</style>

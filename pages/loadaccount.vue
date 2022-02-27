@@ -14,7 +14,7 @@
       "
       color="primary"
       to="/account#background"
-      v-if="isuser"
+      v-if="currentUser.isuser"
     >
       <v-icon left>mdi-pencil</v-icon> 배경화면 이미지 바꾸기
     </v-btn>
@@ -22,8 +22,8 @@
     <v-parallax
       style="position: absolute; right: 0; top: 0; width: 100%; height: 100%"
       :src="
-        userBackground
-          ? userBackground
+        userInfo.userBackground
+          ? userInfo.userBackground
           : 'https://images5.alphacoders.com/659/thumb-1920-659155.jpg/'
       "
     >
@@ -33,119 +33,97 @@
             <v-card
               :elevation="hover ? 20 : 2"
               :class="{ 'on-hover': hover } + ' vcard'"
+              :style="
+                $vuetify.breakpoint.mobile ? 'display: block' : 'display: flex'
+              "
             >
-              <v-card-text>
-                <v-list-item>
-                  <v-list-item-avatar size="80">
-                    <v-img :src="userPhotoURL"></v-img>
-                  </v-list-item-avatar>
-
-                  <v-list-item-content>
-                    <v-list-item-title>{{ userDisplayName }}</v-list-item-title>
-
-                    <v-row justify="space-around" align="center" class="mt-3">
-                      <v-chip class="ma-2" color="red" text-color="white">
-                        <v-icon left> mdi-youtube-subscription </v-icon>
-                        {{ subscriberNumber }}
-                        {{ $vuetify.breakpoint.mobile ? '' : '구독자' }}
-                      </v-chip>
-                      <v-chip class="ma-2" color="blue" text-color="white">
-                        <v-icon left> mdi-library </v-icon>
-                        {{ userLibris }}
-                        {{ $vuetify.breakpoint.mobile ? '' : '리브리스' }}
-                      </v-chip>
-                    </v-row>
-                  </v-list-item-content>
-                </v-list-item>
-                <br />
-                <div class="text--primary" v-if="bio">{{ bio }}</div>
-                <div
-                  class="text--primary"
-                  style="color: grey !important"
-                  v-else
-                >
-                  아직 나의 소개를 입력하지 않았습니다.
-                </div>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn :to="`/list?username=${userDisplayName}`" class="my-3"
-                  >{{ userDisplayName }}의 글 보기<v-icon right
-                    >mdi-arrow-right-thin</v-icon
-                  >
-                </v-btn>
-                <v-btn
-                  class="my-3"
-                  color="primary"
-                  @click="subscribe"
-                  v-if="uid !== $route.query.uid"
-                >
-                  {{ subscribed ? '구독 취소' : '구독하기'
-                  }}<v-icon right>mdi-shield-account</v-icon>
-                </v-btn>
-                <v-btn class="my-3" color="primary" to="/account" v-if="isuser">
-                  편집<v-icon right>mdi-shield-account</v-icon>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-hover>
-        </div>
-
-        <div
-          class="cardy"
-          v-if="
-            (subscriberNumber || uid !== $route.query.uid) &&
-            !isuser &&
-            $vuetify.breakpoint.mobile
-          "
-          style="width: 100%; height: auto"
-        >
-          <v-hover v-slot="{ hover }">
-            <v-card
-              ><v-virtual-scroll
-                :items="Object.values(subscription)"
-                :item-height="50"
-                height="auto"
-                :lazy-load="100"
-                :show-numbers="false"
-                :loading-text="'로딩중...'"
-              >
-                <template v-slot:default="{ item }">
+              <div>
+                <v-card-text>
                   <v-list-item>
+                    <v-list-item-avatar size="80">
+                      <v-img :src="userInfo.userPhotoURL"></v-img>
+                    </v-list-item-avatar>
+
                     <v-list-item-content>
-                      <v-list-item-title>{{ item }}</v-list-item-title>
+                      <v-list-item-title>{{
+                        userInfo.userDisplayName
+                      }}</v-list-item-title>
+
+                      <v-row justify="space-around" align="center" class="mt-3">
+                        <v-chip class="ma-2" color="red" text-color="white">
+                          <v-icon left> mdi-youtube-subscription </v-icon>
+                          {{ subscriberNumber }}
+                          {{ $vuetify.breakpoint.mobile ? '' : '구독자' }}
+                        </v-chip>
+                        <v-chip class="ma-2" color="blue" text-color="white">
+                          <v-icon left> mdi-library </v-icon>
+                          {{ userInfo.userLibris }}
+                          {{ $vuetify.breakpoint.mobile ? '' : '리브리스' }}
+                        </v-chip>
+                      </v-row>
                     </v-list-item-content>
                   </v-list-item>
-                </template>
-              </v-virtual-scroll>
-            </v-card>
-          </v-hover>
-        </div>
+                  <br />
+                  <div class="text--primary" v-if="userInfo.bio">
+                    {{ userInfo.bio }}
+                  </div>
+                  <div
+                    class="text--primary"
+                    style="color: grey !important"
+                    v-else
+                  >
+                    아직 나의 소개를 입력하지 않았습니다.
+                  </div>
+                </v-card-text>
 
-        <div
-          class="cardy"
-          v-if="
-            (subscriberNumber || uid !== $route.query.uid) &&
-            !isuser &&
-            !$vuetify.breakpoint.mobile
-          "
-        >
-          <v-hover v-slot="{ hover }">
-            <v-card
-              :elevation="hover ? 20 : 2"
-              :class="{ 'on-hover': hover } + ' mb-3 vcard'"
-            >
-              <v-card-title>{{ userDisplayName }} 구독자</v-card-title>
-              <v-card-text>
-                <v-list>
-                  <v-list-item
+                <v-card-actions>
+                  <v-btn
+                    :to="`/list?username=${userInfo.userDisplayName}`"
+                    class="my-3"
+                    >{{ userInfo.userDisplayName }}의 글 보기<v-icon right
+                      >mdi-arrow-right-thin</v-icon
+                    >
+                  </v-btn>
+                  <v-btn
+                    class="my-3"
+                    color="primary"
+                    @click="subscribe"
+                    v-if="currentUser.uid !== $route.query.uid"
+                  >
+                    {{ subscribed ? '구독 취소' : '구독하기'
+                    }}<v-icon right>mdi-shield-account</v-icon>
+                  </v-btn>
+                  <v-btn
+                    class="my-3"
+                    color="primary"
+                    to="/account"
+                    v-if="currentUser.isuser"
+                  >
+                    편집<v-icon right>mdi-shield-account</v-icon>
+                  </v-btn>
+                </v-card-actions>
+              </div>
+
+              <v-divider vertical></v-divider>
+
+              <div
+                v-if="
+                  (subscriberNumber || currentUser.uid !== $route.query.uid) &&
+                  !currentUser.isuser
+                "
+              >
+                <v-card-title
+                  >{{ userInfo.userDisplayName }} 구독자</v-card-title
+                >
+                <v-card-text>
+                  <p
                     v-for="(people, index) in subscription"
                     :key="Object.keys(people)[index]"
                   >
-                    <v-list-item-title>{{ people }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-card-text>
+                    {{ people }}
+                  </p>
+                </v-card-text>
+              </div>
             </v-card>
           </v-hover>
         </div>
@@ -161,15 +139,20 @@ import * as filter from 'leo-profanity'
 export default {
   data() {
     return {
-      userLibris: '',
-      userDisplayName: '',
-      userPhotoURL: '',
-      userBackground: '',
-      bio: '',
-      uid: '',
+      userInfo: {
+        userLibris: '',
+        userDisplayName: '',
+        userPhotoURL: '',
+        userBackground: '',
+        bio: '',
+      },
 
-      myUsername: '',
-      isuser: false,
+      currentUser: {
+        uid: '',
+
+        myUsername: '',
+        isuser: false,
+      },
 
       subscription: [],
       subscribed: false,
@@ -180,89 +163,72 @@ export default {
   },
   methods: {
     getUserInfo() {
-      // 유저 정보 가져오기
-      db.ref(`/users/${this.$route.query.uid}/`).once('value', (s) => {
-        this.userDisplayName = s.val().username
-        this.userPhotoURL = s.val().photoURL
-        this.userLibris = s.val().libris
-        this.bio = s.val().bio
-        this.userBackground = s.val().background
-      })
+      db.ref(`/users/${this.$route.query.uid}/`).once(
+        'value',
+        (s) =>
+          (this.userInfo = {
+            userLibris: s.val().libris,
+            userDisplayName: s.val().username,
+            userPhotoURL: s.val().photoURL,
+            userBackground: s.val().background,
+            bio: s.val().bio,
+          })
+      )
 
-      // 나의 유저 정보 가져오기
       auth.onAuthStateChanged((user) => {
-        if (user) {
-          this.uid = user.uid
-          this.myUsername = user.displayName
-          this.isuser = this.uid === this.$route.query.uid
-        }
+        if (user)
+          this.currentUser = {
+            uid: user.uid,
+            myUsername: user.displayName,
+            isuser: this.currentUser.uid === this.$route.query.uid,
+          }
       })
     },
-    async getSubscribtion() {
-      // 구독 여부 확인
-      this.subscription = await db
-        .ref(`/users/${this.$route.query.uid}/subscriber`)
+    getSubscribtion() {
+      db.ref(`/users/${this.$route.query.uid}/subscriber`)
         .once('value')
         .then((s) => {
-          return s.val() ?? []
-        })
-
-      // 구독 숫자
-      this.subscriberNumber = await db
-        .ref(`/users/${this.$route.query.uid}/subscriber`)
-        .once('value')
-        .then((s) => {
-          return s.numChildren()
+          this.subscription = s.val() ?? []
+          this.subscriberNumber = s.numChildren()
         })
     },
     async isSubscribed() {
-      // 구독 여부 확인
       this.subscription = await db
         .ref(`/users/${this.$route.query.uid}/subscriber`)
         .once('value')
-        .then((s) => {
-          return s.val() ?? []
-        })
+        .then((s) => s.val() ?? [])
 
-      if (Object.keys(this.subscription).includes(this.uid)) {
-        this.subscribed = true
-      } else {
-        this.subscribed = false
-      }
+      this.subscribed = Object.keys(this.subscription).includes(
+        this.currentUser.uid
+      )
     },
-    async notify() {
-      const timestamp = Date.now()
-
-      await db.ref(`users/${this.$route.query.uid}/notification`).push({
+    notify() {
+      db.ref(`users/${this.$route.query.uid}/notification`).push({
         title: `${this.myUsername}님이 구독했습니다!`,
-        time: timestamp,
+        time: Date.now(),
         link: `/loadaccount?uid=${this.$route.query.uid}`,
       })
     },
     async notifyNO() {
-      const timestamp = Date.now()
-
       await db.ref(`users/${this.$route.query.uid}/notification`).push({
         title: `${this.myUsername}님이 구독을 취소했습니다`,
-        time: timestamp,
+        time: Date.now(),
         link: `/loadaccount?uid=${this.$route.query.uid}`,
       })
     },
     subscribe() {
-      // 구독하기
       if (this.subscribed) {
         db.ref(
-          `/users/${this.$route.query.uid}/subscriber/${this.uid}`
+          `/users/${this.$route.query.uid}/subscriber/${this.currentUser.uid}`
         ).remove()
 
         db.ref(
-          `/users/${this.uid}/subscribe/${this.$route.query.uid}/${this.uid}`
+          `/users/${this.currentUser.uid}/subscribe/${this.$route.query.uid}/${this.currentUser.uid}`
         ).remove()
 
-        delete this.subscription[this.uid]
+        delete this.subscription[this.currentUser.uid]
         this.subscribed = false
 
-        // update libris
         db.ref(`/users/${this.$route.query.uid}/libris`).once('value', (s) => {
           db.ref(`/users/${this.$route.query.uid}/libris`).set(
             parseInt(s.val()) - 10
@@ -272,16 +238,15 @@ export default {
         this.notifyNO()
       } else {
         db.ref(`/users/${this.uid}/subscribe/${this.$route.query.uid}`).set(
-          this.userDisplayName
+          this.userInfo.userDisplayName
         )
         db.ref(`/users/${this.$route.query.uid}/subscriber/${this.uid}`).set(
-          this.myUsername
+          this.currentUser.myUsername
         )
 
-        this.subscription[this.uid] = this.myUsername
+        this.subscription[this.currentUser.uid] = this.currentUser.myUsername
         this.subscribed = true
 
-        // update libris
         db.ref(`/users/${this.$route.query.uid}/libris`).once('value', (s) => {
           db.ref(`/users/${this.$route.query.uid}/libris`).set(
             parseInt(s.val()) + 10

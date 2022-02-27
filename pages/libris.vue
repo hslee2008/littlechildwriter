@@ -68,12 +68,12 @@ export default {
   mounted() {
     db.ref('/users')
       .orderByChild('/libris')
-      .on('child_added', async (snapshot) => {
+      .on('child_added', async (s) => {
         this.librisTop.unshift({
-          name: snapshot.val().username,
-          libris: snapshot.val().libris ?? 0,
-          image: snapshot.val().photoURL,
-          uid: snapshot.key,
+          name: s.val().username,
+          libris: s.val().libris ?? 0,
+          image: s.val().photoURL,
+          uid: s.key,
         })
       })
   },

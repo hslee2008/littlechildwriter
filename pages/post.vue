@@ -12,7 +12,7 @@
         <v-card-text>
           <v-row style="margin: 0.5px; gap: 10px" class="mb-3" justify="center">
             <v-dialog
-              v-model="isbn.isGoingToTakeVideoISBN"
+              v-model="isbn.videoBarcode"
               :width="$vuetify.breakpoint.xs ? '90%' : '70%'"
               height="90%"
             >
@@ -22,11 +22,7 @@
                 </v-btn>
               </template>
 
-              <v-card
-                height="100%"
-                width="100%"
-                v-if="isbn.isGoingToTakeVideoISBN"
-              >
+              <v-card height="100%" width="100%" v-if="isbn.videoBarcode">
                 <div id="container">
                   <video
                     autoplay="true"
@@ -37,10 +33,10 @@
                 </div>
                 <v-card-actions>
                   <v-btn @click="showCamera">카메라</v-btn>
-                  <v-btn @click="takeCamera">ISBN 바코드 찍기</v-btn>
-                  <v-btn
-                    @click="isbn.isGoingToTakeVideoISBN = false"
-                    color="red"
+                  <v-btn @click="takeISBNBarcodePictureFromVideo"
+                    >ISBN 바코드 찍기</v-btn
+                  >
+                  <v-btn @click="isbn.videoBarcode = false" color="red"
                     ><v-icon left>mdi-close-outline</v-icon>취소</v-btn
                   ></v-card-actions
                 >
@@ -49,7 +45,7 @@
 
             <v-divider vertical></v-divider>
 
-            <v-dialog v-model="isbn.isGoingToTakeISBNPicture" width="500">
+            <v-dialog v-model="isbn.pictureBarcode" width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
                   ><v-icon left>mdi-barcode</v-icon> 사진
@@ -86,7 +82,7 @@
                   <v-btn
                     color="primary"
                     text
-                    @click="isbn.isGoingToTakeISBNPicture = false"
+                    @click="isbn.pictureBarcode = false"
                   >
                     취소
                   </v-btn>
@@ -96,7 +92,7 @@
 
             <v-divider vertical></v-divider>
 
-            <v-dialog v-model="isbn.showIsbn" width="500">
+            <v-dialog v-model="isbn.inputISBN" width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
                   ><v-icon left>mdi-form-textbox</v-icon> 입력</v-btn
@@ -120,7 +116,7 @@
                     autofocus
                     label="ISBN"
                     v-model="post.isbn"
-                    v-if="isbn.showIsbn"
+                    v-if="isbn.inputISBN"
                     @click:append="fetchi"
                     append-icon="mdi-database-import"
                   ></v-text-field>
@@ -130,7 +126,7 @@
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="isbn.showIsbn = false">
+                  <v-btn color="primary" text @click="isbn.inputISBN = false">
                     취소
                   </v-btn>
                 </v-card-actions>
@@ -239,9 +235,9 @@ export default {
       },
 
       isbn: {
-        isGoingToTakeVideoISBN: false,
-        isGoingToTakeISBNPicture: false,
-        showIsbn: false,
+        videoBarcode: false,
+        pictureBarcode: false,
+        inputISBN: false,
       },
 
       loading: false,
@@ -267,15 +263,15 @@ export default {
             })
             .then((s) => (this.$refs.video.srcObject = s))
             .catch((e) => {
-              this.isbn.isGoingToTakeISBNPicture = false
+              this.isbn.pictureBarcode = false
               this.error = '알 수 없는 에러!'
             })
       } catch (err) {
-        this.isbn.isGoingToTakeISBNPicture = false
+        this.isbn.pictureBarcode = false
         this.error = err.message
       }
     },
-    takeCamera() {
+    takeISBNBarcodePictureFromVideo() {
       try {
         if ('BarcodeDetector' in window)
           new BarcodeDetector({
@@ -286,14 +282,14 @@ export default {
             .then(async (a) => {
               this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
               this.fetchi()
-              this.isbn.isGoingToTakeISBNPicture = false
+              this.isbn.pictureBarcode = false
             })
             .catch(() =>
               alert('바코드가 흐리게 보이지 않게 멀리 다시 찍어 주세요.')
             )
       } catch (err) {
         alert('카메라 사용 불가: ' + err.message)
-        this.isbn.isGoingToTakeISBNPicture = false
+        this.isbn.pictureBarcode = false
       }
     },
     uploadFile(e) {
@@ -314,9 +310,9 @@ export default {
               .then((res) => res[0].rawValue)
               .then((a) => {
                 this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
-                this.isbn.isGoingToTakeVideoISBN = false
+                this.isbn.videoBarcode = false
                 this.fetchi()
-                this.isbn.isGoingToTakeISBNPicture = false
+                this.isbn.pictureBarcode = false
               })
               .catch((err) =>
                 alert(
@@ -325,7 +321,7 @@ export default {
               )
           } else {
             alert('카메라 사용 불가능합니다. 핸드폰에서만 가능합니다.')
-            this.isbn.isGoingToTakeISBNPicture = false
+            this.isbn.pictureBarcode = false
           }
         }
       }
@@ -387,7 +383,12 @@ export default {
         if (user) {
           await db
             .ref(`users/${user.uid}/libris`)
-            .transaction((currentValue) => currentValue + 1)
+            .transaction((currentValue) => {
+              if (this.post.pageCount < 100) currentValue + 1
+              else if (this.post.pageCount < 300) currentValue + 2
+              else if (this.post.pageCount < 500) currentValue + 4
+              else currentValue + 5
+            })
         }
       })
     },
@@ -413,7 +414,7 @@ export default {
         })
         .catch((err) => (this.error = '이미지를 찾을 수 없습니다. '))
 
-      this.isbn.showIsbn = false
+      this.isbn.inputISBN = false
       this.loading = false
     },
     getSubscribers(uid) {
