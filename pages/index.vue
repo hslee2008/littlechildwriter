@@ -39,7 +39,7 @@
 
           <span v-if="userInfo.loginInfo">
             <v-btn to="/post" color="rgb(2, 79, 70)" class="my-3"
-              >지금 글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon></v-btn
+              >글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon></v-btn
             >
           </span>
           <span v-else>
@@ -79,7 +79,7 @@
             $vuetify.breakpoint.width < 330
               ? '90%'
               : $vuetify.breakpoint.width < 400
-              ? 150
+              ? 120
               : $vuetify.breakpoint.xs
               ? 185
               : $vuetify.breakpoint.sm
@@ -100,7 +100,7 @@
               $vuetify.breakpoint.width < 330
                 ? 300
                 : $vuetify.breakpoint.width < 400
-                ? 220
+                ? 200
                 : $vuetify.breakpoint.xs
                 ? 265
                 : $vuetify.breakpoint.sm
@@ -169,59 +169,137 @@
 
     <br /><br />
 
-    <v-container>
-      <div style="margin: 5px">
+    <v-container style="margin: 5px">
+      <div>
         <h2>나의 포인트</h2>
         <v-divider></v-divider>
+        <br />
       </div>
-      <v-card max-width="344" style="margin: 5px">
-        <v-card-text>
-          <div>Libris (리브리스)</div>
-          <p class="text-h4 text--primary">Little 작가 포인트</p>
+      <v-row style="margin: 1px; gap: 15px">
+        <v-card max-width="344">
+          <v-card-text>
+            <div>Libris (리브리스)</div>
+            <p class="text-h4 text--primary">Little 작가 포인트</p>
 
-          <v-card-title class="white--text mt-8">
-            <v-avatar size="45"
-              ><v-img
-                src="https://styles.redditmedia.com/t5_2vif5/styles/communityIcon_3wrpkpq1fky01.png?width=256&s=23736b7a09bfce732fb56ff57973e1c4afa74a63"
-              ></v-img
-            ></v-avatar>
-            <v-spacer></v-spacer>
-            <v-progress-circular
-              v-if="loading"
-              indeterminate
-            ></v-progress-circular>
-            <span class="text-h4" v-else>{{ userInfo.libris }}</span>
-          </v-card-title>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn text color="teal accent-4" @click="reveal = true">
-            Libris란??
-          </v-btn>
-        </v-card-actions>
+            <v-card-title class="white--text mt-8">
+              <v-avatar size="45"
+                ><v-img
+                  src="https://styles.redditmedia.com/t5_2vif5/styles/communityIcon_3wrpkpq1fky01.png?width=256&s=23736b7a09bfce732fb56ff57973e1c4afa74a63"
+                ></v-img
+              ></v-avatar>
+              <v-spacer></v-spacer>
+              <v-progress-circular
+                v-if="loading"
+                indeterminate
+              ></v-progress-circular>
+              <span class="text-h4" v-else>{{ userInfo.libris }}</span>
+            </v-card-title>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn text color="teal accent-4" @click="reveal = true">
+              Libris란??
+            </v-btn>
+          </v-card-actions>
 
-        <v-expand-transition>
-          <v-card
-            v-if="reveal"
-            class="transition-fast-in-fast-out v-card--reveal"
-            style="height: 100%"
-          >
-            <v-card-text class="pb-0">
-              <p class="text-h6 text--primary">리브리스란...</p>
-              <p>
-                리브리스는 Little 작가 라이브러리 포인트로 사용자들이 글을
-                을리고, 좋아요 버튼 누르고, 매일 사이트 방문하고, 다른 사람의
-                글을 읽으면 리브리스 포인트가 올라갑니다.
-              </p>
-            </v-card-text>
-            <v-card-actions class="pt-0">
-              <v-btn text color="teal accent-4" @click="reveal = false">
-                Close
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-expand-transition>
-      </v-card></v-container
-    >
+          <v-expand-transition>
+            <v-card
+              v-if="reveal"
+              class="transition-fast-in-fast-out v-card--reveal"
+              style="height: 100%"
+            >
+              <v-card-text class="pb-0">
+                <p class="text-h6 text--primary">리브리스란...</p>
+                <p>
+                  리브리스는 Little 작가 라이브러리 포인트로 사용자들이 글을
+                  을리고, 좋아요 버튼 누르고, 매일 사이트 방문하고, 다른 사람의
+                  글을 읽으면 리브리스 포인트가 올라갑니다.
+                </p>
+              </v-card-text>
+              <v-card-actions class="pt-0">
+                <v-btn text color="teal accent-4" @click="reveal = false">
+                  Close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-expand-transition>
+        </v-card>
+
+        <v-card max-width="344">
+          <v-card-text>
+            <div>구독자</div>
+            <p class="text-h4 text--primary">Little 작가 구독자</p>
+
+            <v-card-title class="white--text mt-8">
+              <v-avatar size="45"
+                ><v-icon>mdi-youtube-subscription</v-icon>
+              </v-avatar>
+              <v-spacer></v-spacer>
+              <v-progress-circular
+                v-if="loading"
+                indeterminate
+              ></v-progress-circular>
+              <span class="text-h4" v-else>{{ userInfo.subscriber }}</span>
+            </v-card-title>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn text color="teal accent-4" @click="reveal1 = true">
+              구독하자!
+            </v-btn>
+          </v-card-actions>
+
+          <v-expand-transition>
+            <v-card
+              v-if="reveal1"
+              class="transition-fast-in-fast-out v-card--reveal"
+              style="height: 100%"
+            >
+              <v-card-text class="pb-0">
+                <p class="text-h6 text--primary">구독하면...</p>
+                <p>
+                  구독하면 다른 사람이 글을 작성했을 때 알림을 받고 그 사람의
+                  리브리스 포인트도 올라갑니다! 글을 잘 쓰는 사람이 있다면
+                  구독해 주세요!
+                </p>
+              </v-card-text>
+              <v-card-actions class="pt-0">
+                <v-btn text color="teal accent-4" @click="reveal1 = false">
+                  Close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-expand-transition>
+        </v-card>
+
+        <v-card max-width="344">
+          <v-card-text>
+            <div>글</div>
+            <p class="text-h4 text--primary">Little 작가 글 수</p>
+            <v-card-title class="white--text mt-8">
+              <v-avatar size="45"><v-icon>mdi-text-box</v-icon> </v-avatar>
+              <v-spacer></v-spacer>
+              <v-progress-circular
+                v-if="loading"
+                indeterminate
+              ></v-progress-circular>
+              <span class="text-h4" v-else>{{
+                recent.filter((item) => item.uid == this.userInfo.loginInfo)
+                  .length
+              }}</span>
+            </v-card-title>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn
+              text
+              color="teal accent-4"
+              :to="'/list?username=' + userInfo.name"
+            >
+              나의 글 보기
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-row>
+    </v-container>
 
     <br /><br />
 
@@ -303,12 +381,16 @@ export default {
         loginInfo: false,
         name: '',
         image: '',
+        subscriber: 0,
       },
+
       loading: true,
       overlay: false,
-      reveal: false,
       active: false,
       model: null,
+
+      reveal: false,
+      reveal1: false,
 
       page: 1,
     }
@@ -348,6 +430,13 @@ export default {
           this.userInfo.loginInfo = user.uid
           this.userInfo.name = user.displayName
           this.userInfo.image = user.photoURL
+
+          this.userInfo.subscriber = await db
+            .ref(`/users/${this.userInfo.loginInfo}/subscriber`)
+            .once('value')
+            .then((s) => {
+              return s.numChildren()
+            })
         }
       })
     },
@@ -364,14 +453,16 @@ export default {
         },
       })
     },
-    postlist() {
-      db.ref('/contents/').on('child_added', async (snapshot) => {
-        const data = await snapshot.val().posts
+    async postlist() {
+      db.ref('/contents/')
+        .orderByKey()
+        .on('child_added', async (snapshot) => {
+          const data = await snapshot.val().posts
 
-        for (let i = 0; i < Object.keys(data).length; i++) {
-          this.recent.unshift(data[Object.keys(data)[i]])
-        }
-      })
+          for (let i = 0; i < Object.keys(data).length; i++) {
+            this.recent.unshift(data[Object.keys(data)[i]])
+          }
+        })
 
       this.recent.sort((a, b) => {
         return a.time - b.time

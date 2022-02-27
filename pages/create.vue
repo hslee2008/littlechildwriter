@@ -88,6 +88,9 @@ export default {
                   username: this.userDisplayName,
                   photoURL: 'https://littlechildwriter.web.app/icon.png',
                   libris: 0,
+                  bio: '',
+                  subscribe: [],
+                  subscriber: [],
                 })
 
                 this.$router.push('/')

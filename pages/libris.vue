@@ -31,7 +31,9 @@
                       'font-size: ' + $vuetify.breakpoint.name / 20 + 'px'
                     "
                   >
-                    {{ item.name }}
+                    <NuxtLink :to="'/loadaccount?uid=' + item.uid">{{
+                      item.name
+                    }}</NuxtLink>
                   </v-list-item-title>
                   <v-list-item-subtitle
                     >{{ !$vuetify.breakpoint.mobile ? '리브리스: ' : ''
@@ -71,6 +73,7 @@ export default {
           name: snapshot.val().username,
           libris: snapshot.val().libris ?? 0,
           image: snapshot.val().photoURL,
+          uid: snapshot.key,
         })
       })
   },

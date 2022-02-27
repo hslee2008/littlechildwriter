@@ -213,6 +213,111 @@
       </v-timeline-item>
     </v-timeline>
 
+    <br /><br /><br /><br />
+
+    <v-divider></v-divider>
+
+    <br /><br /><br /><br />
+
+    <v-row>
+      <v-card
+        v-if="beforeOfRecentPost.title !== post.title"
+        class="mx-auto my-3"
+        elevation="20"
+        style="float: left; display: flex"
+      >
+        <div>
+          <v-card-title
+            class="primary--text col-11 text-truncate"
+            style="font-size: 1rem"
+          >
+            {{ beforeOfRecentPost.title }}</v-card-title
+          >
+          <v-card-subtitle style="font-size: 0.9rem"
+            >by {{ beforeOfRecentPost.username }}</v-card-subtitle
+          >
+
+          <v-divider v-if="!$vuetify.breakpoint.mobile"></v-divider>
+
+          <v-card-text v-if="!$vuetify.breakpoint.mobile">
+            <p>
+              {{
+                new Date(parseInt(beforeOfRecentPost.time)).toLocaleDateString()
+              }}
+            </p>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn
+              @click="
+                $router.push(
+                  `/loadpost?uid=${beforeOfRecentPost.uid}&time=${beforeOfRecentPost.time}&views=${beforeOfRecentPost.views}&pageCount=${beforeOfRecentPost.pageCount}`
+                )
+              "
+              color="primary"
+              elevation="0"
+              ><v-icon left>mdi-arrow-left</v-icon>이전</v-btn
+            >
+          </v-card-actions>
+        </div>
+
+        <v-img
+          v-if="!$vuetify.breakpoint.mobile"
+          :src="beforeOfRecentPost.image"
+          style="margin: auto"
+        ></v-img>
+      </v-card>
+
+      <v-card
+        v-if="nextOfRecentPost.title !== post.title"
+        class="mx-auto my-3"
+        elevation="20"
+        style="float: right; display: flex"
+      >
+        <v-img
+          v-if="!$vuetify.breakpoint.mobile"
+          :src="nextOfRecentPost.image"
+          style="margin: auto"
+        ></v-img>
+
+        <div>
+          <v-card-title
+            class="primary--text col-11 text-truncate"
+            style="font-size: 1rem"
+          >
+            {{ nextOfRecentPost.title }}</v-card-title
+          >
+          <v-card-subtitle style="font-size: 0.9rem"
+            >by {{ nextOfRecentPost.username }}</v-card-subtitle
+          >
+
+          <v-divider v-if="!$vuetify.breakpoint.mobile"></v-divider>
+
+          <v-card-text v-if="!$vuetify.breakpoint.mobile">
+            <p>
+              {{
+                new Date(parseInt(nextOfRecentPost.time)).toLocaleDateString()
+              }}
+            </p>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn
+              @click="
+                $router.push(
+                  `/loadpost?uid=${nextOfRecentPost.uid}&time=${nextOfRecentPost.time}&views=${nextOfRecentPost.views}&pageCount=${nextOfRecentPost.pageCount}`
+                )
+              "
+              color="primary"
+              elevation="0"
+              >다음<v-icon right>mdi-arrow-right</v-icon></v-btn
+            >
+          </v-card-actions>
+        </div>
+      </v-card>
+    </v-row>
+
+    <br /><br />
     <br /><br />
   </div>
 </template>
@@ -266,6 +371,9 @@ export default {
       loading: true,
       dialog: false,
       useruid: '',
+
+      nextOfRecentPost: {},
+      beforeOfRecentPost: {},
     }
   },
   methods: {
@@ -340,14 +448,21 @@ export default {
       })
     },
     async del() {
+      this.dialog = false
+
       await db
         .ref(
           `contents/${this.$route.query.uid}/posts/${this.$route.query.time}`
         )
         .remove()
+
       await db.ref(`comments/${this.$route.path}/comments`).remove()
 
-      this.dialog = false
+      await db
+        .ref(`users/${this.useruid}/libris`)
+        .transaction((currentValue) => {
+          return currentValue - 1
+        })
 
       this.$router.push('/list')
     },
@@ -443,6 +558,73 @@ export default {
       this.librisUpdate(this.$route.query.uid)
       this.librisUpdate(this.useruid)
     },
+
+    getNextOfRecentPostFirebaseDatabase() {
+      db.ref('/contents/')
+        .orderByChild('/posts/time')
+        .on('child_added', async (snapshot) => {
+          const data = await snapshot.val().posts
+
+          for (let i = 0; i < Object.keys(data).length; i++) {
+            if (data[Object.keys(data)[i]].time == this.$route.query.time) {
+              if (Object.keys(data).length - 1 > i) {
+                this.nextOfRecentPost = {
+                  uid: snapshot.key,
+                  time: Object.keys(data)[i + 1],
+                  image: data[Object.keys(data)[i + 1]].image,
+                  title: data[Object.keys(data)[i + 1]].title,
+                  username: data[Object.keys(data)[i + 1]].username,
+                  views: data[Object.keys(data)[i + 1]].views,
+                  pageCount: data[Object.keys(data)[i + 1]].pageCount,
+                }
+              } else {
+                this.nextOfRecentPost = {
+                  uid: snapshot.key,
+                  time: Object.keys(data)[0],
+                  image: data[Object.keys(data)[0]].image,
+                  title: data[Object.keys(data)[0]].title,
+                  username: data[Object.keys(data)[0]].username,
+                  views: data[Object.keys(data)[0]].views,
+                  pageCount: data[Object.keys(data)[0]].pageCount,
+                }
+              }
+            }
+          }
+        })
+    },
+    getBeforeOfRecentPostFirebaseDatabase() {
+      db.ref('/contents/')
+        .orderByChild('/posts/time')
+        .on('child_added', async (snapshot) => {
+          const data = await snapshot.val().posts
+
+          for (let i = 0; i < Object.keys(data).length; i++) {
+            if (data[Object.keys(data)[i]].time == this.$route.query.time) {
+              if (Object.keys(data).length - 1 > i) {
+                this.beforeOfRecentPost = {
+                  uid: snapshot.key,
+                  time: Object.keys(data)[i - 1],
+                  image: data[Object.keys(data)[i - 1]].image,
+                  title: data[Object.keys(data)[i - 1]].title,
+                  username: data[Object.keys(data)[i - 1]].username,
+                  views: data[Object.keys(data)[i - 1]].views,
+                  pageCount: data[Object.keys(data)[i - 1]].pageCount,
+                }
+              } else {
+                this.beforeOfRecentPost = {
+                  uid: snapshot.key,
+                  time: Object.keys(data)[0],
+                  image: data[Object.keys(data)[0]].image,
+                  title: data[Object.keys(data)[0]].title,
+                  username: data[Object.keys(data)[0]].username,
+                  views: data[Object.keys(data)[0]].views,
+                  pageCount: data[Object.keys(data)[0]].pageCount,
+                }
+              }
+            }
+          }
+        })
+    },
   },
   async mounted() {
     this.getUser()
@@ -457,6 +639,9 @@ export default {
     this.growView()
     this.getQueryChips()
     this.getComments()
+
+    this.getNextOfRecentPostFirebaseDatabase()
+    this.getBeforeOfRecentPostFirebaseDatabase()
 
     setTimeout(() => (this.loading = false), 500)
   },

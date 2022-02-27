@@ -109,7 +109,11 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['./assets/css/transition.css', './assets/css/component.css'],
+  css: [
+    './assets/css/transition.css',
+    './assets/css/component.css',
+    './assets/css/global.css',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['./plugins/firebase.js', './plugins/vuetify.js'],

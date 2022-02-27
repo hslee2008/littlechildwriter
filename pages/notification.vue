@@ -64,7 +64,7 @@ export default {
           let data = {}
 
           await a.once('value', (snapshot) => {
-            data = snapshot.val()
+            data = snapshot.val() ?? []
           })
 
           a.child(Object.keys(data)[0]).remove()
@@ -80,7 +80,7 @@ export default {
             await db
               .ref(`/users/${user.uid}/notification`)
               .once('value')
-              .then((s) => s.val() ?? {})
+              .then((s) => s.val() ?? [])
           )
         }
       })

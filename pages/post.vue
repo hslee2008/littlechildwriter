@@ -3,7 +3,7 @@
     <v-row class="my-1">
       <v-card :width="this.$vuetify.mobile ? 300 : 500">
         <img
-          id="isbn"
+          ref="isbn"
           src="/logo.png"
           alt="isbn-nothing-to-be-shown"
           style="display: none"
@@ -18,7 +18,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon left>mdi-camera</v-icon> 비디오
+                  ><v-icon left>mdi-barcode-scan</v-icon> 비디오
                 </v-btn>
               </template>
 
@@ -28,10 +28,15 @@
                 v-if="isbn.isGoingToTakeVideoISBN"
               >
                 <div id="container">
-                  <video autoplay="true" id="videoElement" width="100%"></video>
+                  <video
+                    autoplay="true"
+                    id="videoElement"
+                    ref="video"
+                    width="100%"
+                  ></video>
                 </div>
                 <v-card-actions>
-                  <v-btn @click="asCamera">카메라</v-btn>
+                  <v-btn @click="showCamera">카메라</v-btn>
                   <v-btn @click="takeCamera">ISBN 바코드 찍기</v-btn>
                   <v-btn
                     @click="isbn.isGoingToTakeVideoISBN = false"
@@ -47,7 +52,7 @@
             <v-dialog v-model="isbn.isGoingToTakeISBNPicture" width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon left>mdi-camera</v-icon> 사진 찍기
+                  ><v-icon left>mdi-barcode</v-icon> 사진
                 </v-btn>
               </template>
 
@@ -58,7 +63,7 @@
                   color="white"
                   class="mb-0"
                 ></v-progress-linear>
-                <v-card-title> IBSN 사진 찍기 </v-card-title>
+                <v-card-title> IBSN 사진 </v-card-title>
 
                 <br />
 
@@ -94,7 +99,7 @@
             <v-dialog v-model="isbn.showIsbn" width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon left>mdi-book-alphabet</v-icon> ISBN 직접 입력</v-btn
+                  ><v-icon left>mdi-form-textbox</v-icon> 입력</v-btn
                 >
               </template>
 
@@ -105,13 +110,14 @@
                   color="white"
                   class="mb-0"
                 ></v-progress-linear>
-                <v-card-title> IBSN 직접 입력 </v-card-title>
+                <v-card-title> 입력 </v-card-title>
 
                 <br />
 
                 <v-card-text>
                   <v-text-field
                     dense
+                    autofocus
                     label="ISBN"
                     v-model="post.isbn"
                     v-if="isbn.showIsbn"
@@ -231,22 +237,26 @@ export default {
         pageCount: 0,
         likes: 0,
       },
+
       isbn: {
         isGoingToTakeVideoISBN: false,
         isGoingToTakeISBNPicture: false,
         showIsbn: false,
       },
+
       loading: false,
       error: '',
       libris: 0,
+      uid: '',
+
+      subscribers: [],
+      username: '',
     }
   },
   methods: {
-    asCamera() {
+    showCamera() {
       try {
-        let video = document.querySelector('#videoElement')
-
-        if (navigator.mediaDevices.getUserMedia) {
+        if (navigator.mediaDevices.getUserMedia)
           navigator.mediaDevices
             .getUserMedia({
               video: {
@@ -255,43 +265,32 @@ export default {
                 height: { ideal: 2160 },
               },
             })
-            .then(function (stream) {
-              video.srcObject = stream
-            })
-            .catch(function (error) {
-              alert('알 수 없는 에러!')
+            .then((s) => (this.$refs.video.srcObject = s))
+            .catch((e) => {
               this.isbn.isGoingToTakeISBNPicture = false
+              this.error = '알 수 없는 에러!'
             })
-        }
       } catch (err) {
-        alert(err.message)
         this.isbn.isGoingToTakeISBNPicture = false
+        this.error = err.message
       }
     },
     takeCamera() {
       try {
-        if ('BarcodeDetector' in window) {
-          let barcodeDetector = new BarcodeDetector({
+        if ('BarcodeDetector' in window)
+          new BarcodeDetector({
             formats: ['code_39', 'codabar', 'ean_13', 'ean_8'],
           })
-
-          barcodeDetector
-            .detect(document.querySelector('#videoElement'))
+            .detect(this.$refs.video)
+            .then((res) => res[0].value)
             .then(async (a) => {
-              this.post.isbn = JSON.stringify(
-                await a[0].rawValue,
-                null,
-                2
-              ).replace(/\"/g, '')
+              this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
               this.fetchi()
               this.isbn.isGoingToTakeISBNPicture = false
             })
-            .catch((err) => {
-              alert(
-                'ISBN을 인식하지 못했습니다. 바코드가 흐리게 보이지 않게 멀리 다시 찍어 주세요.'
-              )
-            })
-        }
+            .catch(() =>
+              alert('바코드가 흐리게 보이지 않게 멀리 다시 찍어 주세요.')
+            )
       } catch (err) {
         alert('카메라 사용 불가: ' + err.message)
         this.isbn.isGoingToTakeISBNPicture = false
@@ -301,25 +300,20 @@ export default {
       let reader = new FileReader()
 
       reader.onload = () => {
-        document.querySelector('#isbn').src = reader.result
+        this.$refs.isbn.src = reader.result
 
         let tempImage = new Image()
         tempImage.src = reader.result
 
         tempImage.onload = () => {
           if ('BarcodeDetector' in window) {
-            let barcodeDetector = new BarcodeDetector({
+            new BarcodeDetector({
               formats: ['code_39', 'codabar', 'ean_13', 'ean_8'],
             })
-
-            barcodeDetector
-              .detect(document.querySelector('#isbn'))
-              .then(async (a) => {
-                this.post.isbn = JSON.stringify(
-                  await a[0].rawValue,
-                  null,
-                  2
-                ).replace(/\"/g, '')
+              .detect(this.$refs.isbn)
+              .then((res) => res[0].rawValue)
+              .then((a) => {
+                this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
                 this.isbn.isGoingToTakeVideoISBN = false
                 this.fetchi()
                 this.isbn.isGoingToTakeISBNPicture = false
@@ -341,7 +335,6 @@ export default {
     uploadImageFile(e) {
       let reader = new FileReader()
       reader.onload = async () => (this.post.image = reader.result)
-
       reader.readAsDataURL(e)
     },
     async postcontent() {
@@ -366,23 +359,35 @@ export default {
           })
 
           this.updateLibris()
+        } else {
+          alert('로그인이 필요합니다.')
+
+          this.$route.push('/login')
         }
       })
 
+      this.notifySubscribers()
+
       this.$router.push('/list')
+    },
+    async notifySubscribers() {
+      const timestamp = Date.now()
+
+      for (let i = 0; i < this.subscribers.length; i++) {
+        await db.ref(`users/${this.subscribers[i]}/notification`).push({
+          title: `${this.username}님이 새로운 글을 올렸습니다!`,
+          time: timestamp,
+          type: 'subscription',
+          link: `/loadpost?uid=${uie}&time=${timestamp}&isbn=${this.post.isbn}&pageCount=${this.post.pageCount}`,
+        })
+      }
     },
     async updateLibris() {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
           await db
-            .ref(`/users/${user.uid}/libris`)
-            .once('value')
-            .then(
-              async (snapshot) =>
-                await db
-                  .ref(`/users/${user.uid}/libris`)
-                  .set(parseInt(snapshot.val()) + 1)
-            )
+            .ref(`users/${user.uid}/libris`)
+            .transaction((currentValue) => currentValue + 1)
         }
       })
     },
@@ -395,27 +400,36 @@ export default {
       )
         .then((res) => res.json())
         .then((json) => {
-          if (json.totalItems === 0) {
-            this.error = '이미지를 찾을 수 없습니다. '
-          } else {
-            this.post.title = json.items[0].volumeInfo.title
-            this.post.author = json.items[0].volumeInfo.authors[0]
-            this.post.image = json.items[0].volumeInfo.imageLinks.thumbnail
-            this.post.previewLink = json.items[0].volumeInfo.previewLink
-            this.post.pageCount = json.items[0].volumeInfo.pageCount
-
-            if (this.post.pageCount === undefined) {
-              this.post.pageCount = 0
+          if (json.totalItems === 0) this.error = '이미지를 찾을 수 없습니다. '
+          else
+            this.post = {
+              ...this.post,
+              title: json.items[0].volumeInfo.title,
+              image: json.items[0].volumeInfo.imageLinks.thumbnail,
+              previewLink: json.items[0].volumeInfo.previewLink,
+              pageCount: json.items[0].volumeInfo.pageCount,
+              author: json.items[0].volumeInfo.authors,
             }
-          }
         })
-        .catch((err) => {
-          this.error = '이미지를 찾을 수 없습니다. '
-        })
+        .catch((err) => (this.error = '이미지를 찾을 수 없습니다. '))
 
       this.isbn.showIsbn = false
       this.loading = false
     },
+    getSubscribers(uid) {
+      db.ref(`/users/${uid}/subscriber`)
+        .once('value')
+        .then((s) => (this.subscribers = Object.keys(s.val() ?? [])))
+    },
+  },
+  async mounted() {
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        this.uid = user.uid
+        this.username = user.displayName
+        this.getSubscribers(user.uid)
+      }
+    })
   },
 }
 </script>

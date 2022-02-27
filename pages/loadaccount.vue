@@ -1,15 +1,38 @@
 <template>
   <div>
+    <v-btn
+      bottom
+      right
+      fixed
+      ripple
+      style="
+        margin-bottom: 35px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        z-index: 999;
+      "
+      color="primary"
+      to="/account#background"
+      v-if="isuser"
+    >
+      <v-icon left>mdi-pencil</v-icon> 배경화면 이미지 바꾸기
+    </v-btn>
+
     <v-parallax
       style="position: absolute; right: 0; top: 0; width: 100%; height: 100%"
-      src="https://images5.alphacoders.com/659/thumb-1920-659155.jpg"
+      :src="
+        userBackground
+          ? userBackground
+          : 'https://images5.alphacoders.com/659/thumb-1920-659155.jpg/'
+      "
     >
-      <v-row flex justify="center" class="img-div" style="margin: 10px">
+      <v-row flex>
         <div class="cardy">
           <v-hover v-slot="{ hover }">
             <v-card
               :elevation="hover ? 20 : 2"
-              :class="{ 'on-hover': hover } + ' mb-3 vcard'"
+              :class="{ 'on-hover': hover } + ' vcard'"
             >
               <v-card-text>
                 <v-list-item>
@@ -19,9 +42,19 @@
 
                   <v-list-item-content>
                     <v-list-item-title>{{ userDisplayName }}</v-list-item-title>
-                    <v-list-item-subtitle>{{
-                      userLibris
-                    }}</v-list-item-subtitle>
+
+                    <v-row justify="space-around" align="center" class="mt-3">
+                      <v-chip class="ma-2" color="red" text-color="white">
+                        <v-icon left> mdi-youtube-subscription </v-icon>
+                        {{ subscriberNumber }}
+                        {{ $vuetify.breakpoint.mobile ? '' : '구독자' }}
+                      </v-chip>
+                      <v-chip class="ma-2" color="blue" text-color="white">
+                        <v-icon left> mdi-library </v-icon>
+                        {{ userLibris }}
+                        {{ $vuetify.breakpoint.mobile ? '' : '리브리스' }}
+                      </v-chip>
+                    </v-row>
                   </v-list-item-content>
                 </v-list-item>
                 <br />
@@ -39,88 +72,80 @@
                 <v-btn :to="`/list?username=${userDisplayName}`" class="my-3"
                   >{{ userDisplayName }}의 글 보기<v-icon right
                     >mdi-arrow-right-thin</v-icon
-                  ></v-btn
-                ></v-card-actions
-              >
+                  >
+                </v-btn>
+                <v-btn
+                  class="my-3"
+                  color="primary"
+                  @click="subscribe"
+                  v-if="uid !== $route.query.uid"
+                >
+                  {{ subscribed ? '구독 취소' : '구독하기'
+                  }}<v-icon right>mdi-shield-account</v-icon>
+                </v-btn>
+                <v-btn class="my-3" color="primary" to="/account" v-if="isuser">
+                  편집<v-icon right>mdi-shield-account</v-icon>
+                </v-btn>
+              </v-card-actions>
             </v-card>
           </v-hover>
+        </div>
 
+        <div
+          class="cardy"
+          v-if="
+            (subscriberNumber || uid !== $route.query.uid) &&
+            !isuser &&
+            $vuetify.breakpoint.mobile
+          "
+          style="width: 100%; height: auto"
+        >
+          <v-hover v-slot="{ hover }">
+            <v-card
+              ><v-virtual-scroll
+                :items="Object.values(subscription)"
+                :item-height="50"
+                height="auto"
+                :lazy-load="100"
+                :show-numbers="false"
+                :loading-text="'로딩중...'"
+              >
+                <template v-slot:default="{ item }">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item }}</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </template>
+              </v-virtual-scroll>
+            </v-card>
+          </v-hover>
+        </div>
+
+        <div
+          class="cardy"
+          v-if="
+            (subscriberNumber || uid !== $route.query.uid) &&
+            !isuser &&
+            !$vuetify.breakpoint.mobile
+          "
+        >
           <v-hover v-slot="{ hover }">
             <v-card
               :elevation="hover ? 20 : 2"
-              :class="{ 'on-hover': hover } + ' vcard'"
+              :class="{ 'on-hover': hover } + ' mb-3 vcard'"
             >
+              <v-card-title>{{ userDisplayName }} 구독자</v-card-title>
               <v-card-text>
-                <v-timeline align-top dense>
-                  <v-timeline-item
-                    v-for="(message, index) in commentList"
-                    :key="message.time"
-                    small
-                    :icon="message.badWord ? 'mdi-alert' : ''"
+                <v-list>
+                  <v-list-item
+                    v-for="(people, index) in subscription"
+                    :key="Object.keys(people)[index]"
                   >
-                    <div>
-                      <div style="display: flex">
-                        <div class="font-weight-normal">
-                          <strong>{{ message.username }}</strong> ({{
-                            new Date(message.time).toLocaleDateString() +
-                            ' ' +
-                            new Date(message.time).toLocaleTimeString()
-                          }})
-
-                          <v-menu offset-y>
-                            <template v-slot:activator="{ on, attrs }">
-                              <v-btn
-                                icon
-                                v-bind="attrs"
-                                v-on="on"
-                                v-if="myUsername.includes(message.username)"
-                              >
-                                <v-icon>mdi-dots-vertical</v-icon>
-                              </v-btn>
-                            </template>
-                            <v-list dense>
-                              <v-list-item>
-                                <v-list-item-title
-                                  @click="delcomment(message, index)"
-                                  ><v-icon color="error"
-                                    >mdi-delete</v-icon
-                                  ></v-list-item-title
-                                >
-                              </v-list-item>
-                            </v-list>
-                          </v-menu>
-                        </div>
-                        <v-alert
-                          dense
-                          outlined
-                          type="error"
-                          v-if="message.badWord"
-                        >
-                          나쁜 말이 있습니다. 필터 되었습니다.
-                        </v-alert>
-                      </div>
-
-                      <div>{{ message.comment }}</div>
-                    </div>
-                  </v-timeline-item>
-                </v-timeline>
+                    <v-list-item-title>{{ people }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
               </v-card-text>
-
-              <v-card-actions>
-                <v-text-field
-                  label="댓글"
-                  v-model="comment"
-                  append-icon="mdi-send"
-                  @click:append="commentpost"
-                  @keyup:enter="commentpost"
-                  single-line
-                  hide-details
-                  outlined
-                  dense
-                  class="mx-auto my-6"
-                >
-                </v-text-field>
-              </v-card-actions>
             </v-card>
           </v-hover>
         </div>
@@ -139,13 +164,18 @@ export default {
       userLibris: '',
       userDisplayName: '',
       userPhotoURL: '',
+      userBackground: '',
       bio: '',
       uid: '',
 
-      comment: '',
-      commentList: [],
-
       myUsername: '',
+      isuser: false,
+
+      subscription: [],
+      subscribed: false,
+      subscriberNumber: 0,
+
+      recent: [],
     }
   },
   methods: {
@@ -156,6 +186,7 @@ export default {
         this.userPhotoURL = s.val().photoURL
         this.userLibris = s.val().libris
         this.bio = s.val().bio
+        this.userBackground = s.val().background
       })
 
       // 나의 유저 정보 가져오기
@@ -163,68 +194,110 @@ export default {
         if (user) {
           this.uid = user.uid
           this.myUsername = user.displayName
+          this.isuser = this.uid === this.$route.query.uid
         }
       })
     },
-    commentpost() {
-      if (this.comment.length > 0) {
-        filter.loadDictionary('en-us')
-        filter.loadDictionary('ko-kr')
-
-        db.ref(
-          `/users/${this.$route.query.uid}++and++${this.uid}/comments`
-        ).push({
-          comment: filter.clean(this.comment),
-          badword: filter.check(this.comment),
-          username: this.myUsername,
-          time: Date.now(),
+    async getSubscribtion() {
+      // 구독 여부 확인
+      this.subscription = await db
+        .ref(`/users/${this.$route.query.uid}/subscriber`)
+        .once('value')
+        .then((s) => {
+          return s.val() ?? []
         })
 
-        this.comment = ''
+      // 구독 숫자
+      this.subscriberNumber = await db
+        .ref(`/users/${this.$route.query.uid}/subscriber`)
+        .once('value')
+        .then((s) => {
+          return s.numChildren()
+        })
+    },
+    async isSubscribed() {
+      // 구독 여부 확인
+      this.subscription = await db
+        .ref(`/users/${this.$route.query.uid}/subscriber`)
+        .once('value')
+        .then((s) => {
+          return s.val() ?? []
+        })
 
-        this.fetchComments()
-        this.notify()
+      if (Object.keys(this.subscription).includes(this.uid)) {
+        this.subscribed = true
+      } else {
+        this.subscribed = false
       }
     },
     async notify() {
       const timestamp = Date.now()
 
       await db.ref(`users/${this.$route.query.uid}/notification`).push({
-        title: `${this.myUsername}님이 비공개 댓글를 작성했습니다습니다`,
+        title: `${this.myUsername}님이 구독했습니다!`,
         time: timestamp,
         link: `/loadaccount?uid=${this.$route.query.uid}`,
       })
     },
-    async fetchComments() {
-      this.commentList = await db
-        .ref(`/users/`)
-        .once('value')
-        .then(
-          (s) =>
-            (
-              s.val()[this.$route.query.uid + '++and++' + this.uid] ?? {
-                comments: '',
-              }
-            ).comments
-        )
+    async notifyNO() {
+      const timestamp = Date.now()
+
+      await db.ref(`users/${this.$route.query.uid}/notification`).push({
+        title: `${this.myUsername}님이 구독을 취소했습니다`,
+        time: timestamp,
+        link: `/loadaccount?uid=${this.$route.query.uid}`,
+      })
     },
-    async delcomment(message, index) {
-      await db
-        .ref(
-          `/users/${this.$route.query.uid}++and++${this.uid}/comments/${index}`
+    subscribe() {
+      // 구독하기
+      if (this.subscribed) {
+        db.ref(
+          `/users/${this.$route.query.uid}/subscriber/${this.uid}`
+        ).remove()
+
+        db.ref(
+          `/users/${this.uid}/subscribe/${this.$route.query.uid}/${this.uid}`
+        ).remove()
+
+        delete this.subscription[this.uid]
+        this.subscribed = false
+
+        // update libris
+        db.ref(`/users/${this.$route.query.uid}/libris`).once('value', (s) => {
+          db.ref(`/users/${this.$route.query.uid}/libris`).set(
+            parseInt(s.val()) - 10
+          )
+        })
+
+        this.notifyNO()
+      } else {
+        db.ref(`/users/${this.uid}/subscribe/${this.$route.query.uid}`).set(
+          this.userDisplayName
         )
-        .remove()
+        db.ref(`/users/${this.$route.query.uid}/subscriber/${this.uid}`).set(
+          this.myUsername
+        )
 
-      this.commentList[index].comment = '삭제된 댓글입니다.'
-      this.commentList[index].username = '삭제된 댓글입니다.'
+        this.subscription[this.uid] = this.myUsername
+        this.subscribed = true
 
-      await setTimeout(() => this.fetchComments(), 1500)
+        // update libris
+        db.ref(`/users/${this.$route.query.uid}/libris`).once('value', (s) => {
+          db.ref(`/users/${this.$route.query.uid}/libris`).set(
+            parseInt(s.val()) + 10
+          )
+        })
+
+        this.notify()
+      }
+
+      setTimeout(() => this.getSubscribtion(), 50)
     },
   },
   async mounted() {
     this.getUserInfo()
-
-    await setInterval(() => this.fetchComments(), 1500)
+    await this.getSubscribtion()
+    await this.isSubscribed()
   },
 }
 </script>

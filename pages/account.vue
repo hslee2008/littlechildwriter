@@ -35,6 +35,7 @@
           value="email"
           prepend-inner-icon="mdi-email"
         ></v-text-field>
+
         <div
           :style="
             'display: ' + $vuetify.breakpoint.mobile
@@ -42,7 +43,10 @@
               : 'flex' + '; gap: 10px'
           "
         >
-          <v-card tile justify-center style="margin-bottom: 3px">
+          <v-card tile justify-center>
+            <v-card-title>프로필 아바타</v-card-title>
+            <v-divider></v-divider>
+            <br />
             <v-text-field
               label="URL"
               placeholder="URL"
@@ -58,13 +62,18 @@
               value="photo"
               prepend-inner-icon="mdi-camera"
             ></v-text-field>
-            <v-card-text style="display: flex; justify-content: center">
+            <v-card-text class="d-flex justify-center">
               <v-avatar size="100"><v-img :src="photo" /></v-avatar>
             </v-card-text>
           </v-card>
+
+          <br />
+
+          <br />
+
           <v-card tile justify-center>
             <v-card-title>자신을 소개하세요!</v-card-title>
-            <v-card-text style="display: flex; justify-content: center">
+            <v-card-text class="d-flex justify-center">
               <v-textarea
                 required
                 flat
@@ -79,6 +88,34 @@
               ></v-textarea>
             </v-card-text>
           </v-card>
+
+          <br />
+
+          <br />
+
+          <v-card tile justify-center id="background">
+            <v-card-title>프로필 페이지 배경화면</v-card-title>
+            <v-divider></v-divider>
+            <br />
+            <v-text-field
+              label="프로필 페이지 배경화면"
+              placeholder="배경화면"
+              filled
+              required
+              shaped
+              flat
+              dense
+              solo
+              validate-on-blur
+              v-model="background"
+              :rules="photoRules"
+              value="Background"
+              prepend-inner-icon="mdi-camera"
+            ></v-text-field>
+            <v-card-text class="d-flex justify-center">
+              <v-avatar size="100"><v-img :src="background" /></v-avatar>
+            </v-card-text>
+          </v-card>
         </div>
       </div>
 
@@ -86,7 +123,7 @@
 
       <br />
 
-      <v-row justify="center" style="gap: 10px">
+      <v-row justify="center" style="gap: 5px">
         <v-btn @click="update" color="primary"
           ><v-icon left>mdi-account</v-icon>Update</v-btn
         >
@@ -119,20 +156,14 @@
     </v-form>
 
     <br />
+    <br />
+    <br />
   </div>
 </template>
 
-<style scoped>
-.account {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-</style>
-
 <script>
 import { db, auth } from '../plugins/firebase'
+import * as filter from 'leo-profanity'
 
 export default {
   data() {
@@ -143,6 +174,7 @@ export default {
       error: '',
       emaili: '',
       bio: '',
+      background: '',
       verified: false,
       valid: true,
       uid: '',
@@ -152,7 +184,7 @@ export default {
       ],
       photoRules: [
         (v) => !!v || 'Name is required',
-        (v) => v.length <= 500 || 'Name must be less than 500 characters',
+        (v) => v.length <= 10000 || 'Name must be less than 10000 characters',
       ],
       emailRules: [
         (v) => !!v || 'Email is required',
@@ -183,6 +215,9 @@ export default {
             .once('value')
             .then((snapshot) => {
               this.bio = snapshot.val().bio
+              this.background =
+                snapshot.val().background ??
+                'https://images5.alphacoders.com/659/thumb-1920-659155.jpg'
             })
         }
       })
@@ -199,7 +234,8 @@ export default {
           db.ref(`/users/${currentUser.uid}`).update({
             username: this.name,
             photoURL: this.photo,
-            bio: this.bio,
+            bio: filter.clean(this.bio),
+            background: this.background,
           })
 
           this.getUserInfo()
@@ -207,6 +243,26 @@ export default {
           this.$router.push('/loadaccount?uid=' + this.uid)
         })
         .catch((error) => alert(error.message))
+
+      await db.ref('/users').once('value', (snapshot) => {
+        snapshot.forEach((child) => {
+          if (child.val().username === this.name) {
+            db.ref(`/users/${child.key}`).update({
+              username: this.name,
+            })
+          }
+        })
+      })
+
+      await db.ref('/users').once('value', (snapshot) => {
+        snapshot.forEach((child) => {
+          if (child.val().subscriber.includes(this.name)) {
+            db.ref(`/users/${child.key}`).update({
+              subscriber: this.name,
+            })
+          }
+        })
+      })
     },
     async email() {
       const currentUser = auth.currentUser

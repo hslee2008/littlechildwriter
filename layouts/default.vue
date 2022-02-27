@@ -132,7 +132,7 @@ export default {
             libris: await db
               .ref('users/' + user.uid)
               .once('value')
-              .then((s) => s.val().libris),
+              .then((s) => s.val().libris ?? 0),
           }
         } else {
           this.login = {}

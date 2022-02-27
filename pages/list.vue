@@ -242,8 +242,8 @@ export default {
     updateItemsPerPage(number) {
       this.itemsPerPage = number
     },
-    openPost(item) {
-      const { uid, time, views, pageCount } = item
+    openPost(it) {
+      const { uid, time, views, pageCount } = it
 
       this.$router.push({
         path: '/loadpost',
@@ -255,44 +255,39 @@ export default {
         },
       })
     },
-    likeThis(item) {
+    likeThis(it) {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          db.ref(`/contents/${item.uid}/posts/${item.time}/likes`).set(
-            item.likes + 1
+          db.ref(`/contents/${it.uid}/posts/${it.time}/likes`).set(it.likes + 1)
+
+          db.ref(`contents/${it.uid}/posts/${it.time}/liked/${user.uid}`).set(
+            true
           )
-          db.ref(
-            `contents/${item.uid}/posts/${item.time}/liked/${user.uid}`
-          ).set(true)
 
           this.updateLibris(user.uid)
-          this.notify()
+          this.notify(it)
 
-          item.likes++
-          item.liked[this.uid] = true
+          it.likes++
+          it.liked[this.uid] = true
         }
       })
     },
-    async updateLibris(uid) {
+    async pdateLibris(uid) {
       await db
-        .ref(`/users/${uid}/libris`)
-        .once('value')
-        .then(
-          async (snapshot) =>
-            await db
-              .ref(`/users/${uid}/libris`)
-              .set(parseInt(snapshot.val()) + 0.1)
-        )
+        .ref(`users/${uid}/libris`)
+        .transaction((currentValue) => currentValue + 0.1)
     },
-    async notify() {
+
+    notify(it) {
       auth.onAuthStateChanged(async (user) => {
         await db.ref(`users/${this.$route.query.uid}/notification`).push({
           title: `${user.displayName}님이 글을 좋아합니다`,
           time: Date.now(),
-          link: `/loadpost?uid=${item.uid}&time=${item.time}&views=${item.views}&pageCount=${item.pageCount}`,
+          link: `/loadpost?uid=${it.uid}&time=${it.time}&views=${it.views}&pageCount=${it.pageCount}`,
         })
       })
     },
+
     getUserInfo() {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
@@ -302,12 +297,11 @@ export default {
           await db
             .ref('/users/' + user.uid)
             .once('value')
-            .then((snapshot) => {
-              this.libris = snapshot.val().libris
-            })
+            .then((s) => (this.libris = s.val().libris))
         }
       })
     },
+
     fetchContent() {
       db.ref('/contents/')
         .orderByChild('/posts/time')
