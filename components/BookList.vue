@@ -7,7 +7,7 @@
 
     <br />
 
-    <v-row style="gap: 5px">
+    <v-row style="gap: 15px">
       <v-card
         v-for="item in data.slice(4 * page - 3, 4 * page + 1)"
         :key="item.uid + item.time"
@@ -83,17 +83,9 @@ export default {
   },
   methods: {
     loadPost(item) {
-      const { uid, time, views, pageCount } = item
+      const { uid, time } = item
 
-      this.$router.push({
-        path: '/loadpost',
-        query: {
-          uid,
-          time,
-          views: views + 1,
-          pageCount,
-        },
-      })
+      this.$router.push(`/content/${uid}-${time}`)
     },
   },
 }

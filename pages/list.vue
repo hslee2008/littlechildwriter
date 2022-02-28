@@ -117,7 +117,7 @@
                 {{ new Date(parseInt(item.time)).toLocaleTimeString() }}
               </p>
               <div style="margin-right: 10px">
-                <v-icon>mdi-eye</v-icon> {{ item.views }}
+                <v-icon>mdi-eye</v-icon> {{ Math.round(item.views) }}
               </div>
               <v-rating
                 :value="item.rating"
@@ -243,17 +243,9 @@ export default {
       this.itemsPerPage = number
     },
     openPost(it) {
-      const { uid, time, views, pageCount } = it
+      const { uid, time } = it
 
-      this.$router.push({
-        path: '/loadpost',
-        query: {
-          uid,
-          time,
-          views: views + 1,
-          pageCount,
-        },
-      })
+      this.$router.push(`/content/${uid}-${time}`)
     },
     likeThis(it) {
       auth.onAuthStateChanged(async (user) => {
@@ -280,10 +272,10 @@ export default {
 
     notify(it) {
       auth.onAuthStateChanged(async (user) => {
-        await db.ref(`users/${this.$route.query.uid}/notification`).push({
+        await db.ref(`users/${it.uid}/notification`).push({
           title: `${user.displayName}님이 글을 좋아합니다`,
           time: Date.now(),
-          link: `/loadpost?uid=${it.uid}&time=${it.time}&views=${it.views}&pageCount=${it.pageCount}`,
+          link: `/content/${it.uid}-${it.time}`,
         })
       })
     },

@@ -31,7 +31,7 @@
                       'font-size: ' + $vuetify.breakpoint.name / 20 + 'px'
                     "
                   >
-                    <NuxtLink :to="'/loadaccount?uid=' + item.uid">{{
+                    <NuxtLink :to="`target/${item.uid}`">{{
                       item.name
                     }}</NuxtLink>
                   </v-list-item-title>

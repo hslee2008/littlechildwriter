@@ -80,13 +80,13 @@ export default {
       if (this.valid)
         auth
           .signInWithEmailAndPassword(this.email, this.password)
-          .then(() => this.$router.push('/'))
+          .then(() => this.$router.push('/account'))
           .catch((error) => (this.error = error))
     },
     google() {
       auth
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-        .then(() => this.$router.push('/'))
+        .then(() => this.$router.push('/account'))
         .catch((error) => (this.error = error))
     },
   },

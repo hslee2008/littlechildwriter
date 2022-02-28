@@ -393,7 +393,7 @@ export default {
           title: `${this.username}님이 새로운 글을 올렸습니다!`,
           time: timestamp,
           type: 'subscription',
-          link: `/loadpost?uid=${this.uid}&time=${timestamp}&isbn=${this.post.isbn}&pageCount=${this.post.pageCount}`,
+          link: `/content/${this.uid}-${timestamp}`,
         })
       }
     },

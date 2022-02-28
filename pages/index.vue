@@ -69,7 +69,7 @@
 
     <v-container style="margin: 5px">
       <div>
-        <h2>나의 포인트</h2>
+        <h2>나의 통계</h2>
         <v-divider></v-divider>
         <br />
       </div>
@@ -311,7 +311,7 @@ export default {
           await db.ref(`users/${this.$route.query.uid}/notification`).push({
             title: `${user.displayName}님이 글을 좋아합니다`,
             time: timestamp,
-            link: `/loadpost?uid=${item.uid}&time=${item.time}&views=${item.views}&pageCount=${item.pageCount}`,
+            link: `/content/${item.uid}-${item.time}`,
           })
 
           item.likes++
@@ -320,17 +320,9 @@ export default {
       })
     },
     loadPost(item) {
-      const { uid, time, views, pageCount } = item
+      const { uid, time } = item
 
-      this.$router.push({
-        path: '/loadpost',
-        query: {
-          uid,
-          time,
-          views: views + 1,
-          pageCount,
-        },
-      })
+      this.$router.push(`/content/${uid}-${time}`)
     },
     async postlist() {
       const content = db.ref('/contents/')

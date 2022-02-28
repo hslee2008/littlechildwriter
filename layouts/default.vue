@@ -53,7 +53,7 @@
               <p class="text-caption mt-1">
                 {{ login.email }}
               </p>
-              <NuxtLink :to="'/loadaccount?uid=' + login.uid">
+              <NuxtLink :to="`target/${login.uid}`">
                 <v-btn color="primary">나의 프로필 페이지</v-btn>
               </NuxtLink>
 
@@ -140,19 +140,13 @@ export default {
       })
     },
   },
-  mounted() {
-    this.getUserInfo()
+  async mounted() {
+    await this.getUserInfo()
 
-    db.ref(`/users/${this.login.uid}`)
-      .once('value')
-      .then((s) => {
-        if (!s.exists()) {
-          db.ref(`/users/${this.login.uid}`).update({
-            username: this.login.name,
-            photoURL: this.login.photo,
-          })
-        }
-      })
+    db.ref(`/users/${this.login.uid}`).update({
+      username: this.login.name,
+      photoURL: this.login.photo,
+    })
   },
 }
 </script>

@@ -59,7 +59,7 @@
 
           <v-card-subtitle>
             by
-            <NuxtLink :to="`/loadaccount?uid=${post.uid}`">
+            <NuxtLink :to="`target/${post.uid}`">
               {{ post.username }}
             </NuxtLink></v-card-subtitle
           >
@@ -208,7 +208,7 @@
 </template>
 
 <script>
-import { db, auth } from '../plugins/firebase.js'
+import { db, auth } from '../../plugins/firebase.js'
 import * as filter from 'leo-profanity'
 
 export default {
@@ -242,8 +242,7 @@ export default {
   },
   methods: {
     async delcomment(message, index) {
-      const { uid, time } = this.$route.query
-      const comments = db.ref(`contents/${time}/comments`)
+      const comments = db.ref(`contents/${this.time}/comments`)
 
       comments.once('value', (s) =>
         s.forEach((c) => {
@@ -273,9 +272,8 @@ export default {
     async commentpost() {
       if (this.comment.length > 0) {
         const timestamp = Date.now()
-        const { uid, time } = this.$route.query
 
-        const comments = await db.ref(`contents/${time}/comments`)
+        const comments = await db.ref(`contents/${this.time}/comments`)
 
         filter.loadDictionary('en-us')
         filter.loadDictionary('ko-kr')
@@ -290,7 +288,7 @@ export default {
         })
 
         this.notify()
-        this.librisUpdate(this.$route.query.uid)
+        this.librisUpdate(this.uid)
 
         this.comment = ''
 
@@ -298,38 +296,28 @@ export default {
       }
     },
     async notify() {
-      await db.ref(`users/${this.$route.query.uid}/notification`).push({
+      await db.ref(`users/${this.uid}/notification`).push({
         title: `${this.userInfo.username}님이 댓글를 작성했습니다습니다`,
         time: Date.now(),
-        link: `/loadpost?uid=${this.$route.query.uid}&time=${this.$route.query.time}&views=${this.post.views}&pageCount=${this.post.pageCount}`,
+        link: `/content/${this.uid}-${this.time}`,
       })
     },
     async del() {
-      const { uid, time } = this.$route.query
       this.dialog = false
 
-      await db.ref(`contents/${time}`).remove()
+      await db.ref(`contents/${this.time}`).remove()
 
       this.$router.push('/list')
     },
     async edit() {
-      const { uid, time } = this.$route.query
-
-      this.$router.push({
-        path: '/editpost',
-        query: { uid, time },
-      })
+      this.$router.push(`mock/${this.uid}-${this.time}`)
     },
     async getQueryChips() {
-      const { uid, time, views, pageCount } = this.$route.query
-      const thumbs = await db
-          .ref(`/contents/${time}/likes`)
-          .once('value')
-          .then((s) => s.val()),
-        isbn = await db
-          .ref(`/contents/${time}/isbn`)
-          .once('value')
-          .then((s) => s.val())
+      const [thumbs, isbn, views, pageCount] = await db
+        .ref(`/contents/${this.time}/`)
+        .once('value')
+        .then((res) => res.val())
+        .then((s) => [s.likes, s.isbn, Math.round(s.views), s.pageCount])
 
       this.tags = {
         views: {
@@ -338,7 +326,7 @@ export default {
         },
         time: {
           icon: 'calendar-clock',
-          val: new Date(parseInt(time)).toLocaleDateString(),
+          val: new Date(parseInt(this.time)).toLocaleDateString(),
         },
         page: {
           icon: 'book-open-page-variant',
@@ -355,11 +343,9 @@ export default {
       }
     },
     async getComments() {
-      const { uid, time } = this.$route.query
-
       this.comments = Object.values(
         await db
-          .ref(`contents/${time}/comments`)
+          .ref(`contents/${this.time}/comments`)
           .once('value')
           .then((s) => s.val() ?? [])
       )
@@ -370,16 +356,14 @@ export default {
           this.userInfo = {
             uid: user.uid,
             username: user.displayName,
-            isuser: this.$route.query.uid === user.uid,
+            isuser: this.uid === user.uid,
             photo: user.photoURL,
           }
       })
     },
     async getPost() {
-      const { uid, time } = this.$route.query
-
       this.post = await db
-        .ref(`contents/${time}`)
+        .ref(`contents/${this.time}`)
         .once('value')
         .then((s) => s.val())
         .catch((err) => {
@@ -388,7 +372,7 @@ export default {
         })
     },
     async growView() {
-      const viewLink = `contents/${this.$route.query.time}/views`
+      const viewLink = `contents/${this.time}/views`
       db.ref(viewLink)
         .once('value')
         .then((s) => {
@@ -397,7 +381,7 @@ export default {
           db.ref(viewLink).set(s.val() + 1)
         })
 
-      this.librisUpdate(this.$route.query.uid)
+      this.librisUpdate(this.uid)
       this.librisUpdate(this.userInfo.uid)
     },
   },
@@ -411,6 +395,14 @@ export default {
     this.getComments()
 
     setTimeout(() => (this.loading = false), 500)
+  },
+  asyncData({ params }) {
+    const [uid, time] = params.content.split('-')
+
+    return {
+      uid,
+      time,
+    }
   },
 }
 </script>

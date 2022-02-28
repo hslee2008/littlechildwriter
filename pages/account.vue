@@ -116,6 +116,35 @@
               <v-avatar size="100"><v-img :src="background" /></v-avatar>
             </v-card-text>
           </v-card>
+
+          <br />
+
+          <br />
+
+          <v-card tile justify-center>
+            <v-card-title>특집 프로젝트 선택하기</v-card-title>
+            <v-divider></v-divider>
+            <br />
+            <v-virtual-scroll
+              :bench="benched"
+              :items="mine"
+              height="300"
+              item-height="64"
+            >
+              <template v-slot:default="{ item }">
+                <v-list-item :key="item.title">
+                  <v-list-item-action>
+                    <v-checkbox
+                      v-model="checked[item.title]"
+                      :label="item.title"
+                    ></v-checkbox>
+                  </v-list-item-action>
+                </v-list-item>
+
+                <v-divider></v-divider>
+              </template>
+            </v-virtual-scroll>
+          </v-card>
         </div>
       </div>
 
@@ -125,33 +154,18 @@
 
       <v-row justify="center" style="gap: 5px">
         <v-btn @click="update" color="primary"
-          ><v-icon left>mdi-account</v-icon>Update</v-btn
+          ><v-icon left>mdi-account</v-icon>업데이트</v-btn
         >
         <v-btn @click="email" v-if="!verified"
           ><v-icon left>mdi-email</v-icon>Verify Email</v-btn
         >
-        <v-dialog width="500">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn color="error" v-bind="attrs" v-on="on"
-              ><v-icon left>mdi-alert-rhombus</v-icon>Delete</v-btn
-            >
-          </template>
-
-          <v-card>
-            <v-card-title> You are about to delete your account! </v-card-title>
-
-            <v-card-text> This is permanent and cannot be undone. </v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="primary" text @click="delete_danger">
-                Whatever
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+        <Dialog
+          :functionOk="delete_danger"
+          buttonTitle="계정 삭제"
+          title="진짜로 계정을 삭제하겠습니까?"
+          text="계정을 삭제하면 복구할 수 없습니다"
+          icon="delete"
+        />
       </v-row>
     </v-form>
 
@@ -196,14 +210,23 @@ export default {
       ],
       icons: ['mdi-pencil'],
       transparent: 'rgba(255, 255, 255, 0)',
+
+      benched: 0,
+      mine: [],
+      checked: {},
     }
   },
-  mounted() {
-    this.getUserInfo()
+  computed: {
+    items() {
+      return Array.from({ length: this.length }, (k, v) => v + 1)
+    },
+    length() {
+      return 7000
+    },
   },
   methods: {
     getUserInfo() {
-      auth.onAuthStateChanged((user) => {
+      auth.onAuthStateChanged(async (user) => {
         if (user) {
           this.name = user.displayName
           this.photo = user.photoURL
@@ -211,13 +234,15 @@ export default {
           this.verified = user.emailVerified
           this.uid = user.uid
 
-          db.ref(`/users/${user.uid}`)
+          await db
+            .ref(`/users/${user.uid}`)
             .once('value')
             .then((snapshot) => {
               this.bio = snapshot.val().bio
               this.background =
                 snapshot.val().background ??
                 'https://images5.alphacoders.com/659/thumb-1920-659155.jpg'
+              this.checked = snapshot.val().checked ?? {}
             })
         }
       })
@@ -236,24 +261,15 @@ export default {
             photoURL: this.photo,
             bio: filter.clean(this.bio),
             background: this.background,
+            project: this.mine,
+            projectChecked: this.checked,
           })
 
           this.getUserInfo()
 
-          this.$router.push('/loadaccount?uid=' + this.uid)
+          this.$router.push(`target/${this.uid}`)
         })
         .catch((error) => alert(error.message))
-
-      await db.ref('/users').once('value', (snapshot) => {
-        snapshot.forEach((child) => {
-          if (child.val().username === this.name) {
-            db.ref(`/users/${child.key}`).update({
-              username: this.name,
-              subscriber: this.name,
-            })
-          }
-        })
-      })
     },
     async email() {
       const currentUser = auth.currentUser
@@ -275,6 +291,23 @@ export default {
         }
       })
     },
+  },
+  async mounted() {
+    await this.getUserInfo()
+
+    // get all the user's post from database
+    await db.ref('/contents').once('value', async (snapshot) => {
+      const data = Object.values(await snapshot.val())
+
+      data.forEach((child) => {
+        if (child.uid === this.uid) {
+          this.mine.push({
+            title: child.title,
+            link: `${child.uid}-${child.time}`,
+          })
+        }
+      })
+    })
   },
 }
 </script>

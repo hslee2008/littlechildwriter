@@ -36,7 +36,7 @@
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-btn color="teal accent-7" @click="okay" elevation="0">
+          <v-btn color="teal accent-7" @click="update" elevation="0">
             업데이트<v-icon right>mdi-note-plus</v-icon>
           </v-btn>
           <v-btn
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { db, auth } from '../plugins/firebase.js'
+import { db, auth } from '../../plugins/firebase.js'
 
 export default {
   data() {
@@ -92,14 +92,14 @@ export default {
     }
   },
   methods: {
-    async okay() {
+    async update() {
       try {
-        db.ref(`/contents/${this.$route.query.time}`).update({
+        db.ref(`/contents/${this.time}`).update({
           title: this.post.title,
           content: this.post.content,
           rating: this.post.rating,
           isbn: this.post.isbn,
-          time: parseInt(this.$route.query.time),
+          time: parseInt(this.time),
           image: this.post.image,
           previewLink: this.post.previewLink,
           pageCount: this.post.pageCount,
@@ -111,11 +111,25 @@ export default {
         this.error = err.message
       }
     },
+    async getPost() {
+      this.post = (await db.ref(`/contents/${this.time}`).once('value')).val()
+    },
   },
   async mounted() {
-    this.post = (
-      await db.ref(`/contents/${this.$route.query.time}`).once('value')
-    ).val()
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        if (user.uid === this.uid) this.getPost()
+        else alert('본인의 글만 수정할 수 있습니다.')
+      }
+    })
+  },
+  asyncData({ params }) {
+    const [uid, time] = params.mock.split('-')
+
+    return {
+      uid,
+      time,
+    }
   },
 }
 </script>

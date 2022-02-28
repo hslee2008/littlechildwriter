@@ -28,7 +28,7 @@
 
           <v-timeline align-top dense clipped>
             <v-timeline-item
-              v-for="message in notifiactionsList"
+              v-for="(message, index) in notifiactionsList"
               :key="message.time"
               small
             >
@@ -54,6 +54,13 @@
                         <v-list-item-title @click="deleteThis(index)"
                           ><v-icon color="error"
                             >mdi-delete</v-icon
+                          ></v-list-item-title
+                        >
+                      </v-list-item>
+                      <v-list-item>
+                        <v-list-item-title :to="message.link"
+                          ><v-icon color="primary"
+                            >mdi-open-in-new</v-icon
                           ></v-list-item-title
                         >
                       </v-list-item>

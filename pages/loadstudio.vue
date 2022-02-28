@@ -86,7 +86,7 @@
                     <v-card-actions
                       ><v-btn
                         @click="
-                          post.thelink = `/loadpost?uid=${item.uid}&time=${item.time}&views=${item.views}&pageCount=${item.pageCount}`
+                          post.thelink = `/content/${item.uid}-${item.time}`
                           dialog = false
                         "
                         >업로드</v-btn

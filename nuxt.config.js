@@ -3,7 +3,6 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   target: 'static',
-  buildDir: 'nuxtbuild',
   head: {
     titleTemplate: 'Little 작가',
     meta: [
@@ -58,7 +57,7 @@ export default {
       theme_color: '#20232a',
       background_color: '#20232a',
       display: 'minimal-ui',
-      scope: './',
+      scope: '/',
       start_url: '/',
       prefer_related_applications: false,
       related_applications: [

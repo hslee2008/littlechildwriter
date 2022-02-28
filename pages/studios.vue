@@ -346,7 +346,6 @@ export default {
     },
     openStudio(index) {
       this.$router.push('loadstudio?id=' + this.fetchedStudios[index].id)
-      console.log(this.fetchedStudios)
     },
     deleteStudio(index) {
       auth.onAuthStateChanged((user) => {
