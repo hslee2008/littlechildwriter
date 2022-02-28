@@ -3,7 +3,7 @@
     <br /><br />
 
     <v-row>
-      <v-card class="mx-auto" width="344">
+      <v-card class="mx-auto" width="60%">
         <v-btn to="/list" elevation="0" text>
           <v-icon>mdi-arrow-left</v-icon>뒤로가기</v-btn
         >
@@ -94,9 +94,7 @@ export default {
   methods: {
     async okay() {
       try {
-        db.ref(
-          `/contents/${this.$route.query.uid}/posts/${this.$route.query.time}`
-        ).update({
+        db.ref(`/contents/${this.$route.query.time}`).update({
           title: this.post.title,
           content: this.post.content,
           rating: this.post.rating,
@@ -116,11 +114,7 @@ export default {
   },
   async mounted() {
     this.post = (
-      await db
-        .ref(
-          `/contents/${this.$route.query.uid}/posts/${this.$route.query.time}`
-        )
-        .once('value')
+      await db.ref(`/contents/${this.$route.query.time}`).once('value')
     ).val()
   },
 }

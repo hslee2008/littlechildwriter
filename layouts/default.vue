@@ -45,7 +45,7 @@
         </template>
         <v-card>
           <v-list-item-content class="justify-center">
-            <div class="mx-auto text-center">
+            <div class="text-center">
               <v-avatar class="my-1">
                 <v-img :src="login.photo" />
               </v-avatar>
@@ -142,6 +142,17 @@ export default {
   },
   mounted() {
     this.getUserInfo()
+
+    db.ref(`/users/${this.login.uid}`)
+      .once('value')
+      .then((s) => {
+        if (!s.exists()) {
+          db.ref(`/users/${this.login.uid}`).update({
+            username: this.login.name,
+            photoURL: this.login.photo,
+          })
+        }
+      })
   },
 }
 </script>

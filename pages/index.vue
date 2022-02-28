@@ -50,122 +50,20 @@
           <v-btn to="/list"
             >모든 글 보기<v-icon right>mdi-book-alphabet</v-icon></v-btn
           >
+          <v-btn to="/studios"
+            >스튜디오<v-icon right>mdi-android-studio</v-icon></v-btn
+          >
         </div>
       </v-row>
     </v-parallax>
 
     <br /><br />
 
-    <v-container style="margin-top: 600px">
-      <div>
-        <h2>최근 포스트</h2>
-        <v-divider></v-divider>
-      </div>
-      <br />
-      <v-row style="gap: 5px">
-        <v-skeleton-loader
-          v-for="index in 4"
-          :key="index"
-          class="mx-auto"
-          type="card"
-          width="225"
-          v-if="loading"
-        ></v-skeleton-loader>
+    <BookList :data="recent" title="최근 포스트" style="margin-top: 600px" />
 
-        <v-card
-          v-for="item in recent.slice(1 + page, 5 + page)"
-          :key="item.uid + item.time"
-          :width="
-            $vuetify.breakpoint.width < 330
-              ? '90%'
-              : $vuetify.breakpoint.width < 400
-              ? 120
-              : $vuetify.breakpoint.xs
-              ? 185
-              : $vuetify.breakpoint.sm
-              ? 215
-              : $vuetify.breakpoint.md
-              ? 215
-              : 225
-          "
-          class="mx-auto"
-        >
-          <v-img
-            :src="
-              item.image === ''
-                ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXeHDt7iweZ7AdiGtllZWINfZ0_5fPcntSiA&usqp=CAU'
-                : item.image
-            "
-            :height="
-              $vuetify.breakpoint.width < 330
-                ? 300
-                : $vuetify.breakpoint.width < 400
-                ? 200
-                : $vuetify.breakpoint.xs
-                ? 265
-                : $vuetify.breakpoint.sm
-                ? 300
-                : $vuetify.breakpoint.md
-                ? 330
-                : 345
-            "
-            style="margin: auto"
-          ></v-img>
+    <br /><br />
 
-          <v-card-title
-            class="primary--text col-11 text-truncate"
-            style="font-size: 1rem"
-          >
-            {{
-              item.title.includes(': ')
-                ? item.title.substring(item.title.indexOf(': ') + 2)
-                : item.title
-            }}</v-card-title
-          >
-
-          <v-card-text>
-            <v-divider></v-divider>
-            <br />
-            <p>[{{ item.username.split(' ')[0] }}]</p>
-            <p>({{ new Date(item.time).toLocaleDateString() }})</p>
-            <br />
-            <v-rating
-              :value="item.rating"
-              dense
-              color="orange"
-              background-color="orange"
-              hover
-              readonly
-              :size="$vuetify.breakpoint.xs ? 15 : 20"
-              class="mr-1"
-            ></v-rating>
-            <div style="margin-right: 10px">
-              <v-icon>mdi-eye</v-icon> {{ item.views }}
-            </div>
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-btn @click="loadPost(item)" color="primary" elevation="0" icon
-              ><v-icon>mdi-open-in-new</v-icon>
-            </v-btn>
-            <v-btn
-              rounded
-              text
-              @click="likeThis(item)"
-              :disabled="item.liked[userInfo.loginInfo]"
-            >
-              <v-icon>mdi-thumb-up</v-icon> {{ item.likes }}
-            </v-btn></v-card-actions
-          >
-        </v-card>
-      </v-row>
-      <br />
-      <div class="text-center">
-        <v-pagination v-model="page" :length="10"></v-pagination>
-      </div>
-    </v-container>
+    <BookList :data="popular" title="인기있는 포스트" />
 
     <br /><br />
 
@@ -376,6 +274,7 @@ export default {
     return {
       librisTop: [],
       recent: [],
+      popular: [],
 
       userInfo: {
         loginInfo: false,
@@ -399,7 +298,7 @@ export default {
     likeThis(item) {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          const likesRoot = `/contents/${item.uid}/posts/${item.time}`,
+          const likesRoot = `/contents/${item.time}`,
             librisRoot = `/users/${user.uid}/libris`
 
           db.ref(`${likesRoot}/likes`).set(item.likes + 1)
@@ -434,18 +333,17 @@ export default {
       })
     },
     async postlist() {
-      db.ref('/contents/')
-        .orderByKey()
-        .on('child_added', async (s) => {
-          const data = await s.val().posts
-          const keys = Object.keys(data)
+      const content = db.ref('/contents/')
 
-          for (let i = 0; i < keys.length; i++) {
-            this.recent.unshift(data[keys[i]])
-          }
-        })
+      await content.on('child_added', async (snapshot) => {
+        const data = await snapshot.val()
 
-      this.recent.sort((a, b) => a.time - b.time)
+        this.recent.unshift(data)
+        this.popular.unshift(data)
+      })
+
+      await this.recent.sort((a, b) => b.time - a.time)
+      await this.popular.sort((a, b) => b.likes - a.likes)
     },
     userlist() {
       db.ref('/users')
@@ -464,11 +362,10 @@ export default {
         .then((s) => (this.userInfo.libris = s.val()))
     },
   },
-  mounted() {
+  async mounted() {
     this.loading = true
 
     this.userlist()
-    this.postlist()
 
     auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -489,6 +386,8 @@ export default {
           })
       }
     })
+
+    this.postlist()
 
     setTimeout(() => (this.loading = false), 500)
   },

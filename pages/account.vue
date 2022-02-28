@@ -249,15 +249,6 @@ export default {
           if (child.val().username === this.name) {
             db.ref(`/users/${child.key}`).update({
               username: this.name,
-            })
-          }
-        })
-      })
-
-      await db.ref('/users').once('value', (snapshot) => {
-        snapshot.forEach((child) => {
-          if (child.val().subscriber.includes(this.name)) {
-            db.ref(`/users/${child.key}`).update({
               subscriber: this.name,
             })
           }

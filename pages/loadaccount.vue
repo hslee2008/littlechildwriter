@@ -40,7 +40,7 @@
               <div>
                 <v-card-text>
                   <v-list-item>
-                    <v-list-item-avatar size="80">
+                    <v-list-item-avatar size="40">
                       <v-img :src="userInfo.userPhotoURL"></v-img>
                     </v-list-item-avatar>
 
@@ -80,7 +80,7 @@
                   <v-btn
                     :to="`/list?username=${userInfo.userDisplayName}`"
                     class="my-3"
-                    >{{ userInfo.userDisplayName }}의 글 보기<v-icon right
+                    >{{ userInfo.userDisplayName }}의 글<v-icon right
                       >mdi-arrow-right-thin</v-icon
                     >
                   </v-btn>
@@ -201,17 +201,19 @@ export default {
       this.subscribed = Object.keys(this.subscription).includes(
         this.currentUser.uid
       )
+
+      console.log(Object.keys(this.subscription))
     },
     notify() {
       db.ref(`users/${this.$route.query.uid}/notification`).push({
-        title: `${this.myUsername}님이 구독했습니다!`,
+        title: `${this.currentUser.myUsername}님이 구독했습니다!`,
         time: Date.now(),
         link: `/loadaccount?uid=${this.$route.query.uid}`,
       })
     },
     async notifyNO() {
       await db.ref(`users/${this.$route.query.uid}/notification`).push({
-        title: `${this.myUsername}님이 구독을 취소했습니다`,
+        title: `${this.currentUser.myUsername}님이 구독을 취소했습니다`,
         time: Date.now(),
         link: `/loadaccount?uid=${this.$route.query.uid}`,
       })
@@ -237,12 +239,12 @@ export default {
 
         this.notifyNO()
       } else {
-        db.ref(`/users/${this.uid}/subscribe/${this.$route.query.uid}`).set(
-          this.userInfo.userDisplayName
-        )
-        db.ref(`/users/${this.$route.query.uid}/subscriber/${this.uid}`).set(
-          this.currentUser.myUsername
-        )
+        db.ref(
+          `/users/${this.currentUser.uid}/subscribe/${this.$route.query.uid}`
+        ).set(this.currentUser.myUsername)
+        db.ref(
+          `/users/${this.$route.query.uid}/subscriber/${this.currentUser.uid}`
+        ).set(this.currentUser.myUsername)
 
         this.subscription[this.currentUser.uid] = this.currentUser.myUsername
         this.subscribed = true

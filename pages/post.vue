@@ -38,8 +38,8 @@
                   >
                   <v-btn @click="isbn.videoBarcode = false" color="red"
                     ><v-icon left>mdi-close-outline</v-icon>취소</v-btn
-                  ></v-card-actions
-                >
+                  >
+                </v-card-actions>
               </v-card>
             </v-dialog>
 
@@ -118,6 +118,7 @@
                     v-model="post.isbn"
                     v-if="isbn.inputISBN"
                     @click:append="fetchi"
+                    v-on:keyup.enter="fetchi"
                     append-icon="mdi-database-import"
                   ></v-text-field>
                 </v-card-text>
@@ -138,17 +139,24 @@
 
           <br />
 
-          <v-file-input
-            type="file"
-            accept="image/*"
-            @change="uploadImageFile($event)"
-            label="책 사진"
-            color="grey"
-            outlined
-            dense
-            prepend-icon="mdi-image"
-            class=""
-          />
+          <v-row style="gap: 10px" class="my-1">
+            <v-file-input
+              type="file"
+              accept="image/*"
+              @change="uploadImageFile($event)"
+              label="책 사진"
+              color="grey"
+              outlined
+              dense
+              prepend-icon="mdi-image"
+            />
+            <v-text-field
+              label="페이지"
+              dense
+              outlined
+              v-model="post.pageCount"
+            ></v-text-field>
+          </v-row>
 
           <v-row style="margin: 1px">
             <div style="margin: auto">
@@ -181,14 +189,18 @@
           </v-form>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions style="gap: 5px">
           <v-btn color="teal accent-7" @click="postcontent" elevation="0">
             올리기<v-icon right>mdi-note-plus</v-icon>
           </v-btn>
 
-          <v-btn to="/list" elevation="0" text color="error">
-            <v-icon>mdi-arrow-left</v-icon>취소</v-btn
-          >
+          <Dialog
+            :functionOk="() => this.$router.push('/list')"
+            buttonTitle="취소"
+            title="진짜로 취소하겠습니까?"
+            text="취소하면 복구할 수 없습니다"
+            icon="arrow-left"
+          />
         </v-card-actions>
 
         <v-alert
@@ -209,6 +221,8 @@
         />
       </div>
     </v-row>
+
+    <div v-if="$vuetify.breakpoint.mobile"><br /><br /><br /></div>
   </div>
 </template>
 
@@ -232,6 +246,7 @@ export default {
         image: '',
         pageCount: 0,
         likes: 0,
+        liked: [],
       },
 
       isbn: {
@@ -282,7 +297,7 @@ export default {
             .then(async (a) => {
               this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
               this.fetchi()
-              this.isbn.pictureBarcode = false
+              this.isbn.videoBarcode = false
             })
             .catch(() =>
               alert('바코드가 흐리게 보이지 않게 멀리 다시 찍어 주세요.')
@@ -334,11 +349,13 @@ export default {
       reader.readAsDataURL(e)
     },
     async postcontent() {
+      await this.updateLibris()
+
       const timestamp = Date.now()
 
       await auth.onAuthStateChanged(async (user) => {
         if (user) {
-          db.ref('/contents/' + user.uid + '/posts/' + timestamp).set({
+          db.ref('/contents/' + timestamp).set({
             title: this.post.title,
             content: this.post.content,
             rating: this.post.rating,
@@ -350,11 +367,13 @@ export default {
             previewLink: this.post.previewLink,
             pageCount: this.post.pageCount,
             likes: 0,
-            liked: false,
+            liked: [
+              {
+                [user.uid]: true,
+              },
+            ],
             views: 0,
           })
-
-          this.updateLibris()
         } else {
           alert('로그인이 필요합니다.')
 
@@ -374,21 +393,18 @@ export default {
           title: `${this.username}님이 새로운 글을 올렸습니다!`,
           time: timestamp,
           type: 'subscription',
-          link: `/loadpost?uid=${uie}&time=${timestamp}&isbn=${this.post.isbn}&pageCount=${this.post.pageCount}`,
+          link: `/loadpost?uid=${this.uid}&time=${timestamp}&isbn=${this.post.isbn}&pageCount=${this.post.pageCount}`,
         })
       }
     },
-    async updateLibris() {
+    updateLibris() {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          await db
-            .ref(`users/${user.uid}/libris`)
-            .transaction((currentValue) => {
-              if (this.post.pageCount < 100) currentValue + 1
-              else if (this.post.pageCount < 300) currentValue + 2
-              else if (this.post.pageCount < 500) currentValue + 4
-              else currentValue + 5
-            })
+          db.ref(`/users/${user.uid}/libris`).once('value', (s) => {
+            db.ref(`/users/${user.uid}/libris`).set(
+              parseInt(s.val()) + this.post.pageCount / 100
+            )
+          })
         }
       })
     },
@@ -408,7 +424,9 @@ export default {
               title: json.items[0].volumeInfo.title,
               image: json.items[0].volumeInfo.imageLinks.thumbnail,
               previewLink: json.items[0].volumeInfo.previewLink,
-              pageCount: json.items[0].volumeInfo.pageCount,
+              pageCount:
+                json.items[0].volumeInfo.pageCount ??
+                '페이지를 불러올 수 없음. 직접 입력하세요.',
               author: json.items[0].volumeInfo.authors,
             }
         })
@@ -423,7 +441,7 @@ export default {
         .then((s) => (this.subscribers = Object.keys(s.val() ?? [])))
     },
   },
-  async mounted() {
+  mounted() {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         this.uid = user.uid

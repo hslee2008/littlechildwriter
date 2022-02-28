@@ -211,7 +211,7 @@ export default {
   data() {
     return {
       listev: [],
-      itemsPerPageArray: [10, 20, 30, 40],
+      itemsPerPageArray: [10, 30, 50, 70, 100],
       search: '',
       filter: {},
       sortDesc: true,
@@ -259,19 +259,20 @@ export default {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
           it.likes++
-          it.liked[this.uid] = true
+          ;(it.liked ?? {
+            [this.uid]: false,
+          })[this.uid] = true
 
-          db.ref(`/contents/${it.uid}/posts/${it.time}/likes`).set(it.likes + 1)
+          db.ref(`/contents/${it.time}/likes`).set(it.likes)
 
-          db.ref(`contents/${it.uid}/posts/${it.time}/liked/${user.uid}`).set(
-            true
-          )
+          db.ref(`contents/${it.time}/liked/${user.uid}`).set(true)
 
           this.notify(it)
+          this.updateLibris(user.uid)
         }
       })
     },
-    async pdateLibris(uid) {
+    async updateLibris(uid) {
       await db
         .ref(`users/${uid}/libris`)
         .transaction((currentValue) => currentValue + 0.1)
@@ -301,18 +302,17 @@ export default {
       })
     },
 
-    fetchContent() {
-      db.ref('/contents/')
-        .orderByChild('/posts/time')
-        .on('child_added', async (snapshot) => {
-          const data = await snapshot.val().posts
+    async fetchContent() {
+      const content = db.ref('/contents/')
 
-          for (let i = 0; i < Object.keys(data).length; i++) {
-            this.listev.unshift(data[Object.keys(data)[i]])
-          }
-        })
-      this.listev.sort((a, b) => {
-        return a.time + a.likes / 2 - (b.time + a.likes / 2)
+      await content.on('child_added', async (snapshot) => {
+        const data = await snapshot.val()
+
+        this.listev.unshift(data)
+      })
+
+      await this.listev.sort((a, b) => {
+        return a.time + a.likes / 2 - (b.time + b.likes / 2)
       })
     },
   },

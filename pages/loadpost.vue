@@ -2,7 +2,7 @@
   <div>
     <shareButtonFab :title="post.title" :username="post.username" />
 
-    <v-card class="mx-auto my-3">
+    <v-card class="my-3">
       <v-progress-linear v-if="loading" indeterminate color="primary" />
 
       <v-btn
@@ -17,7 +17,7 @@
       >
 
       <div class="cardy">
-        <div class="mx-auto text-center">
+        <div class="text-center">
           <div>
             <v-btn-toggle class="my-5">
               <v-btn :href="post.previewLink">
@@ -49,7 +49,7 @@
             <img
               :src="post.image === undefined ? '' : post.image"
               width="200"
-              class="mx-auto my-4 rounded-lg"
+              class="my-4 rounded-lg"
             />
           </div>
         </div>
@@ -90,92 +90,117 @@
     </v-card>
 
     <div class="text-center my-10" v-if="userInfo.isuser">
-      <v-dialog v-model="dialog" width="500">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            @click="dialog = true"
-            color="red lighten-2"
-            v-bind="attrs"
-            v-on="on"
-            ><v-icon left>mdi-delete</v-icon>삭제</v-btn
-          >
-        </template>
-
-        <v-card>
-          <v-card-title> 진짜로 삭제하시겠습니까? </v-card-title>
-
-          <v-card-text> 삭제하면 복구할 수 없습니다. </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="del"> 👌 OK </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
+      <Dialog
+        :functionOk="del"
+        buttonTitle="삭제"
+        title="진짜로 삭제하겠습니까?"
+        text="삭제하면 복구할 수 없습니다"
+        icon="delete"
+      />
       <v-btn @click="edit" class="ml-3" color="blue lighten-2"
         ><v-icon left>mdi-pencil</v-icon>편집</v-btn
       >
     </div>
 
     <v-text-field
-      label="댓글"
       v-model="comment"
-      append-icon="mdi-send"
-      @click:append="commentpost"
-      @keyup.enter="commentpost"
-      single-line
       hide-details
-      outlined
-      dense
-      class="mx-auto my-6"
-    ></v-text-field>
+      flat
+      label="댓글 달기"
+      solo
+      @keydown.enter="commentpost"
+    >
+      <template v-slot:append>
+        <v-btn class="mx-0" icon depressed @click="commentpost">
+          <v-icon>mdi-send</v-icon>
+        </v-btn>
+      </template>
+    </v-text-field>
 
-    <v-timeline align-top dense>
-      <v-timeline-item
-        v-for="(message, index) in comments"
-        :key="message.time"
-        small
-        :color="userInfo.username.includes(message.username) ? 'blue' : 'red'"
-        :icon="message.badWord ? 'mdi-alert' : ''"
-      >
-        <div class="d-flex">
-          <div class="font-weight-normal">
-            <strong>{{ message.username }}</strong> ({{
+    <v-timeline dense clipped>
+      <v-slide-x-transition group>
+        <v-timeline-item
+          v-for="(message, index) in comments"
+          :key="message.time"
+          class="mb-4"
+          small
+          :color="userInfo.username.includes(message.username) ? 'blue' : 'red'"
+          :icon="message.badWord ? 'mdi-alert' : ''"
+        >
+          <template v-slot:icon>
+            <v-avatar size="30">
+              <img :src="message.photo" />
+            </v-avatar>
+          </template>
+          <v-alert dense outlined dense type="warning" v-if="message.badWord">
+            <v-row>
+              <v-col
+                ><h3>{{ message.content }} (필터됨)</h3></v-col
+              >
+              <v-col class="text-right">
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      v-bind="attrs"
+                      v-on="on"
+                      v-if="userInfo.username.includes(message.username)"
+                      cols="1"
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list dense>
+                    <v-list-item>
+                      <v-list-item-title @click="delcomment(message, index)"
+                        ><v-icon color="error"
+                          >mdi-delete</v-icon
+                        ></v-list-item-title
+                      >
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-col>
+            </v-row>
+          </v-alert>
+
+          <v-row justify="space-between" v-else>
+            <v-col cols="4"
+              ><strong>{{ message.username }}</strong>
+              <p>{{ message.content }}</p>
+            </v-col>
+            <v-col class="text-right my-1" cols="7">{{
               new Date(message.time).toLocaleDateString() +
               ' ' +
               new Date(message.time).toLocaleTimeString()
-            }})
-
-            <v-menu offset-y>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  v-if="userInfo.username.includes(message.username)"
-                >
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-              <v-list dense>
-                <v-list-item>
-                  <v-list-item-title @click="delcomment(message, index)"
-                    ><v-icon color="error"
-                      >mdi-delete</v-icon
-                    ></v-list-item-title
+            }}</v-col>
+            <v-col class="text-right">
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                    v-if="userInfo.username.includes(message.username)"
+                    cols="1"
                   >
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </div>
-        </div>
-        <v-alert dense outlined dense type="warning" v-if="message.badWord">
-          필터됨.
-        </v-alert>
-
-        <div>{{ message.content }}</div>
-      </v-timeline-item>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list dense>
+                  <v-list-item>
+                    <v-list-item-title @click="delcomment(message, index)"
+                      ><v-icon color="error"
+                        >mdi-delete</v-icon
+                      ></v-list-item-title
+                    >
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-col>
+          </v-row>
+        </v-timeline-item>
+      </v-slide-x-transition>
     </v-timeline>
 
     <br /><br /><br /><br />
@@ -196,6 +221,7 @@ export default {
         uid: '',
         username: '',
         isuser: false,
+        photo: '',
       },
 
       post: {
@@ -217,7 +243,7 @@ export default {
   methods: {
     async delcomment(message, index) {
       const { uid, time } = this.$route.query
-      const comments = db.ref(`contents/${uid}/posts/${time}/comments`)
+      const comments = db.ref(`contents/${time}/comments`)
 
       comments.once('value', (s) =>
         s.forEach((c) => {
@@ -249,7 +275,7 @@ export default {
         const timestamp = Date.now()
         const { uid, time } = this.$route.query
 
-        const comments = await db.ref(`contents/${uid}/posts/${time}/comments`)
+        const comments = await db.ref(`contents/${time}/comments`)
 
         filter.loadDictionary('en-us')
         filter.loadDictionary('ko-kr')
@@ -260,6 +286,7 @@ export default {
           time: timestamp,
           uid: this.$fire.auth.currentUser.uid,
           badWord: filter.check(this.comment),
+          photo: this.userInfo.photo,
         })
 
         this.notify()
@@ -281,10 +308,7 @@ export default {
       const { uid, time } = this.$route.query
       this.dialog = false
 
-      await db.ref(`contents/${uid}/posts/${time}`).remove()
-      await db
-        .ref(`users/${this.userInfo.uid}/libris`)
-        .transaction((cv) => cv - 1)
+      await db.ref(`contents/${time}`).remove()
 
       this.$router.push('/list')
     },
@@ -299,11 +323,11 @@ export default {
     async getQueryChips() {
       const { uid, time, views, pageCount } = this.$route.query
       const thumbs = await db
-          .ref(`/contents/${uid}/posts/${time}/likes`)
+          .ref(`/contents/${time}/likes`)
           .once('value')
           .then((s) => s.val()),
         isbn = await db
-          .ref(`/contents/${uid}/posts/${time}/isbn`)
+          .ref(`/contents/${time}/isbn`)
           .once('value')
           .then((s) => s.val())
 
@@ -335,7 +359,7 @@ export default {
 
       this.comments = Object.values(
         await db
-          .ref(`contents/${uid}/posts/${time}/comments`)
+          .ref(`contents/${time}/comments`)
           .once('value')
           .then((s) => s.val() ?? [])
       )
@@ -347,6 +371,7 @@ export default {
             uid: user.uid,
             username: user.displayName,
             isuser: this.$route.query.uid === user.uid,
+            photo: user.photoURL,
           }
       })
     },
@@ -354,7 +379,7 @@ export default {
       const { uid, time } = this.$route.query
 
       this.post = await db
-        .ref(`contents/${uid}/posts/${time}`)
+        .ref(`contents/${time}`)
         .once('value')
         .then((s) => s.val())
         .catch((err) => {
@@ -363,7 +388,7 @@ export default {
         })
     },
     async growView() {
-      const viewLink = `contents/${this.$route.query.uid}/posts/${this.$route.query.time}/views`
+      const viewLink = `contents/${this.$route.query.time}/views`
       db.ref(viewLink)
         .once('value')
         .then((s) => {
