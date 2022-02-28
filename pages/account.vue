@@ -4,7 +4,7 @@
       <h1>Edit Account</h1>
       <h1 v-if="error">{{ error.message }}</h1>
 
-      <v-divider></v-divider>
+      <v-divider />
       <br />
 
       <div>
@@ -45,7 +45,7 @@
         >
           <v-card tile justify-center>
             <v-card-title>프로필 아바타</v-card-title>
-            <v-divider></v-divider>
+            <v-divider />
             <br />
             <v-text-field
               label="URL"
@@ -95,7 +95,7 @@
 
           <v-card tile justify-center id="background">
             <v-card-title>프로필 페이지 배경화면</v-card-title>
-            <v-divider></v-divider>
+            <v-divider />
             <br />
             <v-text-field
               label="프로필 페이지 배경화면"
@@ -123,7 +123,7 @@
 
           <v-card tile justify-center>
             <v-card-title>특집 프로젝트 선택하기</v-card-title>
-            <v-divider></v-divider>
+            <v-divider />
             <br />
             <v-virtual-scroll
               :bench="benched"
@@ -141,7 +141,7 @@
                   </v-list-item-action>
                 </v-list-item>
 
-                <v-divider></v-divider>
+                <v-divider />
               </template>
             </v-virtual-scroll>
           </v-card>

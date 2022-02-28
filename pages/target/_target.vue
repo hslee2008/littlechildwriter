@@ -78,7 +78,7 @@
               </div>
 
               <v-divider vertical></v-divider>
-              <v-divider></v-divider>
+              <v-divider />
 
               <div>
                 <v-card-title
@@ -96,7 +96,7 @@
               </div>
 
               <v-divider vertical></v-divider>
-              <v-divider></v-divider>
+              <v-divider />
 
               <div
                 v-if="
@@ -169,7 +169,7 @@
         아직 나의 소개를 입력하지 않았습니다.
       </v-card-subtitle>
 
-      <v-divider></v-divider>
+      <v-divider />
 
       <div>
         <v-card-title
@@ -186,7 +186,7 @@
         </v-card-text>
       </div>
 
-      <v-divider></v-divider>
+      <v-divider />
 
       <div
         v-if="

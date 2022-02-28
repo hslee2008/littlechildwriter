@@ -49,105 +49,7 @@
 
       <template v-slot:default="props">
         <v-row style="gap: 10px; margin-top: 5px">
-          <v-card
-            v-for="item in props.items"
-            :key="item.uid + item.time"
-            :width="
-              $vuetify.breakpoint.width < 330
-                ? '90%'
-                : $vuetify.breakpoint.width < 400
-                ? 150
-                : $vuetify.breakpoint.xs
-                ? 185
-                : $vuetify.breakpoint.sm
-                ? 215
-                : $vuetify.breakpoint.md
-                ? 215
-                : 225
-            "
-            class="mx-auto my-3"
-            elevation="20"
-          >
-            <v-img
-              :src="
-                item.image === ''
-                  ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXeHDt7iweZ7AdiGtllZWINfZ0_5fPcntSiA&usqp=CAU'
-                  : item.image
-              "
-              :height="
-                $vuetify.breakpoint.width < 330
-                  ? 300
-                  : $vuetify.breakpoint.width < 400
-                  ? 220
-                  : $vuetify.breakpoint.xs
-                  ? 265
-                  : $vuetify.breakpoint.sm
-                  ? 300
-                  : $vuetify.breakpoint.md
-                  ? 330
-                  : 345
-              "
-              style="margin: auto"
-            ></v-img>
-
-            <v-card-title
-              class="primary--text col-11 text-truncate"
-              style="font-size: 1rem"
-            >
-              {{
-                item.title.includes(': ')
-                  ? item.title.substring(item.title.indexOf(': ') + 2)
-                  : item.title
-              }}</v-card-title
-            >
-            <v-card-subtitle style="font-size: 0.9rem">{{
-              item.username
-            }}</v-card-subtitle>
-
-            <v-divider></v-divider>
-
-            <v-card-text>
-              <p>
-                {{
-                  new Date(parseInt(item.time)).getMonth() +
-                  '월 ' +
-                  new Date(parseInt(item.time)).getDate() +
-                  '일'
-                }}<br />
-                {{ new Date(parseInt(item.time)).toLocaleTimeString() }}
-              </p>
-              <div style="margin-right: 10px">
-                <v-icon>mdi-eye</v-icon> {{ Math.round(item.views) }}
-              </div>
-              <v-rating
-                :value="item.rating"
-                dense
-                color="orange"
-                background-color="orange"
-                hover
-                readonly
-                :size="$vuetify.breakpoint.xs ? 15 : 20"
-                class="mr-1"
-              ></v-rating>
-            </v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-card-actions>
-              <v-btn @click="openPost(item)" color="primary" elevation="0"
-                ><v-icon left>mdi-open-in-new</v-icon>열기</v-btn
-              >
-              <v-btn
-                rounded
-                text
-                @click="likeThis(item)"
-                :disabled="item.liked[uid]"
-                v-if="uid"
-              >
-                <v-icon>mdi-thumb-up</v-icon> {{ item.likes }}
-              </v-btn></v-card-actions
-            >
-          </v-card>
+          <BookCard :items="props.items" :uid="uid" />
         </v-row>
       </template>
 
@@ -241,28 +143,6 @@ export default {
     },
     updateItemsPerPage(number) {
       this.itemsPerPage = number
-    },
-    openPost(it) {
-      const { uid, time } = it
-
-      this.$router.push(`/content/${uid}-${time}`)
-    },
-    likeThis(it) {
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          it.likes++
-          ;(it.liked ?? {
-            [this.uid]: false,
-          })[this.uid] = true
-
-          db.ref(`/contents/${it.time}/likes`).set(it.likes)
-
-          db.ref(`contents/${it.time}/liked/${user.uid}`).set(true)
-
-          this.notify(it)
-          this.updateLibris(user.uid)
-        }
-      })
     },
     async updateLibris(uid) {
       await db

@@ -23,13 +23,13 @@
             스튜디오란?
           </v-stepper-step>
 
-          <v-divider></v-divider>
+          <v-divider />
 
           <v-stepper-step :complete="makingStudioSteps > 2" step="2">
             기본 정보
           </v-stepper-step>
 
-          <v-divider></v-divider>
+          <v-divider />
 
           <v-stepper-step step="3"> 이미지 업로드 </v-stepper-step>
         </v-stepper-header>
@@ -44,7 +44,7 @@
               뜻합니다.
             </v-card-text>
 
-            <v-divider></v-divider>
+            <v-divider />
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -71,7 +71,7 @@
               ></v-text-field>
             </v-card-text>
 
-            <v-divider></v-divider>
+            <v-divider />
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -178,14 +178,14 @@
               item.creator
             }}</v-card-subtitle>
 
-            <v-divider></v-divider>
+            <v-divider />
 
             <v-card-text>
               마지막 업데이트:
               {{ new Date(parseInt(item.lastUpdated)).toLocaleDateString() }}
             </v-card-text>
 
-            <v-divider></v-divider>
+            <v-divider />
 
             <v-card-actions>
               <v-btn @click="openStudio(index)" color="primary" elevation="0"
@@ -296,6 +296,7 @@ export default {
         creator: '',
         lastUpdated: '',
         id: '',
+        thelink: '',
         views: 0,
         liked: {},
         totalPosts: {},
@@ -327,6 +328,7 @@ export default {
 
     makeAStudio() {
       this.makingStudioDialog = false
+
       this.studioInfo.creator = auth.currentUser.displayName
       this.studioInfo.lastUpdated = Date.now()
       this.studioInfo.id =

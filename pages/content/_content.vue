@@ -1,6 +1,6 @@
 <template>
   <div>
-    <shareButtonFab :title="post.title" :username="post.username" />
+    <LazyShareButtonFab :title="post.title" :username="post.username" />
 
     <v-card class="my-3">
       <v-progress-linear v-if="loading" indeterminate color="primary" />
@@ -35,15 +35,9 @@
 
             <br />
 
-            <v-rating
-              :value="post.rating"
-              color="amber"
-              dense
-              half-increments
-              readonly
-              size="20"
-              class="my-4"
+            <ReadOnlyRating
               v-if="$vuetify.breakpoint.xs"
+              :value="post.rating"
             />
 
             <img
@@ -65,15 +59,9 @@
           >
 
           <v-card-text>
-            <v-rating
-              :value="post.rating"
-              color="amber"
-              dense
-              half-increments
-              readonly
-              size="20"
-              class="my-4"
+            <ReadOnlyRating
               v-if="!$vuetify.breakpoint.xs"
+              :value="post.rating"
             />
 
             <p class="my-5">{{ post.content }}</p>

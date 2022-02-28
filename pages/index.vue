@@ -325,16 +325,16 @@ export default {
       this.$router.push(`/content/${uid}-${time}`)
     },
     async postlist() {
-      const content = db.ref('/contents/')
+      await db
+        .ref('/contents/')
+        .orderByKey()
+        .on('child_added', async (snapshot) => {
+          const data = await snapshot.val()
 
-      await content.on('child_added', async (snapshot) => {
-        const data = await snapshot.val()
+          this.recent.unshift(data)
+          this.popular.unshift(data)
+        })
 
-        this.recent.unshift(data)
-        this.popular.unshift(data)
-      })
-
-      await this.recent.sort((a, b) => b.time - a.time)
       await this.popular.sort((a, b) => b.likes - a.likes)
     },
     userlist() {

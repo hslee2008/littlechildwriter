@@ -75,7 +75,7 @@
                   />
                 </v-card-text>
 
-                <v-divider></v-divider>
+                <v-divider />
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -123,7 +123,7 @@
                   ></v-text-field>
                 </v-card-text>
 
-                <v-divider></v-divider>
+                <v-divider />
 
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -135,7 +135,7 @@
             </v-dialog>
           </v-row>
 
-          <v-divider></v-divider>
+          <v-divider />
 
           <br />
 

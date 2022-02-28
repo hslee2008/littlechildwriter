@@ -2,7 +2,7 @@
   <div class="create">
     <NuxtLink to="/login">Login</NuxtLink>
     <h1>Create Account</h1>
-    <v-divider></v-divider>
+    <v-divider />
     <br />
     <v-form v-model="valid">
       <v-text-field

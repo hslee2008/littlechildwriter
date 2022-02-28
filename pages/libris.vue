@@ -2,7 +2,7 @@
   <v-container>
     <div style="margin: 5px">
       <h2>명예의 전당</h2>
-      <v-divider></v-divider>
+      <v-divider />
     </div>
     <v-card style="margin: 5px">
       <v-card-text>

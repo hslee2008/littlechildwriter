@@ -16,10 +16,12 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/eslint-config-typescript": "^8.0.0",
     "@nuxtjs/firebase": "^8.2.2",
     "@nuxtjs/pwa": "^3.3.5",
     "bad-words": "^3.0.4",
     "core-js": "^3.21.1",
+    "dotenv": "^16.0.0",
     "firebase": "^9.6.7",
     "leo-profanity": "^1.5.0",
     "nuxt": "^2.15.8",

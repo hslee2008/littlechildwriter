@@ -1,15 +1,13 @@
 <template>
-  <v-container>
-    <div>
-      <h2>{{ title }}</h2>
-      <v-divider></v-divider>
-    </div>
+  <div>
+    <h2>{{ title }}</h2>
+    <v-divider />
 
     <br />
 
     <v-row style="gap: 15px">
       <v-card
-        v-for="item in data.slice(4 * page - 3, 4 * page + 1)"
+        v-for="item in data.slice(0, 4)"
         :key="item.uid + item.time"
         :width="
           $vuetify.breakpoint.width < 330
@@ -48,43 +46,53 @@
           style="margin: auto"
         ></v-img>
 
-        <v-card-title class="primary--text col-11 text-truncate">
+        <v-card-title
+          class="primary--text col-11 text-truncate"
+          style="font-size: 1rem"
+        >
           {{ item.title }}</v-card-title
         >
-        <v-card-subtitle>by {{ item.username }}</v-card-subtitle>
+        <v-card-subtitle style="font-size: 0.9rem"
+          >by {{ item.username }}</v-card-subtitle
+        >
 
-        <v-divider></v-divider>
+        <v-divider />
 
-        <v-card-actions>
-          <v-btn @click="loadPost(item)" color="primary" elevation="0" icon
-            ><v-icon>mdi-open-in-new</v-icon>
-          </v-btn>
-        </v-card-actions>
+        <v-btn
+          block
+          tile
+          @click="loadPost(item.uid, item.time)"
+          text
+          color="primary"
+        >
+          <v-icon left>mdi-open-in-new</v-icon> 열기
+        </v-btn>
+
+        <v-divider />
+
+        <v-card-text>
+          <p>
+            {{
+              new Date(parseInt(item.time)).getMonth() +
+              '월 ' +
+              new Date(parseInt(item.time)).getDate() +
+              '일'
+            }}<br />
+            {{ new Date(parseInt(item.time)).toLocaleTimeString() }}
+          </p>
+          <ReadOnlyRating :value="item.rating" />
+        </v-card-text>
       </v-card>
     </v-row>
-    <br />
-    <div class="text-center">
-      <v-pagination
-        v-model="page"
-        :length="Math.round(data.length / 4)"
-      ></v-pagination>
-    </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'BookList',
-  props: ['data', 'title'],
-  data() {
-    return {
-      page: 1,
-    }
-  },
+  props: ['data', 'title', 'uid'],
   methods: {
-    loadPost(item) {
-      const { uid, time } = item
-
+    loadPost(uid, time) {
       this.$router.push(`/content/${uid}-${time}`)
     },
   },
