@@ -3,6 +3,7 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   target: 'static',
+  buildDir: 'nuxtbuild',
   head: {
     titleTemplate: 'Little 작가',
     meta: [
@@ -159,13 +160,6 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/',
-  },
-
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
-  pwa: {
-    manifest: {
-      lang: 'en',
-    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
