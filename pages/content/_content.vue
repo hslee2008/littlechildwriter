@@ -53,7 +53,7 @@
 
           <v-card-subtitle>
             by
-            <NuxtLink :to="`target/${post.uid}`">
+            <NuxtLink :to="`/target/${post.uid}`">
               {{ post.username }}
             </NuxtLink></v-card-subtitle
           >
@@ -285,7 +285,7 @@ export default {
     },
     async notify() {
       await db.ref(`users/${this.uid}/notification`).push({
-        title: `${this.userInfo.username}님이 댓글를 작성했습니다습니다`,
+        title: `${this.userInfo.username}님이 댓글를 작성했습니다.`,
         time: Date.now(),
         link: `/content/${this.uid}-${this.time}`,
       })
@@ -298,7 +298,7 @@ export default {
       this.$router.push('/list')
     },
     async edit() {
-      this.$router.push(`mock/${this.uid}-${this.time}`)
+      this.$router.push(`/mock/${this.uid}-${this.time}`)
     },
     async getQueryChips() {
       const [thumbs, isbn, views, pageCount] = await db
@@ -361,6 +361,7 @@ export default {
     },
     async growView() {
       const viewLink = `contents/${this.time}/views`
+
       db.ref(viewLink)
         .once('value')
         .then((s) => {

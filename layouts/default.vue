@@ -5,7 +5,7 @@
         <template v-slot:activator="{ on, attrs }">
           <NuxtLink to="/" style="text-decoration: none; color: white">
             <v-avatar size="30" v-bind="attrs" v-on="on">
-              <v-img src="/icon.png"></v-img>
+              <v-img src="/logo.avif"></v-img>
             </v-avatar>
             <span class="ml-1" v-bind="attrs" v-on="on">Little 작가</span>
           </NuxtLink>
@@ -19,8 +19,9 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             icon
-            v-bind="attrs"
             v-on="on"
+            v-bind="attrs"
+            arial-label="밝은/어두운 모드"
             @click.stop="$vuetify.theme.dark = !$vuetify.theme.dark"
           >
             <v-icon>mdi-brightness-6</v-icon>
@@ -29,11 +30,12 @@
         <span>밝은/어두운 모드</span>
       </v-tooltip>
 
-      <v-btn to="/notification" icon style="color: gold">
-        <v-icon>{{
-          !login.notification ? 'mdi-bell' : 'mdi-bell-ring'
-        }}</v-icon>
-      </v-btn>
+      <Notification
+        :uid="login.uid"
+        :username="login.name"
+        :photoURL="login.photo"
+        :background="login.background"
+      />
 
       <v-menu v-if="login.photo" bottom min-width="200px" rounded offset-y>
         <template v-slot:activator="{ on }">
@@ -53,7 +55,7 @@
               <p class="text-caption mt-1">
                 {{ login.email }}
               </p>
-              <NuxtLink :to="`target/${login.uid}`">
+              <NuxtLink :to="`/target/${login.uid}`">
                 <v-btn color="primary">나의 프로필 페이지</v-btn>
               </NuxtLink>
 
@@ -65,7 +67,9 @@
               </p>
 
               <v-divider class="my-3"></v-divider>
-              <v-btn depressed rounded text to="/account"> 계정 편집 </v-btn>
+              <v-btn depressed rounded text to="/account" aria-label="계정">
+                계정 편집
+              </v-btn>
               <v-btn depressed rounded text to="/post"> 글 올리기 </v-btn>
               <v-divider class="my-3"></v-divider>
               <v-btn depressed rounded text @click="logout"> 로그아웃 </v-btn>
@@ -78,11 +82,11 @@
 
     <v-main>
       <v-container>
-        <Nuxt style="margin: 5px" />
+        <Nuxt />
       </v-container>
     </v-main>
 
-    <v-footer :fixed="true" style="z-index: 100">
+    <v-footer :fixed="true" style="z-index: 100" class="justify-center">
       &copy; {{ new Date().getFullYear() }} Little 작가
     </v-footer>
   </v-app>
@@ -98,11 +102,12 @@ export default {
       login: {
         name: '',
         email: '',
+        background: '',
         photo: '',
-        libris: 0,
-        notification: 0,
         uid: '',
+        libris: 0,
       },
+
       drawer: false,
       sheet: false,
     }
@@ -123,30 +128,30 @@ export default {
             email: user.email,
             photo: user.photoURL,
             uid: user.uid,
-            notification: Object.keys(
-              (await db
-                .ref(`/users/${user.uid}/notification`)
-                .once('value')
-                .then((s) => s.val())) ?? false
-            ).length,
-            libris: await db
-              .ref('users/' + user.uid)
+            background: await db
+              .ref(`users/${user.uid}/background`)
               .once('value')
-              .then((s) => s.val().libris ?? 0),
+              .then((s) => s.val() ?? ''),
+            libris: await db
+              .ref(`users/${user.uid}/libris`)
+              .once('value')
+              .then((s) => s.val() ?? 0),
           }
         } else {
           this.login = {}
         }
       })
     },
+    updateUserInfo() {
+      db.ref(`/users/${this.login.uid}`).update({
+        username: this.login.name,
+        photoURL: this.login.photo,
+      })
+    },
   },
   async mounted() {
     await this.getUserInfo()
-
-    db.ref(`/users/${this.login.uid}`).update({
-      username: this.login.name,
-      photoURL: this.login.photo,
-    })
+    this.updateUserInfo()
   },
 }
 </script>

@@ -4,7 +4,7 @@
       <v-card :width="this.$vuetify.mobile ? 300 : 500">
         <img
           ref="isbn"
-          src="/logo.png"
+          src="/logo.avif"
           alt="isbn-nothing-to-be-shown"
           style="display: none"
         />
@@ -227,9 +227,7 @@
 </template>
 
 <script>
-import { db, storage, auth } from '../plugins/firebase.js'
-import 'firebase/compat/database'
-import minify from 'url-minify'
+import { db, auth } from '../plugins/firebase.js'
 
 export default {
   name: 'PostPage',
@@ -266,43 +264,37 @@ export default {
   },
   methods: {
     showCamera() {
-      try {
-        if (navigator.mediaDevices.getUserMedia)
-          navigator.mediaDevices
-            .getUserMedia({
-              video: {
-                facingMode: 'environment',
-                width: { ideal: 4096 },
-                height: { ideal: 2160 },
-              },
-            })
-            .then((s) => (this.$refs.video.srcObject = s))
-            .catch((e) => {
-              this.isbn.pictureBarcode = false
-              this.error = '알 수 없는 에러!'
-            })
-      } catch (err) {
-        this.isbn.pictureBarcode = false
-        this.error = err.message
-      }
+      if (navigator.mediaDevices.getUserMedia)
+        navigator.mediaDevices
+          .getUserMedia({
+            video: {
+              facingMode: 'environment',
+              width: { ideal: 4096 },
+              height: { ideal: 2160 },
+            },
+          })
+          .then((s) => (this.$refs.video.srcObject = s))
+          .catch((e) => {
+            this.isbn.pictureBarcode = false
+            this.error = '알 수 없는 에러!'
+          })
     },
     takeISBNBarcodePictureFromVideo() {
-      try {
-        if ('BarcodeDetector' in window)
-          new BarcodeDetector({
-            formats: ['code_39', 'codabar', 'ean_13', 'ean_8'],
+      if ('BarcodeDetector' in window)
+        new BarcodeDetector({
+          formats: ['code_39', 'codabar', 'ean_13', 'ean_8'],
+        })
+          .detect(this.$refs.video)
+          .then((res) => res[0].value)
+          .then(async (a) => {
+            this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
+            this.fetchi()
+            this.isbn.videoBarcode = false
           })
-            .detect(this.$refs.video)
-            .then((res) => res[0].value)
-            .then(async (a) => {
-              this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
-              this.fetchi()
-              this.isbn.videoBarcode = false
-            })
-            .catch(() =>
-              alert('바코드가 흐리게 보이지 않게 멀리 다시 찍어 주세요.')
-            )
-      } catch (err) {
+          .catch(() =>
+            alert('바코드가 흐리게 보이지 않게 멀리 다시 찍어 주세요.')
+          )
+      else {
         alert('카메라 사용 불가: ' + err.message)
         this.isbn.pictureBarcode = false
       }

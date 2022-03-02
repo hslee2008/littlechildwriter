@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="500" @keyup.enter="functionOk">
+  <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         @click="dialog = true"

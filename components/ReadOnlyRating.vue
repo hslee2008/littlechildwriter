@@ -1,11 +1,12 @@
 <template>
   <v-rating
-    :value="value"
     dense
     readonly
     half-increments
-    size="20"
+    size="15"
     color="amber"
+    background-color="white"
+    :value="value"
   />
 </template>
 

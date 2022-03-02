@@ -3,7 +3,7 @@
     <br /><br />
 
     <v-row>
-      <v-card class="mx-auto" width="60%">
+      <v-card class="mx-auto" max-width="800px">
         <v-btn to="/list" elevation="0" text>
           <v-icon>mdi-arrow-left</v-icon>뒤로가기</v-btn
         >
@@ -38,15 +38,6 @@
         <v-card-actions>
           <v-btn color="teal accent-7" @click="update" elevation="0">
             업데이트<v-icon right>mdi-note-plus</v-icon>
-          </v-btn>
-          <v-btn
-            text
-            color="teal accent-4"
-            :href="post.previewLink"
-            target="_blank"
-            v-if="post.previewLink"
-          >
-            구글 책 링크
           </v-btn>
         </v-card-actions>
 

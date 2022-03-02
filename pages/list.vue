@@ -49,7 +49,11 @@
 
       <template v-slot:default="props">
         <v-row style="gap: 10px; margin-top: 5px">
-          <BookCard :items="props.items" :uid="uid" />
+          <BookCard
+            :items="props.items"
+            :uid="uid"
+            :displayName="userDisplayName"
+          />
         </v-row>
       </template>
 
@@ -144,22 +148,6 @@ export default {
     updateItemsPerPage(number) {
       this.itemsPerPage = number
     },
-    async updateLibris(uid) {
-      await db
-        .ref(`users/${uid}/libris`)
-        .transaction((currentValue) => currentValue + 0.1)
-    },
-
-    notify(it) {
-      auth.onAuthStateChanged(async (user) => {
-        await db.ref(`users/${it.uid}/notification`).push({
-          title: `${user.displayName}님이 글을 좋아합니다`,
-          time: Date.now(),
-          link: `/content/${it.uid}-${it.time}`,
-        })
-      })
-    },
-
     getUserInfo() {
       auth.onAuthStateChanged(async (user) => {
         if (user) {

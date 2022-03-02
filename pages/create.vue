@@ -86,7 +86,7 @@ export default {
               .then(() => {
                 db.ref(`/users/${auth.currentUser.uid}`).set({
                   username: this.userDisplayName,
-                  photoURL: 'https://littlechildwriter.web.app/icon.png',
+                  photoURL: 'https://littlechildwriter.web.app/logo.avif',
                   libris: 0,
                   bio: '',
                   subscribe: [],

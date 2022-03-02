@@ -7,7 +7,7 @@
 
     <v-row style="gap: 15px">
       <v-card
-        v-for="item in data.slice(0, 4)"
+        v-for="item in data.slice(0, 8)"
         :key="item.uid + item.time"
         :width="
           $vuetify.breakpoint.width < 330
@@ -25,11 +25,7 @@
         class="mx-auto"
       >
         <v-img
-          :src="
-            item.image === ''
-              ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXeHDt7iweZ7AdiGtllZWINfZ0_5fPcntSiA&usqp=CAU'
-              : item.image
-          "
+          :src="item.image"
           :height="
             $vuetify.breakpoint.width < 330
               ? 300
@@ -67,21 +63,6 @@
         >
           <v-icon left>mdi-open-in-new</v-icon> 열기
         </v-btn>
-
-        <v-divider />
-
-        <v-card-text>
-          <p>
-            {{
-              new Date(parseInt(item.time)).getMonth() +
-              '월 ' +
-              new Date(parseInt(item.time)).getDate() +
-              '일'
-            }}<br />
-            {{ new Date(parseInt(item.time)).toLocaleTimeString() }}
-          </p>
-          <ReadOnlyRating :value="item.rating" />
-        </v-card-text>
       </v-card>
     </v-row>
   </div>
@@ -89,7 +70,7 @@
 
 <script>
 export default {
-  name: 'BookList',
+  name: 'BookCardSimple',
   props: ['data', 'title', 'uid'],
   methods: {
     loadPost(uid, time) {

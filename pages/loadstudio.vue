@@ -39,7 +39,7 @@
         <v-card :width="this.$vuetify.mobile ? '100%' : 350">
           <img
             ref="isbn"
-            src="/logo.png"
+            src="/logo.avif"
             alt="isbn-nothing-to-be-shown"
             style="display: none"
           />
@@ -138,12 +138,7 @@
             <v-card-title>{{ posts.title }}</v-card-title>
             <v-card-subtitle>by {{ posts.username }}</v-card-subtitle>
             <v-card-text>
-              {{
-                new Date(parseInt(posts.time)).getMonth() +
-                '월 ' +
-                new Date(parseInt(posts.time)).getDate() +
-                '일'
-              }}
+              {{ new Date(parseInt(posts.time)).toLocaleDateString() }}
             </v-card-text>
             <v-card-actions>
               <v-btn :to="posts.thelink">

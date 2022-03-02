@@ -1,162 +1,37 @@
 <template>
-  <div v-if="!$vuetify.breakpoint.mobile">
-    <v-btn
-      bottom
-      right
-      fixed
-      ripple
-      style="
-        margin-bottom: 35px;
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        z-index: 999;
-      "
-      color="primary"
-      to="/account#background"
-      v-if="currentUser.isuser"
-    >
-      <v-icon left>mdi-pencil</v-icon> 배경화면 이미지 바꾸기
-    </v-btn>
-
-    <v-parallax
-      style="position: absolute; right: 0; top: 0; width: 100%; height: 100%"
-      :src="
-        userInfo.userBackground
-          ? userInfo.userBackground
-          : 'https://images5.alphacoders.com/659/thumb-1920-659155.jpg/'
-      "
-    >
-      <v-row flex>
-        <div class="cardy">
-          <v-hover v-slot="{ hover }">
-            <v-card
-              :elevation="hover ? 20 : 2"
-              :class="{ 'on-hover': hover } + ' vcard'"
-              :style="
-                $vuetify.breakpoint.mobile ? 'display: block' : 'display: flex'
-              "
-            >
-              <div>
-                <v-card-text>
-                  <v-list-item>
-                    <v-list-item-avatar size="40">
-                      <v-img :src="userInfo.userPhotoURL"></v-img>
-                    </v-list-item-avatar>
-
-                    <v-list-item-content>
-                      <v-list-item-title>{{
-                        userInfo.userDisplayName
-                      }}</v-list-item-title>
-
-                      <v-row justify="space-around" align="center" class="mt-3">
-                        <v-chip class="ma-2" color="red" text-color="white">
-                          <v-icon left> mdi-youtube-subscription </v-icon>
-                          {{ subscriberNumber }}
-                          {{ $vuetify.breakpoint.mobile ? '' : '구독자' }}
-                        </v-chip>
-                        <v-chip class="ma-2" color="blue" text-color="white">
-                          <v-icon left> mdi-library </v-icon>
-                          {{ userInfo.userLibris }}
-                          {{ $vuetify.breakpoint.mobile ? '' : '리브리스' }}
-                        </v-chip>
-                      </v-row>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <br />
-                  <div class="text--primary" v-if="userInfo.bio">
-                    {{ userInfo.bio }}
-                  </div>
-                  <div
-                    class="text--primary"
-                    style="color: grey !important"
-                    v-else
-                  >
-                    아직 나의 소개를 입력하지 않았습니다.
-                  </div>
-                </v-card-text>
-              </div>
-
-              <v-divider vertical></v-divider>
-              <v-divider />
-
-              <div>
-                <v-card-title
-                  >{{ userInfo.userDisplayName }}의 특집 프로젝트</v-card-title
-                >
-                <v-card-text>
-                  <NuxtLink
-                    v-for="(pro, index) in project"
-                    :key="pro.title"
-                    :to="`/content/${pro.link}`"
-                  >
-                    {{ pro.title }}<br />
-                  </NuxtLink>
-                </v-card-text>
-              </div>
-
-              <v-divider vertical></v-divider>
-              <v-divider />
-
-              <div
-                v-if="
-                  (subscriberNumber || currentUser.uid !== uid) &&
-                  !currentUser.isuser
-                "
+  <div>
+    <v-card class="mx-auto" max-width="750">
+      <v-container fluid>
+        <v-row dense>
+          <v-col cols="12">
+            <v-card>
+              <v-img
+                :src="userInfo.userBackground"
+                class="white--text align-end"
+                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                height="200px"
               >
-                <v-card-title
-                  >{{ userInfo.userDisplayName }} 구독자</v-card-title
-                >
-                <v-card-text>
-                  <span
-                    v-for="(people, index) in subscription"
-                    :key="Object.keys(people)[index]"
-                  >
-                    {{ people }}<br />
-                  </span>
-                </v-card-text>
-              </div>
+                <v-card-title v-text="userInfo.userDisplayName"></v-card-title>
+
+                <v-card-actions>
+                  <v-chip class="ma-2" color="red" text-color="white" label>
+                    <v-icon left> mdi-youtube-subscription </v-icon>
+                    {{ subscriberNumber }}
+                  </v-chip>
+                  <v-chip class="ma-2" color="blue" text-color="white" label>
+                    <v-icon left> mdi-library </v-icon>
+                    {{ userInfo.userLibris }}
+                  </v-chip>
+                  <v-chip class="ma-2" color="blue" text-color="white" label>
+                    <v-icon left> mdi-book-open </v-icon>
+                    {{ recent }}
+                  </v-chip>
+                </v-card-actions>
+              </v-img>
             </v-card>
-          </v-hover>
-        </div>
-      </v-row>
-    </v-parallax>
-  </div>
-
-  <div v-else>
-    <v-card>
-      <v-img height="200px" :src="userInfo.userBackground">
-        <v-app-bar flat color="rgba(0, 0, 0, 0.5)">
-          <v-toolbar-title class="text-h6 white--text pl-0">
-            <v-avatar size="35">
-              <img alt="user" :src="userInfo.userPhotoURL" />
-            </v-avatar>
-            <span class="ml-1">{{ userInfo.userDisplayName }}</span>
-          </v-toolbar-title>
-
-          <v-spacer></v-spacer>
-
-          <v-btn color="white" icon> <v-icon>mdi-dots-vertical</v-icon> </v-btn>
-        </v-app-bar>
-
-        <v-row
-          align="center"
-          style="position: absolute; bottom: 20px; left: 20px"
-        >
-          <v-chip class="ma-2" color="red" text-color="white" label>
-            <v-icon left> mdi-youtube-subscription </v-icon>
-            {{ subscriberNumber }}
-          </v-chip>
-          <v-chip class="ma-2" color="blue" text-color="white" label>
-            <v-icon left> mdi-library </v-icon>
-            {{ userInfo.userLibris }}
-          </v-chip>
-          <v-chip class="ma-2" color="blue" text-color="white" label>
-            <v-icon left> mdi-library </v-icon>
-            {{ recent }}
-          </v-chip>
+          </v-col>
         </v-row>
-      </v-img>
+      </v-container>
 
       <v-card-subtitle class="text--primary" v-if="userInfo.bio">
         {{ userInfo.bio }}
@@ -172,9 +47,7 @@
       <v-divider />
 
       <div>
-        <v-card-title
-          >{{ userInfo.userDisplayName }}의 특집 프로젝트</v-card-title
-        >
+        <v-card-title>{{ userInfo.userDisplayName }}의 프로젝트</v-card-title>
         <v-card-text>
           <NuxtLink
             v-for="(pro, index) in project"

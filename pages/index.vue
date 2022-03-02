@@ -8,7 +8,7 @@
         width: 100%;
         height: calc(100vh - 130px);
       "
-      src="https://images5.alphacoders.com/659/thumb-1920-659155.jpg"
+      src="/background.avif"
     >
       <v-row flex justify="center" class="img-div" style="margin: 5px">
         <div style="margin: auto">
@@ -59,11 +59,15 @@
 
     <br /><br />
 
-    <BookList :data="recent" title="최근 포스트" style="margin-top: 600px" />
+    <BookCardSimple
+      :data="recent"
+      title="최근 포스트"
+      style="margin-top: 575px"
+    />
 
     <br /><br />
 
-    <BookList :data="popular" title="인기있는 포스트" />
+    <BookCardSimple :data="popular" title="인기있는 포스트" />
 
     <br /><br />
 
@@ -201,65 +205,7 @@
 
     <br /><br />
 
-    <v-container>
-      <div style="margin: 5px">
-        <h2>명예의 전당</h2>
-        <v-divider></v-divider>
-      </div>
-      <v-card style="margin: 5px">
-        <v-card-text>
-          <div>리브리스 높은 사람</div>
-          <v-timeline :dense="$vuetify.breakpoint.xs">
-            <v-timeline-item
-              v-for="(item, index) in librisTop.slice(0, 5)"
-              :key="item.name + index"
-              :icon="
-                index == 0
-                  ? 'mdi-chess-king'
-                  : index == 1
-                  ? 'mdi-chess-queen'
-                  : index == 2
-                  ? 'mdi-chess-rook'
-                  : index == 3
-                  ? 'mdi-chess-bishop'
-                  : 'mdi-chess-knight'
-              "
-            >
-              <v-card class="mx-auto" max-width="344" outlined>
-                <v-list-item three-line>
-                  <v-list-item-content>
-                    <div class="text-overline mb-4">{{ index + 1 }}등</div>
-                    <v-list-item-title
-                      class="mb-1"
-                      :style="
-                        'font-size: ' + $vuetify.breakpoint.name / 20 + 'px'
-                      "
-                    >
-                      {{ item.name }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle
-                      >{{ !$vuetify.breakpoint.mobile ? '리브리스: ' : ''
-                      }}{{ item.libris }}</v-list-item-subtitle
-                    >
-                  </v-list-item-content>
-
-                  <v-list-item-avatar
-                    :size="$vuetify.breakpoint.xs ? 30 : 80"
-                    color="grey"
-                  >
-                    <v-img :src="librisTop[index].image"></v-img
-                  ></v-list-item-avatar>
-                </v-list-item>
-              </v-card>
-            </v-timeline-item>
-          </v-timeline>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-btn to="/libris" text color="teal accent-4"> 모두 보기 </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-container>
+    <LibrisCount :librisTop="librisTop.slice(0, 5)" :showActionButton="true" />
 
     <br /><br />
   </div>
@@ -292,33 +238,10 @@ export default {
       reveal1: false,
 
       page: 1,
+      value: 0,
     }
   },
   methods: {
-    likeThis(item) {
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          const likesRoot = `/contents/${item.time}`,
-            librisRoot = `/users/${user.uid}/libris`
-
-          db.ref(`${likesRoot}/likes`).set(item.likes + 1)
-          db.ref(`${likesRoot}/liked/${user.uid}`).set(true)
-
-          db.ref(librisRoot)
-            .once('value')
-            .then((s) => db.ref(librisRoot).set(s.val() + 1))
-
-          await db.ref(`users/${this.$route.query.uid}/notification`).push({
-            title: `${user.displayName}님이 글을 좋아합니다`,
-            time: timestamp,
-            link: `/content/${item.uid}-${item.time}`,
-          })
-
-          item.likes++
-          item.liked[user.uid] = true
-        }
-      })
-    },
     loadPost(item) {
       const { uid, time } = item
 

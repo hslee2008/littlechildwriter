@@ -61,12 +61,7 @@
 
       <v-card-text>
         <p>
-          {{
-            new Date(parseInt(item.time)).getMonth() +
-            '월 ' +
-            new Date(parseInt(item.time)).getDate() +
-            '일'
-          }}<br />
+          {{ new Date(parseInt(item.time)).toLocaleDateString() }}<br />
           {{ new Date(parseInt(item.time)).toLocaleTimeString() }}
         </p>
         <ReadOnlyRating :value="item.rating" />
@@ -74,50 +69,58 @@
 
       <v-divider />
 
-      <v-card-actions>
-        <v-row align="center" justify="center" class="my-1">
-          <v-btn
-            class="mr-1"
-            icon
-            @click="likeThis(item)"
-            :disabled="item.liked[uid] == true"
-            ><v-icon> mdi-thumb-up </v-icon></v-btn
-          >
-          <span class="subheading mr-2"> {{ item.likes }}</span>
-          <span class="mr-1">·</span>
-          <v-icon class="mr-1"> mdi-eye </v-icon>
-          <span class="subheading"> {{ Math.round(item.views) }}</span>
-        </v-row>
+      <v-card-actions class="my-1 justify-center">
+        <v-icon class="mr-1"> mdi-eye </v-icon>
+        <span class="subheading"> {{ Math.round(item.views) }}</span>
+
+        <span class="mr-1 ml-2">·</span>
+
+        <v-btn
+          class="mr-1"
+          icon
+          @click="likeThis(item)"
+          :disabled="item.liked[uid] == true"
+          ><v-icon> mdi-thumb-up </v-icon></v-btn
+        >
+        <span class="subheading"> {{ item.likes }}</span>
       </v-card-actions>
     </v-card>
   </v-row>
 </template>
 
 <script>
-import { auth, db } from '../plugins/firebase.js'
+import { db } from '../plugins/firebase.js'
 
 export default {
-  props: ['items', 'uid'],
+  props: ['items', 'uid', 'displayName'],
   methods: {
     loadPost(uid, time) {
       this.$router.push(`/content/${uid}-${time}`)
     },
-    likeThis(it) {
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          it.likes++
-          ;(it.liked ?? {
-            [this.uid]: false,
-          })[this.uid] = true
-
-          db.ref(`/contents/${it.time}/likes`).set(it.likes)
-
-          db.ref(`contents/${it.time}/liked/${user.uid}`).set(true)
-
-          this.notify(it)
-          this.updateLibris(user.uid)
-        }
+    updateLibris() {
+      db.ref(`users/${this.uid}/libris`).transaction((cv) => cv + 0.1)
+    },
+    notify(it) {
+      db.ref(`users/${it.uid}/notification`).push({
+        title: `${this.displayName}님이 글을 좋아합니다`,
+        time: Date.now(),
+        link: `/content/${it.uid}-${it.time}`,
       })
+    },
+    likeThis(it) {
+      it.likes++
+      ;(it.liked ?? {
+        [this.uid]: false,
+      })[this.uid] = true
+
+      db.ref(`/contents/${it.time}/likes`).set(it.likes)
+
+      db.ref(`contents/${it.time}/liked/${this.uid}`).set(true)
+
+      this.notify(it.uid)
+
+      this.updateLibris()
+      this.updateLibris(it.uid)
     },
   },
 }
