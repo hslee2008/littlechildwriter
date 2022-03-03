@@ -12,7 +12,7 @@
         <v-timeline :dense="$vuetify.breakpoint.xs" clipped>
           <v-timeline-item
             v-for="(item, index) in librisTop"
-            :key="item.name + index"
+            :key="index"
             :icon="
               index == 0
                 ? 'mdi-chess-king'

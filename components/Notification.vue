@@ -63,14 +63,6 @@
 
               <v-list dense>
                 <v-list-item>
-                  <v-list-item-title @click="deleteThis(index)"
-                    ><v-icon color="error"
-                      >mdi-delete</v-icon
-                    ></v-list-item-title
-                  >
-                </v-list-item>
-
-                <v-list-item>
                   <v-list-item-title>
                     <v-btn @click="openItem(message.link)" small icon
                       ><v-icon>mdi-open-in-new</v-icon></v-btn
@@ -107,19 +99,6 @@ export default {
     openItem(link) {
       this.$router.push(link)
       this.notifOverlay = false
-    },
-    async deleteThis(e) {
-      db.ref(`/users/${this.uid}/notification`)
-        .child(Object.keys(await a.once('value', (s) => s.val() ?? []))[0])
-        .remove()
-
-      this.notificationsList.splice(e, 1)
-
-      if (this.notificationsList.length === 0) this.$router.push('/')
-
-      this.notificationsList[e].title = '삭제 되었습니다.'
-
-      this.getNotification()
     },
     async getNotification() {
       this.notificationsList = Object.values(

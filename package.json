@@ -1,6 +1,10 @@
 {
   "name": "littlechildwriter",
   "version": "1.0.0",
+  "description": "littlechildwriter.web.app",
+  "main": ".eslintrc.js",
+  "author": "Hyunseung Lee",
+  "license": "ISC",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -11,39 +15,32 @@
     "deploy": "git add --all && npx prettier --write . && git add --all && npm run generate:mod && firebase deploy && git add --all",
     "lint:prettier": "prettier --check .",
     "lint": "npm run lint:prettier",
-    "lintfix": "prettier --write --list-different .",
-    "test": "npx playwright test"
+    "lintfix": "prettier --write --list-different ."
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.13.6",
-    "@nuxtjs/eslint-config-typescript": "^8.0.0",
-    "@nuxtjs/firebase": "^8.2.2",
-    "@nuxtjs/pwa": "^3.3.5",
     "bad-words": "^3.0.4",
     "core-js": "^3.21.1",
     "dotenv": "^16.0.0",
     "firebase": "^9.6.7",
+    "glob-parent": "^6.0.2",
     "leo-profanity": "^1.5.0",
+    "nth-check": "^2.0.1",
     "nuxt": "^2.15.8",
     "vue": "^2.6.14",
+    "vue-eslint-parser": "^8.3.0",
     "vue-server-renderer": "^2.6.14",
     "vue-template-compiler": "^2.6.14",
-    "vuetify": "^2.6.1",
-    "webpack": "^4.46.0"
+    "vuetify": "^2.6.1"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "^0.2.2",
+    "@nuxt/config": "^2.15.8",
     "@nuxt/types": "^2.15.8",
-    "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/vuetify": "^1.12.3",
-    "@playwright/test": "^1.19.2",
     "eslint-config-prettier": "^8.4.0",
-    "jest": "^27.5.1",
-    "playwright": "^1.19.2",
-    "prettier": "^2.5.1"
-  },
-  "description": "## Build Setup",
-  "main": ".eslintrc.js",
-  "author": "",
-  "license": "ISC"
+    "eslint-plugin-nuxt": "^3.1.0",
+    "prettier": "^2.5.1",
+    "webpack": "^4.46.0"
+  }
 }

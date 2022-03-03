@@ -7,15 +7,15 @@
 
     <v-row style="gap: 15px">
       <v-card
-        v-for="item in data.slice(0, 8)"
-        :key="item.uid + item.time"
+        v-for="(item, index) in data.slice(0, 4)"
+        :key="index"
         :width="
-          $vuetify.breakpoint.width < 330
+          $vuetify.breakpoint.width < 300
             ? '90%'
             : $vuetify.breakpoint.width < 400
-            ? 120
+            ? 125
             : $vuetify.breakpoint.xs
-            ? 185
+            ? 170
             : $vuetify.breakpoint.sm
             ? 215
             : $vuetify.breakpoint.md
@@ -27,10 +27,10 @@
         <v-img
           :src="item.image"
           :height="
-            $vuetify.breakpoint.width < 330
-              ? 300
+            $vuetify.breakpoint.width < 300
+              ? '90%'
               : $vuetify.breakpoint.width < 400
-              ? 200
+              ? 220
               : $vuetify.breakpoint.xs
               ? 265
               : $vuetify.breakpoint.sm

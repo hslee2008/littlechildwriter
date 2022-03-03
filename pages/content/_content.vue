@@ -17,9 +17,9 @@
       >
 
       <div class="cardy">
-        <div class="text-center">
+        <div class="text-center" style="margin: auto">
           <div>
-            <v-btn-toggle class="my-5">
+            <v-btn-toggle class="my-3">
               <v-btn :href="post.previewLink">
                 <v-icon left>mdi-book</v-icon> 구글 정보
               </v-btn>
@@ -90,106 +90,10 @@
       >
     </div>
 
-    <v-text-field
-      v-model="comment"
-      hide-details
-      flat
-      label="댓글 달기"
-      solo
-      @keydown.enter="commentpost"
-    >
-      <template v-slot:append>
-        <v-btn class="mx-0" icon depressed @click="commentpost">
-          <v-icon>mdi-send</v-icon>
-        </v-btn>
-      </template>
-    </v-text-field>
-
-    <v-timeline dense clipped>
-      <v-slide-x-transition group>
-        <v-timeline-item
-          v-for="(message, index) in comments"
-          :key="message.time"
-          class="mb-4"
-          small
-          :color="userInfo.username.includes(message.username) ? 'blue' : 'red'"
-          :icon="message.badWord ? 'mdi-alert' : ''"
-        >
-          <template v-slot:icon>
-            <v-avatar size="30">
-              <img :src="message.photo" />
-            </v-avatar>
-          </template>
-          <v-alert dense outlined dense type="warning" v-if="message.badWord">
-            <v-row>
-              <v-col
-                ><h3>{{ message.content }} (필터됨)</h3></v-col
-              >
-              <v-col class="text-right">
-                <v-menu offset-y>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      icon
-                      v-bind="attrs"
-                      v-on="on"
-                      v-if="userInfo.username.includes(message.username)"
-                      cols="1"
-                    >
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list dense>
-                    <v-list-item>
-                      <v-list-item-title @click="delcomment(message, index)"
-                        ><v-icon color="error"
-                          >mdi-delete</v-icon
-                        ></v-list-item-title
-                      >
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-col>
-            </v-row>
-          </v-alert>
-
-          <v-row justify="space-between" v-else>
-            <v-col cols="4"
-              ><strong>{{ message.username }}</strong>
-              <p>{{ message.content }}</p>
-            </v-col>
-            <v-col class="text-right my-1" cols="7">{{
-              new Date(message.time).toLocaleDateString() +
-              ' ' +
-              new Date(message.time).toLocaleTimeString()
-            }}</v-col>
-            <v-col class="text-right">
-              <v-menu offset-y>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    v-on="on"
-                    v-if="userInfo.username.includes(message.username)"
-                    cols="1"
-                  >
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list dense>
-                  <v-list-item>
-                    <v-list-item-title @click="delcomment(message, index)"
-                      ><v-icon color="error"
-                        >mdi-delete</v-icon
-                      ></v-list-item-title
-                    >
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-col>
-          </v-row>
-        </v-timeline-item>
-      </v-slide-x-transition>
-    </v-timeline>
+    <CommentSection
+      :databaseReference="`content/${this.uid}-${this.time}/comments`"
+      :id="`/content/${this.uid}-${this.time}`"
+    />
 
     <br /><br /><br /><br />
   </div>
@@ -203,6 +107,7 @@ export default {
   data() {
     return {
       comment: '',
+      updatedcomment: '',
       comments: [],
 
       userInfo: {
@@ -229,6 +134,26 @@ export default {
     }
   },
   methods: {
+    async editcomment(index) {
+      this.comments[index]['edit'] = true
+      this.$forceUpdate()
+    },
+    async updatecomment(index) {
+      this.comments[Object.keys(this.comments)[index]] = {
+        ...this.comments[index],
+        content: this.updatedcomment,
+        edited: true,
+        time: Date.now(),
+      }
+
+      delete this.comments[index].edit
+
+      this.$forceUpdate()
+
+      const comments = db.ref(`contents/${this.time}/comments`)
+
+      comments.set(this.comments)
+    },
     async delcomment(message, index) {
       const comments = db.ref(`contents/${this.time}/comments`)
 
@@ -242,10 +167,9 @@ export default {
         })
       )
 
-      this.comments[index].content = '삭제된 댓글입니다.'
-      this.comments[index].username = '삭제된 댓글입니다.'
+      delete this.comments[index]
 
-      await setTimeout(() => this.getComments(), 1500)
+      this.getComments()
     },
     async librisUpdate(useruid) {
       await auth.onAuthStateChanged(async (user) => {
@@ -266,13 +190,16 @@ export default {
         filter.loadDictionary('en-us')
         filter.loadDictionary('ko-kr')
 
-        comments.push({
-          username: this.userInfo.username,
-          content: filter.clean(this.comment),
-          time: timestamp,
-          uid: this.$fire.auth.currentUser.uid,
-          badWord: filter.check(this.comment),
-          photo: this.userInfo.photo,
+        await auth.onAuthStateChanged(async (user) => {
+          if (user)
+            comments.push({
+              username: this.userInfo.username,
+              content: filter.clean(this.comment),
+              time: timestamp,
+              uid: user.uid,
+              badWord: filter.check(this.comment),
+              photo: this.userInfo.photo,
+            })
         })
 
         this.notify()
@@ -362,12 +289,13 @@ export default {
     async growView() {
       const viewLink = `contents/${this.time}/views`
 
-      db.ref(viewLink)
+      await db
+        .ref(viewLink)
         .once('value')
-        .then((s) => {
+        .then(async (s) => {
           this.post.views = s.val()
 
-          db.ref(viewLink).set(s.val() + 1)
+          await db.ref(viewLink).set(s.val() + 1)
         })
 
       this.librisUpdate(this.uid)

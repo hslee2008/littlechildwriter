@@ -1,9 +1,8 @@
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
-import 'firebase/compat/storage'
 import 'firebase/compat/auth'
 
-const app = firebase.initializeApp({
+firebase.initializeApp({
   apiKey: 'AIzaSyDI6kfyE4xQlPqD7Dem3OxiI9lhA4IxQ-I',
   authDomain: 'littlechildwriter.firebaseapp.com',
   projectId: 'littlechildwriter',
@@ -14,7 +13,6 @@ const app = firebase.initializeApp({
 })
 const db = firebase.database()
 const auth = firebase.auth()
-const storage = firebase.storage()
 
 export default firebase
-export { db, auth, storage }
+export { db, auth }

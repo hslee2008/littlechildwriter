@@ -1,5 +1,3 @@
-import NuxtConfiguration from '@nuxt/config'
-
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   target: 'static',
@@ -39,7 +37,7 @@ export default {
     css: false,
   },
   loadingIndicator: {
-    name: 'pulse',
+    name: 'rotating-plane',
     color: 'white',
     background: 'black',
   },
@@ -123,28 +121,8 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
-    [
-      '@nuxtjs/firebase',
-      {
-        config: {
-          apiKey: 'AIzaSyDI6kfyE4xQlPqD7Dem3OxiI9lhA4IxQ-I',
-          authDomain: 'littlechildwriter.firebaseapp.com',
-          projectId: 'littlechildwriter',
-          storageBucket: 'littlechildwriter.appspot.com',
-          messagingSenderId: '986081147205',
-          appId: '1:986081147205:web:fadaee26490f1f173d662c',
-          measurementId: 'G-F7Z7BLCQDQ',
-        },
-        services: {
-          auth: true,
-          database: true,
-        },
-      },
-    ],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -172,14 +150,4 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
   content: ['./pages/*.vue'],
-
-  config: {
-    apiKey: 'AIzaSyDI6kfyE4xQlPqD7Dem3OxiI9lhA4IxQ-I',
-    authDomain: 'littlechildwriter.firebaseapp.com',
-    projectId: 'littlechildwriter',
-    storageBucket: 'littlechildwriter.appspot.com',
-    messagingSenderId: '986081147205',
-    appId: '1:986081147205:web:fadaee26490f1f173d662c',
-    measurementId: 'G-F7Z7BLCQDQ',
-  },
 }

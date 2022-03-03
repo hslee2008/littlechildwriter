@@ -39,16 +39,16 @@
 
           <span v-if="userInfo.loginInfo">
             <v-btn to="/post" color="rgb(2, 79, 70)" class="my-3"
-              >지금 글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon></v-btn
+              >글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon></v-btn
             >
           </span>
           <span v-else>
             <v-btn to="/login" color="rgb(2, 79, 70)" class="my-3"
-              >로그인 하기 <v-icon right>mdi-account</v-icon></v-btn
+              >로그인 <v-icon right>mdi-account</v-icon></v-btn
             >
           </span>
           <v-btn to="/list"
-            >모든 글 보기<v-icon right>mdi-book-alphabet</v-icon></v-btn
+            >모든 글<v-icon right>mdi-book-alphabet</v-icon></v-btn
           >
           <v-btn to="/studios"
             >스튜디오<v-icon right>mdi-android-studio</v-icon></v-btn
@@ -263,11 +263,12 @@ export default {
     userlist() {
       db.ref('/users')
         .orderByChild('/libris')
-        .on('child_added', async (snapshot) => {
+        .on('child_added', async (s) => {
           this.librisTop.unshift({
-            name: snapshot.val().username,
-            libris: snapshot.val().libris ?? 0,
-            image: snapshot.val().photoURL,
+            name: s.val().username,
+            libris: s.val().libris ?? 0,
+            image: s.val().photoURL,
+            uid: s.key,
           })
         })
     },
@@ -276,31 +277,33 @@ export default {
         .once('value')
         .then((s) => (this.userInfo.libris = s.val()))
     },
+    getUserInfo() {
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          this.awaitLibris(user.uid)
+
+          this.userInfo = {
+            loginInfo: user.uid,
+            name: user.displayName,
+            image: user.photoURL,
+            subscriber: 0,
+          }
+
+          this.userInfo.subscriber = await db
+            .ref(`/users/${this.userInfo.loginInfo}/subscriber`)
+            .once('value')
+            .then((s) => {
+              return s.numChildren()
+            })
+        }
+      })
+    },
   },
   async mounted() {
     this.loading = true
 
     this.userlist()
-
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        this.awaitLibris(user.uid)
-
-        this.userInfo = {
-          loginInfo: user.uid,
-          name: user.displayName,
-          image: user.photoURL,
-          subscriber: 0,
-        }
-
-        this.userInfo.subscriber = await db
-          .ref(`/users/${this.userInfo.loginInfo}/subscriber`)
-          .once('value')
-          .then((s) => {
-            return s.numChildren()
-          })
-      }
-    })
+    this.getUserInfo()
 
     this.postlist()
 

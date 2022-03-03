@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row class="my-1">
+    <v-row class="ml-1 mr-1 mt-1">
       <v-card :width="this.$vuetify.mobile ? 300 : 500">
         <img
           ref="isbn"
@@ -18,7 +18,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon left>mdi-barcode-scan</v-icon> 비디오
+                  ><v-icon>mdi-barcode-scan</v-icon>
                 </v-btn>
               </template>
 
@@ -48,7 +48,7 @@
             <v-dialog v-model="isbn.pictureBarcode" width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon left>mdi-barcode</v-icon> 사진
+                  ><v-icon>mdi-barcode</v-icon>
                 </v-btn>
               </template>
 
@@ -95,7 +95,7 @@
             <v-dialog v-model="isbn.inputISBN" width="500">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon left>mdi-form-textbox</v-icon> 입력</v-btn
+                  ><v-icon>mdi-form-textbox</v-icon></v-btn
                 >
               </template>
 
@@ -359,11 +359,9 @@ export default {
             previewLink: this.post.previewLink,
             pageCount: this.post.pageCount,
             likes: 0,
-            liked: [
-              {
-                [user.uid]: true,
-              },
-            ],
+            liked: {
+              [user.uid]: true,
+            },
             views: 0,
           })
         } else {

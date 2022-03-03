@@ -4,13 +4,14 @@
       <template v-slot:activator="{ on, attrs }">
         <v-fab-transition>
           <v-btn
+            v-bind="attrs"
+            v-on="on"
             bottom
             right
             fixed
-            class="mb-10"
             color="primary"
-            v-bind="attrs"
-            v-on="on"
+            style="z-index: 100"
+            :class="$vuetify.breakpoint.mobile ? 'mb-15' : 'mb-10'"
           >
             <v-icon left>mdi-android-studio</v-icon> 나만의 스튜디오 만들기
           </v-btn>
@@ -187,36 +188,17 @@
 
             <v-divider />
 
-            <v-card-actions>
+            <v-card-actions style="gap: 5px">
               <v-btn @click="openStudio(index)" color="primary" elevation="0"
                 ><v-icon left>mdi-open-in-new</v-icon>열기</v-btn
-              ><v-dialog v-model="dialog" width="500">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    @click="dialog = true"
-                    color="error"
-                    elevation="0"
-                    v-if="item.creator === username"
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    <v-icon left>mdi-delete</v-icon>삭제</v-btn
-                  >
-                </template>
-
-                <v-card>
-                  <v-card-title> 진짜로 삭제하시겠습니까? </v-card-title>
-
-                  <v-card-text> 삭제하면 복구할 수 없습니다. </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" text @click="deleteStudio(index)">
-                      👌 OK
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+              >
+              <Dialog
+                :functionOk="deleteStudio"
+                buttonTitle="삭제"
+                title="진짜로 삭제하겠습니까?"
+                text="삭제하면 복구할 수 없습니다."
+                icon="delete"
+              />
             </v-card-actions>
           </v-card>
         </v-row>
@@ -328,7 +310,6 @@ export default {
 
     makeAStudio() {
       this.makingStudioDialog = false
-
       this.studioInfo.creator = auth.currentUser.displayName
       this.studioInfo.lastUpdated = Date.now()
       this.studioInfo.id =
@@ -347,7 +328,7 @@ export default {
       })
     },
     openStudio(index) {
-      this.$router.push('loadstudio?id=' + this.fetchedStudios[index].id)
+      this.$router.push(`studio/${this.fetchedStudios[index].id}`)
     },
     deleteStudio(index) {
       auth.onAuthStateChanged((user) => {

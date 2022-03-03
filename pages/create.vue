@@ -81,7 +81,7 @@ export default {
         await auth
           .createUserWithEmailAndPassword(this.email, this.password)
           .then(() => {
-            this.$fire.auth
+            auth
               .signInWithEmailAndPassword(this.email, this.password)
               .then(() => {
                 db.ref(`/users/${auth.currentUser.uid}`).set({
