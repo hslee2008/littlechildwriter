@@ -244,7 +244,7 @@ export default {
         image: '',
         pageCount: 0,
         likes: 0,
-        liked: [],
+        liked: {},
       },
 
       isbn: {
@@ -358,11 +358,11 @@ export default {
             image: this.post.image,
             previewLink: this.post.previewLink,
             pageCount: this.post.pageCount,
-            likes: 0,
+            likes: 1,
             liked: {
               [user.uid]: true,
             },
-            views: 0,
+            views: 1,
           })
         } else {
           alert('로그인이 필요합니다.')
