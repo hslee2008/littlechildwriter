@@ -20,7 +20,7 @@
           :rules="nameRules"
           value="name"
           prepend-inner-icon="mdi-account"
-        ></v-text-field>
+        />
         <v-text-field
           label="Email"
           placeholder="Email"
@@ -34,7 +34,7 @@
           :rules="emailRules"
           value="email"
           prepend-inner-icon="mdi-email"
-        ></v-text-field>
+        />
 
         <div
           :style="
@@ -61,7 +61,7 @@
               :rules="photoRules"
               value="photo"
               prepend-inner-icon="mdi-camera"
-            ></v-text-field>
+            />
             <v-card-text class="d-flex justify-center">
               <v-avatar size="100"><v-img :src="photo" /></v-avatar>
             </v-card-text>
@@ -85,7 +85,7 @@
                 v-model="bio"
                 placeholder="나의 소개"
                 no-resize
-              ></v-textarea>
+              />
             </v-card-text>
           </v-card>
 
@@ -111,7 +111,7 @@
               :rules="photoRules"
               value="Background"
               prepend-inner-icon="mdi-camera"
-            ></v-text-field>
+            />
             <v-card-text class="d-flex justify-center">
               <v-avatar size="100"><v-img :src="background" /></v-avatar>
             </v-card-text>

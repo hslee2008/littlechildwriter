@@ -1,13 +1,7 @@
 <template>
   <div>
     <v-parallax
-      style="
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 100%;
-        height: calc(100vh - 130px);
-      "
+      style="position: absolute; left: 0; width: 100%"
       src="/background.avif"
     >
       <v-row flex justify="center" class="img-div" style="margin: 5px">
@@ -38,12 +32,12 @@
           <br />
 
           <span v-if="userInfo.loginInfo">
-            <v-btn to="/post" color="rgb(2, 79, 70)" class="my-3"
+            <v-btn to="/post" color="primary" class="my-3"
               >글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon></v-btn
             >
           </span>
           <span v-else>
-            <v-btn to="/login" color="rgb(2, 79, 70)" class="my-3"
+            <v-btn to="/login" color="primary" class="my-3"
               >로그인 <v-icon right>mdi-account</v-icon></v-btn
             >
           </span>
@@ -94,7 +88,9 @@
                 v-if="loading"
                 indeterminate
               ></v-progress-circular>
-              <span class="text-h4" v-else>{{ userInfo.libris }}</span>
+              <span class="text-h4" v-else>{{
+                Math.round(userInfo.libris)
+              }}</span>
             </v-card-title>
           </v-card-text>
           <v-card-actions>

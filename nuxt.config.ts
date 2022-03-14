@@ -1,24 +1,79 @@
 export default {
-  // Global page headers: https://go.nuxtjs.dev/config-head
   target: 'static',
+  generate: {
+    dir: '../public_html/',
+    devtools: true,
+  },
+  // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: 'Little 작가',
+    htmlAttrs: {
+      lang: 'en,ko-kr',
+    },
+    titleTemplate: '%s | Coding-Insight',
+    title: 'Little Child Writer',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
-        content: 'Little 작가에서 글을 올리고, 새롭게 배우고, 대화를 하세요.',
+        content:
+          'Learn programming through learning, practicing, and building. Our site includes full courses of python, c, c++, and rust for free in both Korean and English language.',
       },
-      { name: 'format-detection', content: 'telephone=no' },
+      {
+        name: 'author',
+        content: ['Hyunseung'],
+      },
+      {
+        name: 'copyright',
+        content: 'LittleChildWriter',
+      },
+      {
+        name: 'subtitle',
+        content: '글을 올리고, 새롭게 배우고, 대화하기',
+      },
+      {
+        name: 'subject',
+        content: '글을 올리고, 새롭게 배우고, 대화하기',
+      },
+      {
+        name: 'language',
+        content: 'ES, KO-KR',
+      },
+      {
+        name: 'format-detection',
+        content: 'telephone=no',
+      },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/favicon.ico',
+      },
+      {
+        rel: 'apple-touch-icon',
+        href: '/favicon.ico',
+      },
+    ],
   },
 
-  generate: {
-    fallback: '404.html',
+  css: [
+    './assets/css/global.css',
+    './assets/css/transition.css',
+    './assets/css/component.css',
+  ],
+
+  // https://go.nuxtjs.dev/config-plugins
+  plugins: ['~/plugins/vuetify.js'],
+
+  // https://go.nuxtjs.dev/config-components
+  components: true,
+
+  components: {
+    dirs: ['~/components/global/', '~/components/spec/'],
   },
+
+  // https://go.nuxtjs.dev/config-modules
+  buildModules: ['@nuxtjs/vuetify'],
 
   vue: {
     config: {
@@ -26,6 +81,43 @@ export default {
       performance: true,
       productionTip: true,
     },
+  },
+
+  // https://go.nuxtjs.dev/config-modules
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/pwa',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/robots',
+  ],
+
+  sitemap: {
+    hostname: 'https://www.littlechildwriter.web.app',
+    gzip: true,
+    exclude: ['/.nuxt', '/404', '/500'],
+    defaults: {
+      changefreq: 'daily',
+      priority: 1,
+      lastmod: new Date(),
+    },
+  },
+
+  robots: [
+    {
+      UserAgent: '*',
+      Allow: '/',
+      Sitemap: 'https://www.littlechildwriter.web.app/sitemap.xml',
+    },
+    {
+      userAgent: 'Googlebot-image',
+      Disallow: '/',
+    },
+  ],
+
+  // https://go.nuxtjs.dev/config-axios
+  axios: {
+    // https://github.com/nuxt-community/axios-module/issues/308
+    baseURL: '/',
   },
 
   loading: {
@@ -37,11 +129,12 @@ export default {
     css: false,
   },
   loadingIndicator: {
-    name: 'rotating-plane',
+    name: 'pulse',
     color: 'white',
     background: 'black',
   },
 
+  //  https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
       name: 'Little 작가',
@@ -52,8 +145,8 @@ export default {
       id: '/index.html',
       author: ['이현승'],
       categories: ['Education', 'Programming'],
-      theme_color: '#20232a',
-      background_color: '#20232a',
+      theme_color: '#23272F',
+      background_color: '#23272F',
       display: 'minimal-ui',
       scope: '/',
       start_url: '/',
@@ -106,48 +199,38 @@ export default {
     },
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    './assets/css/transition.css',
-    './assets/css/component.css',
-    './assets/css/global.css',
-  ],
-
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['./plugins/firebase.js', './plugins/vuetify.js'],
-
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
-
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
-  ],
-
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
-  ],
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+  router: {
+    base: '/',
   },
 
-  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
-    customVariables: ['./assets/variables.scss'],
-    theme: {
-      dark: true,
-    },
+    customVariables: ['~/assets/sass/variables.scss'],
+    treeShake: true,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
-  content: ['./pages/*.vue'],
+  build: {
+    devtools: true,
+    optmizeCSS: true,
+    splitChunks: {
+      layouts: true,
+      pages: true,
+      commons: true,
+    },
+    html: {
+      minify: {
+        collapseWhitespace: false,
+        removeComments: true,
+      },
+    },
+    extend(config, { isClient }) {
+      // Extend only webpack config for client-bundle
+      if (isClient) {
+        config.performance = {
+          maxEntrypointSize: 512000,
+          maxAssetSize: 512000,
+        }
+      }
+    },
+  },
 }

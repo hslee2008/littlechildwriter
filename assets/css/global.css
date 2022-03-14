@@ -1,0 +1,19 @@
+.theme--dark.v-application {
+  background-color: var(--v-background-base, #23272f) !important;
+}
+
+.theme--light.v-application {
+  background-color: var(--v-background-base, rgb(243, 243, 243)) !important;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #087ea4;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0fa5d6;
+}

@@ -1,229 +1,231 @@
 <template>
-  <div>
-    <v-row class="ml-1 mr-1 mt-1">
-      <v-card :width="this.$vuetify.mobile ? 300 : 500">
+  <v-row class="ma-1">
+    <v-card :width="this.$vuetify.mobile ? 300 : 500" class="ma-auto">
+      <div class="d-none">
         <img
           ref="isbn"
           src="/logo.avif"
           alt="isbn-nothing-to-be-shown"
-          style="display: none"
+          class="d-none"
         />
 
-        <v-card-text>
-          <v-row style="margin: 0.5px; gap: 10px" class="mb-3" justify="center">
-            <v-dialog
-              v-model="isbn.videoBarcode"
-              :width="$vuetify.breakpoint.xs ? '90%' : '70%'"
-              height="90%"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon>mdi-barcode-scan</v-icon>
-                </v-btn>
-              </template>
-
-              <v-card height="100%" width="100%" v-if="isbn.videoBarcode">
-                <div id="container">
-                  <video
-                    autoplay="true"
-                    id="videoElement"
-                    ref="video"
-                    width="100%"
-                  ></video>
-                </div>
-                <v-card-actions>
-                  <v-btn @click="showCamera">카메라</v-btn>
-                  <v-btn @click="takeISBNBarcodePictureFromVideo"
-                    >ISBN 바코드 찍기</v-btn
-                  >
-                  <v-btn @click="isbn.videoBarcode = false" color="red"
-                    ><v-icon left>mdi-close-outline</v-icon>취소</v-btn
-                  >
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
-            <v-divider vertical></v-divider>
-
-            <v-dialog v-model="isbn.pictureBarcode" width="500">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon>mdi-barcode</v-icon>
-                </v-btn>
-              </template>
-
-              <v-card>
-                <v-progress-linear
-                  v-if="loading"
-                  indeterminate
-                  color="white"
-                  class="mb-0"
-                ></v-progress-linear>
-                <v-card-title> IBSN 사진 </v-card-title>
-
-                <br />
-
-                <v-card-text>
-                  <v-file-input
-                    type="file"
-                    accept="image/*"
-                    @change="uploadFile($event)"
-                    label="ISBN 사진"
-                    color="grey"
-                    outlined
-                    dense
-                  />
-                </v-card-text>
-
-                <v-divider />
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary"
-                    text
-                    @click="isbn.pictureBarcode = false"
-                  >
-                    취소
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-
-            <v-divider vertical></v-divider>
-
-            <v-dialog v-model="isbn.inputISBN" width="500">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                  ><v-icon>mdi-form-textbox</v-icon></v-btn
-                >
-              </template>
-
-              <v-card>
-                <v-progress-linear
-                  v-if="loading"
-                  indeterminate
-                  color="white"
-                  class="mb-0"
-                ></v-progress-linear>
-                <v-card-title> 입력 </v-card-title>
-
-                <br />
-
-                <v-card-text>
-                  <v-text-field
-                    dense
-                    autofocus
-                    label="ISBN"
-                    v-model="post.isbn"
-                    v-if="isbn.inputISBN"
-                    @click:append="fetchi"
-                    v-on:keyup.enter="fetchi"
-                    append-icon="mdi-database-import"
-                  ></v-text-field>
-                </v-card-text>
-
-                <v-divider />
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="primary" text @click="isbn.inputISBN = false">
-                    취소
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-row>
-
-          <v-divider />
-
-          <br />
-
-          <v-row style="gap: 10px" class="my-1">
-            <v-file-input
-              type="file"
-              accept="image/*"
-              @change="uploadImageFile($event)"
-              label="책 사진"
-              color="grey"
-              outlined
-              dense
-              prepend-icon="mdi-image"
-            />
-            <v-text-field
-              label="페이지"
-              dense
-              outlined
-              v-model="post.pageCount"
-            ></v-text-field>
-          </v-row>
-
-          <v-row style="margin: 1px">
-            <div style="margin: auto">
-              {{ new Date().toLocaleDateString() }}
-            </div>
-            <v-rating
-              v-model="post.rating"
-              background-color="blue lighten-3"
-              color="blue"
-              dense
-              size="30"
-              style="margin: auto"
-            ></v-rating>
-          </v-row>
-          <v-form>
-            <v-text-field
-              label="제목"
-              v-model="post.title"
-              :hint="post.subtitle"
-            ></v-text-field>
-            <v-text-field label="작가" v-model="post.author"></v-text-field>
-
-            <div class="text--primary">
-              <v-textarea
-                label="책 소개"
-                hint="아직 책을 읽지 않은 사람들에게 책을 요약하세요!"
-                v-model="post.content"
-              ></v-textarea>
-            </div>
-          </v-form>
-        </v-card-text>
-
-        <v-card-actions style="gap: 5px">
-          <v-btn color="teal accent-7" @click="postcontent" elevation="0">
-            올리기<v-icon right>mdi-note-plus</v-icon>
-          </v-btn>
-
-          <Dialog
-            :functionOk="() => this.$router.push('/list')"
-            buttonTitle="취소"
-            title="진짜로 취소하겠습니까?"
-            text="취소하면 복구할 수 없습니다"
-            icon="arrow-left"
-          />
-        </v-card-actions>
-
-        <v-alert
-          dense
+        <v-file-input
+          ref="file"
+          type="file"
+          accept="image/*"
+          @change="uploadImageFile($event)"
+          label="책 사진"
+          color="grey"
           outlined
-          type="error"
-          v-if="error"
-          style="margin: 10px"
-          >{{ error }}</v-alert
-        >
-      </v-card>
-
-      <div style="margin: auto">
-        <v-img
-          :src="post.image"
-          v-if="post.image"
-          laxy-src="https://i.pinimg.com/originals/6b/67/cb/6b67cb8a166c0571c1290f205c513321.gif"
+          dense
+          prepend-icon="mdi-upload"
         />
       </div>
-    </v-row>
 
-    <div v-if="$vuetify.breakpoint.mobile"><br /><br /><br /></div>
-  </div>
+      <v-card-text>
+        <v-row style="margin: 0.5px; gap: 10px" class="mb-3" justify="center">
+          <v-btn @click="$refs.file.$refs.input.click()" text class="mr-auto">
+            <v-icon left>mdi-upload</v-icon> 이미지
+          </v-btn>
+
+          <v-dialog
+            v-model="isbn.videoBarcode"
+            :width="$vuetify.breakpoint.xs ? '90%' : '70%'"
+            height="90%"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
+                ><v-icon>mdi-barcode-scan</v-icon>
+              </v-btn>
+            </template>
+
+            <v-card height="100%" width="100%" v-if="isbn.videoBarcode">
+              <div id="container">
+                <video
+                  autoplay="true"
+                  id="videoElement"
+                  ref="video"
+                  width="100%"
+                ></video>
+              </div>
+              <v-card-actions>
+                <v-btn @click="showCamera">카메라</v-btn>
+                <v-btn @click="takeISBNBarcodePictureFromVideo"
+                  >ISBN 바코드 찍기</v-btn
+                >
+                <v-btn @click="isbn.videoBarcode = false" color="red"
+                  ><v-icon left>mdi-close-outline</v-icon>취소</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <v-divider vertical></v-divider>
+
+          <v-dialog v-model="isbn.pictureBarcode" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
+                ><v-icon>mdi-barcode</v-icon>
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-progress-linear
+                v-if="loading"
+                indeterminate
+                color="white"
+                class="mb-0"
+              ></v-progress-linear>
+              <v-card-title> IBSN 사진 </v-card-title>
+
+              <br />
+
+              <v-card-text>
+                <v-file-input
+                  type="file"
+                  accept="image/*"
+                  @change="uploadFile($event)"
+                  label="ISBN 사진"
+                  color="grey"
+                  outlined
+                  dense
+                />
+              </v-card-text>
+
+              <v-divider />
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="isbn.pictureBarcode = false"
+                >
+                  취소
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <v-divider vertical></v-divider>
+
+          <v-dialog v-model="isbn.inputISBN" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
+                ><v-icon>mdi-form-textbox</v-icon></v-btn
+              >
+            </template>
+
+            <v-card>
+              <v-progress-linear
+                v-if="loading"
+                indeterminate
+                color="white"
+                class="mb-0"
+              ></v-progress-linear>
+              <v-card-title> 입력 </v-card-title>
+
+              <br />
+
+              <v-card-text>
+                <v-text-field
+                  dense
+                  autofocus
+                  label="ISBN"
+                  v-model="post.isbn"
+                  v-if="isbn.inputISBN"
+                  @click:append="fetchi"
+                  v-on:keyup.enter="fetchi"
+                  append-icon="mdi-database-import"
+                />
+              </v-card-text>
+
+              <v-divider />
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" text @click="isbn.inputISBN = false">
+                  취소
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+
+        <v-divider />
+
+        <v-row class="my-10">
+          <v-rating
+            v-model="post.rating"
+            color="blue"
+            required
+            size="30"
+            class="mx-auto"
+          />
+        </v-row>
+
+        <v-form>
+          <v-text-field
+            label="제목"
+            v-model="post.title"
+            :hint="post.subtitle"
+          />
+
+          <v-row style="margin-left: 0.5px; margin-right: 0.5px; gap: 10px">
+            <v-text-field label="작가" v-model="post.author" />
+            <v-text-field label="페이지" v-model="post.pageCount" />
+          </v-row>
+
+          <div class="text--primary">
+            <v-textarea
+              label="책 소개"
+              hint="아직 책을 읽지 않은 사람들에게 책을 요약하세요!"
+              v-model="post.content"
+            />
+          </div>
+        </v-form>
+      </v-card-text>
+
+      <v-card-actions style="gap: 5px">
+        <v-btn color="teal accent-7" @click="postcontent" elevation="0">
+          올리기<v-icon right>mdi-note-plus</v-icon>
+        </v-btn>
+
+        <Dialog
+          :functionOk="() => this.$router.push('/list')"
+          buttonTitle="취소"
+          title="진짜로 취소하겠습니까?"
+          text="취소하면 복구할 수 없습니다"
+          icon="arrow-left"
+        />
+
+        <div style="margin: auto">
+          {{ new Date().toLocaleDateString() }}
+        </div>
+      </v-card-actions>
+
+      <v-alert dense outlined type="error" v-if="error" style="margin: 10px">{{
+        error
+      }}</v-alert>
+    </v-card>
+
+    <div style="margin: auto">
+      <v-chip-group active-class="primary--text" column>
+        <v-chip
+          v-for="tag in post.categories"
+          :key="tag"
+          ripple
+          disabled
+          outlined
+          label
+        >
+          #{{ tag }}
+        </v-chip>
+      </v-chip-group>
+
+      <v-img :src="post.image" v-if="post.image" class="rounded-lg" />
+    </div>
+  </v-row>
 </template>
 
 <script>
@@ -245,6 +247,7 @@ export default {
         pageCount: 0,
         likes: 0,
         liked: {},
+        categories: [],
       },
 
       isbn: {
@@ -341,12 +344,12 @@ export default {
       reader.readAsDataURL(e)
     },
     async postcontent() {
-      await this.updateLibris()
-
       const timestamp = Date.now()
 
       await auth.onAuthStateChanged(async (user) => {
         if (user) {
+          await this.updateLibris(user.uid)
+
           db.ref('/contents/' + timestamp).set({
             title: this.post.title,
             content: this.post.content,
@@ -358,6 +361,7 @@ export default {
             image: this.post.image,
             previewLink: this.post.previewLink,
             pageCount: this.post.pageCount,
+            categories: this.post.categories,
             likes: 1,
             liked: {
               [user.uid]: true,
@@ -387,15 +391,11 @@ export default {
         })
       }
     },
-    updateLibris() {
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          db.ref(`/users/${user.uid}/libris`).once('value', (s) => {
-            db.ref(`/users/${user.uid}/libris`).set(
-              parseInt(s.val()) + this.post.pageCount / 100
-            )
-          })
-        }
+    updateLibris(uid) {
+      db.ref(`/users/${uid}/libris`).once('value', (s) => {
+        db.ref(`/users/${uid}/libris`).set(
+          parseInt(s.val()) + this.post.pageCount / 100
+        )
       })
     },
     async fetchi() {
@@ -407,28 +407,31 @@ export default {
       )
         .then((res) => res.json())
         .then((json) => {
+          const volume = json.items[0].volumeInfo
+
           if (json.totalItems === 0) this.error = '이미지를 찾을 수 없습니다. '
           else
             this.post = {
               ...this.post,
-              title: json.items[0].volumeInfo.title,
-              image: json.items[0].volumeInfo.imageLinks.thumbnail,
-              previewLink: json.items[0].volumeInfo.previewLink,
-              pageCount:
-                json.items[0].volumeInfo.pageCount ??
-                '페이지를 불러올 수 없음. 직접 입력하세요.',
-              author: json.items[0].volumeInfo.authors,
+              title: volume.title,
+              image: volume.imageLinks.thumbnail,
+              previewLink: volume.previewLink,
+              pageCount: volume.pageCount,
+              author: volume.authors,
+              categories: volume.categories,
             }
         })
-        .catch((err) => (this.error = '이미지를 찾을 수 없습니다. '))
+        .catch((err) => (this.error = '알 수 없는 에러'))
 
       this.isbn.inputISBN = false
       this.loading = false
     },
-    getSubscribers(uid) {
+    getSubscribtion(uid) {
       db.ref(`/users/${uid}/subscriber`)
         .once('value')
-        .then((s) => (this.subscribers = Object.keys(s.val() ?? [])))
+        .then((s) => {
+          this.subscription = Object.keys(s.val()) ?? []
+        })
     },
   },
   mounted() {
@@ -436,7 +439,7 @@ export default {
       if (user) {
         this.uid = user.uid
         this.username = user.displayName
-        this.getSubscribers(user.uid)
+        this.getSubscribtion(user.uid)
       }
     })
   },

@@ -1,88 +1,14 @@
 <template>
-  <v-app dark>
-    <v-app-bar v-if="!$vuetify.breakpoint.mobile" fixed app style="z-index: 99">
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <NuxtLink to="/" style="text-decoration: none; color: white">
-            <v-avatar size="30" v-bind="attrs" v-on="on">
-              <v-img src="/logo.avif"></v-img>
-            </v-avatar>
-            <span class="ml-1" v-bind="attrs" v-on="on">Little 작가</span>
-          </NuxtLink>
-        </template>
-        <span class="white--text">홈으로 이동하기</span>
-      </v-tooltip>
-
-      <v-spacer />
-
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            icon
-            v-on="on"
-            v-bind="attrs"
-            arial-label="밝은/어두운 모드"
-            @click.stop="$vuetify.theme.dark = !$vuetify.theme.dark"
-          >
-            <v-icon>mdi-brightness-6</v-icon>
-          </v-btn>
-        </template>
-        <span>밝은/어두운 모드</span>
-      </v-tooltip>
-
-      <Notification
-        :uid="login.uid"
-        :username="login.name"
-        :photoURL="login.photo"
-        :background="login.background"
-      />
-
-      <v-menu v-if="login.photo" bottom min-width="200px" rounded offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn icon x-large v-on="on">
-            <v-avatar size="35">
-              <v-img :src="login.photo" />
-            </v-avatar>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-list-item-content class="justify-center">
-            <div class="text-center">
-              <v-avatar class="my-1">
-                <v-img :src="login.photo" />
-              </v-avatar>
-              <h3>{{ login.name }}</h3>
-              <p class="text-caption mt-1">
-                {{ login.email }}
-              </p>
-              <NuxtLink :to="`/target/${login.uid}`">
-                <v-btn color="primary">나의 프로필 페이지</v-btn>
-              </NuxtLink>
-
-              <v-divider class="my-3"></v-divider>
-
-              <p>
-                <v-icon left>mdi-crown-circle</v-icon>Libris:
-                {{ login.libris }}
-              </p>
-
-              <v-divider class="my-3"></v-divider>
-              <v-btn depressed rounded text to="/account" aria-label="계정">
-                계정 편집
-              </v-btn>
-              <v-btn depressed rounded text to="/post"> 글 올리기 </v-btn>
-              <v-divider class="my-3"></v-divider>
-              <v-btn depressed rounded text @click="logout"> 로그아웃 </v-btn>
-            </div>
-          </v-list-item-content>
-        </v-card>
-      </v-menu>
-      <v-btn to="/login" icon v-else><v-icon>mdi-account-circle</v-icon></v-btn>
-    </v-app-bar>
+  <v-app>
+    <AppBar />
 
     <v-main>
       <v-container>
         <Nuxt />
+
+        <template v-if="$vuetify.breakpoint.mobile">
+          <br /><br /><br />
+        </template>
       </v-container>
     </v-main>
 
@@ -150,26 +76,21 @@
           </v-list-item-content>
         </v-card>
       </v-menu>
+
       <v-btn to="/login" icon v-else><v-icon>mdi-account-circle</v-icon></v-btn>
     </v-bottom-navigation>
-
-    <v-footer
-      v-else
-      :fixed="true"
-      style="z-index: 100; padding: 10px"
-      class="justify-center"
-    >
-      Hyunseung Lee <v-icon left right>mdi-copyright</v-icon>
-      {{ new Date().getFullYear() }} Little 작가
-    </v-footer>
   </v-app>
 </template>
 
 <script>
+import AppBar from './AppBar.vue'
 import { auth, db } from '../plugins/firebase'
 
 export default {
   name: 'DefaultLayout',
+  components: {
+    AppBar,
+  },
   data() {
     return {
       login: {

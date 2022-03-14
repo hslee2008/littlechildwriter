@@ -63,13 +63,13 @@
                 label="스튜디오 이름"
                 v-model="studioInfo.name"
                 required
-              ></v-text-field>
+              />
 
               <v-text-field
                 label="스튜디오 설명"
                 v-model="studioInfo.description"
                 required
-              ></v-text-field>
+              />
             </v-card-text>
 
             <v-divider />
@@ -91,7 +91,7 @@
                 label="스튜디오 사진 URL"
                 v-model="studioInfo.image"
                 required
-              ></v-text-field>
+              />
 
               <v-file-input
                 type="file"
@@ -134,7 +134,7 @@
             hide-details
             prepend-inner-icon="mdi-magnify"
             label="Search"
-          ></v-text-field>
+          />
           <template v-if="$vuetify.breakpoint.mdAndUp">
             <v-spacer></v-spacer>
             <v-select

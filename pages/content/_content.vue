@@ -40,11 +40,26 @@
               :value="post.rating"
             />
 
-            <img
-              :src="post.image === undefined ? '' : post.image"
-              width="200"
-              class="my-4 rounded-lg"
-            />
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <a
+                  v-on="on"
+                  v-bind="attrs"
+                  :href="`https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=${post.isbn.replaceAll(
+                    '-',
+                    ''
+                  )}&x=2&y=12`"
+                >
+                  <v-img
+                    :src="post.image"
+                    width="200"
+                    class="my-4 mx-auto rounded-lg"
+                  />
+                </a>
+              </template>
+
+              <span>알라딘</span>
+            </v-tooltip>
           </div>
         </div>
 
@@ -91,7 +106,7 @@
     </div>
 
     <CommentSection
-      :databaseReference="`content/${this.uid}-${this.time}/comments`"
+      :databaseReference="`contents/${this.time}/comments`"
       :id="`/content/${this.uid}-${this.time}`"
     />
 
@@ -134,43 +149,6 @@ export default {
     }
   },
   methods: {
-    async editcomment(index) {
-      this.comments[index]['edit'] = true
-      this.$forceUpdate()
-    },
-    async updatecomment(index) {
-      this.comments[Object.keys(this.comments)[index]] = {
-        ...this.comments[index],
-        content: this.updatedcomment,
-        edited: true,
-        time: Date.now(),
-      }
-
-      delete this.comments[index].edit
-
-      this.$forceUpdate()
-
-      const comments = db.ref(`contents/${this.time}/comments`)
-
-      comments.set(this.comments)
-    },
-    async delcomment(message, index) {
-      const comments = db.ref(`contents/${this.time}/comments`)
-
-      comments.once('value', (s) =>
-        s.forEach((c) => {
-          if (
-            c.val().uid === this.userInfo.uid &&
-            c.val().time === message.time
-          )
-            comments.child(c.key).remove()
-        })
-      )
-
-      delete this.comments[index]
-
-      this.getComments()
-    },
     async librisUpdate(useruid) {
       await auth.onAuthStateChanged(async (user) => {
         if (user)
@@ -180,35 +158,6 @@ export default {
               db.ref(`users/${user.uid}/libris`).set(parseInt(s.val()) + 0.5)
             )
       })
-    },
-    async commentpost() {
-      if (this.comment.length > 0) {
-        const timestamp = Date.now()
-
-        const comments = await db.ref(`contents/${this.time}/comments`)
-
-        filter.loadDictionary('en-us')
-        filter.loadDictionary('ko-kr')
-
-        await auth.onAuthStateChanged(async (user) => {
-          if (user)
-            comments.push({
-              username: this.userInfo.username,
-              content: filter.clean(this.comment),
-              time: timestamp,
-              uid: user.uid,
-              badWord: filter.check(this.comment),
-              photo: this.userInfo.photo,
-            })
-        })
-
-        this.notify()
-        this.librisUpdate(this.uid)
-
-        this.comment = ''
-
-        this.getComments()
-      }
     },
     async notify() {
       await db.ref(`users/${this.uid}/notification`).push({
@@ -257,14 +206,6 @@ export default {
         },
       }
     },
-    async getComments() {
-      this.comments = Object.values(
-        await db
-          .ref(`contents/${this.time}/comments`)
-          .once('value')
-          .then((s) => s.val() ?? [])
-      )
-    },
     async getUser() {
       auth.onAuthStateChanged(async (user) => {
         if (user)
@@ -307,11 +248,10 @@ export default {
 
     this.getPost()
 
-    this.growView()
     this.getQueryChips()
-    this.getComments()
+    this.growView()
 
-    setTimeout(() => (this.loading = false), 500)
+    setTimeout(() => (this.loading = false), 1000)
   },
   asyncData({ params }) {
     const [uid, time] = params.content.split('-')

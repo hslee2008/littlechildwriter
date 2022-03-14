@@ -22,7 +22,7 @@
             hide-details
             prepend-inner-icon="mdi-magnify"
             label="Search"
-          ></v-text-field>
+          />
           <template v-if="$vuetify.breakpoint.mdAndUp">
             <v-spacer></v-spacer>
             <v-select

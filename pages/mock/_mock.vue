@@ -21,18 +21,14 @@
               style="margin: auto"
             ></v-rating
           ></v-row>
-          <v-text-field label="제목" v-model="post.title"></v-text-field>
-          <v-text-field
-            disabled
-            label="글쓴이"
-            v-model="post.username"
-          ></v-text-field>
+          <v-text-field label="제목" v-model="post.title" />
+          <v-text-field disabled label="글쓴이" v-model="post.username" />
           <div class="text--primary">
             <v-textarea
               label="책 요약"
               hint="책에 대한 내용을 넣으세요!"
               v-model="post.content"
-            ></v-textarea>
+            />
           </div>
         </v-card-text>
         <v-card-actions>

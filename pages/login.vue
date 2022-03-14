@@ -20,7 +20,7 @@
         :rules="emailRules"
         prepend-inner-icon="mdi-email"
         v-on:keyup.enter="onSubmit"
-      ></v-text-field>
+      />
 
       <v-text-field
         label="암호"
@@ -35,7 +35,7 @@
         :rules="passwordRules"
         prepend-inner-icon="mdi-key"
         v-on:keyup.enter="onSubmit"
-      ></v-text-field>
+      />
       <v-btn @click="onSubmit" color="primary"
         ><v-icon left>mdi-account</v-icon>로그인</v-btn
       >

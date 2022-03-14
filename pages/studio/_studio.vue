@@ -39,8 +39,8 @@
                 label="제목"
                 v-model="post.title"
                 :hint="post.subtitle"
-              ></v-text-field>
-              <v-text-field label="이름" v-model="post.author"></v-text-field>
+              />
+              <v-text-field label="이름" v-model="post.author" />
             </v-form>
           </v-row>
         </v-card-text>

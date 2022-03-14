@@ -5,11 +5,7 @@
     <v-divider />
     <br />
     <v-form v-model="valid">
-      <v-text-field
-        v-model="userDisplayName"
-        label="이름"
-        required
-      ></v-text-field>
+      <v-text-field v-model="userDisplayName" label="이름" required />
       <v-text-field
         label="Email"
         placeholder="Email"
@@ -22,7 +18,7 @@
         v-model="email"
         :rules="emailRules"
         prepend-inner-icon="mdi-email"
-      ></v-text-field>
+      />
       <v-text-field
         label="Password"
         placeholder="Password"
@@ -35,7 +31,7 @@
         v-model="password"
         :rules="passwordRules"
         prepend-inner-icon="mdi-key"
-      ></v-text-field>
+      />
       <v-btn @click="pressed" color="primary"
         ><v-icon left>mdi-account</v-icon>Create and Login</v-btn
       >
