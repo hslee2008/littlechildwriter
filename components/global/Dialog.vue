@@ -29,8 +29,8 @@ export default {
   data() {
     return {
       dialog: false,
-    }
+    };
   },
   props: ['functionOk', 'buttonTitle', 'title', 'text', 'icon'],
-}
+};
 </script>

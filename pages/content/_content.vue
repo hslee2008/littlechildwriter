@@ -1,6 +1,17 @@
 <template>
   <div>
-    <LazyShareButtonFab :title="post.title" :username="post.username" />
+    <v-chip-group active-class="primary--text" column>
+      <v-chip
+        v-for="tag in post.categories"
+        :key="tag"
+        ripple
+        disabled
+        outlined
+        label
+      >
+        #{{ tag }}
+      </v-chip>
+    </v-chip-group>
 
     <v-card class="my-3">
       <v-progress-linear v-if="loading" indeterminate color="primary" />
@@ -58,13 +69,15 @@
                 </a>
               </template>
 
-              <span>알라딘</span>
+              <span>알라딘 - {{ post.isbn }}</span>
             </v-tooltip>
           </div>
         </div>
 
         <div style="margin: auto; padding: 10px">
-          <v-card-title> {{ post.title }} </v-card-title>
+          <v-card-title>
+            {{ post.title }}
+          </v-card-title>
 
           <v-card-subtitle>
             by
@@ -92,22 +105,43 @@
       </div>
     </v-card>
 
-    <div class="text-center my-10" v-if="userInfo.isuser">
+    <div class="text-center my-10">
       <Dialog
+        v-if="userInfo.isuser"
         :functionOk="del"
         buttonTitle="삭제"
         title="진짜로 삭제하겠습니까?"
         text="삭제하면 복구할 수 없습니다"
         icon="delete"
       />
-      <v-btn @click="edit" class="ml-3" color="blue lighten-2"
+      <v-btn
+        v-if="userInfo.isuser"
+        :to="`/mock/${this.uid}-${this.time}`"
+        class="ml-3"
+        color="blue lighten-2"
         ><v-icon left>mdi-pencil</v-icon>편집</v-btn
       >
+
+      <br v-if="userInfo.isuser" />
+
+      <v-btn
+        class="mt-5"
+        text
+        @click="likeThis()"
+        :disabled="post.liked[uid] == true"
+        ><v-icon left> mdi-thumb-up </v-icon>{{ post.likes }}</v-btn
+      >
+      <v-btn text @click="sharePost" class="mt-5">
+        <v-icon left>mdi-share-variant</v-icon> 공유
+      </v-btn>
+      <v-btn text @click="download" class="mt-5">
+        <v-icon left>mdi-download</v-icon> 다운로드
+      </v-btn>
     </div>
 
     <CommentSection
       :databaseReference="`contents/${this.time}/comments`"
-      :id="`/content/${this.uid}-${this.time}`"
+      :id="`/contents/${this.uid}-${this.time}`"
     />
 
     <br /><br /><br /><br />
@@ -115,78 +149,100 @@
 </template>
 
 <script>
-import { db, auth } from '../../plugins/firebase.js'
-import * as filter from 'leo-profanity'
+import { db, auth } from '../../plugins/firebase.js';
+import { saveAs } from 'file-saver';
 
 export default {
   data() {
     return {
       comment: '',
-      updatedcomment: '',
       comments: [],
 
-      userInfo: {
-        uid: '',
-        username: '',
-        isuser: false,
-        photo: '',
-      },
+      userInfo: {},
+      tags: {},
 
       post: {
-        title: '',
-        content: '',
-        image: '',
-        time: '',
-        username: '',
-        views: 0,
-        rating: 0,
-        pageCount: 0,
         isbn: '',
+        liked: {},
       },
-      tags: {},
+
       loading: true,
-      dialog: false,
-    }
+    };
   },
   methods: {
-    async librisUpdate(useruid) {
-      await auth.onAuthStateChanged(async (user) => {
-        if (user)
-          db.ref(`users/${user.uid}/libris`)
-            .once('value')
-            .then((s) =>
-              db.ref(`users/${user.uid}/libris`).set(parseInt(s.val()) + 0.5)
-            )
-      })
+    download() {
+      const mainContent = `
+        ${this.post.username}의 글 [${new Date(this.time).toLocaleString()}]
+
+        ${this.post.title}
+
+        ${this.post.content}
+
+
+
+        URL: ${window.location.href}
+      `.replaceAll('        ', '');
+
+      saveAs(
+        new Blob([mainContent], {
+          type: 'text/plain;charset=utf-8',
+        }),
+        this.post.username + '의 글.txt'
+      );
+    },
+    likeThis() {
+      this.post.likes++;
+      if (!this.post.liked)
+        this.post.liked = {
+          [this.uid]: false,
+        };
+      else this.post.liked[this.uid] = true;
+
+      db.ref(`/contents/${this.time}/likes`).set(this.post.likes);
+      db.ref(`contents/${this.time}/liked/${this.uid}`).set(true);
+
+      this.notify(this.uid, this.time);
+
+      this.updateLibris(this.userInfo.uid);
+      this.updateLibris(this.uid);
+    },
+    sharePost() {
+      if (navigator.canShare)
+        navigator.share({
+          title: `Little 작가 (${this.post.title} by ${this.post.username})`,
+          url: window.location.href,
+        });
+    },
+    async updateLibris(useruid) {
+      db.ref(`users/${useruid}/libris`)
+        .once('value')
+        .then((s) =>
+          db.ref(`users/${useruid}/libris`).set(parseInt(s.val()) + 0.5)
+        );
     },
     async notify() {
       await db.ref(`users/${this.uid}/notification`).push({
         title: `${this.userInfo.username}님이 댓글를 작성했습니다.`,
         time: Date.now(),
         link: `/content/${this.uid}-${this.time}`,
-      })
+      });
     },
     async del() {
-      this.dialog = false
+      await db.ref(`contents/${this.time}`).remove();
 
-      await db.ref(`contents/${this.time}`).remove()
-
-      this.$router.push('/list')
-    },
-    async edit() {
-      this.$router.push(`/mock/${this.uid}-${this.time}`)
+      this.$router.push('/list');
     },
     async getQueryChips() {
-      const [thumbs, isbn, views, pageCount] = await db
+      const [views, pageCount] = await db
         .ref(`/contents/${this.time}/`)
         .once('value')
         .then((res) => res.val())
-        .then((s) => [s.likes, s.isbn, Math.round(s.views), s.pageCount])
+        .then((s) => [Math.round(s.views), s.pageCount]);
 
       this.tags = {
         views: {
           icon: 'eye',
-          val: views,
+          val: views + 1,
         },
         time: {
           icon: 'calendar-clock',
@@ -196,15 +252,7 @@ export default {
           icon: 'book-open-page-variant',
           val: pageCount,
         },
-        liked: {
-          icon: 'thumb-up',
-          val: thumbs,
-        },
-        isbn: {
-          icon: 'bookmark',
-          val: isbn,
-        },
-      }
+      };
     },
     async getUser() {
       auth.onAuthStateChanged(async (user) => {
@@ -214,8 +262,8 @@ export default {
             username: user.displayName,
             isuser: this.uid === user.uid,
             photo: user.photoURL,
-          }
-      })
+          };
+      });
     },
     async getPost() {
       this.post = await db
@@ -223,43 +271,50 @@ export default {
         .once('value')
         .then((s) => s.val())
         .catch((err) => {
-          alert('글이 존재하지 않습니다')
-          this.$router.push('/list')
-        })
+          alert('글이 존재하지 않습니다');
+          this.$router.push('/list');
+        });
+
+      if (!this.post.categories)
+        this.post.categories = await fetch(
+          `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
+        )
+          .then((res) => res.json())
+          .then((res) => res.items[0].volumeInfo.categories);
     },
     async growView() {
-      const viewLink = `contents/${this.time}/views`
+      await db.ref(`contents/${this.time}/views`).set(this.tags.views.val);
 
-      await db
-        .ref(viewLink)
-        .once('value')
-        .then(async (s) => {
-          this.post.views = s.val()
-
-          await db.ref(viewLink).set(s.val() + 1)
-        })
-
-      this.librisUpdate(this.uid)
-      this.librisUpdate(this.userInfo.uid)
+      this.updateLibris(this.uid);
+      this.updateLibris(this.userInfo.uid);
     },
   },
-  async mounted() {
-    this.getUser()
 
-    this.getPost()
+  async created() {
+    this.getUser();
 
-    this.getQueryChips()
-    this.growView()
+    await this.getPost();
+    await this.getQueryChips();
 
-    setTimeout(() => (this.loading = false), 1000)
+    setTimeout(() => (this.loading = false), 1000);
+
+    this.growView();
   },
+
+  mounted() {
+    !this.post.liked &&
+      (this.post.liked = {
+        [this.uid]: false,
+      });
+  },
+
   asyncData({ params }) {
-    const [uid, time] = params.content.split('-')
+    const [uid, time] = params.content.split('-');
 
     return {
       uid,
       time,
-    }
+    };
   },
-}
+};
 </script>

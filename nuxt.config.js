@@ -1,7 +1,6 @@
 export default {
   target: 'static',
   generate: {
-    dir: '../public_html/',
     devtools: true,
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -9,7 +8,7 @@ export default {
     htmlAttrs: {
       lang: 'en,ko-kr',
     },
-    titleTemplate: '%s | Coding-Insight',
+    titleTemplate: '%s',
     title: 'Little Child Writer',
     meta: [
       {
@@ -57,9 +56,9 @@ export default {
   },
 
   css: [
-    './assets/css/global.css',
-    './assets/css/transition.css',
-    './assets/css/component.css',
+    '@/assets/css/global.css',
+    '@/assets/css/transition.css',
+    '@/assets/css/component.css',
   ],
 
   // https://go.nuxtjs.dev/config-plugins
@@ -83,7 +82,7 @@ export default {
     },
   },
 
-  // https://go.nuxtjs.dev/config-modules
+  //  https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
@@ -148,8 +147,8 @@ export default {
       theme_color: '#23272F',
       background_color: '#23272F',
       display: 'minimal-ui',
-      scope: '/',
-      start_url: '/',
+      scope: './',
+      start_url: './',
       prefer_related_applications: false,
       related_applications: [
         {
@@ -177,6 +176,13 @@ export default {
           sizes: '512x512',
           type: 'image/png',
           purpose: 'any maskable',
+        },
+      ],
+      screenshots: [
+        {
+          src: '/pwa/screenshot.png',
+          sizes: '1920x896',
+          type: 'image/png',
         },
       ],
       shortcuts: [
@@ -208,7 +214,7 @@ export default {
     treeShake: true,
   },
 
-  // Build Configuration: https://go.nuxtjs.dev/config-build
+  //Configuration: https://go.nuxtjs.dev/config-build
   build: {
     devtools: true,
     optmizeCSS: true,
@@ -229,8 +235,8 @@ export default {
         config.performance = {
           maxEntrypointSize: 512000,
           maxAssetSize: 512000,
-        }
+        };
       }
     },
   },
-}
+};

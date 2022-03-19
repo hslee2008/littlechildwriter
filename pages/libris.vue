@@ -3,15 +3,15 @@
 </template>
 
 <script>
-import { db } from '../plugins/firebase.js'
+import { db } from '../plugins/firebase.js';
 
 export default {
   data() {
     return {
       librisTop: [],
-    }
+    };
   },
-  mounted() {
+  created() {
     db.ref('/users')
       .orderByChild('/libris')
       .on('child_added', async (s) => {
@@ -20,8 +20,8 @@ export default {
           libris: s.val().libris ?? 0,
           image: s.val().photoURL,
           uid: s.key,
-        })
-      })
+        });
+      });
   },
-}
+};
 </script>

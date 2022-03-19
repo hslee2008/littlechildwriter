@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { db, auth } from '../../plugins/firebase'
+import { db, auth } from '../../plugins/firebase';
 
 export default {
   props: ['uid', 'username', 'photoURL', 'background'],
@@ -87,18 +87,18 @@ export default {
     return {
       notificationsList: [],
       notifOverlay: false,
-    }
+    };
   },
   methods: {
     async clearEverything() {
-      await db.ref(`/users/${this.uid}/notification`).remove()
-      this.notificationsList = []
+      await db.ref(`/users/${this.uid}/notification`).remove();
+      this.notificationsList = [];
 
-      this.getNotification()
+      this.getNotification();
     },
     openItem(link) {
-      this.$router.push(link)
-      this.notifOverlay = false
+      this.$router.push(link);
+      this.notifOverlay = false;
     },
     async getNotification() {
       this.notificationsList = Object.values(
@@ -106,13 +106,13 @@ export default {
           .ref(`/users/${this.uid}/notification`)
           .once('value')
           .then((s) => s.val() ?? [])
-      )
+      );
 
-      this.notification = this.notificationsList.length
+      this.notification = this.notificationsList.length;
     },
   },
-  mounted() {
-    this.getNotification()
+  created() {
+    this.getNotification();
   },
-}
+};
 </script>

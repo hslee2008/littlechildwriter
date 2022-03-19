@@ -13,7 +13,7 @@
       loading-text="로딩 중..."
     >
       <template v-slot:header>
-        <v-toolbar dark class="mb-1" style="background-color: transparent">
+        <v-toolbar dark class="mb-1 transparent elevation-0">
           <v-text-field
             v-model="search"
             clearable
@@ -43,6 +43,11 @@
                 <v-icon>mdi-arrow-down</v-icon>
               </v-btn>
             </v-btn-toggle>
+            <v-spacer></v-spacer>
+            <v-btn text @click="simplify = !simplify">
+              <v-icon left>mdi-{{ simplify ? 'eye' : 'eye-off' }}</v-icon>
+              {{ simplify ? '자세한' : '간단한' }} 뷰
+            </v-btn>
           </template>
         </v-toolbar>
       </template>
@@ -53,6 +58,7 @@
             :items="props.items"
             :uid="uid"
             :displayName="userDisplayName"
+            :simple="simplify"
           />
         </v-row>
       </template>
@@ -111,7 +117,7 @@
 </template>
 
 <script>
-import { db, auth } from '../plugins/firebase.js'
+import { db, auth } from '../plugins/firebase.js';
 
 export default {
   data() {
@@ -128,63 +134,64 @@ export default {
       userDisplayName: '',
       uid: '',
       libris: '',
-    }
+      simplify: false,
+    };
   },
   computed: {
     numberOfPages() {
-      return Math.ceil(this.listev.length / this.itemsPerPage)
+      return Math.ceil(this.listev.length / this.itemsPerPage);
     },
     filteredKeys() {
-      return this.keys.filter((key) => key !== 'Name')
+      return this.keys.filter((key) => key !== 'Name');
     },
   },
   methods: {
     nextPage() {
-      if (this.page + 1 <= this.numberOfPages) this.page += 1
+      if (this.page + 1 <= this.numberOfPages) this.page += 1;
     },
     formerPage() {
-      if (this.page - 1 >= 1) this.page -= 1
+      if (this.page - 1 >= 1) this.page -= 1;
     },
     updateItemsPerPage(number) {
-      this.itemsPerPage = number
+      this.itemsPerPage = number;
     },
     getUserInfo() {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          this.userDisplayName = user.displayName
-          this.uid = user.uid
+          this.userDisplayName = user.displayName;
+          this.uid = user.uid;
 
           await db
             .ref('/users/' + user.uid)
             .once('value')
-            .then((s) => (this.libris = s.val().libris))
+            .then((s) => (this.libris = s.val().libris));
         }
-      })
+      });
     },
 
     async fetchContent() {
-      const content = db.ref('/contents/')
+      const content = db.ref('/contents/');
 
       await content.on('child_added', async (snapshot) => {
-        const data = await snapshot.val()
+        const data = await snapshot.val();
 
-        this.listev.unshift(data)
-      })
+        this.listev.unshift(data);
+      });
 
       await this.listev.sort((a, b) => {
-        return a.time + a.likes / 2 - (b.time + b.likes / 2)
-      })
+        return a.time + a.likes / 2 - (b.time + b.likes / 2);
+      });
     },
   },
-  async mounted() {
-    if (this.$route.query.username) this.search = this.$route.query.username
-    if (this.$route.query.time) this.search = this.$route.query.time
+  async created() {
+    if (this.$route.query.username) this.search = this.$route.query.username;
+    if (this.$route.query.time) this.search = this.$route.query.time;
 
-    await this.fetchContent()
+    await this.fetchContent();
 
-    this.getUserInfo()
+    this.getUserInfo();
   },
-}
+};
 </script>
 
 <style>

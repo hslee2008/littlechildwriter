@@ -1,15 +1,16 @@
 <template>
   <div>
     <v-text-field
-      v-model="comment"
-      hide-details
       flat
-      label="댓글 달기"
       solo
+      hide-details
+      label="댓글 달기"
+      :disabled="disabled"
+      v-model="comment"
       @keydown.enter="commentpost"
     >
       <template v-slot:append>
-        <v-btn class="mx-0" icon depressed @click="commentpost">
+        <v-btn icon depressed @click="commentpost" :disabled="disabled">
           <v-icon>mdi-send</v-icon>
         </v-btn>
       </template>
@@ -30,11 +31,12 @@
               <img :src="message.photo" />
             </v-avatar>
           </template>
-          <v-alert dense outlined dense type="warning" v-if="message.badWord">
+          <v-alert dense outlined dense v-if="message.badWord">
             <v-row>
-              <v-col
-                ><h3>{{ message.content }} (필터됨)</h3></v-col
-              >
+              <v-col class="my-auto">
+                <h3>{{ message.content }} (필터됨)</h3>
+              </v-col>
+
               <v-col class="text-right">
                 <v-menu offset-y>
                   <template v-slot:activator="{ on, attrs }">
@@ -71,7 +73,7 @@
               <div>
                 <v-card-title
                   >{{ message.username }}
-                  <v-spacer class="ml-5"></v-spacer>
+                  <v-spacer class="mx-5"></v-spacer>
                   <span
                     class="font-italic text-right text--disabled"
                     style="font-size: 0.8rem"
@@ -143,8 +145,8 @@
 </template>
 
 <script>
-import { auth, db } from '../../plugins/firebase.js'
-import * as filter from 'leo-profanity'
+import { auth, db } from '../../plugins/firebase.js';
+import * as filter from 'leo-profanity';
 
 export default {
   props: ['databaseReference', 'id'],
@@ -154,13 +156,15 @@ export default {
       updatedcomment: '',
       comments: [],
 
+      disabled: false,
+
       userInfo: {
         uid: '',
         username: '',
         isuser: false,
         photo: '',
       },
-    }
+    };
   },
   methods: {
     async getUser() {
@@ -171,12 +175,13 @@ export default {
             username: user.displayName,
             isuser: this.uid === user.uid,
             photo: user.photoURL,
-          }
-      })
+          };
+        else disabled = true;
+      });
     },
     async editcomment(index) {
-      this.comments[index]['edit'] = true
-      this.$forceUpdate()
+      this.comments[index]['edit'] = true;
+      this.$forceUpdate();
     },
     async updatecomment(index) {
       this.comments[Object.keys(this.comments)[index]] = {
@@ -184,15 +189,15 @@ export default {
         content: this.updatedcomment,
         edited: true,
         time: Date.now(),
-      }
+      };
 
-      delete this.comments[index].edit
+      delete this.comments[index].edit;
 
-      this.$forceUpdate()
+      this.$forceUpdate();
 
-      const comments = db.ref(this.databaseReference)
+      const comments = db.ref(this.databaseReference);
 
-      comments.set(this.comments)
+      comments.set(this.comments);
     },
     async getComments() {
       this.comments = Object.values(
@@ -200,10 +205,10 @@ export default {
           .ref(this.databaseReference)
           .once('value')
           .then((s) => s.val() ?? [])
-      )
+      );
     },
     async delcomment(message, index) {
-      const comments = db.ref(this.databaseReference)
+      const comments = db.ref(this.databaseReference);
 
       comments.once('value', (s) =>
         s.forEach((c) => {
@@ -211,32 +216,32 @@ export default {
             c.val().uid === this.userInfo.uid &&
             c.val().time === message.time
           )
-            comments.child(c.key).remove()
+            comments.child(c.key).remove();
         })
-      )
+      );
 
-      delete this.comments[index]
+      delete this.comments[index];
 
-      this.getComments()
+      this.getComments();
     },
-    async librisUpdate(useruid) {
+    async updateLibris(useruid) {
       await auth.onAuthStateChanged(async (user) => {
         if (user)
           db.ref(`users/${user.uid}/libris`)
             .once('value')
             .then((s) =>
               db.ref(`users/${user.uid}/libris`).set(parseInt(s.val()) + 0.5)
-            )
-      })
+            );
+      });
     },
     async commentpost() {
       if (this.comment.length > 0) {
-        const timestamp = Date.now()
+        const timestamp = Date.now();
 
-        const comments = await db.ref(this.databaseReference)
+        const comments = await db.ref(this.databaseReference);
 
-        filter.loadDictionary('en-us')
-        filter.loadDictionary('ko-kr')
+        filter.loadDictionary('en-us');
+        filter.loadDictionary('ko-kr');
 
         await auth.onAuthStateChanged(async (user) => {
           if (user)
@@ -247,15 +252,15 @@ export default {
               uid: user.uid,
               badWord: filter.check(this.comment),
               photo: this.userInfo.photo,
-            })
-        })
+            });
+        });
 
-        this.notify()
-        this.librisUpdate(this.uid)
+        this.notify();
+        this.updateLibris(this.uid);
 
-        this.comment = ''
+        this.comment = '';
 
-        this.getComments()
+        this.getComments();
       }
     },
     async notify() {
@@ -263,12 +268,12 @@ export default {
         title: `${this.userInfo.username}님이 댓글를 작성했습니다.`,
         time: Date.now(),
         link: this.id,
-      })
+      });
     },
   },
-  mounted() {
-    this.getComments()
-    this.getUser()
+  created() {
+    this.getComments();
+    this.getUser();
   },
-}
+};
 </script>

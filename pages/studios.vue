@@ -167,7 +167,7 @@
             class="my-3"
             elevation="20"
           >
-            <v-img :src="item.image" width="50vh" style="margin: auto"></v-img>
+            <v-img :src="item.image" width="50vh" style="margin: auto" />
 
             <v-card-title
               class="primary--text col-11 text-truncate"
@@ -256,7 +256,7 @@
 </template>
 
 <script>
-import { db, auth } from '../plugins/firebase.js'
+import { db, auth } from '../plugins/firebase.js';
 
 export default {
   data() {
@@ -287,48 +287,48 @@ export default {
       username: '',
       makingStudioDialog: false,
       makingStudioSteps: 1,
-    }
+    };
   },
   computed: {
     numberOfPages() {
-      return Math.ceil(this.fetchedStudios.length / this.itemsPerPage)
+      return Math.ceil(this.fetchedStudios.length / this.itemsPerPage);
     },
     filteredKeys() {
-      return this.keys.filter((key) => key !== 'Name')
+      return this.keys.filter((key) => key !== 'Name');
     },
   },
   methods: {
     nextPage() {
-      if (this.page + 1 <= this.numberOfPages) this.page += 1
+      if (this.page + 1 <= this.numberOfPages) this.page += 1;
     },
     formerPage() {
-      if (this.page - 1 >= 1) this.page -= 1
+      if (this.page - 1 >= 1) this.page -= 1;
     },
     updateItemsPerPage(number) {
-      this.itemsPerPage = number
+      this.itemsPerPage = number;
     },
 
     makeAStudio() {
-      this.makingStudioDialog = false
-      this.studioInfo.creator = auth.currentUser.displayName
-      this.studioInfo.lastUpdated = Date.now()
+      this.makingStudioDialog = false;
+      this.studioInfo.creator = auth.currentUser.displayName;
+      this.studioInfo.lastUpdated = Date.now();
       this.studioInfo.id =
-        auth.currentUser.uid + this.studioInfo.name.replace(/\s/g, '')
+        auth.currentUser.uid + this.studioInfo.name.replace(/\s/g, '');
 
       db.ref('studios')
         .child(auth.currentUser.uid + this.studioInfo.name.replace(/\s/g, ''))
-        .set(this.studioInfo)
+        .set(this.studioInfo);
     },
     async fetchStudio() {
       await db.ref('studios').on('value', (snapshot) => {
-        this.fetchedStudios = []
+        this.fetchedStudios = [];
         snapshot.forEach((childSnapshot) => {
-          this.fetchedStudios.push(childSnapshot.val())
-        })
-      })
+          this.fetchedStudios.push(childSnapshot.val());
+        });
+      });
     },
     openStudio(index) {
-      this.$router.push(`studio/${this.fetchedStudios[index].id}`)
+      this.$router.push(`studio/${this.fetchedStudios[index].id}`);
     },
     deleteStudio(index) {
       auth.onAuthStateChanged((user) => {
@@ -337,23 +337,23 @@ export default {
             .child(
               user.uid + this.fetchedStudios[index].name.replace(/\s/g, '')
             )
-            .remove()
+            .remove();
         }
-      })
+      });
     },
     fetchUserInfo() {
       auth.onAuthStateChanged((user) => {
         if (user) {
-          this.username = user.displayName
+          this.username = user.displayName;
         }
-      })
+      });
     },
   },
-  async mounted() {
-    this.fetchStudio()
-    this.fetchUserInfo()
+  async created() {
+    this.fetchStudio();
+    this.fetchUserInfo();
   },
-}
+};
 
 /*
 

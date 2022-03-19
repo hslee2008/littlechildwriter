@@ -5,8 +5,6 @@
     dense
     clipped-left
     app
-    :rounded="!$vuetify.breakpoint.mobile"
-    :class="!$vuetify.breakpoint.mobile && 'mx-2 my-2'"
     :color="$vuetify.theme.dark ? '#23272F' : 'white'"
     elevate-on-scroll
   >
@@ -14,7 +12,7 @@
       <template v-slot:activator="{ on, attrs }">
         <NuxtLink to="/" style="text-decoration: none; color: white">
           <v-avatar size="30" v-bind="attrs" v-on="on">
-            <v-img src="/logo.avif"></v-img>
+            <v-img src="/logo.avif" />
           </v-avatar>
           <span class="ml-1" v-bind="attrs" v-on="on">Little 작가</span>
         </NuxtLink>
@@ -92,7 +90,7 @@
 </template>
 
 <script>
-import { auth, db } from '../plugins/firebase'
+import { auth, db } from '../plugins/firebase';
 
 export default {
   name: 'DefaultLayout',
@@ -109,15 +107,15 @@ export default {
 
       drawer: false,
       sheet: false,
-    }
+    };
   },
   methods: {
     logout() {
-      auth.signOut()
-      this.$forceUpdate()
+      auth.signOut();
+      this.$forceUpdate();
     },
     gotoHome() {
-      this.$router.push('/')
+      this.$router.push('/');
     },
     getUserInfo() {
       auth.onAuthStateChanged(async (user) => {
@@ -135,24 +133,24 @@ export default {
               .ref(`users/${user.uid}/libris`)
               .once('value')
               .then((s) => s.val() ?? 0),
-          }
+          };
         } else {
-          this.login = {}
+          this.login = {};
         }
-      })
+      });
     },
     updateUserInfo() {
       db.ref(`/users/${this.login.uid}`).update({
         username: this.login.name,
         photoURL: this.login.photo,
-      })
+      });
     },
   },
-  async mounted() {
-    await this.getUserInfo()
-    this.updateUserInfo()
+  async created() {
+    await this.getUserInfo();
+    this.updateUserInfo();
   },
-}
+};
 </script>
 
 <style>

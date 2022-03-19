@@ -83,8 +83,8 @@
 </template>
 
 <script>
-import AppBar from './AppBar.vue'
-import { auth, db } from '../plugins/firebase'
+import AppBar from './AppBar.vue';
+import { auth, db } from '../plugins/firebase';
 
 export default {
   name: 'DefaultLayout',
@@ -104,15 +104,15 @@ export default {
 
       drawer: false,
       sheet: false,
-    }
+    };
   },
   methods: {
     logout() {
-      auth.signOut()
-      this.$forceUpdate()
+      auth.signOut();
+      this.gotoHome();
     },
     gotoHome() {
-      this.$router.push('/')
+      this.$router.push('/');
     },
     getUserInfo() {
       auth.onAuthStateChanged(async (user) => {
@@ -130,37 +130,29 @@ export default {
               .ref(`users/${user.uid}/libris`)
               .once('value')
               .then((s) => s.val() ?? 0),
-          }
+          };
         } else {
-          this.login = {}
+          this.login = {
+            name: '',
+            email: '',
+            background: '',
+            photo: '',
+            uid: '',
+            libris: 0,
+          };
         }
-      })
+      });
     },
     updateUserInfo() {
       db.ref(`/users/${this.login.uid}`).update({
         username: this.login.name,
         photoURL: this.login.photo,
-      })
+      });
     },
   },
-  async mounted() {
-    await this.getUserInfo()
-    this.updateUserInfo()
+  async created() {
+    await this.getUserInfo();
+    this.updateUserInfo();
   },
-}
+};
 </script>
-
-<style>
-.to-show {
-  display: none;
-}
-
-@media screen and (max-width: 686px) {
-  .to-hide {
-    display: none;
-  }
-  .to-show {
-    display: block;
-  }
-}
-</style>

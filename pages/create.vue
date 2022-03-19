@@ -51,16 +51,18 @@
 </style>
 
 <script>
-import { db, auth } from '../plugins/firebase.js'
+import { db, auth } from '../plugins/firebase.js';
 
 export default {
   data() {
     return {
       email: '',
       password: '',
-      error: '',
       userDisplayName: '',
+
       valid: false,
+      error: '',
+
       emailRules: [
         (v) => !!v || 'E-mail is required',
         (v) => /.+@.+/.test(v) || 'E-mail must be valid',
@@ -69,37 +71,27 @@ export default {
         (v) => !!v || 'Password is required',
         (v) => v.length > 6 || 'Password must be more than 6 characters',
       ],
-    }
+    };
   },
   methods: {
     async pressed() {
-      if (this.valid) {
+      if (this.valid)
         await auth
           .createUserWithEmailAndPassword(this.email, this.password)
           .then(() => {
-            auth
-              .signInWithEmailAndPassword(this.email, this.password)
-              .then(() => {
-                db.ref(`/users/${auth.currentUser.uid}`).set({
-                  username: this.userDisplayName,
-                  photoURL: 'https://littlechildwriter.web.app/logo.avif',
-                  libris: 0,
-                  bio: '',
-                  subscribe: [],
-                  subscriber: [],
-                })
+            db.ref(`/users/${auth.currentUser.uid}`).set({
+              username: this.userDisplayName,
+              photoURL: 'https://littlechildwriter.web.app/logo.avif',
+              libris: 0,
+              bio: '',
+              subscribe: [],
+              subscriber: [],
+            });
 
-                this.$router.push('/')
-              })
-              .catch((error) => {
-                this.error = error
-              })
+            this.$router.push('/');
           })
-          .catch((error) => {
-            this.error = error
-          })
-      }
+          .catch((error) => (this.error = error));
     },
   },
-}
+};
 </script>

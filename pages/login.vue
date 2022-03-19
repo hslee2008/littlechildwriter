@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import firebase, { auth } from '../plugins/firebase.js'
-import 'firebase/compat/app'
+import firebase, { auth } from '../plugins/firebase.js';
+import 'firebase/compat/app';
 
 export default {
   data() {
@@ -73,7 +73,7 @@ export default {
         (v) => !!v || 'Password is required',
         (v) => v.length > 6 || 'Password must be more than 6 characters',
       ],
-    }
+    };
   },
   methods: {
     onSubmit() {
@@ -81,14 +81,14 @@ export default {
         auth
           .signInWithEmailAndPassword(this.email, this.password)
           .then(() => this.$router.push('/account'))
-          .catch((error) => (this.error = error))
+          .catch((error) => (this.error = error));
     },
     google() {
       auth
         .signInWithPopup(new firebase.auth.GoogleAuthProvider())
         .then(() => this.$router.push('/account'))
-        .catch((error) => (this.error = error))
+        .catch((error) => (this.error = error));
     },
   },
-}
+};
 </script>

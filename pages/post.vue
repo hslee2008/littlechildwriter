@@ -229,7 +229,7 @@
 </template>
 
 <script>
-import { db, auth } from '../plugins/firebase.js'
+import { db, auth } from '../plugins/firebase.js';
 
 export default {
   name: 'PostPage',
@@ -263,7 +263,7 @@ export default {
 
       subscribers: [],
       username: '',
-    }
+    };
   },
   methods: {
     showCamera() {
@@ -278,9 +278,9 @@ export default {
           })
           .then((s) => (this.$refs.video.srcObject = s))
           .catch((e) => {
-            this.isbn.pictureBarcode = false
-            this.error = '알 수 없는 에러!'
-          })
+            this.isbn.pictureBarcode = false;
+            this.error = '알 수 없는 에러!';
+          });
     },
     takeISBNBarcodePictureFromVideo() {
       if ('BarcodeDetector' in window)
@@ -290,26 +290,28 @@ export default {
           .detect(this.$refs.video)
           .then((res) => res[0].value)
           .then(async (a) => {
-            this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
-            this.fetchi()
-            this.isbn.videoBarcode = false
+            this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '');
+            this.fetchi();
+            this.isbn.videoBarcode = false;
           })
-          .catch(() =>
-            alert('바코드가 흐리게 보이지 않게 멀리 다시 찍어 주세요.')
-          )
+          .catch((e) =>
+            alert(
+              '바코드가 흐리게 보이지 않게 멀리 다시 찍어 주세요. ' + e.message
+            )
+          );
       else {
-        alert('카메라 사용 불가: ' + err.message)
-        this.isbn.pictureBarcode = false
+        alert('카메라 사용 불가: ' + err.message);
+        this.isbn.pictureBarcode = false;
       }
     },
     uploadFile(e) {
-      let reader = new FileReader()
+      let reader = new FileReader();
 
       reader.onload = () => {
-        this.$refs.isbn.src = reader.result
+        this.$refs.isbn.src = reader.result;
 
-        let tempImage = new Image()
-        tempImage.src = reader.result
+        let tempImage = new Image();
+        tempImage.src = reader.result;
 
         tempImage.onload = () => {
           if ('BarcodeDetector' in window) {
@@ -319,36 +321,36 @@ export default {
               .detect(this.$refs.isbn)
               .then((res) => res[0].rawValue)
               .then((a) => {
-                this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '')
-                this.isbn.videoBarcode = false
-                this.fetchi()
-                this.isbn.pictureBarcode = false
+                this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '');
+                this.isbn.videoBarcode = false;
+                this.fetchi();
+                this.isbn.pictureBarcode = false;
               })
               .catch((err) =>
                 alert(
                   'ISBN을 인식하지 못했습니다. 바코드가 흐어게 보이지 않게 멀리 다시 찍어 주세요.'
                 )
-              )
+              );
           } else {
-            alert('카메라 사용 불가능합니다. 핸드폰에서만 가능합니다.')
-            this.isbn.pictureBarcode = false
+            alert('카메라 사용 불가능합니다. 핸드폰에서만 가능합니다.');
+            this.isbn.pictureBarcode = false;
           }
-        }
-      }
+        };
+      };
 
-      reader.readAsDataURL(e)
+      reader.readAsDataURL(e);
     },
     uploadImageFile(e) {
-      let reader = new FileReader()
-      reader.onload = async () => (this.post.image = reader.result)
-      reader.readAsDataURL(e)
+      let reader = new FileReader();
+      reader.onload = async () => (this.post.image = reader.result);
+      reader.readAsDataURL(e);
     },
     async postcontent() {
-      const timestamp = Date.now()
+      const timestamp = Date.now();
 
       await auth.onAuthStateChanged(async (user) => {
         if (user) {
-          await this.updateLibris(user.uid)
+          await this.updateLibris(user.uid);
 
           db.ref('/contents/' + timestamp).set({
             title: this.post.title,
@@ -367,20 +369,20 @@ export default {
               [user.uid]: true,
             },
             views: 1,
-          })
+          });
         } else {
-          alert('로그인이 필요합니다.')
+          alert('로그인이 필요합니다.');
 
-          this.$route.push('/login')
+          this.$route.push('/login');
         }
-      })
+      });
 
-      this.notifySubscribers()
+      this.notifySubscribers();
 
-      this.$router.push('/list')
+      this.$router.push('/list');
     },
     async notifySubscribers() {
-      const timestamp = Date.now()
+      const timestamp = Date.now();
 
       for (let i = 0; i < this.subscribers.length; i++) {
         await db.ref(`users/${this.subscribers[i]}/notification`).push({
@@ -388,28 +390,28 @@ export default {
           time: timestamp,
           type: 'subscription',
           link: `/content/${this.uid}-${timestamp}`,
-        })
+        });
       }
     },
     updateLibris(uid) {
       db.ref(`/users/${uid}/libris`).once('value', (s) => {
         db.ref(`/users/${uid}/libris`).set(
           parseInt(s.val()) + this.post.pageCount / 100
-        )
-      })
+        );
+      });
     },
     async fetchi() {
-      this.loading = true
-      this.error = ''
+      this.loading = true;
+      this.error = '';
 
       await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
       )
         .then((res) => res.json())
         .then((json) => {
-          const volume = json.items[0].volumeInfo
+          const volume = json.items[0].volumeInfo;
 
-          if (json.totalItems === 0) this.error = '이미지를 찾을 수 없습니다. '
+          if (json.totalItems === 0) this.error = '이미지를 찾을 수 없습니다. ';
           else
             this.post = {
               ...this.post,
@@ -419,29 +421,29 @@ export default {
               pageCount: volume.pageCount,
               author: volume.authors,
               categories: volume.categories,
-            }
+            };
         })
-        .catch((err) => (this.error = '알 수 없는 에러'))
+        .catch((err) => (this.error = '알 수 없는 에러'));
 
-      this.isbn.inputISBN = false
-      this.loading = false
+      this.isbn.inputISBN = false;
+      this.loading = false;
     },
     getSubscribtion(uid) {
       db.ref(`/users/${uid}/subscriber`)
         .once('value')
         .then((s) => {
-          this.subscription = Object.keys(s.val()) ?? []
-        })
+          this.subscription = Object.keys(s.val()) ?? [];
+        });
     },
   },
-  mounted() {
+  created() {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
-        this.uid = user.uid
-        this.username = user.displayName
-        this.getSubscribtion(user.uid)
+        this.uid = user.uid;
+        this.username = user.displayName;
+        this.getSubscribtion(user.uid);
       }
-    })
+    });
   },
-}
+};
 </script>

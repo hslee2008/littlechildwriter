@@ -74,9 +74,9 @@
                     <v-card-actions
                       ><v-btn
                         @click="
-                          post.thelink = `/content/${item.uid}-${item.time}`
-                          post.image = item.image
-                          dialog = false
+                          post.thelink = `/content/${item.uid}-${item.time}`;
+                          post.image = item.image;
+                          dialog = false;
                         "
                         icon
                         ><v-icon>mdi-check</v-icon></v-btn
@@ -172,8 +172,8 @@
 </template>
 
 <script>
-import { db, auth } from '../../plugins/firebase.js'
-import * as filter from 'leo-profanity'
+import { db, auth } from '../../plugins/firebase.js';
+import * as filter from 'leo-profanity';
 
 export default {
   data() {
@@ -221,7 +221,7 @@ export default {
 
       subscribers: [],
       username: '',
-    }
+    };
   },
   methods: {
     fetchStudio() {
@@ -229,15 +229,15 @@ export default {
         .child(this.id)
         .once('value')
         .then(async (s) => {
-          this.studioInfo = await s.val()
-        })
+          this.studioInfo = await s.val();
+        });
     },
     async postcontent() {
-      const timestamp = Date.now()
+      const timestamp = Date.now();
 
       await auth.onAuthStateChanged(async (user) => {
         if (user) {
-          const database = db.ref(`/studios/${this.id}/contents`)
+          const database = db.ref(`/studios/${this.id}/contents`);
 
           database.push({
             title: this.post.title,
@@ -246,38 +246,38 @@ export default {
             username: user.displayName,
             thelink: this.post.thelink,
             image: this.post.image,
-          })
+          });
 
-          this.updateLibris(user.uid)
-          this.editStudioDialog = false
-          this.$forceUpdate()
-          this.fetchStudio()
+          this.updateLibris(user.uid);
+          this.editStudioDialog = false;
+          this.$forceUpdate();
+          this.fetchStudio();
         } else {
-          alert('로그인이 필요합니다.')
+          alert('로그인이 필요합니다.');
 
-          this.$route.push('/login')
+          this.$route.push('/login');
         }
-      })
+      });
     },
     updateLibris(uid) {
       db.ref(`/users/${uid}/libris`).once('value', (s) => {
         db.ref(`/users/${uid}/libris`).set(
           parseInt(s.val()) + this.post.pageCount / 100
-        )
-      })
+        );
+      });
     },
     getSubscribers(uid) {
       db.ref(`/users/${uid}/subscriber`)
         .once('value')
-        .then((s) => (this.subscribers = Object.keys(s.val() ?? [])))
+        .then((s) => (this.subscribers = Object.keys(s.val() ?? [])));
     },
     fetchUsers() {
       auth.onAuthStateChanged(async (user) => {
         if (user) {
-          this.uid = user.uid
-          this.username = user.displayName
-          this.post.author = user.displayName
-          this.getSubscribers(user.uid)
+          this.uid = user.uid;
+          this.username = user.displayName;
+          this.post.author = user.displayName;
+          this.getSubscribers(user.uid);
 
           db.ref('/contents/').on('child_added', async (s) => {
             this.mine.unshift({
@@ -287,22 +287,22 @@ export default {
               username: s.val().username,
               thelink: s.val().thelink,
               image: s.val().image,
-            })
-          })
+            });
+          });
 
-          this.mine.sort((a, b) => a.time - b.time)
+          this.mine.sort((a, b) => a.time - b.time);
         }
-      })
+      });
     },
   },
-  async mounted() {
-    this.fetchStudio()
-    this.fetchUsers()
+  async created() {
+    this.fetchStudio();
+    this.fetchUsers();
   },
   asyncData({ params }) {
-    const id = params.studio
+    const id = params.studio;
 
-    return { id }
+    return { id };
   },
-}
+};
 </script>

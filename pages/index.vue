@@ -1,77 +1,78 @@
 <template>
   <div>
     <v-parallax
-      style="position: absolute; left: 0; width: 100%"
+      style="position: absolute; left: 0; top: 0; width: 100%"
       src="/background.avif"
     >
-      <v-row flex justify="center" class="img-div" style="margin: 5px">
+      <v-row flex justify="center" class="img-div">
         <div style="margin: auto">
           <v-hover v-slot="{ hover }">
             <v-card
               :elevation="hover ? 20 : 2"
-              :class="{ 'on-hover': hover }"
-              class="mx-auto"
+              :class="`${
+                hover && 'on-hover'
+              } d-flex justify-center align-center pa-10 rounded-xl`"
               height="300"
               max-width="500"
-              style="
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 20px;
-                border-radius: 20px;
-              "
             >
               <div>
                 <h1>Little 작가</h1>
                 <br />
-                <p style="color: grey">글을 올리고, 새롭게 배우고, 대화하기</p>
+                <p class="blue-grey--text">
+                  글을 올리고, 새롭게 배우고, 대화하기
+                </p>
               </div>
             </v-card>
           </v-hover>
 
           <br />
 
-          <span v-if="userInfo.loginInfo">
-            <v-btn to="/post" color="primary" class="my-3"
-              >글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon></v-btn
-            >
-          </span>
-          <span v-else>
-            <v-btn to="/login" color="primary" class="my-3"
-              >로그인 <v-icon right>mdi-account</v-icon></v-btn
-            >
-          </span>
-          <v-btn to="/list"
-            >모든 글<v-icon right>mdi-book-alphabet</v-icon></v-btn
-          >
-          <v-btn to="/studios"
-            >스튜디오<v-icon right>mdi-android-studio</v-icon></v-btn
-          >
+          <div class="d-flex justify-center">
+            <div>
+              <span v-if="userInfo.loginInfo">
+                <v-btn to="/post" color="primary" class="my-3">
+                  글 올리기 <v-icon right>mdi-arrow-right-thin</v-icon>
+                </v-btn>
+              </span>
+              <span v-else>
+                <v-btn to="/login" color="primary" class="my-3">
+                  로그인 <v-icon right>mdi-account</v-icon>
+                </v-btn>
+              </span>
+              <v-btn to="/list">
+                모든 글<v-icon right>mdi-text-box-multiple-outline</v-icon>
+              </v-btn>
+              <v-btn to="/studios"><v-icon>mdi-android-studio</v-icon></v-btn>
+            </div>
+          </div>
         </div>
       </v-row>
     </v-parallax>
 
-    <br /><br />
-
-    <BookCardSimple
-      :data="recent"
-      title="최근 포스트"
-      style="margin-top: 575px"
+    <v-card-title style="margin-top: 500px">최근 포스트</v-card-title>
+    <v-divider class="mx-5 mb-10" />
+    <BookCard
+      :items="recent"
+      :uid="userInfo.uid"
+      :displayName="userInfo.userDisplayName"
+      :simple="true"
     />
 
-    <br /><br />
+    <v-card-title>인기있는 포스트</v-card-title>
+    <v-divider class="mx-5 mb-10" />
+    <BookCard
+      :items="popular"
+      :uid="userInfo.uid"
+      :displayName="userInfo.userDisplayName"
+      :simple="true"
+    />
 
-    <BookCardSimple :data="popular" title="인기있는 포스트" />
+    <div style="margin: 5px">
+      <v-card-title>나의 통계</v-card-title>
 
-    <br /><br />
+      <v-divider class="mx-5 mb-10" />
 
-    <v-container style="margin: 5px">
-      <div>
-        <h2>나의 통계</h2>
-        <v-divider></v-divider>
-        <br />
-      </div>
-      <v-row style="margin: 1px; gap: 15px">
+      <v-row class="mx-5" style="gap: 10px">
         <v-card max-width="344">
           <v-card-text>
             <div>Libris (리브리스)</div>
@@ -94,14 +95,14 @@
             </v-card-title>
           </v-card-text>
           <v-card-actions>
-            <v-btn text color="teal accent-4" @click="reveal = true">
+            <v-btn text color="teal accent-4" @click="librisCard = true">
               Libris란??
             </v-btn>
           </v-card-actions>
 
           <v-expand-transition>
             <v-card
-              v-if="reveal"
+              v-if="librisCard"
               class="transition-fast-in-fast-out v-card--reveal"
               style="height: 100%"
             >
@@ -114,7 +115,7 @@
                 </p>
               </v-card-text>
               <v-card-actions class="pt-0">
-                <v-btn text color="teal accent-4" @click="reveal = false">
+                <v-btn text color="teal accent-4" @click="librisCard = false">
                   Close
                 </v-btn>
               </v-card-actions>
@@ -140,14 +141,14 @@
             </v-card-title>
           </v-card-text>
           <v-card-actions>
-            <v-btn text color="teal accent-4" @click="reveal1 = true">
+            <v-btn text color="teal accent-4" @click="subscriptionCard = true">
               구독하자!
             </v-btn>
           </v-card-actions>
 
           <v-expand-transition>
             <v-card
-              v-if="reveal1"
+              v-if="subscriptionCard"
               class="transition-fast-in-fast-out v-card--reveal"
               style="height: 100%"
             >
@@ -160,44 +161,19 @@
                 </p>
               </v-card-text>
               <v-card-actions class="pt-0">
-                <v-btn text color="teal accent-4" @click="reveal1 = false">
+                <v-btn
+                  text
+                  color="teal accent-4"
+                  @click="subscriptionCard = false"
+                >
                   Close
                 </v-btn>
               </v-card-actions>
             </v-card>
           </v-expand-transition>
         </v-card>
-
-        <v-card max-width="344">
-          <v-card-text>
-            <div>글</div>
-            <p class="text-h4 text--primary">Little 작가 글 수</p>
-            <v-card-title class="white--text mt-8">
-              <v-avatar size="45"><v-icon>mdi-text-box</v-icon> </v-avatar>
-              <v-spacer></v-spacer>
-              <v-progress-circular
-                v-if="loading"
-                indeterminate
-              ></v-progress-circular>
-              <span class="text-h4" v-else>{{
-                recent.filter((item) => item.uid == this.userInfo.loginInfo)
-                  .length
-              }}</span>
-            </v-card-title>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn
-              text
-              color="teal accent-4"
-              :to="'/list?username=' + userInfo.name"
-            >
-              나의 글 보기
-            </v-btn>
-          </v-card-actions>
-        </v-card>
       </v-row>
-    </v-container>
+    </div>
 
     <br /><br />
 
@@ -208,7 +184,7 @@
 </template>
 
 <script>
-import { db, auth } from '../plugins/firebase.js'
+import { db, auth } from '../plugins/firebase.js';
 
 export default {
   name: 'IndexPage',
@@ -218,120 +194,70 @@ export default {
       recent: [],
       popular: [],
 
-      userInfo: {
-        loginInfo: false,
-        name: '',
-        image: '',
-        subscriber: 0,
-      },
+      userInfo: {},
 
       loading: true,
-      overlay: false,
-      active: false,
-      model: null,
 
-      reveal: false,
-      reveal1: false,
-
-      page: 1,
-      value: 0,
-    }
+      librisCard: false,
+      subscriptionCard: false,
+    };
   },
   methods: {
-    loadPost(item) {
-      const { uid, time } = item
+    postlist() {
+      const database = db.ref('/contents/');
 
-      this.$router.push(`/content/${uid}-${time}`)
-    },
-    async postlist() {
-      await db
-        .ref('/contents/')
+      database
         .orderByKey()
-        .on('child_added', async (snapshot) => {
-          const data = await snapshot.val()
+        .limitToLast(4)
+        .on('child_added', async (s) => this.recent.unshift(await s.val()));
 
-          this.recent.unshift(data)
-          this.popular.unshift(data)
-        })
-
-      await this.popular.sort((a, b) => b.likes - a.likes)
+      database
+        .orderByChild('likes')
+        .limitToLast(4)
+        .on('child_added', async (s) => this.popular.unshift(await s.val()));
     },
-    userlist() {
+    topLibrisUsers() {
       db.ref('/users')
         .orderByChild('/libris')
         .on('child_added', async (s) => {
+          const data = await s.val();
+
           this.librisTop.unshift({
-            name: s.val().username,
-            libris: s.val().libris ?? 0,
-            image: s.val().photoURL,
+            name: data.username,
+            libris: data.libris ?? 0,
+            image: data.photoURL,
             uid: s.key,
-          })
-        })
-    },
-    awaitLibris(uid) {
-      db.ref(`/users/${uid}/libris`)
-        .once('value')
-        .then((s) => (this.userInfo.libris = s.val()))
+          });
+        });
     },
     getUserInfo() {
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          this.awaitLibris(user.uid)
-
-          this.userInfo = {
-            loginInfo: user.uid,
-            name: user.displayName,
-            image: user.photoURL,
-            subscriber: 0,
-          }
-
-          this.userInfo.subscriber = await db
-            .ref(`/users/${this.userInfo.loginInfo}/subscriber`)
-            .once('value')
-            .then((s) => {
-              return s.numChildren()
-            })
-        }
-      })
+      auth.onAuthStateChanged(async (u) => {
+        u &&
+          (this.userInfo = {
+            loginInfo: u.uid,
+            name: u.displayName,
+            image: u.photoURL,
+            subscriber: await db
+              .ref(`/users/${u.uid}/subscriber`)
+              .once('value')
+              .then((s) => s.numChildren()),
+            libris: await db
+              .ref(`/users/${u.uid}/libris`)
+              .once('value')
+              .then((s) => s.val()),
+          });
+      });
     },
   },
-  async mounted() {
-    this.loading = true
+  async created() {
+    this.loading = true;
 
-    this.userlist()
-    this.getUserInfo()
+    await this.getUserInfo();
+    this.topLibrisUsers();
 
-    this.postlist()
+    await this.postlist();
 
-    setTimeout(() => (this.loading = false), 500)
+    setTimeout(() => (this.loading = false), 1000);
   },
-}
+};
 </script>
-
-<style>
-h1 {
-  font-size: 60px;
-}
-
-@media screen and (max-width: 451px) {
-  h1 {
-    font-size: 40px;
-  }
-}
-@media screen and (max-width: 313px) {
-  h1 {
-    font-size: 30px;
-  }
-}
-@media screen and (max-width: 285px) {
-  p,
-  div {
-    font-size: 10px;
-  }
-}
-@media screen and (max-width: 247px) {
-  h1 {
-    font-size: 20px;
-  }
-}
-</style>
