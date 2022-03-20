@@ -147,8 +147,8 @@ export default {
       theme_color: '#23272F',
       background_color: '#23272F',
       display: 'minimal-ui',
-      scope: './',
-      start_url: './',
+      scope: '/',
+      start_url: '/',
       prefer_related_applications: false,
       related_applications: [
         {

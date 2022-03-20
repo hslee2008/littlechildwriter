@@ -12,7 +12,7 @@
       <template v-slot:activator="{ on, attrs }">
         <NuxtLink to="/" style="text-decoration: none; color: white">
           <v-avatar size="30" v-bind="attrs" v-on="on">
-            <v-img src="/logo.avif" />
+            <v-img src="/logo.avif"></v-img>
           </v-avatar>
           <span class="ml-1" v-bind="attrs" v-on="on">Little 작가</span>
         </NuxtLink>
@@ -146,24 +146,9 @@ export default {
       });
     },
   },
-  async created() {
+  async mounted() {
     await this.getUserInfo();
     this.updateUserInfo();
   },
 };
 </script>
-
-<style>
-.to-show {
-  display: none;
-}
-
-@media screen and (max-width: 686px) {
-  .to-hide {
-    display: none;
-  }
-  .to-show {
-    display: block;
-  }
-}
-</style>

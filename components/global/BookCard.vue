@@ -22,26 +22,49 @@
             ? 215
             : 225
         "
-        class="mx-auto my-3"
+        class="mx-auto my-5 transparent"
         elevation="20"
       >
-        <v-img
-          :src="item.image"
-          :height="
-            $vuetify.breakpoint.width < 300
-              ? '90%'
-              : $vuetify.breakpoint.width < 400
-              ? 220
-              : $vuetify.breakpoint.xs
-              ? 265
-              : $vuetify.breakpoint.sm
-              ? 300
-              : $vuetify.breakpoint.md
-              ? 330
-              : 345
-          "
-          class="rounded-lg"
-        />
+        <v-hover>
+          <template v-slot:default="{ hover }">
+            <v-img
+              :src="item.image"
+              :height="
+                $vuetify.breakpoint.width < 300
+                  ? '90%'
+                  : $vuetify.breakpoint.width < 400
+                  ? 220
+                  : $vuetify.breakpoint.xs
+                  ? 265
+                  : $vuetify.breakpoint.sm
+                  ? 300
+                  : $vuetify.breakpoint.md
+                  ? 330
+                  : 345
+              "
+              class="rounded-lg"
+            >
+              <v-overlay v-if="hover" absolute color="primary">
+                <v-btn icon @click="sharePost(item.title, item.username)">
+                  <v-icon> mdi-share-variant </v-icon>
+                </v-btn>
+              </v-overlay>
+              <v-chip-group column>
+                <v-chip
+                  v-for="tag in item.categories"
+                  :key="tag"
+                  ripple
+                  disabled
+                  outlined
+                  label
+                  class="black--text"
+                >
+                  #{{ tag }}
+                </v-chip>
+              </v-chip-group>
+            </v-img>
+          </template>
+        </v-hover>
 
         <v-tooltip :left="!$vuetify.breakpoint.mobile">
           <template v-slot:activator="{ on, attrs }">
@@ -65,39 +88,42 @@
           @click="loadPost(item.uid, item.time)"
           text
           color="primary"
+          class="rounded-lg"
         >
           <v-icon left>mdi-open-in-new</v-icon> 열기
         </v-btn>
 
-        <template v-if="!simple">
-          <v-divider />
+        <v-slide-y-transition>
+          <v-card class="transparent" v-show="!simple">
+            <v-divider />
 
-          <v-card-text>
-            <p>
-              {{ new Date(parseInt(item.time)).toLocaleDateString() }}<br />
-              {{ new Date(parseInt(item.time)).toLocaleTimeString() }}
-            </p>
-            <ReadOnlyRating :value="item.rating" />
-          </v-card-text>
+            <v-card-text>
+              <p>
+                {{ new Date(parseInt(item.time)).toLocaleDateString() }}<br />
+                {{ new Date(parseInt(item.time)).toLocaleTimeString() }}
+              </p>
+              <ReadOnlyRating :value="item.rating" />
+            </v-card-text>
 
-          <v-divider />
+            <v-divider />
 
-          <v-card-actions class="my-1 justify-center">
-            <v-icon class="mr-1"> mdi-eye </v-icon>
-            <span class="subheading"> {{ Math.round(item.views) }}</span>
+            <v-card-actions class="my-1 justify-center">
+              <v-icon class="mr-1"> mdi-eye </v-icon>
+              <span class="subheading"> {{ Math.round(item.views) }}</span>
 
-            <span class="mr-1 ml-2">·</span>
+              <span class="mr-1 ml-2">·</span>
 
-            <v-btn
-              class="mr-1"
-              icon
-              @click="likeThis(item)"
-              :disabled="item.liked[uid] == true"
-              ><v-icon> mdi-thumb-up </v-icon></v-btn
-            >
-            <span class="subheading"> {{ item.likes }}</span>
-          </v-card-actions>
-        </template>
+              <v-btn
+                icon
+                @click="likeThis(item)"
+                :disabled="item.liked[uid] == true"
+              >
+                <v-icon> mdi-thumb-up </v-icon>
+              </v-btn>
+              <span class="subheading"> {{ item.likes }}</span>
+            </v-card-actions>
+          </v-card>
+        </v-slide-y-transition>
       </v-card>
     </v-row>
   </v-lazy>
@@ -121,6 +147,13 @@ export default {
         time: Date.now(),
         link: `/content/${uid}-${time}`,
       });
+    },
+    sharePost(title, username) {
+      if (navigator.canShare)
+        navigator.share({
+          title: `Little 작가 (${title} by ${username})`,
+          url: window.location.href,
+        });
     },
     likeThis(it) {
       it.likes++;

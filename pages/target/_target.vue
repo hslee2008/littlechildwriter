@@ -30,7 +30,7 @@
         @click="subscribe"
         style="float: right"
       >
-        {{ subscribed ? '구독 취소' : '구독하기' }}
+        {{ subscribed ? '취소' : '구독' }}
       </v-btn>
     </v-row>
 
@@ -80,7 +80,6 @@
         모든 글
       </v-tab>
       <v-tab
-        v-if="currentUser.uid !== uid"
         :style="
           'background-color: ' + ($vuetify.theme.dark ? '#23272F' : '#f5f5f5')
         "
@@ -97,7 +96,7 @@
 
       <v-tabs-items
         v-model="tab"
-        class="py-3"
+        class="pa-5"
         :style="
           'background-color: ' + ($vuetify.theme.dark ? '#23272F' : '#f5f5f5')
         "
@@ -106,59 +105,48 @@
           <v-card
             v-for="(item, index) in project"
             :key="item.title"
-            :width="
-              $vuetify.breakpoint.width < 400
-                ? 150
-                : $vuetify.breakpoint.xs
-                ? 185
-                : $vuetify.breakpoint.sm
-                ? 215
-                : $vuetify.breakpoint.md
-                ? 215
-                : 225
-            "
-            class="mx-auto my-3"
-            elevation="20"
+            width="100%"
+            class="mx-auto my-3 transparent"
           >
-            <v-img
-              :src="item.image"
-              :height="
-                $vuetify.breakpoint.width < 330
-                  ? 300
-                  : $vuetify.breakpoint.width < 400
-                  ? 220
-                  : $vuetify.breakpoint.xs
-                  ? 265
-                  : $vuetify.breakpoint.sm
-                  ? 300
-                  : $vuetify.breakpoint.md
-                  ? 330
-                  : 345
+            <div
+              :style="
+                $vuetify.breakpoint.mobile ? 'display: block' : 'display: flex'
               "
-              style="margin: auto"
-            />
+            >
+              <v-img
+                :src="item.image"
+                min-width="200"
+                max-width="300"
+                class="rounded-lg ma-auto"
+              />
 
-            <v-card-title
-              class="primary--text col-11 text-truncate"
-              style="font-size: 1rem"
-            >
-              {{ item.title }}</v-card-title
-            >
-            <v-card-subtitle style="font-size: 0.9rem"
-              >by {{ item.username }}</v-card-subtitle
-            >
+              <div class="ma-auto">
+                <v-card-title class="primary--text" style="font-size: 1.5rem">
+                  {{ item.title }}</v-card-title
+                >
+                <v-card-subtitle style="font-size: 0.9rem"
+                  >by {{ item.username }}</v-card-subtitle
+                >
 
-            <v-divider />
+                <v-divider />
 
-            <v-btn
-              block
-              tile
-              @click="loadPost(item.uid, item.time)"
-              text
-              color="primary"
-            >
-              <v-icon left>mdi-open-in-new</v-icon> 열기
-            </v-btn>
+                <v-card-text style="font-size: 1rem">
+                  {{ item.description }}
+                </v-card-text>
+
+                <v-divider />
+
+                <v-btn
+                  block
+                  tile
+                  @click="loadPost(item.uid, item.time)"
+                  text
+                  color="primary"
+                >
+                  <v-icon left>mdi-open-in-new</v-icon> 열기
+                </v-btn>
+              </div>
+            </div>
           </v-card>
         </v-tab-item>
         <v-tab-item>
@@ -169,13 +157,30 @@
             :simple="true"
           />
         </v-tab-item>
-        <v-tab-item v-if="currentUser.uid !== uid">
-          <span
-            v-for="(people, index) in subscription"
-            :key="Object.keys(people)[index]"
+        <v-tab-item>
+          <v-virtual-scroll
+            :items="Object.keys(subscription)"
+            height="300"
+            item-height="64"
           >
-            {{ people }}<br />
-          </span>
+            <template v-slot:default="{ item }">
+              <v-list-item :key="item">
+                <v-list-item-content>
+                  <v-list-item-title>
+                    {{ subscription[item] }}
+                  </v-list-item-title>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                  <v-btn icon :to="`/target/${item}`">
+                    <v-icon small> mdi-open-in-new </v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+
+              <v-divider></v-divider>
+            </template>
+          </v-virtual-scroll>
         </v-tab-item>
         <v-tab-item>
           <p>{{ userInfo.bio }}</p>
@@ -221,6 +226,9 @@ export default {
     };
   },
   methods: {
+    loadPost(uid, time) {
+      this.$router.push(`/content/${uid}-${time}`);
+    },
     fetchContent() {
       db.ref('/contents/').on('child_added', async (s) => {
         const data = await s.val();
@@ -321,15 +329,12 @@ export default {
         .ref(`/users/${this.uid}/projectChecked`)
         .once('value', (s) => s.val());
 
-      db.ref(`/users/${this.uid}/project`).once(
-        'value',
-        async (s) =>
-          await s
-            .val()
-            .forEach(
-              (a) => projectChecked.val()[a.title] && this.project.push(a)
-            )
-      );
+      db.ref(`/users/${this.uid}/project`).once('value', async (s) => {
+        const data = await s.val();
+        (data ? data : []).forEach(
+          (a) => projectChecked.val()[a.title] && this.project.push(a)
+        );
+      });
     },
   },
   async created() {

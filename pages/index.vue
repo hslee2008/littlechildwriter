@@ -50,7 +50,7 @@
     </v-parallax>
 
     <v-card-title style="margin-top: 500px">최근 포스트</v-card-title>
-    <v-divider class="mx-5 mb-10" />
+    <v-divider class="mx-5 mb-5" />
     <BookCard
       :items="recent"
       :uid="userInfo.uid"
@@ -59,7 +59,7 @@
     />
 
     <v-card-title>인기있는 포스트</v-card-title>
-    <v-divider class="mx-5 mb-10" />
+    <v-divider class="mx-5 mb-5" />
     <BookCard
       :items="popular"
       :uid="userInfo.uid"
@@ -208,12 +208,12 @@ export default {
 
       database
         .orderByKey()
-        .limitToLast(4)
+        .limitToLast(this.$vuetify.breakpoint.mobile ? 4 : 10)
         .on('child_added', async (s) => this.recent.unshift(await s.val()));
 
       database
         .orderByChild('likes')
-        .limitToLast(4)
+        .limitToLast(this.$vuetify.breakpoint.mobile ? 4 : 10)
         .on('child_added', async (s) => this.popular.unshift(await s.val()));
     },
     topLibrisUsers() {

@@ -25,7 +25,7 @@
       <v-card-text>
         <v-row style="margin: 0.5px; gap: 10px" class="mb-3" justify="center">
           <v-btn @click="$refs.file.$refs.input.click()" text class="mr-auto">
-            <v-icon left>mdi-upload</v-icon> 이미지
+            <v-icon left>mdi-upload</v-icon> 사진
           </v-btn>
 
           <v-dialog
@@ -235,20 +235,7 @@ export default {
   name: 'PostPage',
   data() {
     return {
-      post: {
-        title: '',
-        subtitle: '',
-        content: '',
-        rating: 0,
-        isbn: '',
-        author: [],
-        previewLink: '',
-        image: '',
-        pageCount: 0,
-        likes: 0,
-        liked: {},
-        categories: [],
-      },
+      post: {},
 
       isbn: {
         videoBarcode: false,
@@ -279,7 +266,7 @@ export default {
           .then((s) => (this.$refs.video.srcObject = s))
           .catch((e) => {
             this.isbn.pictureBarcode = false;
-            this.error = '알 수 없는 에러!';
+            makeError('알 수 없는 에러!');
           });
     },
     takeISBNBarcodePictureFromVideo() {
@@ -345,36 +332,40 @@ export default {
       reader.onload = async () => (this.post.image = reader.result);
       reader.readAsDataURL(e);
     },
+    makeError(e) {
+      this.error = e;
+
+      setTimeout(() => {
+        this.error = '';
+      }, 3000);
+    },
     async postcontent() {
-      const timestamp = Date.now();
+      if (!this.post.rating) {
+        makeError('평점을 입력해주세요');
+        return;
+      }
 
-      await auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          await this.updateLibris(user.uid);
+      this.post.time = Date.now();
 
-          db.ref('/contents/' + timestamp).set({
-            title: this.post.title,
-            content: this.post.content,
-            rating: this.post.rating,
-            isbn: this.post.isbn,
-            uid: user.uid,
-            time: timestamp,
-            username: user.displayName,
-            image: this.post.image,
-            previewLink: this.post.previewLink,
-            pageCount: this.post.pageCount,
-            categories: this.post.categories,
-            likes: 1,
-            liked: {
-              [user.uid]: true,
-            },
-            views: 1,
-          });
-        } else {
-          alert('로그인이 필요합니다.');
+      await this.updateLibris(this.uid);
 
-          this.$route.push('/login');
-        }
+      db.ref('/contents/' + this.post.time).set({
+        title: this.post.title,
+        content: this.post.content,
+        rating: this.post.rating,
+        isbn: this.post.isbn,
+        uid: this.uid,
+        time: this.post.time,
+        username: this.username,
+        image: this.post.image,
+        previewLink: this.post.previewLink,
+        pageCount: this.post.pageCount,
+        categories: this.post.categories,
+        likes: 1,
+        liked: {
+          [this.uid]: true,
+        },
+        views: 1,
       });
 
       this.notifySubscribers();
@@ -382,23 +373,23 @@ export default {
       this.$router.push('/list');
     },
     async notifySubscribers() {
-      const timestamp = Date.now();
-
       for (let i = 0; i < this.subscribers.length; i++) {
         await db.ref(`users/${this.subscribers[i]}/notification`).push({
           title: `${this.username}님이 새로운 글을 올렸습니다!`,
           time: timestamp,
           type: 'subscription',
-          link: `/content/${this.uid}-${timestamp}`,
+          link: `/content/${this.uid}-${this.post.time}`,
         });
       }
     },
     updateLibris(uid) {
-      db.ref(`/users/${uid}/libris`).once('value', (s) => {
-        db.ref(`/users/${uid}/libris`).set(
-          parseInt(s.val()) + this.post.pageCount / 100
-        );
-      });
+      const LibrisDatabase = `/users/${uid}/libris`;
+
+      db.ref(LibrisDatabase).once('value', (s) =>
+        db
+          .ref(LibrisDatabase)
+          .set(parseInt(s.val()) + this.post.pageCount / 100)
+      );
     },
     async fetchi() {
       this.loading = true;
@@ -411,7 +402,7 @@ export default {
         .then((json) => {
           const volume = json.items[0].volumeInfo;
 
-          if (json.totalItems === 0) this.error = '이미지를 찾을 수 없습니다. ';
+          if (json.totalItems === 0) makeError('이미지를 찾을 수 없습니다');
           else
             this.post = {
               ...this.post,
@@ -423,7 +414,7 @@ export default {
               categories: volume.categories,
             };
         })
-        .catch((err) => (this.error = '알 수 없는 에러'));
+        .catch((err) => makeError('알 수 없는 에러'));
 
       this.isbn.inputISBN = false;
       this.loading = false;
@@ -437,11 +428,11 @@ export default {
     },
   },
   created() {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        this.uid = user.uid;
-        this.username = user.displayName;
-        this.getSubscribtion(user.uid);
+    auth.onAuthStateChanged(async (u) => {
+      if (u) {
+        this.uid = u.uid;
+        this.username = u.displayName;
+        this.getSubscribtion(u.uid);
       }
     });
   },

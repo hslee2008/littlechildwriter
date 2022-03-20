@@ -16,21 +16,14 @@
     <v-card class="my-3">
       <v-progress-linear v-if="loading" indeterminate color="primary" />
 
-      <v-btn
-        tile
-        small
-        to="/list"
-        elevation="0"
-        :block="$vuetify.breakpoint.mobile"
-        :color="!$vuetify.breakpoint.mobile ? 'rgb(0, 0, 0, 0)' : 'normal'"
-      >
-        <v-icon left>mdi-arrow-left</v-icon> 뒤로가기</v-btn
-      >
+      <v-btn tile text small to="/list" color="primary" class="rounded-lg">
+        <v-icon left>mdi-arrow-left</v-icon> 뒤로가기
+      </v-btn>
 
       <div class="cardy">
         <div class="text-center" style="margin: auto">
           <div>
-            <v-btn-toggle class="my-3">
+            <v-btn-toggle class="my-3 rounded-lg">
               <v-btn :href="post.previewLink">
                 <v-icon left>mdi-book</v-icon> 구글 정보
               </v-btn>
