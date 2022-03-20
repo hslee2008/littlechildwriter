@@ -65,42 +65,13 @@
     <br /><br />
 
     <v-tabs v-model="tab" grow>
-      <v-tab
-        :style="
-          'background-color: ' + ($vuetify.theme.dark ? '#23272F' : '#f5f5f5')
-        "
-      >
-        홈
-      </v-tab>
-      <v-tab
-        :style="
-          'background-color: ' + ($vuetify.theme.dark ? '#23272F' : '#f5f5f5')
-        "
-      >
-        모든 글
-      </v-tab>
-      <v-tab
-        :style="
-          'background-color: ' + ($vuetify.theme.dark ? '#23272F' : '#f5f5f5')
-        "
-      >
-        구독자
-      </v-tab>
-      <v-tab
-        :style="
-          'background-color: ' + ($vuetify.theme.dark ? '#23272F' : '#f5f5f5')
-        "
-      >
-        나의 소개
-      </v-tab>
+      <v-tab> 홈 </v-tab>
+      <v-tab> 모든 글 </v-tab>
+      <v-tab> 구독자 </v-tab>
+      <v-tab> 평점 선호도 </v-tab>
+      <v-tab> 나의 소개 </v-tab>
 
-      <v-tabs-items
-        v-model="tab"
-        class="pa-5"
-        :style="
-          'background-color: ' + ($vuetify.theme.dark ? '#23272F' : '#f5f5f5')
-        "
-      >
+      <v-tabs-items v-model="tab" class="pa-5">
         <v-tab-item>
           <v-card
             v-for="(item, index) in project"
@@ -172,7 +143,7 @@
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-btn icon :to="`/target/${item}`">
+                  <v-btn icon :to="`/user/${item}`">
                     <v-icon small> mdi-open-in-new </v-icon>
                   </v-btn>
                 </v-list-item-action>
@@ -181,6 +152,21 @@
               <v-divider></v-divider>
             </template>
           </v-virtual-scroll>
+        </v-tab-item>
+        <v-tab-item>
+          <v-select
+            v-model="rating"
+            :items="[5, 4, 3, 2, 1]"
+            label="평점 선택"
+            outlined
+          ></v-select>
+
+          <BookCard
+            :items="[five, four, three, two, one][5 - rating]"
+            :uid="uid"
+            :displayName="userInfo.username"
+            :simple="true"
+          />
         </v-tab-item>
         <v-tab-item>
           <p>{{ userInfo.bio }}</p>
@@ -199,6 +185,8 @@ import * as filter from 'leo-profanity';
 export default {
   data() {
     return {
+      rating: 5,
+
       userInfo: {
         libris: '',
         username: '',
@@ -217,6 +205,12 @@ export default {
       subscribed: false,
       subscriberNumber: 0,
 
+      five: [],
+      four: [],
+      three: [],
+      two: [],
+      one: [],
+
       recent: [],
       project: [],
       listev: [],
@@ -228,6 +222,20 @@ export default {
   methods: {
     loadPost(uid, time) {
       this.$router.push(`/content/${uid}-${time}`);
+    },
+    fetchContentByStar() {
+      db.ref('/contents/')
+        .orderByChild('time')
+        .on('child_added', async (s) => {
+          const data = await s.val();
+
+          data.uid === this.uid &&
+            (data.rating == 5 && this.five.push(data),
+            data.rating == 4 && this.four.push(data),
+            data.rating == 3 && this.three.push(data),
+            data.rating == 2 && this.two.push(data),
+            data.rating == 1 && this.one.push(data));
+        });
     },
     fetchContent() {
       db.ref('/contents/').on('child_added', async (s) => {
@@ -281,7 +289,7 @@ export default {
       db.ref(`users/${this.uid}/notification`).push({
         title: `${this.currentUser.myUsername}님이 구독했습니다!`,
         time: Date.now(),
-        link: `target/${this.uid}`,
+        link: `user/${this.uid}`,
       });
     },
     subscribe() {
@@ -301,7 +309,7 @@ export default {
         this.userInfo.libris -= 10;
       } else {
         db.ref(`/users/${this.currentUser.uid}/subscribe/${this.uid}`).set(
-          this.currentUser.myUsername
+          this.userInfo.username
         );
         db.ref(`/users/${this.uid}/subscriber/${this.currentUser.uid}`).set(
           this.currentUser.myUsername
@@ -348,6 +356,7 @@ export default {
     this.getFePro();
     this.postlist();
     this.fetchContent();
+    this.fetchContentByStar();
   },
   async mounted() {
     this.loading = false;

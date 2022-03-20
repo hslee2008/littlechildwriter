@@ -2,11 +2,10 @@
   <v-app-bar
     v-if="!$vuetify.breakpoint.mobile"
     fixed
-    dense
     clipped-left
     app
-    :color="$vuetify.theme.dark ? '#23272F' : 'white'"
     elevate-on-scroll
+    color="#23272F"
   >
     <v-tooltip bottom>
       <template v-slot:activator="{ on, attrs }">
@@ -21,21 +20,6 @@
     </v-tooltip>
 
     <v-spacer />
-
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          icon
-          v-on="on"
-          v-bind="attrs"
-          arial-label="밝은/어두운 모드"
-          @click.stop="$vuetify.theme.dark = !$vuetify.theme.dark"
-        >
-          <v-icon>mdi-brightness-6</v-icon>
-        </v-btn>
-      </template>
-      <span>밝은/어두운 모드</span>
-    </v-tooltip>
 
     <Notification
       :uid="login.uid"
@@ -62,7 +46,7 @@
             <p class="text-caption mt-1">
               {{ login.email }}
             </p>
-            <NuxtLink :to="`/target/${login.uid}`">
+            <NuxtLink :to="`/account/${login.uid}`">
               <v-btn color="primary">나의 프로필 페이지</v-btn>
             </NuxtLink>
 

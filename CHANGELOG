@@ -1,0 +1,15 @@
+0.0.1
+INIT
+
+0.0.1
+
+1. Lazify Libris Count Component
+2. Remove Firebase Hosting Cache from .gitignore
+3. Rename Folders to understandable names
+4. Fix Bug in Comment Section
+5. Add Each Rating List of Menu in /user
+6. Disable Bug of Like Button in /content due to Bugs
+7. Change Title from nuxt.config.js
+8. Fix Bug in /content from /mock to /edit
+9. Remove theme support
+10. Fix bug, optimize code

@@ -20,7 +20,7 @@
       <v-slide-x-transition group>
         <v-timeline-item
           v-for="(message, index) in comments"
-          :key="message.time"
+          :key="message.time + index"
           class="mb-4 mr-3"
           small
           :color="userInfo.username.includes(message.username) ? 'blue' : 'red'"
@@ -176,7 +176,7 @@ export default {
             isuser: this.uid === user.uid,
             photo: user.photoURL,
           };
-        else disabled = true;
+        else this.disabled = true;
       });
     },
     async editcomment(index) {

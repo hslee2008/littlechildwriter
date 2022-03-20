@@ -116,7 +116,13 @@
               <v-btn
                 icon
                 @click="likeThis(item)"
-                :disabled="item.liked[uid] == true"
+                :disabled="
+                  (!item.liked
+                    ? {
+                        [uid]: false,
+                      }
+                    : item.liked)[uid] == true
+                "
               >
                 <v-icon> mdi-thumb-up </v-icon>
               </v-btn>

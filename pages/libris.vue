@@ -18,7 +18,9 @@ export default {
         this.librisTop.unshift({
           name: s.val().username,
           libris: s.val().libris ?? 0,
-          image: s.val().photoURL,
+          image:
+            s.val().photoURL ??
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrrnGZwdiVB0PvComVCV3YlXEMtQpHVmGjDg&usqp=CAU',
           uid: s.key,
         });
       });

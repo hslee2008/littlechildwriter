@@ -259,7 +259,7 @@ export default {
 
           this.getUserInfo();
 
-          this.$router.push(`target/${this.uid}`);
+          this.$router.push(`/user/${this.uid}`);
         })
         .catch((error) => alert(error.message));
     },

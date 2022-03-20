@@ -56,7 +56,7 @@
       </v-card-text>
 
       <v-card-actions style="gap: 5px">
-        <v-btn color="primary" @click="update" elevation="0">
+        <v-btn color="primary" @click="update" class="elevation-0">
           업데이트<v-icon right>mdi-note-plus</v-icon>
         </v-btn>
 
@@ -154,7 +154,7 @@ export default {
   },
 
   asyncData({ params }) {
-    const [uid, time] = params.mock.split('-');
+    const [uid, time] = params.edit.split('-');
 
     return {
       uid,

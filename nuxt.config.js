@@ -9,7 +9,7 @@ export default {
       lang: 'en,ko-kr',
     },
     titleTemplate: '%s',
-    title: 'Little Child Writer',
+    title: 'Little 작가',
     meta: [
       {
         hid: 'description',

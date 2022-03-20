@@ -125,7 +125,7 @@
       hide-default-footer
     >
       <template v-slot:header>
-        <v-toolbar dark class="mb-1" style="background-color: rgb(0, 0, 0, 0)">
+        <v-toolbar dark class="mb-1 elevation-0 transparent">
           <v-text-field
             v-model="search"
             clearable
@@ -270,6 +270,7 @@ export default {
       itemsPerPage: 10,
       sortBy: 'time',
       keys: ['time', 'views'],
+      uid: '',
 
       studioInfo: {
         name: '',
@@ -289,6 +290,7 @@ export default {
       makingStudioSteps: 1,
     };
   },
+
   computed: {
     numberOfPages() {
       return Math.ceil(this.fetchedStudios.length / this.itemsPerPage);
@@ -297,81 +299,71 @@ export default {
       return this.keys.filter((key) => key !== 'Name');
     },
   },
+
   methods: {
     nextPage() {
-      if (this.page + 1 <= this.numberOfPages) this.page += 1;
+      this.page + 1 <= this.numberOfPages && (this.page += 1);
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
     },
     formerPage() {
-      if (this.page - 1 >= 1) this.page -= 1;
+      this.page - 1 >= 1 && (this.page -= 1);
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
     },
-    updateItemsPerPage(number) {
-      this.itemsPerPage = number;
+    updateItemsPerPage(n) {
+      this.itemsPerPage = n;
     },
 
     makeAStudio() {
       this.makingStudioDialog = false;
-      this.studioInfo.creator = auth.currentUser.displayName;
-      this.studioInfo.lastUpdated = Date.now();
-      this.studioInfo.id =
-        auth.currentUser.uid + this.studioInfo.name.replace(/\s/g, '');
+
+      this.studioInfo = {
+        creator: this.username,
+        lastUpdated: new Date.now(),
+        id: this.uid + this.studioInfo.name.replace(/\s/g, ''),
+      };
 
       db.ref('studios')
         .child(auth.currentUser.uid + this.studioInfo.name.replace(/\s/g, ''))
         .set(this.studioInfo);
     },
-    async fetchStudio() {
-      await db.ref('studios').on('value', (snapshot) => {
+    fetchStudio() {
+      db.ref('studios').on('value', (s) => {
         this.fetchedStudios = [];
-        snapshot.forEach((childSnapshot) => {
-          this.fetchedStudios.push(childSnapshot.val());
-        });
+
+        s.forEach((c) => this.fetchedStudios.push(c.val()));
       });
     },
-    openStudio(index) {
-      this.$router.push(`studio/${this.fetchedStudios[index].id}`);
+    openStudio(i) {
+      this.$router.push(`studio/${this.fetchedStudios[i].id}`);
     },
-    deleteStudio(index) {
-      auth.onAuthStateChanged((user) => {
-        if (user) {
-          db.ref('studios')
-            .child(
-              user.uid + this.fetchedStudios[index].name.replace(/\s/g, '')
-            )
-            .remove();
-        }
-      });
+    deleteStudio(i) {
+      db.ref('studios')
+        .child(this.uid + this.fetchedStudios[i].name.replace(/\s/g, ''))
+        .remove();
     },
     fetchUserInfo() {
       auth.onAuthStateChanged((user) => {
         if (user) {
           this.username = user.displayName;
+          this.uid = user.uid;
         }
       });
     },
   },
+
   async created() {
     this.fetchStudio();
     this.fetchUserInfo();
   },
 };
-
-/*
-
-
-{
-  name: '',
-  description: '',
-  image: '',
-  creator: '',
-  lastUpdated: '',
-  likes: 0,
-  views: 0,
-  liked: {},
-  joins: {},
-  totalPosts: {},
-  comments: [],
-}
-
-
-*/
 </script>

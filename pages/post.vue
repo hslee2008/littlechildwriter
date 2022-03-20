@@ -24,7 +24,12 @@
 
       <v-card-text>
         <v-row style="margin: 0.5px; gap: 10px" class="mb-3" justify="center">
-          <v-btn @click="$refs.file.$refs.input.click()" text class="mr-auto">
+          <v-btn
+            @click="$refs.file.$refs.input.click()"
+            text
+            class="mr-auto"
+            :small="$vuetify.breakpoint.mobile"
+          >
             <v-icon left>mdi-upload</v-icon> 사진
           </v-btn>
 
@@ -34,8 +39,16 @@
             height="90%"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                ><v-icon>mdi-barcode-scan</v-icon>
+              <v-btn
+                color="primary"
+                v-bind="attrs"
+                v-on="on"
+                :small="$vuetify.breakpoint.mobile"
+                class="elevation-0"
+              >
+                <v-icon :small="$vuetify.breakpoint.mobile">
+                  mdi-barcode-scan
+                </v-icon>
               </v-btn>
             </template>
 
@@ -46,7 +59,7 @@
                   id="videoElement"
                   ref="video"
                   width="100%"
-                ></video>
+                />
               </div>
               <v-card-actions>
                 <v-btn @click="showCamera">카메라</v-btn>
@@ -64,8 +77,14 @@
 
           <v-dialog v-model="isbn.pictureBarcode" width="500">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                ><v-icon>mdi-barcode</v-icon>
+              <v-btn
+                color="primary"
+                v-bind="attrs"
+                v-on="on"
+                :small="$vuetify.breakpoint.mobile"
+                class="elevation-0"
+              >
+                <v-icon :small="$vuetify.breakpoint.mobile">mdi-barcode</v-icon>
               </v-btn>
             </template>
 
@@ -111,9 +130,17 @@
 
           <v-dialog v-model="isbn.inputISBN" width="500">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn elevation="0" color="primary" v-bind="attrs" v-on="on"
-                ><v-icon>mdi-form-textbox</v-icon></v-btn
+              <v-btn
+                color="primary"
+                v-bind="attrs"
+                v-on="on"
+                :small="$vuetify.breakpoint.mobile"
+                class="elevation-0"
               >
+                <v-icon :small="$vuetify.breakpoint.mobile">
+                  mdi-form-textbox
+                </v-icon>
+              </v-btn>
             </template>
 
             <v-card>
@@ -187,7 +214,7 @@
       </v-card-text>
 
       <v-card-actions style="gap: 5px">
-        <v-btn color="teal accent-7" @click="postcontent" elevation="0">
+        <v-btn color="teal accent-7" @click="postcontent" class="elevation-0">
           올리기<v-icon right>mdi-note-plus</v-icon>
         </v-btn>
 
@@ -245,7 +272,6 @@ export default {
 
       loading: false,
       error: '',
-      libris: 0,
       uid: '',
 
       subscribers: [],
@@ -266,7 +292,7 @@ export default {
           .then((s) => (this.$refs.video.srcObject = s))
           .catch((e) => {
             this.isbn.pictureBarcode = false;
-            makeError('알 수 없는 에러!');
+            this.makeError('알 수 없는 에러!');
           });
     },
     takeISBNBarcodePictureFromVideo() {
@@ -277,6 +303,8 @@ export default {
           .detect(this.$refs.video)
           .then((res) => res[0].value)
           .then(async (a) => {
+            console.log(JSON.stringify(a, null, 2));
+            console.log(JSON.stringify(a));
             this.post.isbn = JSON.stringify(a, null, 2).replace(/\"/g, '');
             this.fetchi();
             this.isbn.videoBarcode = false;
@@ -334,22 +362,15 @@ export default {
     },
     makeError(e) {
       this.error = e;
-
-      setTimeout(() => {
-        this.error = '';
-      }, 3000);
+      setTimeout(() => (this.error = ''), 3000);
     },
     async postcontent() {
       if (!this.post.rating) {
-        makeError('평점을 입력해주세요');
+        this.makeError('평점을 입력해주세요');
         return;
       }
 
-      this.post.time = Date.now();
-
-      await this.updateLibris(this.uid);
-
-      db.ref('/contents/' + this.post.time).set({
+      db.ref(`/contents/${this.post.time}`).set({
         title: this.post.title,
         content: this.post.content,
         rating: this.post.rating,
@@ -369,6 +390,7 @@ export default {
       });
 
       this.notifySubscribers();
+      this.updateLibris(this.uid);
 
       this.$router.push('/list');
     },
@@ -393,28 +415,28 @@ export default {
     },
     async fetchi() {
       this.loading = true;
-      this.error = '';
 
       await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
       )
         .then((res) => res.json())
-        .then((json) => {
-          const volume = json.items[0].volumeInfo;
-
-          if (json.totalItems === 0) makeError('이미지를 찾을 수 없습니다');
-          else
-            this.post = {
-              ...this.post,
-              title: volume.title,
-              image: volume.imageLinks.thumbnail,
-              previewLink: volume.previewLink,
-              pageCount: volume.pageCount,
-              author: volume.authors,
-              categories: volume.categories,
-            };
+        .then((res) =>
+          res.totalItems === 0
+            ? this.makeError('ISBN을 찾을 수 없습니다')
+            : res.items[0].volumeInfo
+        )
+        .then((vol) => {
+          this.post = {
+            ...this.post,
+            title: vol.title,
+            image: vol.imageLinks.thumbnail,
+            previewLink: vol.previewLink,
+            pageCount: vol.pageCount,
+            author: vol.authors,
+            categories: vol.categories,
+          };
         })
-        .catch((err) => makeError('알 수 없는 에러'));
+        .catch((e) => this.makeError(e.message));
 
       this.isbn.inputISBN = false;
       this.loading = false;
@@ -422,19 +444,22 @@ export default {
     getSubscribtion(uid) {
       db.ref(`/users/${uid}/subscriber`)
         .once('value')
-        .then((s) => {
-          this.subscription = Object.keys(s.val()) ?? [];
-        });
+        .then((s) => (this.subscription = Object.keys(s.val()) ?? []));
+    },
+    getUserInfo() {
+      auth.onAuthStateChanged(async (u) => {
+        if (u) {
+          this.uid = u.uid;
+          this.username = u.displayName;
+          this.getSubscribtion(u.uid);
+        }
+      });
     },
   },
   created() {
-    auth.onAuthStateChanged(async (u) => {
-      if (u) {
-        this.uid = u.uid;
-        this.username = u.displayName;
-        this.getSubscribtion(u.uid);
-      }
-    });
+    this.post.time = Date.now();
+
+    this.getUserInfo();
   },
 };
 </script>

@@ -14,17 +14,18 @@
 
     <v-bottom-navigation fixed v-if="$vuetify.breakpoint.mobile">
       <v-btn to="/" x-small>
-        <span>홈</span>
+        홈
 
         <v-icon>mdi-home</v-icon>
       </v-btn>
 
       <v-btn to="/post" x-small>
-        <span>쓰기</span> <v-icon>mdi-pencil</v-icon></v-btn
-      >
+        쓰기
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
 
       <v-btn to="/list" x-small>
-        <span>리스트</span>
+        리스트
 
         <v-icon>mdi-library</v-icon>
       </v-btn>
@@ -47,7 +48,7 @@
               <p class="text-caption mt-1">
                 {{ login.email }}
               </p>
-              <NuxtLink :to="`/target/${login.uid}`">
+              <NuxtLink :to="`/user/${login.uid}`">
                 <v-btn color="primary">나의 프로필 페이지</v-btn>
               </NuxtLink>
 
@@ -109,10 +110,7 @@ export default {
   methods: {
     logout() {
       auth.signOut();
-      this.gotoHome();
-    },
-    gotoHome() {
-      this.$router.push('/');
+      this.$router.push('/login');
     },
     getUserInfo() {
       auth.onAuthStateChanged(async (user) => {

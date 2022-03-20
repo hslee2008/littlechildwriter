@@ -74,7 +74,7 @@
 
           <v-card-subtitle>
             by
-            <NuxtLink :to="`/target/${post.uid}`">
+            <NuxtLink :to="`/user/${post.uid}`">
               {{ post.username }}
             </NuxtLink></v-card-subtitle
           >
@@ -109,7 +109,7 @@
       />
       <v-btn
         v-if="userInfo.isuser"
-        :to="`/mock/${this.uid}-${this.time}`"
+        :to="`/edit/${this.uid}-${this.time}`"
         class="ml-3"
         color="blue lighten-2"
         ><v-icon left>mdi-pencil</v-icon>편집</v-btn
@@ -117,13 +117,9 @@
 
       <br v-if="userInfo.isuser" />
 
-      <v-btn
-        class="mt-5"
-        text
-        @click="likeThis()"
-        :disabled="post.liked[uid] == true"
-        ><v-icon left> mdi-thumb-up </v-icon>{{ post.likes }}</v-btn
-      >
+      <v-btn class="mt-5" text @click="likeThis()" disabled>
+        <v-icon left> mdi-thumb-up </v-icon>{{ post.likes }}
+      </v-btn>
       <v-btn text @click="sharePost" class="mt-5">
         <v-icon left>mdi-share-variant</v-icon> 공유
       </v-btn>
@@ -210,7 +206,7 @@ export default {
       db.ref(`users/${useruid}/libris`)
         .once('value')
         .then((s) =>
-          db.ref(`users/${useruid}/libris`).set(parseInt(s.val()) + 0.5)
+          db.ref(`users/${useruid}/libris`).set(parseInt(s.val()) + 0.1)
         );
     },
     async notify() {
@@ -292,13 +288,6 @@ export default {
     setTimeout(() => (this.loading = false), 1000);
 
     this.growView();
-  },
-
-  mounted() {
-    !this.post.liked &&
-      (this.post.liked = {
-        [this.uid]: false,
-      });
   },
 
   asyncData({ params }) {

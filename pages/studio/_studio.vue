@@ -27,11 +27,6 @@
         />
 
         <v-card-text>
-          <v-row style="margin: 1px">
-            <div style="margin: auto">
-              {{ new Date().toLocaleDateString() }}
-            </div>
-          </v-row>
           <v-row>
             <img :src="post.image" height="100" class="mx-auto" />
             <v-form class="mx-auto">
@@ -41,12 +36,13 @@
                 :hint="post.subtitle"
               />
               <v-text-field label="이름" v-model="post.author" />
+              {{ new Date().toLocaleDateString() }}
             </v-form>
           </v-row>
         </v-card-text>
 
         <v-card-actions style="gap: 20px">
-          <v-btn color="teal accent-7" @click="postcontent" elevation="0">
+          <v-btn color="teal accent-7" @click="postcontent" class="elevation-0">
             올리기<v-icon right>mdi-note-plus</v-icon>
           </v-btn>
 
@@ -74,8 +70,9 @@
                     <v-card-actions
                       ><v-btn
                         @click="
-                          post.thelink = `/content/${item.uid}-${item.time}`;
+                          post.thelink = `/contents/${item.uid}-${item.time}`;
                           post.image = item.image;
+                          post.time = item.time;
                           dialog = false;
                         "
                         icon
@@ -103,7 +100,7 @@
         tile
         small
         to="/studios"
-        elevation="0"
+        class="elevation-0"
         :block="$vuetify.breakpoint.mobile"
         :color="!$vuetify.breakpoint.mobile ? 'rgb(0, 0, 0, 0)' : 'normal'"
       >
@@ -135,35 +132,17 @@
     <br />
 
     <v-row class="ml-3 mr-3 mt-3" style="gap: 20px" justify="center">
-      <div>
-        <v-card
-          v-for="(posts, index) in studioInfo.contents"
-          :key="posts.time"
-          :style="
-            $vuetify.breakpoint.width < 350 ? 'display: block' : 'display: flex'
-          "
-        >
-          <v-img :src="posts.image" />
-
-          <div>
-            <v-card-title>{{ posts.title }}</v-card-title>
-            <v-card-subtitle>by {{ posts.username }}</v-card-subtitle>
-            <v-card-text>
-              {{ new Date(parseInt(posts.time)).toLocaleDateString() }}
-            </v-card-text>
-            <v-card-actions>
-              <v-btn :to="posts.thelink">
-                <v-icon left>mdi-open-in-new</v-icon>
-                열기
-              </v-btn>
-            </v-card-actions>
-          </div>
-        </v-card>
-      </div>
+      <BookCard
+        :items="studioInfo.contents"
+        :uid="uid"
+        :displayName="userInfo.username"
+        :simple="true"
+      />
 
       <CommentSection
         :databaseReference="`studios/${this.id}/comments`"
         :id="`/studio/${this.id}`"
+        class="ma-7"
       />
     </v-row>
 
