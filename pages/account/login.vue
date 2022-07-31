@@ -5,7 +5,9 @@
   >
     <div>
       <h1>로그인</h1>
-      <p>계정이 없으면 <NuxtLink to="/create"> 계정 만들기 </NuxtLink></p>
+      <p>
+        계정이 없으면 <NuxtLink to="/account/create"> 계정 만들기 </NuxtLink>
+      </p>
 
       <v-divider class="my-5" />
 

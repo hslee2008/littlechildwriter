@@ -13,11 +13,11 @@
       <v-card-subtitle v-text="userInfo.email" />
 
       <v-btn :to="`/user/${userInfo.uid}`" text> 프로필 </v-btn>
-      <v-btn to="/account" text> 편집 </v-btn>
+      <v-btn to="/account/account" text> 편집 </v-btn>
       <v-btn text @click="logout"> 로그아웃 </v-btn>
     </v-card>
   </v-menu>
-  <v-btn v-else to="/login" icon>
+  <v-btn v-else to="/account/login" icon>
     <v-icon>mdi-account-circle</v-icon>
   </v-btn>
 </template>
@@ -30,7 +30,7 @@ export default {
     logout() {
       this.userInfo = {}
       auth.signOut()
-      this.$router.push('/login')
+      this.$router.push('/account/login')
     }
   }
 }

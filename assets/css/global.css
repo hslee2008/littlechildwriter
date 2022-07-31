@@ -28,6 +28,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Transition */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.314s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
+
 /* Custom */
 .zmax {
   z-index: 999;

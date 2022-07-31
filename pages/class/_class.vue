@@ -21,7 +21,7 @@
           :key="item.title"
           class="d-flex mt-5 transparent"
           rounded
-          :to="`/content/${item.time}`"
+          :to="`/book/content/${item.time}`"
         >
           <v-icon color="orange" class="ml-4"> mdi-book </v-icon>
           <div>
@@ -166,7 +166,7 @@
           </v-card-actions>
         </v-card>
 
-        <CommentComponent
+        <LazyCommentComponent
           v-else
           :id="`/class/${id}`"
           :dbr="`classes/${id}/contents`"
@@ -263,7 +263,7 @@
         <v-card class="mt-5">
           <v-card-title>삭제</v-card-title>
           <v-card-text>
-            <DialogComponent
+            <LazyDialogComponent
               :cb="deleteClass"
               btn-title="삭제"
               title="진짜로 삭제하겠습니까?"

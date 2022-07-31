@@ -6,7 +6,7 @@
         <v-list-item
           v-for="(item, i) in items"
           :key="i"
-          :to="`/content/${item.time}`"
+          :to="`/book/content/${item.time}`"
         >
           <v-list-item-content>
             <v-list-item-title> {{ item.title }} </v-list-item-title>
@@ -35,7 +35,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar fixed app color="#22272E" class="elevation-0">
+    <v-app-bar fixed app color="#23262E" class="elevation-0">
       <v-app-bar-nav-icon
         v-if="userInfo.displayName"
         @click="bookmark = !bookmark"
@@ -48,6 +48,12 @@
       </NuxtLink>
 
       <v-spacer />
+
+      <v-slide-x-transition>
+        <v-btn v-if="$route.path !== '/book/post'" icon to="/book/post">
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </v-slide-x-transition>
 
       <v-dialog
         v-if="userInfo.uid"

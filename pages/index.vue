@@ -3,10 +3,10 @@
     <v-parallax class="parallax" src="/background.avif">
       <div class="ma-auto">
         <div class="mx-3">
-          <v-btn v-if="userInfo.uid" to="/post" color="primary" block>
+          <v-btn v-if="userInfo.uid" to="/book/post" color="primary" block>
             글 올리기 <v-icon right> mdi-arrow-right-thin </v-icon>
           </v-btn>
-          <v-btn v-else to="/login" color="primary" block>
+          <v-btn v-else to="/account/login" color="primary" block>
             로그인 <v-icon right> mdi-account </v-icon>
           </v-btn>
         </div>
@@ -28,6 +28,9 @@
           <v-btn to="/list" class="mx-3">
             글 <v-icon right> mdi-text-box-multiple-outline </v-icon>
           </v-btn>
+          <v-btn to="/team/my" class="mx-3">
+            팀 플레이 <v-icon right> mdi-microsoft-teams </v-icon>
+          </v-btn>
           <v-btn to="/classes" class="mx-3">
             클래스 <v-icon right> mdi-google-classroom </v-icon>
           </v-btn>
@@ -37,11 +40,11 @@
 
     <v-card-title style="margin-top: 600px"> 최근 포스트 </v-card-title>
     <v-divider class="mx-5 mb-5" />
-    <LazyBookCard :items="recent" :uid="userInfo.uid" :simple="true" />
+    <LazyBookCard :items="recent" :simple="true" />
 
     <v-card-title>인기있는 포스트</v-card-title>
     <v-divider class="mx-5 mb-5" />
-    <LazyBookCard :items="popular" :uid="userInfo.uid" :simple="true" />
+    <LazyBookCard :items="popular" :simple="true" />
 
     <v-card class="mx-5 my-10 transparent">
       <v-card-text>
@@ -51,11 +54,17 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn to="/libris" color="primary" class="mx-3">
-          명예의 전당 더보기 <v-icon right> mdi-arrow-right-bold </v-icon>
+        <v-btn text to="/libris" color="primary" class="mx-3">
+          명예의 전당 더보기
         </v-btn>
       </v-card-actions>
     </v-card>
+
+    <v-card-title> 팀 명예의 전당 </v-card-title>
+    <v-divider class="mx-5 mb-5" />
+    <Teams :noTitle="true" />
+
+    <br />
   </div>
 </template>
 

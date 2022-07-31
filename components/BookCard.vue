@@ -8,7 +8,7 @@
         :width="$vuetify.breakpoint.mobile ? 150 : 200"
         class="mx-auto my-5 transparent"
       >
-        <v-card :to="`/content/${item.time}`" class="transparent">
+        <v-card :to="`/book/content/${item.time}`" class="transparent">
           <v-img
             :src="item.image"
             :lazy-src="item.image"

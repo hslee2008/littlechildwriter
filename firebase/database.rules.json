@@ -11,6 +11,9 @@
       "$userId": {
         ".write": "$userId === auth.uid"
       }
+    },
+    "teams": {
+      ".indexOn": "/points"
     }
   }
 }

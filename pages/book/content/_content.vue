@@ -37,7 +37,7 @@
           </v-img>
         </div>
 
-        <v-card-content class="ma-auto pa-1">
+        <div class="ma-auto pa-1">
           <v-card-title class="h1 primary--text" v-text="post.title" />
 
           <v-card-subtitle>
@@ -62,20 +62,20 @@
               </v-chip>
             </v-chip-group>
           </v-card-text>
-        </v-card-content>
+        </div>
       </div>
     </v-card>
 
     <div class="text-center my-10">
       <div v-if="post.uid === userInfo.uid" class="mb-10">
-        <DialogComponent
+        <LazyDialogComponent
           :cb="del"
           btn-title="삭제"
           title="진짜로 삭제하겠습니까?"
           text="삭제하면 복구할 수 없습니다"
           icon="delete"
         />
-        <v-btn :to="`/edit/${time}`" class="ml-3" color="blue lighten-2">
+        <v-btn :to="`/book/edit/${time}`" class="ml-3" color="blue lighten-2">
           <v-icon left> mdi-pencil </v-icon> 편집
         </v-btn>
       </div>
@@ -112,7 +112,7 @@
       </v-dialog>
     </div>
 
-    <CommentComponent
+    <LazyCommentComponent
       :id="`/content/${time}`"
       :dbr="`contents/${time}/comments`"
       :uid="this.post.uid"
@@ -120,7 +120,16 @@
 
     <br /><br /><br /><br />
 
-    <template v-if="post.categories && suggested[0]">
+    <div class="text-center">
+      <v-progress-circular
+        v-if="loading"
+        indeterminate
+        color="primary"
+        class="mb-5"
+      />
+    </div>
+
+    <template v-if="post.categories && !loading">
       <h1>이런 책 어때?</h1>
 
       <v-row>
@@ -176,6 +185,7 @@ export default {
       },
 
       fetchedBookID: '',
+      loading: false,
       suggested: []
     }
   },
@@ -186,6 +196,8 @@ export default {
   },
   methods: {
     async fetchContent() {
+      this.loading = true
+
       const cat = [...this.post.categories]
       cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
 
@@ -228,6 +240,8 @@ export default {
           })
           .catch(() => cat.shift())
       }
+
+      this.loading = false
     },
     async loadIframe() {
       let fetched = ''

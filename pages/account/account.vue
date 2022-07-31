@@ -98,7 +98,7 @@
     <v-card-title>비공개 프로젝트</v-card-title>
     <v-divider />
     <br />
-    <BookCard :items="project" :simple="true" :sp="true" />
+    <LazyBookCard :items="project" :simple="true" :sp="true" />
 
     <v-row justify="center" class="gap5">
       <v-btn color="primary" @click="update">
@@ -111,6 +111,7 @@
 
 <script>
 import { auth, db } from '@/plugins/firebase'
+import { userInfo } from 'os'
 
 export default {
   data() {
@@ -123,20 +124,26 @@ export default {
     }
   },
   mounted() {
-    db.ref(`/users/${auth.currentUser.uid}`)
-      .once('value')
-      .then(snapshot => {
-        this.userDB = snapshot.val()
-      })
+    auth.onAuthStateChanged(u => {
+      if (u)
+        db.ref(`/users/${this.userInfo.uid}`)
+          .once('value')
+          .then(snapshot => {
+            this.userDB = snapshot.val()
+          })
+    })
   },
   created() {
     this.fetchContent()
   },
   methods: {
     fetchContent() {
-      db.ref('/contents/').on('child_added', async s => {
-        const data = await s.val()
-        data.uid === auth.currentUser.uid && this.project.unshift(data)
+      auth.onAuthStateChanged(u => {
+        if (u)
+          db.ref('/contents/').on('child_added', async s => {
+            const data = await s.val()
+            data.uid === this.userInfo.uid && this.project.unshift(data)
+          })
       })
     },
     update() {

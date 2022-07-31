@@ -2,7 +2,7 @@
   <div>
     <v-row class="ma-auto">
       <v-avatar size="80">
-        <v-img :src="targetUser.photoURL" class="elevation-1" />
+        <v-img :src="targetUser.photoURL" />
       </v-avatar>
 
       <div class="d-flex align-center">
@@ -19,7 +19,12 @@
         @click="subscribe"
         v-text="subscribed ? '취소' : '구독'"
       />
-      <v-btn v-else class="ml-auto my-auto" color="primary" to="/account">
+      <v-btn
+        v-else
+        class="ml-auto my-auto"
+        color="primary"
+        to="/account/account"
+      >
         편집 <v-icon right> mdi-pencil </v-icon>
       </v-btn>
     </v-row>
@@ -44,7 +49,6 @@
             :items="
               rating === '모두' ? books : books.filter(i => i.rating === rating)
             "
-            :uid="uid"
             :simple="true"
           />
         </v-tab-item>
@@ -64,7 +68,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <CommentComponent
+          <LazyCommentComponent
             :id="`/user/${uid}`"
             :dbr="`users/${uid}/chat`"
             :uid="this.uid"

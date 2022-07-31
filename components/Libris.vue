@@ -27,7 +27,6 @@
           <v-list-item-avatar
             v-if="item.image"
             :size="$vuetify.breakpoint.xs ? 50 : 70"
-            color="#1E1E1E"
           >
             <v-img :src="item.image" :lazy-src="item.image" class="rounded-lg">
               <template #placeholder>

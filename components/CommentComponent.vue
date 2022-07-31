@@ -26,7 +26,7 @@
                 <v-avatar
                   v-bind="attrs"
                   size="40"
-                  :color="message.badWord ? 'red' : '#23262e'"
+                  :color="message.badWord ? 'red' : '#23262E'"
                   v-on="on"
                 >
                   <v-img :src="message.photoURL" />
@@ -41,7 +41,7 @@
               rounded
               width="100%"
               class="d-flex mr-5"
-              :color="message.badWord ? 'red' : '#23262e'"
+              :color="message.badWord ? 'red' : '#23262E'"
             >
               <div>
                 <v-card-subtitle

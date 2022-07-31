@@ -7,7 +7,8 @@ Vue.mixin({
       displayName: '',
       photoURL: '',
       uid: '',
-      email: ''
+      email: '',
+      libris: 0
     }
   }),
   created() {
@@ -16,13 +17,19 @@ Vue.mixin({
   methods: {
     updateLibris(uid, val) {
       db.ref(`users/${uid}/libris`).transaction(cv => cv + val)
+      db.ref(`users/${uid}/joined`).once('value', async snapshot => {
+        Object.values(await snapshot.val()).forEach(async team => {
+          db.ref(`teams/${team}/libris`).transaction(cv => cv + val)
+        })
+      })
     },
     getUserInfo() {
-      auth.onAuthStateChanged(u => {
+      auth.onAuthStateChanged(async u => {
         if (u) {
           const { displayName, photoURL, uid, email } = u
 
           this.userInfo = {
+            ...this.userInfo,
             displayName,
             photoURL,
             email,

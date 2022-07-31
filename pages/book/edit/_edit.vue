@@ -14,7 +14,7 @@
       <v-textarea v-model="post.content" label="책 소개" />
 
       <v-card-actions>
-        <DialogComponent
+        <LazyDialogComponent
           :cb="() => $router.push(`/content/${post.time}`)"
           btn-title="취소"
           title="진짜로 취소하겠습니까?"

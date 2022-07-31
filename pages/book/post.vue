@@ -171,8 +171,6 @@
                 {{ item.volumeInfo.description.substring(0, 200) }}...
               </v-list-item-subtitle>
             </v-list-item-content>
-
-            <v-list-item-actions> </v-list-item-actions>
           </v-list-item>
         </v-list>
 
@@ -386,7 +384,7 @@ export default {
       })
 
       this.updateLibris(this.userInfo.uid, this.post.pageCount / 100)
-      this.$router.push(`/content/${time}`)
+      this.$router.push(`/book/content/${time}`)
     },
     fetchi() {
       this.loading = true
