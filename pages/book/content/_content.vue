@@ -73,7 +73,7 @@
           btn-title="삭제"
           title="진짜로 삭제하겠습니까?"
           text="삭제하면 복구할 수 없습니다"
-          icon="delete"
+          icon="trash-can"
         />
         <v-btn :to="`/book/edit/${time}`" class="ml-3" color="blue lighten-2">
           <v-icon left> mdi-pencil </v-icon> 편집
@@ -113,20 +113,15 @@
     </div>
 
     <LazyCommentComponent
-      :id="`/content/${time}`"
+      :link="`/book/content/${time}`"
       :dbr="`contents/${time}/comments`"
       :uid="this.post.uid"
     />
 
-    <br /><br /><br /><br />
+    <br /><br /><br /><br /><br /><br /><br /><br />
 
     <div class="text-center">
-      <v-progress-circular
-        v-if="loading"
-        indeterminate
-        color="primary"
-        class="mb-5"
-      />
+      <v-progress-circular v-if="loading" indeterminate color="primary" large />
     </div>
 
     <template v-if="post.categories && !loading">
@@ -144,6 +139,8 @@
         </v-card>
       </v-row>
     </template>
+
+    <br /><br /><br /><br />
   </div>
 </template>
 

@@ -23,7 +23,7 @@
                 <v-list-item @click="deleteBookmark(item.time, i)">
                   <v-list-item-content>
                     <v-list-item-title>
-                      <v-icon left> mdi-delete </v-icon>
+                      <v-icon left> mdi-trash-can </v-icon>
                       삭제
                     </v-list-item-title>
                   </v-list-item-content>
@@ -46,6 +46,49 @@
           <v-img src="icon.png" />
         </v-avatar>
       </NuxtLink>
+
+      <v-spacer />
+
+      <div v-if="$route.path !== '/list'" class="text-center">
+        <v-dialog v-model="dialog" width="500">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text v-bind="attrs" v-on="on">
+              <v-icon left>mdi-magnify</v-icon> 검색
+            </v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title> 검색 </v-card-title>
+
+            <v-card-text>
+              <v-text-field
+                v-model="search"
+                placeholder="Search"
+                autofocus
+                outlined
+                clearable
+                width="300px"
+                prepend-inner-icon="mdi-magnify"
+                class="flex justify-center align-center"
+              />
+              <v-list v-if="search !== ''">
+                <v-list-item
+                  v-for="(item, i) in books.filter(book =>
+                    book.title.toLowerCase().includes(search)
+                  )"
+                  :key="i"
+                  :to="`/book/content/${item.time}`"
+                  @click="dialog = false"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title> {{ item.title }} </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </div>
 
       <v-spacer />
 
@@ -84,7 +127,7 @@
           <v-card-actions>
             <v-spacer />
             <v-btn text @click="clearEverything">
-              비우기 <v-icon right> mdi-delete </v-icon>
+              비우기 <v-icon right> mdi-trash-can </v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -110,13 +153,18 @@ export default {
     return {
       notif: [],
       items: [],
+      books: [],
+
       notifOverlay: false,
-      bookmark: false
+      bookmark: false,
+      dialog: false,
+      search: ''
     }
   },
   mounted() {
     this.getBookMarks()
     this.getNotification()
+    this.searchBook()
   },
   methods: {
     clearEverything() {
@@ -147,6 +195,11 @@ export default {
       db.ref(`/contents/${time}/bookmarks/${this.userInfo.uid}`).remove()
       this.updateLibris(this.userInfo.uid, -0.1)
       this.items.splice(i, 1)
+    },
+    searchBook() {
+      db.ref('/contents/').on('child_added', async s =>
+        this.books.push(await s.val())
+      )
     }
   },
   components: {

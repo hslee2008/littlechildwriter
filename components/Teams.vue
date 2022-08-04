@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="transparent">
     <v-card-title v-if="!noTitle">
       <span class="headline">팀 목록</span>
     </v-card-title>

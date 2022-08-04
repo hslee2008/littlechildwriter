@@ -5,7 +5,7 @@
     <v-divider />
     <br />
 
-    <v-row class="mx-1 gap5">
+    <v-row class="mx-1 gap10">
       <v-text-field
         v-model="userInfo.displayName"
         label="Name"
@@ -33,7 +33,7 @@
       />
     </v-row>
 
-    <v-row class="mx-1 gap5">
+    <v-row class="mx-1 gap10">
       <v-text-field
         v-model="userInfo.uid"
         label="UID"
@@ -98,9 +98,9 @@
     <v-card-title>비공개 프로젝트</v-card-title>
     <v-divider />
     <br />
-    <LazyBookCard :items="project" :simple="true" :sp="true" />
+    <LazyBookCard :items="project" :simple="true" :showprivate="true" />
 
-    <v-row justify="center" class="gap5">
+    <v-row justify="center" class="gap10">
       <v-btn color="primary" @click="update">
         <v-icon left> mdi-account </v-icon>
         업데이트

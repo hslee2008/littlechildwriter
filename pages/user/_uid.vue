@@ -69,7 +69,7 @@
 
         <v-tab-item>
           <LazyCommentComponent
-            :id="`/user/${uid}`"
+            :link="`/user/${uid}`"
             :dbr="`users/${uid}/chat`"
             :uid="this.uid"
           />

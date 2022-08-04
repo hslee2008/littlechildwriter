@@ -43,14 +43,11 @@ html {
   z-index: 999;
 }
 
-.gap5 {
-  gap: 5px;
-}
-
 .gap10 {
   gap: 10px;
 }
 
-.gap20 {
-  gap: 20px;
+/* Customize */
+.v-overlay__scrim {
+  background-color: #3d4754 !important;
 }

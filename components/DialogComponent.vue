@@ -18,7 +18,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn color="primary" text @click="cb"> 👌 OK </v-btn>
+        <v-btn color="primary" class="ma-3" @click="cb"> 확인 </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

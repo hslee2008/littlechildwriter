@@ -14,7 +14,7 @@
 
       <v-list>
         <v-list-item @click="$refs.file.$refs.input.click()">
-          <v-icon left> mdi-upload </v-icon> 컴퓨터에서 책 사진 업로드
+          <v-icon left> mdi-upload </v-icon> 책 사진 업로드
         </v-list-item>
         <v-list-item v-if="$vuetify.breakpoint.mobile" @click="showCamera">
           <v-icon left> mdi-barcode-scan </v-icon> 카메라로 ISBN 촬영
@@ -413,9 +413,6 @@ export default {
           }
 
           this.isbn.inputISBN = false
-        })
-        .catch(() => {
-          this.error = '책을 찾을 수 없습니다'
         })
 
       this.loading = false

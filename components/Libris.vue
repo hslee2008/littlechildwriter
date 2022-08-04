@@ -1,5 +1,5 @@
 <template>
-  <v-timeline :dense="$vuetify.breakpoint.xs" clipped>
+  <v-timeline :dense="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs" clipped>
     <v-timeline-item
       v-for="(item, i) in lbt"
       v-if="item.image || item.name"
@@ -14,9 +14,9 @@
       >
         <v-list-item>
           <v-list-item-content>
-            <div class="text-overline mb-4">
+            <v-list-item-subtitle class="text-overline mb-4">
               {{ i + 1 }}등 ({{ Math.round(item.libris) }} Libris)
-            </div>
+            </v-list-item-subtitle>
             <v-list-item-title
               v-if="item.name"
               class="mb-1"

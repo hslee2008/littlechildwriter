@@ -38,13 +38,23 @@
       </div>
     </v-parallax>
 
-    <v-card-title style="margin-top: 600px"> 최근 포스트 </v-card-title>
-    <v-divider class="mx-5 mb-5" />
-    <LazyBookCard :items="recent" :simple="true" />
+    <v-tabs v-model="tab" show-arrows center-active grow class="transparent" style="margin-top: 600px">
+      <v-tab>최근 포스트</v-tab>
+      <v-tab>좋아요 많은 포스트</v-tab>
+      <v-tab>인기있는 포스트</v-tab>
 
-    <v-card-title>인기있는 포스트</v-card-title>
-    <v-divider class="mx-5 mb-5" />
-    <LazyBookCard :items="popular" :simple="true" />
+      <v-tabs-items v-model="tab" class="transparent">
+        <v-tab-item>
+          <BookCard :items="recent" :simple="true" />
+        </v-tab-item>
+        <v-tab-item>
+          <BookCard :items="popular" :simple="true" />
+        </v-tab-item>
+        <v-tab-item>
+          <BookCard :items="views" :simple="true" />
+        </v-tab-item>
+      </v-tabs-items>
+    </v-tabs>
 
     <v-card class="mx-5 my-10 transparent">
       <v-card-text>
@@ -75,7 +85,9 @@ export default {
   data() {
     return {
       recent: [],
-      popular: []
+      popular: [],
+      views: [],
+      tab: 0
     }
   },
   created() {
@@ -90,7 +102,12 @@ export default {
       db.ref('/contents')
         .orderByChild('likes')
         .limitToLast(4)
-        .on('child_added', async s => this.popular.unshift(await s.val()))
+        .on( 'child_added', async s => this.popular.unshift( await s.val() ) )
+
+      db.ref( '/contents' )
+        .orderByChild( 'views' )
+        .limitToLast( 4 )
+        .on( 'child_added', async s => this.views.unshift( await s.val() ) )
     }
   }
 }

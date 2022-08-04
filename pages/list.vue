@@ -25,7 +25,7 @@
 
     <template #default="props">
       <v-row class="mt-5 gap10">
-        <BookCard :items="props.items" />
+        <LazyBookCard :items="props.items" />
       </v-row>
     </template>
 

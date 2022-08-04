@@ -3,18 +3,13 @@
     <v-row class="row">
       <v-card
         v-for="(item, i) in items"
-        v-if="sp ? item.isPublic === false : item.isPublic !== false"
+        v-if="showprivate ? item.isPublic === false : item.isPublic !== false"
         :key="i"
         :width="$vuetify.breakpoint.mobile ? 150 : 200"
         class="mx-auto my-5 transparent"
       >
         <v-card :to="`/book/content/${item.time}`" class="transparent">
-          <v-img
-            :src="item.image"
-            :lazy-src="item.image"
-            class="rounded-lg"
-            :gradient="simple ? '' : 'to bottom, rgba(0,0,0,0), rgba(0,0,0,.5)'"
-          >
+          <v-img :src="item.image" :lazy-src="item.image" class="rounded-lg">
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey lighten-5" />
@@ -78,7 +73,7 @@ export default {
       type: Boolean,
       default: false
     },
-    sp: {
+    showprivate: {
       type: Boolean,
       default: false
     }

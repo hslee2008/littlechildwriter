@@ -1,2 +1,6 @@
 .nuxt
 .github
+dist
+node_modules
+yarn-error.log
+static/sw.js
