@@ -148,7 +148,7 @@ export default {
     },
     update() {
       const { displayName, photoURL, uid } = this.userInfo
-      const { bio, background } = this.userDB
+      const { bio } = this.userDB
 
       auth.currentUser
         .updateProfile({
@@ -159,8 +159,7 @@ export default {
           db.ref(`/users/${uid}`).update({
             displayName,
             photoURL,
-            bio,
-            background
+            bio
           })
 
           this.$router.push(`/user/${uid}`)

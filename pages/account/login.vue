@@ -60,10 +60,9 @@
 </template>
 
 <script>
-import { auth, login } from '@/plugins/firebase'
-import { defineComponent } from 'vue'
+import { db, auth, login } from '@/plugins/firebase'
 
-export default defineComponent({
+export default {
   data() {
     return {
       email: '',
@@ -88,7 +87,15 @@ export default defineComponent({
         .signInWithPopup(new login.GoogleAuthProvider())
         .then(() => this.$router.push('/'))
         .catch(e => (this.error = e))
+
+      const { email, displayName, photoURL, uid } = this.userInfo
+
+      db.ref(`users/${uid}`).update({
+        email,
+        displayName,
+        photoURL
+      })
     }
   }
-})
+}
 </script>

@@ -1,38 +1,49 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="bookmark" fixed app temporary color="#23262E">
-      <v-card-title> <v-icon left>mdi-bookmark</v-icon> 북마크 </v-card-title>
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="`/book/content/${item.time}`"
-        >
-          <v-list-item-content>
-            <v-list-item-title> {{ item.title }} </v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-spacer />
-            <v-menu offset-y>
-              <template #activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" cols="1" v-on="on" @click.prevent>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item @click="deleteBookmark(item.time, i)">
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      <v-icon left> mdi-trash-can </v-icon>
-                      삭제
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-list-item-action>
-        </v-list-item>
-      </v-list>
+      <template v-if="items.length > 0">
+        <v-card-title> <v-icon left>mdi-bookmark</v-icon> 북마크 </v-card-title>
+        <v-list>
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            :to="`/book/content/${item.time}`"
+          >
+            <v-list-item-content>
+              <v-list-item-title> {{ item.title }} </v-list-item-title>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-spacer />
+              <v-menu offset-y>
+                <template #activator="{ on, attrs }">
+                  <v-btn icon v-bind="attrs" cols="1" v-on="on" @click.prevent>
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="deleteBookmark(item.time, i)">
+                    <v-list-item-content>
+                      <v-list-item-title>
+                        <v-icon left> mdi-trash-can </v-icon>
+                        삭제
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+      </template>
+
+      <v-divider></v-divider>
+
+      <v-card-actions>
+        <v-btn color="primary" block id="pwainstall">
+          설치
+          <v-icon right>mdi-download</v-icon>
+        </v-btn>
+      </v-card-actions>
     </v-navigation-drawer>
 
     <v-app-bar fixed app color="#23262E" class="elevation-0">
@@ -165,6 +176,23 @@ export default {
     this.getBookMarks()
     this.getNotification()
     this.searchBook()
+
+    this.$nextTick(() => {
+      let deferredPrompt
+
+      window.addEventListener('beforeinstallprompt', e => {
+        e.preventDefault()
+        deferredPrompt = e
+        console.log(`'beforeinstallprompt' event was fired.`)
+      })
+
+      pwainstall.addEventListener('click', async () => {
+        deferredPrompt.prompt()
+        const { outcome } = await deferredPrompt.userChoice
+        console.log(`User response to the install prompt: ${outcome}`)
+        deferredPrompt = null
+      })
+    })
   },
   methods: {
     clearEverything() {
