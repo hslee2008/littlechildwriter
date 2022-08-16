@@ -266,6 +266,8 @@ export default {
 
       post !== null && Object.keys(post).length !== 1 && (this.post = post)
 
+      const parsedDate = new Date(parseInt(this.time))
+
       this.tags = {
         views: {
           icon: 'eye',
@@ -273,7 +275,7 @@ export default {
         },
         time: {
           icon: 'calendar-clock',
-          val: new Date(parseInt(this.time)).toLocaleDateString()
+          val: `${parsedDate.getMonth()}/${parsedDate.getDate()}/${parsedDate.getFullYear()}`
         },
         page: {
           icon: 'book-open-page-variant',

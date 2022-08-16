@@ -141,5 +141,28 @@ export default {
 
   router: {
     base: '/'
+  },
+
+  generate: {
+    async routes() {
+      var admin = require('firebase-admin')
+      var serviceAccount = require('./firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json')
+
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: 'https://littlechildwriter-default-rtdb.firebaseio.com'
+      })
+
+      var db = admin.database()
+      var contents = db.ref('contents')
+
+      const snapshot = await contents.once('value')
+      var contents_1 = snapshot.val()
+      var routes = []
+      for (var key in contents_1) {
+        routes.push('/book/content/' + key)
+      }
+      return routes
+    }
   }
 }

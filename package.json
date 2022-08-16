@@ -10,14 +10,15 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "nuxt": "^2.15.8",
-    "vue": "2.7.8",
     "@nuxtjs/pwa": "latest",
     "firebase": "latest",
     "leo-profanity": "latest",
+    "nuxt": "^2.15.8",
+    "vue": "2.7.8",
     "vuetify": "latest"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "latest"
+    "@nuxtjs/vuetify": "latest",
+    "firebase-admin": "latest"
   }
 }

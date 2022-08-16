@@ -1,7 +1,13 @@
 {
   "hosting": {
     "public": "dist",
-    "ignore": ["firebaseon", "**/.*", "**/node_modules/**"]
+    "ignore": ["firebaseon", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   },
   "database": {
     "rules": "./firebase/database.rules.json"
