@@ -2,6 +2,7 @@
   <v-tabs v-model="tab">
     <v-tab>홈</v-tab>
     <v-tab>멤버</v-tab>
+    <v-tab>소통 공간</v-tab>
     <v-tab>책</v-tab>
 
     <v-tabs-items v-model="tab" class="transparent">
@@ -36,6 +37,14 @@
             </v-list>
           </v-card-text>
         </v-card>
+      </v-tab-item>
+
+      <v-tab-item>
+        <LazyCommentComponent
+          :link="`/book/content/${time}`"
+          :dbr="`/teams/${this.name}/comments`"
+          :nofield="userInfo.uid"
+        />
       </v-tab-item>
 
       <v-tab-item>

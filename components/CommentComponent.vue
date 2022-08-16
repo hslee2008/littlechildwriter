@@ -16,7 +16,7 @@
       </template>
     </v-text-field>
 
-    <v-timeline v-if="!dontshow && comments.length > 0" dense clipped>
+    <v-timeline v-if="!nocomments && comments.length > 0" dense clipped>
       <v-slide-x-transition group>
         <v-timeline-item v-for="(message, i) in comments" :key="message.time">
           <template #icon>
@@ -125,6 +125,9 @@
         </v-timeline-item>
       </v-slide-x-transition>
     </v-timeline>
+    <div v-else>
+      <v-card-title>댓글이 없습니다</v-card-title>
+    </div>
   </div>
 </template>
 
@@ -146,7 +149,7 @@ export default {
       type: String,
       required: true
     },
-    dontshow: {
+    nocomments: {
       type: Boolean,
       default: false
     },

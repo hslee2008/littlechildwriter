@@ -38,7 +38,14 @@
       </div>
     </v-parallax>
 
-    <v-tabs v-model="tab" show-arrows center-active grow class="transparent" style="margin-top: 600px">
+    <v-tabs
+      v-model="tab"
+      show-arrows
+      center-active
+      grow
+      class="transparent"
+      style="margin-top: 600px"
+    >
       <v-tab>최근 포스트</v-tab>
       <v-tab>좋아요 많은 포스트</v-tab>
       <v-tab>인기있는 포스트</v-tab>
@@ -102,12 +109,12 @@ export default {
       db.ref('/contents')
         .orderByChild('likes')
         .limitToLast(4)
-        .on( 'child_added', async s => this.popular.unshift( await s.val() ) )
+        .on('child_added', async s => this.popular.unshift(await s.val()))
 
-      db.ref( '/contents' )
-        .orderByChild( 'views' )
-        .limitToLast( 4 )
-        .on( 'child_added', async s => this.views.unshift( await s.val() ) )
+      db.ref('/contents')
+        .orderByChild('views')
+        .limitToLast(4)
+        .on('child_added', async s => this.views.unshift(await s.val()))
     }
   }
 }

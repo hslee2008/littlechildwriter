@@ -4,8 +4,17 @@ export default {
   },*/
 
   loading: {
-    color: 'dodgerblue',
-    height: '1px'
+    color: 'skyblue',
+    height: '3px',
+    continuous: true
+  },
+
+  ssr: false,
+
+  loadingIndicator: {
+    name: 'wandering-cubes',
+    color: 'white',
+    background: '#23262E'
   },
 
   head: {
@@ -147,21 +156,18 @@ export default {
     async routes() {
       var admin = require('firebase-admin')
       var serviceAccount = require('./firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json')
+      var routes = []
+      var db = admin.database()
 
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL: 'https://littlechildwriter-default-rtdb.firebaseio.com'
       })
 
-      var db = admin.database()
-      var contents = db.ref('contents')
+      /* Contents */
+      var contents = (await db.ref('contents').once('value')).val()
+      for (var key in contents) routes.push('/book/content/' + key)
 
-      const snapshot = await contents.once('value')
-      var contents_1 = snapshot.val()
-      var routes = []
-      for (var key in contents_1) {
-        routes.push('/book/content/' + key)
-      }
       return routes
     }
   }
