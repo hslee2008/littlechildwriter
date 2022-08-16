@@ -58,7 +58,10 @@
             </v-menu>
           </v-card-actions>
         </v-card>
-
+        <v-card v-else-if="item.type === '파일'" :href="item.url">
+          <v-card-title>{{ item.file }}</v-card-title>
+          <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+        </v-card>
         <v-card v-else class="mt-5">
           <div class="d-flex">
             <v-avatar size="40" class="ml-3 mt-6">
@@ -103,7 +106,7 @@
 
         <v-select
           v-model="post.type"
-          :items="['책', '공지사항']"
+          :items="['책', '공지사항', '파일']"
           label="종류 선택"
           outlined
           class="mb-10"
@@ -165,7 +168,43 @@
             </v-btn>
           </v-card-actions>
         </v-card>
+        <v-card v-else-if="post.type === '파일'" class="transparent">
+          <v-file-input
+            v-model="post.file"
+            color="deep-purple accent-4"
+            counter
+            label="File input"
+            multiple
+            placeholder="Select your files"
+            prepend-icon="mdi-paperclip"
+            outlined
+            :show-size="1000"
+            ref="file"
+            @change="fileChange"
+            ><template v-slot:selection="{ index, text }">
+              <v-chip
+                v-if="index < 2"
+                color="deep-purple accent-4"
+                dark
+                label
+                small
+              >
+                {{ text }}
+              </v-chip>
 
+              <span
+                v-else-if="index === 2"
+                class="text-overline grey--text text--darken-3 mx-2"
+              >
+                +{{ files.length - 2 }} File(s)
+              </span>
+            </template>
+          </v-file-input>
+          <v-btn color="primary" @click="upload">
+            <v-icon left>mdi-file-upload</v-icon>
+            파일 게시
+          </v-btn>
+        </v-card>
         <LazyCommentComponent
           v-else
           :link="`/class/${id}`"
@@ -278,7 +317,7 @@
 </template>
 
 <script>
-import { db } from '@/plugins/firebase'
+import { db, storage } from '@/plugins/firebase'
 
 export default {
   asyncData({ params }) {
@@ -297,6 +336,7 @@ export default {
       post: {
         title: '',
         time: '',
+        file: [],
         book: true,
         type: '책'
       },
@@ -306,7 +346,9 @@ export default {
       tab: 0,
 
       userUid: '',
-      userName: ''
+      userName: '',
+
+      progress: 0
     }
   },
   created() {
@@ -314,6 +356,40 @@ export default {
     this.fetchuserArticles()
   },
   methods: {
+    fileChange(f) {
+      this.post.file = f
+    },
+    upload() {
+      const storageRef = storage
+        .ref(`${this.post.file[0].name}`)
+        .put(this.post.file[0])
+
+      storageRef.on(
+        `state_changed`,
+        s => (this.progress = (s.bytesTransferred / s.totalBytes) * 100),
+        e => console.log(e.message),
+        () =>
+          storageRef.snapshot.ref
+            .getDownloadURL()
+            .then(url =>
+              db.ref(`classes/${this.id}/contents`).push({
+                type: this.post.type,
+                uid: this.userInfo.uid,
+                displayName: this.userInfo.displayName,
+                file: this.post.file[0].name,
+                url
+              })
+            )
+            .then(() => {
+              this.post.title = ''
+              this.post.time = ''
+              this.post.file = []
+              this.post.book = true
+              this.post.type = '책'
+            })
+            .then(() => (this.tab = 0))
+      )
+    },
     deleteContent(i) {
       delete this.classInfo.contents[i]
       this.$forceUpdate()

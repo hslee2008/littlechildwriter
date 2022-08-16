@@ -125,7 +125,7 @@
         </v-timeline-item>
       </v-slide-x-transition>
     </v-timeline>
-    <div v-else>
+    <div v-else-if="!nocomments">
       <v-card-title>댓글이 없습니다</v-card-title>
     </div>
   </div>
