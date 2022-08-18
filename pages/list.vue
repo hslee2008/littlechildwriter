@@ -1,6 +1,6 @@
 <template>
   <v-data-iterator
-    :items="listev"
+    :items="books"
     :items-per-page.sync="itemsPerPage"
     :page.sync="page"
     :search="search"
@@ -10,17 +10,14 @@
     class="mb-10"
   >
     <template #header>
-      <v-toolbar class="my-5 transparent d-flex justify-center">
-        <v-text-field
-          v-model="search"
-          label="Search"
-          outlined
-          clearable
-          prepend-inner-icon="mdi-magnify"
-          append-icon="mdi-swap-horizontal"
-          @click:append="sortDesc = !sortDesc"
-        />
-      </v-toolbar>
+      <v-text-field
+        v-model="search"
+        label="Search"
+        outlined
+        append-icon="mdi-swap-horizontal"
+        @click:append="sortDesc = !sortDesc"
+        class="ml-2 mr-2"
+      />
     </template>
 
     <template #default="props">
@@ -77,9 +74,8 @@ import { db } from '@/plugins/firebase'
 export default {
   data() {
     return {
-      listev: [],
+      books: [],
       sortBy: 'time',
-      keys: ['time', 'likes', 'comments', 'views'],
       search: '',
       page: 1,
       itemsPerPage: 10,
@@ -88,19 +84,15 @@ export default {
   },
   computed: {
     numberOfPages() {
-      return Math.ceil(this.listev.length / this.itemsPerPage)
+      return Math.ceil(this.books.length / this.itemsPerPage)
     }
   },
   created() {
-    db.ref('/contents/').on('child_added', async s =>
-      this.listev.unshift(await s.val())
-    )
-  },
-  mounted() {
     this.$route.query.search && (this.search = this.$route.query.search)
-    this.$route.query.itemsPerPage &&
-      (this.itemsPerPage = this.$route.query.itemsPerPage)
-    this.$route.query.sortDesc && (this.sortDesc = this.$route.query.sortDesc)
+
+    db.ref('/contents/').on('child_added', async s =>
+      this.books.unshift(await s.val())
+    )
   },
   methods: {
     nextPage() {

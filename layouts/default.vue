@@ -36,7 +36,7 @@
         </v-list>
       </template>
 
-      <v-divider></v-divider>
+      <v-divider />
 
       <v-card-actions>
         <v-btn color="primary" block id="pwainstall">
@@ -78,9 +78,7 @@
                 autofocus
                 outlined
                 clearable
-                width="300px"
                 prepend-inner-icon="mdi-magnify"
-                class="flex justify-center align-center"
               />
               <v-list v-if="search !== ''">
                 <v-list-item
@@ -92,7 +90,7 @@
                   @click="dialog = false"
                 >
                   <v-list-item-content>
-                    <v-list-item-title> {{ item.title }} </v-list-item-title>
+                    <v-list-item-title v-text="item.title" />
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -173,8 +171,7 @@ export default {
     }
   },
   mounted() {
-    this.getBookMarks()
-    this.getNotification()
+    this.getSavedUserDataFromDB()
     this.searchBook()
 
     this.$nextTick(() => {
@@ -183,13 +180,10 @@ export default {
       window.addEventListener('beforeinstallprompt', e => {
         e.preventDefault()
         deferredPrompt = e
-        console.log(`'beforeinstallprompt' event was fired.`)
       })
 
       pwainstall.addEventListener('click', async () => {
         deferredPrompt.prompt()
-        const { outcome } = await deferredPrompt.userChoice
-        console.log(`User response to the install prompt: ${outcome}`)
         deferredPrompt = null
       })
     })
@@ -199,23 +193,24 @@ export default {
       db.ref(`/users/${this.userInfo.uid}/notification`).remove()
       this.notif = []
     },
-    getNotification() {
-      db.ref(`/users/${this.userInfo.uid}/notification`).on(
-        'child_added',
-        async s => this.notif.push(await s.val())
-      )
-    },
     load(link) {
       this.notifOverlay = false
       this.$forceUpdate()
       this.$router.push(link)
     },
-    getBookMarks() {
-      auth.onAuthStateChanged(user => {
-        user &&
-          db
-            .ref(`/users/${this.userInfo.uid}/bookmarks`)
-            .on('child_added', async s => this.items.push(await s.val()))
+    getSavedUserDataFromDB() {
+      auth.onAuthStateChanged(u => {
+        if (!u) return
+
+        db.ref(`/users/${this.userInfo.uid}/bookmarks`).on(
+          'child_added',
+          async s => this.items.push(await s.val())
+        )
+
+        db.ref(`/users/${this.userInfo.uid}/notification`).on(
+          'child_added',
+          async s => this.notif.push(await s.val())
+        )
       })
     },
     deleteBookmark(time, i) {

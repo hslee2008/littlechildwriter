@@ -125,9 +125,6 @@
         </v-timeline-item>
       </v-slide-x-transition>
     </v-timeline>
-    <div v-else-if="!nocomments">
-      <v-card-title>댓글이 없습니다</v-card-title>
-    </div>
   </div>
 </template>
 
@@ -176,7 +173,9 @@ export default {
     }
   },
   created() {
-    this.getComments()
+    db.ref(this.dbr).on('child_added', async s =>
+      this.comments.push({ ...(await s.val()), id: s.key })
+    )
   },
   methods: {
     editcomment(i) {
@@ -209,11 +208,6 @@ export default {
       delete this.comments[i].edit
       this.$forceUpdate()
       db.ref(this.dbr).set(this.comments)
-    },
-    getComments() {
-      db.ref(this.dbr).on('child_added', async s =>
-        this.comments.push({ ...(await s.val()), id: s.key })
-      )
     },
     delcomment(i) {
       const cmt = db.ref(this.dbr)

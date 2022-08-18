@@ -134,18 +134,20 @@ export default {
     })
   },
   created() {
-    this.fetchContent()
+    auth.onAuthStateChanged(
+      u =>
+        u &&
+        db
+          .ref('/contents/')
+          .on(
+            'child_added',
+            async s =>
+              data.uid === this.userInfo.uid &&
+              this.project.unshift(await s.val())
+          )
+    )
   },
   methods: {
-    fetchContent() {
-      auth.onAuthStateChanged(u => {
-        if (u)
-          db.ref('/contents/').on('child_added', async s => {
-            const data = await s.val()
-            data.uid === this.userInfo.uid && this.project.unshift(data)
-          })
-      })
-    },
     update() {
       const { displayName, photoURL, uid } = this.userInfo
       const { bio } = this.userDB

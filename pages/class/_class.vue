@@ -112,7 +112,7 @@
           class="mb-10"
         />
 
-        <v-card v-if="post.type === '책'" class="transparent">
+        <v-card v-if="post.type === '책'">
           <v-card-title>책 링크 업로드</v-card-title>
           <v-card-text>
             <v-text-field v-model="post.title" label="제목" />
@@ -128,8 +128,8 @@
             <v-dialog v-model="dialog" width="700">
               <template #activator="{ on, attrs }">
                 <div class="text-center">
-                  <v-btn icon v-bind="attrs" v-on="on">
-                    <v-icon>mdi-bookshelf</v-icon>
+                  <v-btn color="primary" v-bind="attrs" v-on="on">
+                    <v-icon left>mdi-bookshelf</v-icon> 책 선택
                   </v-btn>
                 </div>
               </template>
@@ -352,8 +352,22 @@ export default {
     }
   },
   created() {
-    this.fetchClass()
-    this.fetchuserArticles()
+    db.ref(`/classes/${this.id}`).on(
+      'value',
+      async s => (this.classInfo = await s.val())
+    )
+
+    db.ref('/contents/').on('child_added', s => {
+      const { title, time, uid, displayName, image } = s.val()
+
+      this.listev.unshift({
+        title,
+        time,
+        uid,
+        displayName,
+        image
+      })
+    })
   },
   methods: {
     fileChange(f) {
@@ -427,12 +441,6 @@ export default {
         )
       })
     },
-    fetchClass() {
-      db.ref(`/classes/${this.id}`).on(
-        'value',
-        async s => (this.classInfo = await s.val())
-      )
-    },
     postcontent() {
       const { title, time, book } = this.post
       const { uid, displayName } = this.userInfo
@@ -451,19 +459,6 @@ export default {
         book: true
       }
       this.tab = 0
-    },
-    fetchuserArticles() {
-      db.ref('/contents/').on('child_added', s => {
-        const { title, time, uid, displayName, image } = s.val()
-
-        this.listev.unshift({
-          title,
-          time,
-          uid,
-          displayName,
-          image
-        })
-      })
     },
     deleteClass() {
       db.ref('classes').child(this.id).remove()

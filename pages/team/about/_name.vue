@@ -8,16 +8,12 @@
     <v-tabs-items v-model="tab" class="transparent">
       <v-tab-item>
         <v-card class="transparent">
-          <v-card-title class="primary--text">
-            {{ team.name }}
-          </v-card-title>
+          <v-card-title class="primary--text" v-text="team.name" />
           <v-card-subtitle>
             {{ new Date(team.createdAt).toLocaleDateString() }} ·
             {{ team.members.length }}명
           </v-card-subtitle>
-          <v-card-text>
-            {{ team.description }}
-          </v-card-text>
+          <v-card-text v-text="team.description" />
         </v-card>
       </v-tab-item>
 
@@ -72,26 +68,19 @@ export default {
       book: []
     }
   },
-  created() {
-    this.getTeams()
-    this.getBookList()
-  },
-  methods: {
-    async getTeams() {
-      await db.ref(`teams/${this.name}`).once('value', snapshot => {
-        this.team = snapshot.val()
-      })
-    },
-    getBookList() {
-      db.ref(`contents/`).once('value', snapshot => {
-        for (let key in snapshot.val()) {
-          for (let i in this.team.members) {
-            this.team.members[i].uid === snapshot.val()[key].uid &&
-              this.book.push(snapshot.val()[key])
-          }
+  async created() {
+    await db.ref(`teams/${this.name}`).once('value', snapshot => {
+      this.team = snapshot.val()
+    })
+
+    db.ref(`contents/`).once('value', snapshot => {
+      for (let key in snapshot.val()) {
+        for (let i in this.team.members) {
+          this.team.members[i].uid === snapshot.val()[key].uid &&
+            this.book.push(snapshot.val()[key])
         }
-      })
-    }
+      }
+    })
   }
 }
 </script>

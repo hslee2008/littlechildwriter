@@ -98,24 +98,19 @@ export default {
     }
   },
   created() {
-    this.postlist()
-  },
-  methods: {
-    postlist() {
-      db.ref('/contents')
-        .limitToLast(4)
-        .on('child_added', async s => this.recent.unshift(await s.val()))
+    db.ref('/contents')
+      .limitToLast(4)
+      .on('child_added', async s => this.recent.unshift(await s.val()))
 
-      db.ref('/contents')
-        .orderByChild('likes')
-        .limitToLast(4)
-        .on('child_added', async s => this.popular.unshift(await s.val()))
+    db.ref('/contents')
+      .orderByChild('likes')
+      .limitToLast(4)
+      .on('child_added', async s => this.popular.unshift(await s.val()))
 
-      db.ref('/contents')
-        .orderByChild('views')
-        .limitToLast(4)
-        .on('child_added', async s => this.views.unshift(await s.val()))
-    }
+    db.ref('/contents')
+      .orderByChild('views')
+      .limitToLast(4)
+      .on('child_added', async s => this.views.unshift(await s.val()))
   }
 }
 </script>

@@ -168,9 +168,8 @@ export default {
       const snapshot = await contents.once('value')
       var contents_1 = snapshot.val()
       var routes = []
-      for (var key in contents_1) {
-        routes.push('/book/content/' + key)
-      }
+
+      for (var key in contents_1) routes.push('/book/content/' + key)
 
       return routes
     }

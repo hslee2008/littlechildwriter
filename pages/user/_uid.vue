@@ -1,40 +1,33 @@
 <template>
   <div>
-    <v-row class="ma-auto">
-      <v-avatar size="80">
+    <v-row class="mb-5">
+      <v-avatar size="80" class="mt-2">
         <v-img :src="targetUser.photoURL" />
       </v-avatar>
 
       <div class="d-flex align-center">
         <div>
-          <h2 class="my-auto mx-5 zmax" v-text="targetUser.displayName" />
-          <p class="grey--text ml-5">구독자 {{ subscriberNumber }}명</p>
+          <v-card-title v-text="targetUser.displayName" />
+          <v-card-subtitle class="grey--text"
+            >구독자 {{ subCount }}명</v-card-subtitle
+          >
         </div>
       </div>
 
-      <v-btn
-        v-if="userInfo.uid !== uid"
-        class="ml-auto my-auto float-right"
-        color="red"
-        @click="subscribe"
-        v-text="subscribed ? '취소' : '구독'"
-      />
-      <v-btn
-        v-else
-        class="ml-auto my-auto"
-        color="primary"
-        to="/account/account"
-      >
-        편집 <v-icon right> mdi-pencil </v-icon>
-      </v-btn>
+      <div class="ml-auto my-auto float-right">
+        <v-btn v-if="userInfo.uid !== uid" color="red" @click="subscribe">
+          {{ subscribed ? '구독 취소' : '구독' }}
+        </v-btn>
+        <v-btn v-else color="primary" to="/account/account">
+          편집 <v-icon right> mdi-pencil </v-icon>
+        </v-btn>
+      </div>
     </v-row>
-
-    <br />
 
     <v-tabs v-model="tab" show-arrows center-active grow class="transparent">
       <v-tab> 게시물 </v-tab>
       <v-tab> 구독자 </v-tab>
-      <v-tab> 커뮤니티 </v-tab>
+      <v-tab> 소통 </v-tab>
       <v-tab> 정보 </v-tab>
 
       <v-tabs-items v-model="tab" class="py-5 transparent">
@@ -47,7 +40,7 @@
           />
           <LazyBookCard
             :items="
-              rating === '모두' ? books : books.filter(i => i.rating === rating)
+              books.filter(i => (rating === '모두' ? 1 : i.rating === rating))
             "
             :simple="true"
           />
@@ -126,45 +119,40 @@ export default {
 
       targetUser: {
         libris: '',
-        username: '',
+        displayName: '',
         photoURL: '',
         bio: ''
       },
 
       subscription: [],
       subscribed: false,
-      subscriberNumber: 0,
+      subCount: 0,
       books: []
     }
   },
   created() {
-    this.fetchContent()
-    this.getTargetUserInfo()
+    db.ref('/contents/').on('child_added', async s => {
+      const data = await s.val()
+      data.uid === this.uid && this.books.unshift(data)
+    })
+
+    db.ref(`/users/${this.uid}/`)
+      .once('value')
+      .then(res => res.val())
+      .then(({ libris, displayName, photoURL, bio, subscriber }) => {
+        this.targetUser = {
+          libris,
+          displayName,
+          photoURL,
+          bio
+        }
+
+        this.subscription = subscriber ?? []
+        this.subCount = Object.keys(subscriber).length
+        this.subscribed = Object.keys(subscriber).includes(this.userInfo.uid)
+      })
   },
   methods: {
-    fetchContent() {
-      db.ref('/contents/').on('child_added', async s => {
-        const data = await s.val()
-        data.uid === this.uid && this.books.unshift(data)
-      })
-    },
-    getTargetUserInfo() {
-      db.ref(`/users/${this.uid}/`)
-        .once('value')
-        .then(res => res.val())
-        .then(({ libris, displayName, photoURL, bio, subscriber }) => {
-          this.targetUser = {
-            libris,
-            displayName,
-            photoURL,
-            bio
-          }
-
-          this.subscription = subscriber ?? []
-          this.subscriberNumber = Object.keys(subscriber).length
-          this.subscribed = Object.keys(subscriber).includes(this.userInfo.uid)
-        })
-    },
     subscribe() {
       if (this.subscribed) {
         db.ref(`/users/${this.userInfo.uid}/subscribe/${this.uid}`).remove()
@@ -172,7 +160,7 @@ export default {
 
         delete this.subscription[this.userInfo.uid]
         this.subscribed = false
-        this.subscriberNumber--
+        this.subCount--
         this.targetUser.libris -= 10
 
         this.updateLibris(this.uid, -10)
@@ -186,7 +174,7 @@ export default {
 
         this.subscription[this.userInfo.uid] = this.userInfo.displayName
         this.subscribed = true
-        this.subscriberNumber++
+        this.subCount++
         this.targetUser.libris += 10
 
         this.updateLibris(this.uid, 10)

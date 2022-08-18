@@ -23,12 +23,11 @@
   background-color: #23262e !important;
 }
 
-/* Scroll */
+/* Transition */
 html {
   scroll-behavior: smooth;
 }
 
-/* Transition */
 .page-enter-active,
 .page-leave-active {
   transition: opacity 0.314s;

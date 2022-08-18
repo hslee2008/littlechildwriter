@@ -57,16 +57,13 @@ export default {
     }
   },
   created() {
-    this.getTeams()
+    db.ref('teams').on('child_added', s => this.teams.push(s.val()))
   },
   mounted() {
     this.teams = this.teams.sort((a, b) => b.points - a.points)
     this.$forceUpdate()
   },
   methods: {
-    getTeams() {
-      db.ref('teams').on('child_added', s => this.teams.push(s.val()))
-    },
     joinWaitingList(name, i) {
       this.teams[i].waiting = {
         ...this.teams[i].waiting,
