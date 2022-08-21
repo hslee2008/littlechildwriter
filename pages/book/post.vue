@@ -19,36 +19,33 @@
         <v-list-item v-if="$vuetify.breakpoint.mobile" @click="showCamera">
           <v-icon left> mdi-barcode-scan </v-icon> 카메라로 ISBN 촬영
         </v-list-item>
-        <v-list-item
-          v-if="$vuetify.breakpoint.mobile"
-          @click="isbn.pictureBarcode = true"
-        >
+        <v-list-item v-if="$vuetify.breakpoint.mobile" @click="isbn.pic = true">
           <v-icon left> mdi-barcode </v-icon> 사진으로 ISBN 촬영
         </v-list-item>
-        <v-list-item @click="isbn.inputISBN = true">
+        <v-list-item @click="isbn.input = true">
           <v-icon left> mdi-form-textbox </v-icon> ISBN 입력
         </v-list-item>
-        <v-list-item @click="isbn.findISBN = true">
+        <v-list-item @click="isbn.find = true">
           <v-icon left> mdi-book-search </v-icon> 책 찾기
         </v-list-item>
       </v-list>
     </v-menu>
 
-    <v-dialog v-model="isbn.videoBarcode" width="90%" height="90%">
-      <v-card v-if="isbn.videoBarcode" height="100%" width="100%">
+    <v-dialog v-model="isbn.vid" width="90%" height="90%">
+      <v-card v-if="isbn.vid" height="100%" width="100%">
         <div id="container">
           <video id="videoElement" ref="video" autoplay="true" width="100%" />
         </div>
         <v-card-actions>
           <v-btn @click="takeISBNVideo"> ISBN 바코드 찍기 </v-btn>
-          <v-btn color="error" @click="isbn.videoBarcode = false">
+          <v-btn color="error" @click="isbn.vid = false">
             <v-icon left> mdi-close-outline </v-icon>취소
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="isbn.pictureBarcode" width="500">
+    <v-dialog v-model="isbn.pic" width="500">
       <v-card>
         <v-card-title> IBSN 사진 </v-card-title>
 
@@ -68,16 +65,17 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn text @click="isbn.pictureBarcode = false"> 취소 </v-btn>
+          <v-btn text @click="isbn.pic = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="isbn.inputISBN" width="500">
+    <v-dialog v-model="isbn.input" width="500">
       <v-card>
         <v-progress-linear
           v-if="loading"
           indeterminate
+          rounded
           color="white"
           class="mb-0"
         />
@@ -87,7 +85,7 @@
 
         <v-card-text>
           <v-text-field
-            v-if="isbn.inputISBN"
+            v-if="isbn.input"
             v-model="post.isbn"
             autofocus
             label="ISBN"
@@ -95,20 +93,19 @@
           />
         </v-card-text>
 
-        <v-alert v-if="error" v-text="error" class="ml-2"></v-alert>
-
         <v-card-actions>
           <v-spacer />
-          <v-btn text @click="isbn.inputISBN = false"> 취소 </v-btn>
+          <v-btn text @click="isbn.input = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="isbn.findISBN" width="700">
+    <v-dialog v-model="isbn.find" width="700">
       <v-card>
         <v-progress-linear
           v-if="loading"
           indeterminate
+          rounded
           color="white"
           class="mb-0"
         />
@@ -118,8 +115,8 @@
 
         <v-card-text>
           <v-text-field
-            v-if="isbn.findISBN"
-            v-model="searching_title"
+            v-if="isbn.find"
+            v-model="title"
             autofocus
             label="책 제목"
             @keyup.enter="fetchISBN"
@@ -128,15 +125,16 @@
 
         <v-list>
           <v-list-item
-            v-for="item in searched_books"
-            v-if="item.volumeInfo.industryIdentifiers"
+            v-for="item in searched"
+            v-if="
+              item.volumeInfo.industryIdentifiers && item.volumeInfo.imageLinks
+            "
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
             @click="
-              fetchFromSearch(item.volumeInfo.industryIdentifiers[0].identifier)
+              fetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
             "
           >
             <v-img
-              v-if="item.volumeInfo.imageLinks"
               :src="item.volumeInfo.imageLinks.thumbnail"
               class="mr-4 ma-2 rounded-lg"
               max-width="100"
@@ -172,11 +170,27 @@
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
+
+          <v-list-item v-else>
+            <v-list-item-content>
+              <v-list-item-title
+                class="primary--text h1"
+                v-text="item.volumeInfo.title"
+              />
+              <v-list-item-subtitle v-text="item.volumeInfo.subtitle" />
+
+              <v-spacer />
+
+              <v-list-item-subtitle class="red--text">
+                이 책에 대한 정보가 부족해 선택할 수 없습니다.
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
 
         <v-card-actions>
           <v-spacer />
-          <v-btn text @click="isbn.findISBN = false"> 취소 </v-btn>
+          <v-btn text @click="isbn.find = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -186,6 +200,7 @@
         v-model="post.rating"
         color="blue"
         required
+        ripple
         size="30"
         class="mx-auto"
       />
@@ -243,35 +258,34 @@ export default {
       },
 
       isbn: {
-        videoBarcode: false,
-        pictureBarcode: false,
-        inputISBN: false,
-        findISBN: false
+        vid: false,
+        pic: false,
+        input: false,
+        find: false
       },
 
-      error: '',
       loading: false,
-      searching_title: '',
-      searched_books: [],
-      formats: ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
+      title: '',
+      searched: [],
+      bc_f: ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
     }
   },
   methods: {
-    fetchFromSearch(isbn) {
+    fetchBook(isbn) {
       this.post.isbn = isbn
-      this.isbn.findISBN = false
       this.fetchi()
+      this.isbn.find = false
     },
     async fetchISBN() {
       this.loading = true
 
       await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${this.searching_title}&maxResults=40`
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${this.title}&maxResults=40`
       )
         .then(res => res.json())
         .then(
           books =>
-            (this.searched_books = books.items?.sort(
+            (this.searched = books.items?.sort(
               (a, b) =>
                 (a.volumeInfo.imageLinks == undefined) -
                 (b.volumeInfo.imageLinks == undefined)
@@ -281,33 +295,30 @@ export default {
       this.loading = false
     },
     showCamera() {
-      this.isbn.videoBarcode = true
+      this.isbn.vid = true
 
-      navigator.mediaDevices.getUserMedia &&
-        navigator.mediaDevices
-          .getUserMedia({
-            video: {
-              facingMode: 'environment',
-              width: { ideal: 4096 },
-              height: { ideal: 2160 }
-            }
-          })
-          .then(s => (this.$refs.video.srcObject = s))
-          .catch(() => (this.isbn.pictureBarcode = false))
+      navigator.mediaDevices
+        .getUserMedia({
+          video: {
+            facingMode: 'environment',
+            width: { ideal: 4096 },
+            height: { ideal: 2160 }
+          }
+        })
+        .then(s => (this.$refs.video.srcObject = s))
     },
     takeISBNVideo() {
-      if ('BarcodeDetector' in window)
-        new BarcodeDetector({
-          formats: this.formats
+      new BarcodeDetector({
+        bc_f: this.bc_f
+      })
+        .detect(this.$refs.video)
+        .then(res => res[0].rawValue)
+        .then(a => {
+          this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
+          this.isbn.vid = false
+          this.fetchi()
         })
-          .detect(this.$refs.video)
-          .then(res => res[0].rawValue)
-          .then(a => {
-            this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-            this.isbn.videoBarcode = false
-            this.fetchi()
-          })
-          .catch(() => alert('다시 찍어주세요'))
+        .catch(() => alert('다시 찍어주세요'))
     },
     uploadFile(file) {
       const reader = new FileReader()
@@ -321,13 +332,13 @@ export default {
           tempImage.onload = () => {
             if ('BarcodeDetector' in window)
               new BarcodeDetector({
-                formats: this.formats
+                bc_f: this.bc_f
               })
                 .detect(this.$refs.isbn)
                 .then(res => res[0].rawValue)
                 .then(a => {
                   this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-                  this.isbn.pictureBarcode = false
+                  this.isbn.pic = false
                   this.fetchi()
                 })
                 .catch(() => alert('다시 찍어주세요'))
@@ -408,11 +419,11 @@ export default {
             pageCount,
             author,
             categories: await fetch(res.items[0].selfLink)
-              .then(res => res.json())
-              .then(res => res.volumeInfo.categories)
+              .then(cg => cg.json())
+              .then(cg => cg.volumeInfo.categories)
           }
 
-          this.isbn.inputISBN = false
+          this.isbn.input = false
         })
 
       this.loading = false

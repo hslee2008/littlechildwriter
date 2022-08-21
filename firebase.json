@@ -5,7 +5,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/error"
+        "destination": "/index.html"
       }
     ]
   },

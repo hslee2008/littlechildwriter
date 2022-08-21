@@ -56,9 +56,17 @@
             />
             <p class="my-5" v-text="post.content" />
             <v-chip-group class="my-5" column>
-              <v-chip v-for="tag in tags" :key="tag.icon" label>
-                <v-icon left> mdi-{{ tag.icon }} </v-icon>
-                {{ tag.val }}
+              <v-chip label>
+                <v-icon left> mdi-eye </v-icon>
+                {{ post.views + 1 }}
+              </v-chip>
+              <v-chip label>
+                <v-icon left>mdi-sort-clock-descending-outline</v-icon>
+                {{ parsedTime }}
+              </v-chip>
+              <v-chip label>
+                <v-icon left>mdi-book</v-icon>
+                {{ post.pageCount }}
               </v-chip>
             </v-chip-group>
           </v-card-text>
@@ -156,23 +164,10 @@ export default {
   },
   data() {
     return {
+      parsedTime: '',
+
       comment: '',
       comments: [],
-
-      tags: {
-        views: {
-          icon: 'eye',
-          val: 0
-        },
-        time: {
-          icon: 'calendar-clock',
-          val: ''
-        },
-        page: {
-          icon: 'book-open-page-variant',
-          val: 0
-        }
-      },
 
       post: {
         isbn: '',
@@ -267,24 +262,10 @@ export default {
       post !== null && Object.keys(post).length !== 1 && (this.post = post)
 
       const parsedDate = new Date(parseInt(this.time))
-
-      this.tags = {
-        views: {
-          icon: 'eye',
-          val: this.post.views + 1
-        },
-        time: {
-          icon: 'calendar-clock',
-          val: `${parsedDate.getMonth()}/${parsedDate.getDate()}/${parsedDate.getFullYear()}`
-        },
-        page: {
-          icon: 'book-open-page-variant',
-          val: this.post.pageCount
-        }
-      }
+      this.parsedTime = `${parsedDate.getMonth()}/${parsedDate.getDate()}/${parsedDate.getFullYear()}`
     },
     growView() {
-      db.ref(`contents/${this.time}/views`).set(this.tags.views.val)
+      db.ref(`contents/${this.time}/views`).transaction(view => view + 1)
       this.updateLibris(this.post.uid, 0.1)
       this.updateLibris(this.userInfo.uid, 0.1)
     }

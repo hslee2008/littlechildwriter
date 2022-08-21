@@ -5,14 +5,14 @@ export default {
 
   loading: {
     color: 'skyblue',
-    height: '3px',
+    height: '2px',
     continuous: true
   },
 
   ssr: false,
 
   loadingIndicator: {
-    name: 'wandering-cubes',
+    name: 'three-bounce',
     color: 'white',
     background: '#23262E'
   },
@@ -154,6 +154,7 @@ export default {
 
   generate: {
     async routes() {
+      var routes = []
       var admin = require('firebase-admin')
       var serviceAccount = require('./firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json')
 
@@ -163,13 +164,16 @@ export default {
       })
 
       var db = admin.database()
-      var contents = db.ref('contents')
 
-      const snapshot = await contents.once('value')
-      var contents_1 = snapshot.val()
-      var routes = []
+      const books = (await db.ref('contents').once('value')).val()
+      const classes = (await db.ref('classes').once('value')).val()
+      const teams = (await db.ref('teams').once('value')).val()
+      const users = (await db.ref('users').once('value')).val()
 
-      for (var key in contents_1) routes.push('/book/content/' + key)
+      for (var key in books) routes.push('/book/content/' + key)
+      for (var key in classes) routes.push('/class/' + key)
+      for (var key in teams) routes.push('/team/about/' + key)
+      for (var key in users) routes.push('/user/' + key)
 
       return routes
     }
