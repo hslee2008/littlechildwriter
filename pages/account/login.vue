@@ -44,7 +44,7 @@
 
         <v-divider class="my-5" />
 
-        <div class="d-flex justify-center gap10">
+        <div class="d-flex justify-center g-10">
           <v-btn color="primary" @click="onSubmit">
             <v-icon left> mdi-account </v-icon>로그인
           </v-btn>

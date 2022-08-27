@@ -83,7 +83,7 @@
     </template>
 
     <template #default="props">
-      <v-row class="mt-5 ma-1 gap10">
+      <v-row class="mt-5 ma-1 g-10">
         <v-card
           v-for="item in props.items"
           v-if="

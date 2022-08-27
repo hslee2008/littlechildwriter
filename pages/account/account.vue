@@ -98,7 +98,7 @@
       </v-card-text>
     </v-card>
 
-    <v-row justify="center" class="gap10">
+    <v-row justify="center" class="g-10">
       <v-btn color="primary" @click="update">
         <v-icon left> mdi-account </v-icon>
         업데이트

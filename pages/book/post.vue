@@ -5,32 +5,6 @@
       <v-file-input ref="file" accept="image/*" @change="uploadImg($event)" />
     </div>
 
-    <v-menu bottom>
-      <template #activator="{ on, attrs }">
-        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-          책 정보 입력
-        </v-btn>
-      </template>
-
-      <v-list>
-        <v-list-item @click="$refs.file.$refs.input.click()">
-          <v-icon left> mdi-upload </v-icon> 책 사진 업로드
-        </v-list-item>
-        <v-list-item v-if="$vuetify.breakpoint.mobile" @click="showCamera">
-          <v-icon left> mdi-barcode-scan </v-icon> 카메라로 ISBN 촬영
-        </v-list-item>
-        <v-list-item v-if="$vuetify.breakpoint.mobile" @click="isbn.pic = true">
-          <v-icon left> mdi-barcode </v-icon> 사진으로 ISBN 촬영
-        </v-list-item>
-        <v-list-item @click="isbn.input = true">
-          <v-icon left> mdi-form-textbox </v-icon> ISBN 입력
-        </v-list-item>
-        <v-list-item @click="isbn.find = true">
-          <v-icon left> mdi-book-search </v-icon> 책 찾기
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
     <v-dialog v-model="isbn.vid" width="90%" height="90%">
       <v-card v-if="isbn.vid" height="100%" width="100%">
         <div id="container">
@@ -195,37 +169,65 @@
       </v-card>
     </v-dialog>
 
-    <v-row class="my-10">
-      <v-rating
-        v-model="post.rating"
+    <v-card-text>
+      <v-row class="my-10">
+        <v-rating
+          v-model="post.rating"
+          color="blue"
+          required
+          ripple
+          size="30"
+          class="mx-auto"
+        />
+      </v-row>
+
+      <v-text-field v-model="post.title" label="제목" />
+
+      <v-row class="g-10" style="margin: 0.5px 0">
+        <v-text-field v-model="post.author" label="작가" />
+        <v-text-field v-model="post.pageCount" label="페이지" />
+      </v-row>
+
+      <v-checkbox
+        v-model="post.isPublic"
+        :label="`${post.isPublic ? '' : '(프로필 페이지에서만 공개됨) 비'}공개`"
         color="blue"
-        required
-        ripple
-        size="30"
-        class="mx-auto"
       />
-    </v-row>
 
-    <v-text-field v-model="post.title" label="제목" />
+      <v-textarea v-model="post.content" label="책 소개" />
+    </v-card-text>
 
-    <v-row class="gap10" style="margin: 0.5px 0">
-      <v-text-field v-model="post.author" label="작가" />
-      <v-text-field v-model="post.pageCount" label="페이지" />
-    </v-row>
+    <v-card-actions class="g-10">
+      <v-btn color="primary" @click="postcontent"> 업로드 </v-btn>
 
-    <v-checkbox
-      v-model="post.isPublic"
-      :label="`${post.isPublic ? '' : '(프로필 페이지에서만 공개됨) 비'}공개`"
-      color="blue"
-    />
+      <v-menu bottom>
+        <template #activator="{ on, attrs }">
+          <v-btn v-bind="attrs" v-on="on" elevation="0">
+            책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
+          </v-btn>
+        </template>
 
-    <v-textarea v-model="post.content" label="책 소개" />
-
-    <v-card-actions>
-      <v-spacer />
-      <v-btn color="primary" text @click="postcontent">
-        업로드 <v-icon right> mdi-note-plus </v-icon>
-      </v-btn>
+        <v-list>
+          <v-list-item @click="$refs.file.$refs.input.click()">
+            <v-icon left> mdi-upload </v-icon> 책 사진 업로드
+          </v-list-item>
+          <v-list-item v-if="$vuetify.breakpoint.mobile" @click="showCamera">
+            <v-icon left> mdi-barcode-scan </v-icon> 카메라로 ISBN 촬영
+          </v-list-item>
+          <v-list-item
+            v-if="$vuetify.breakpoint.mobile"
+            @click="isbn.pic = true"
+          >
+            <v-icon left> mdi-barcode </v-icon> 사진으로 ISBN 촬영
+          </v-list-item>
+          <v-list-item @click="isbn.input = true">
+            <v-icon left> mdi-form-textbox </v-icon> ISBN 입력
+          </v-list-item>
+          <v-list-item @click="isbn.find = true">
+            <v-icon left> mdi-book-search </v-icon> 책 찾기
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-card-actions>
 
     <div class="ma-auto mt-10">
@@ -280,7 +282,7 @@ export default {
       this.loading = true
 
       await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${this.title}&maxResults=40`
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${this.title}&maxResults=40&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`
       )
         .then(res => res.json())
         .then(
@@ -401,7 +403,7 @@ export default {
       this.loading = true
 
       fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
+        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`
       )
         .then(res => res.json())
         .then(async res => {

@@ -21,7 +21,7 @@
     </template>
 
     <template #default="props">
-      <v-row class="mt-5 gap10">
+      <v-row class="mt-5 g-10">
         <LazyBookCard :items="props.items" />
       </v-row>
     </template>
@@ -30,14 +30,7 @@
       <v-row class="mt-10" align="center" justify="center">
         <v-menu top>
           <template #activator="{ on, attrs }">
-            <v-btn
-              dark
-              text
-              color="primary"
-              class="ml-2"
-              v-bind="attrs"
-              v-on="on"
-            >
+            <v-btn text color="primary" class="ml-2" v-bind="attrs" v-on="on">
               {{ itemsPerPage }}
               <v-icon right> mdi-chevron-down </v-icon>
             </v-btn>

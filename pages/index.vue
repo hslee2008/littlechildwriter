@@ -4,7 +4,7 @@
       <div class="ma-auto">
         <div class="mx-3">
           <v-btn v-if="userInfo.uid" to="/book/post" color="primary" block>
-            글 올리기 <v-icon right> mdi-arrow-right-thin </v-icon>
+            <v-icon left> mdi-pencil </v-icon> 작성하기
           </v-btn>
           <v-btn v-else to="/account/login" color="primary" block>
             로그인 <v-icon right> mdi-account </v-icon>

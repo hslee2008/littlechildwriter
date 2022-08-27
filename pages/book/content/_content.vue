@@ -5,7 +5,8 @@
       frameborder="0"
       scrolling="no"
       class="zmax frame"
-      :src="`https://books.google.co.kr/books?id=${fetchedBookID}&lpg=PP1&pg=PP1&output=embed&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`"
+      :src="`https://books.google.co.kr/books?id=${fetchedBookID}&lpg=PP1&pg=PP1&output=embed&key='
+    AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4'`"
       width="100%"
       height="100%"
     />
@@ -200,7 +201,7 @@ export default {
         await fetch(
           `https://www.googleapis.com/books/v1/volumes?q=subject:${cat.join(
             ','
-          )}&maxResults=${n}`
+          )}&maxResults=${n}&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`
         )
           .then(res => res.json())
           .then(data => {
@@ -239,7 +240,7 @@ export default {
       let fetched = ''
 
       await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
+        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`
       )
         .then(res => res.json())
         .then(res => {
