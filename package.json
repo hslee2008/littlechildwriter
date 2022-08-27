@@ -14,8 +14,9 @@
     "@nuxtjs/pwa": "latest",
     "firebase": "^9.9.3",
     "leo-profanity": "latest",
-    "nuxt": "^2.15.8",
-    "vue": "2.7.9",
+    "nuxt": "latest",
+    "vue": "2.7.10",
+    "vue-server-renderer": "latest",
     "vuetify": "latest"
   },
   "devDependencies": {

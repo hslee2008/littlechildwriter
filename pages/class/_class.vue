@@ -6,9 +6,7 @@
     <v-tab v-if="classInfo.uid === userInfo.uid"> 설정 </v-tab>
 
     <v-tabs-items v-model="tab" class="py-5 transparent">
-      <v-tab-item>
-        <br />
-
+      <v-tab-item class="pt-10">
         <h1 class="primary--text" v-text="classInfo.name" />
         <h4 class="grey--text">선생님 {{ classInfo.creator }}</h4>
         <p class="my-5" v-text="classInfo.description" />
@@ -58,7 +56,7 @@
             </v-menu>
           </v-card-actions>
         </v-card>
-        <v-card v-else-if="item.type === '파일'" :href="item.url">
+        <v-card v-else-if="item.type === '파일'" :href="item.url" class="mb-5">
           <v-card-title>{{ item.file }}</v-card-title>
           <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
         </v-card>
@@ -101,9 +99,7 @@
         </v-card>
       </v-tab-item>
 
-      <v-tab-item class="transparent">
-        <br />
-
+      <v-tab-item class="pt-10">
         <v-select
           v-model="post.type"
           :items="['책', '공지사항', '파일']"
@@ -169,6 +165,12 @@
           </v-card-actions>
         </v-card>
         <v-card v-else-if="post.type === '파일'" class="transparent">
+          <v-progress-linear
+            v-if="progress > 0"
+            color="primary"
+            :value="progress"
+          />
+
           <v-file-input
             v-model="post.file"
             color="deep-purple accent-4"
@@ -181,7 +183,8 @@
             :show-size="1000"
             ref="file"
             @change="fileChange"
-            ><template v-slot:selection="{ index, text }">
+          >
+            <template v-slot:selection="{ index, text }">
               <v-chip
                 v-if="index < 2"
                 color="deep-purple accent-4"
@@ -215,7 +218,7 @@
         />
       </v-tab-item>
 
-      <v-tab-item>
+      <v-tab-item class="pt-10">
         <v-card class="mt-5 transparent">
           <v-card-title>다른 친구들</v-card-title>
           <v-card-text>
@@ -232,7 +235,7 @@
         </v-card>
       </v-tab-item>
 
-      <v-tab-item v-if="classInfo.uid === userInfo.uid">
+      <v-tab-item v-if="classInfo.uid === userInfo.uid" class="pt-10">
         <v-card class="mt-5">
           <v-card-title>수업 세부정보</v-card-title>
           <v-card-text>
@@ -374,9 +377,13 @@ export default {
       this.post.file = f
     },
     upload() {
-      const storageRef = storage
-        .ref(`${this.post.file[0].name}`)
-        .put(this.post.file[0])
+      let storageRef
+
+      for (let i = 0; i < this.post.file.length; i++) {
+        storageRef = storage
+          .ref(`${this.post.file[i].name}`)
+          .put(this.post.file[i])
+      }
 
       storageRef.on(
         `state_changed`,
@@ -395,13 +402,14 @@ export default {
               })
             )
             .then(() => {
+              this.tab = 0
               this.post.title = ''
               this.post.time = ''
               this.post.file = []
               this.post.book = true
               this.post.type = '책'
+              this.progress = 0
             })
-            .then(() => (this.tab = 0))
       )
     },
     deleteContent(i) {

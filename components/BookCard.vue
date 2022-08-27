@@ -35,7 +35,14 @@
 
         <v-card v-show="!simple" class="transparent">
           <v-card-actions v-if="userInfo.uid">
-            <v-btn icon @click="bookmark(item.time, i)" color="primary">
+            <v-btn
+              icon
+              @click="bookmark(item.time, i)"
+              color="primary"
+              :disabled="
+                Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
+              "
+            >
               <v-icon>
                 mdi-bookmark{{
                   Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
@@ -56,6 +63,21 @@
           </v-card-actions>
         </v-card>
       </v-card>
+
+      <v-snackbar v-model="bookmarkSnackbar">
+        북마크가 추가되었습니다.
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="bookmarkSnackbar = false"
+          >
+            닫기
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-row>
   </v-lazy>
 </template>
@@ -78,6 +100,11 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      bookmarkSnackbar: false
+    }
+  },
   methods: {
     likeThis(it) {
       it.likes++
@@ -90,18 +117,20 @@ export default {
       this.updateLibris(it.uid, 0.1)
     },
     bookmark(time, i) {
+      this.bookmarkSnackbar = true
+
       db.ref(`/users/${this.userInfo.uid}/bookmarks/${time}`).set({
         title: this.items[i].title,
         image: this.items[i].image,
         time: time
       })
       db.ref(`/contents/${time}/bookmarks/${this.userInfo.uid}`).set(true)
+
       this.items[i].bookmarks = {
         ...this.items[i].bookmarks,
         [this.userInfo.uid]: true
       }
       this.updateLibris(this.userInfo.uid, 0.1)
-      this.$forceUpdate()
     }
   }
 }

@@ -13,7 +13,7 @@ export default {
 
   loadingIndicator: {
     name: 'three-bounce',
-    color: 'white',
+    color: '#D3D3D3',
     background: '#23262E'
   },
 
