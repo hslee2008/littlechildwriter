@@ -13,12 +13,12 @@
 
         <br />
 
-        <v-card v-for="(category, title) in classInfo.contents" :key="title">
+        <v-card v-for="(category, title) in classInfo.contents" :key="title" class="transparent">
           <v-card-title v-text="title" />
 
           <v-card
             v-for="(item, i) in category"
-            v-if="item.book"
+            v-if="item.type === '책'"
             :key="item.title"
             class="d-flex mt-5"
             :to="`/book/content/${item.time}`"
@@ -58,7 +58,7 @@
           <v-card
             v-else-if="item.type === '파일'"
             :href="item.url"
-            class="d-flex mb-5"
+            class="d-flex mt-5"
           >
             <v-icon class="ml-4"> mdi-link-variant </v-icon>
 
@@ -91,6 +91,20 @@
                 </v-list>
               </v-menu>
             </v-card-actions>
+          </v-card>
+          <v-card
+            v-else-if="item.type === '링크'"
+            :href="item.url"
+            class="d-flex mt-5"
+          >
+            <v-icon class="ml-4"> mdi-link </v-icon>
+
+            <div>
+              <v-card-title>{{ item.name }} 링크</v-card-title>
+              <v-card-subtitle>
+                <a :href="item.link" v-text="item.title" target="_blank" />
+              </v-card-subtitle>
+            </div>
           </v-card>
           <v-card v-else class="mt-5">
             <div class="d-flex">
@@ -135,7 +149,7 @@
       <v-tab-item class="pt-10">
         <v-select
           v-model="post.type"
-          :items="['책', '공지사항', '파일']"
+          :items="['책', '공지사항', '파일', '링크']"
           label="종류 선택"
           outlined
           class="mb-10"
@@ -202,6 +216,23 @@
 
             <v-spacer />
 
+            <v-btn
+              :disabled="post.title === ''"
+              color="primary"
+              class="elevation-0"
+              @click="postcontent"
+            >
+              게시
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+        <v-card v-else-if="post.type === '링크'" class="transparent">
+          <v-card-title>링크 업로드</v-card-title>
+          <v-card-text>
+            <v-text-field v-model="post.title" label="제목" />
+            <v-text-field v-model="post.link" label="링크" />
+          </v-card-text>
+          <v-card-actions class="ma-2 gap20">
             <v-btn
               :disabled="post.title === ''"
               color="primary"
@@ -342,10 +373,10 @@ export default {
       listev: [],
       post: {
         title: '',
-        time: '',
+        link: '',
+        time: Date.now(),
         category: '',
         file: [],
-        book: true,
         type: '책'
       },
 
@@ -421,7 +452,7 @@ export default {
       db.ref(`/classes/${this.id}/contents/${title}/${i}`).remove()
     },
     postcontent() {
-      const { title, time, book, category } = this.post
+      const { title, time, category, type, link } = this.post
       const { uid, displayName } = this.userInfo
 
       db.ref(`/classes/${this.id}/contents/${category}`).push({
@@ -429,14 +460,11 @@ export default {
         uid,
         time,
         displayName,
-        book
+        type,
+        link
       })
 
-      this.post = {
-        title: '',
-        time: '',
-        book: true
-      }
+      this.post = {}
       this.tab = 0
     },
     deleteClass() {
