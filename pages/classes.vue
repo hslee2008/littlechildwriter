@@ -72,7 +72,7 @@
 
               <v-card-actions>
                 <v-spacer />
-                <v-btn :disabled="!classInfo.image" text @click="makeAClass">
+                <v-btn text @click="makeAClass">
                   <v-icon left> mdi-check </v-icon> 만들기
                 </v-btn>
               </v-card-actions>
