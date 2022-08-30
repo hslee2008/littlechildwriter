@@ -2,7 +2,6 @@
   <v-tabs v-model="tab" show-arrows center-active grow class="transparent">
     <v-tab> 홈 </v-tab>
     <v-tab> 글 쓰기 </v-tab>
-    <v-tab> 다른 친구들 </v-tab>
     <v-tab v-if="classInfo.uid === userInfo.uid"> 설정 </v-tab>
 
     <v-tabs-items v-model="tab" class="py-5 transparent">
@@ -164,7 +163,7 @@
           />
           <v-select
             v-model="post.category"
-            :items="Object.keys(classInfo.contents)"
+            :items="Object.keys(classInfo.contents || {})"
             label="종류 선택"
             outlined
           />
@@ -295,23 +294,6 @@
           :cb="() => (tab = 0)"
           :uid="userInfo.uid"
         />
-      </v-tab-item>
-
-      <v-tab-item class="pt-10">
-        <v-card class="mt-5 transparent">
-          <v-card-title>다른 친구들</v-card-title>
-          <v-card-text>
-            <v-list>
-              <v-list-item
-                v-for="(item, i) in classInfo.users"
-                :key="i"
-                :to="`/user/${item.uid}`"
-              >
-                <v-list-item-title v-text="item.displayName" />
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
       </v-tab-item>
 
       <v-tab-item v-if="classInfo.uid === userInfo.uid" class="pt-10">
