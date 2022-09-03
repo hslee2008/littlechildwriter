@@ -52,7 +52,7 @@
             <v-btn
               icon
               :disabled="item.liked[userInfo.uid] == true"
-              @click="likeThis(item)"
+              @click="likeBook(item)"
               class="mr-2"
             >
               <v-icon> mdi-thumb-up </v-icon>
@@ -104,7 +104,7 @@ export default {
     }
   },
   methods: {
-    likeThis(it) {
+    likeBook(it) {
       it.likes++
       it.liked[this.userInfo.uid] = true
 
@@ -113,6 +113,8 @@ export default {
 
       this.updateLibris(this.userInfo.uid, 0.1)
       this.updateLibris(it.uid, 0.1)
+
+      this.notify(this.uid, `${this.userInfo.displayName}님이 좋아합니다`, `/book/content/${it.time}`)
     },
     bookmark(time, i) {
       this.bookmarkSnackbar = true

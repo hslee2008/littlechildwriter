@@ -97,7 +97,7 @@
       </v-btn>
       <v-dialog width="700">
         <template #activator="{ on, attrs }">
-          <v-btn text v-bind="attrs" v-on="on">
+          <v-btn text v-bind="attrs" v-on="on" v-if="post.categories">
             <v-icon left> mdi-shape </v-icon> 카테고리
           </v-btn>
         </template>
@@ -190,6 +190,11 @@ export default {
   methods: {
     async fetchContent() {
       this.loading = true
+
+      if (!this.post.categories) {
+        this.loading = false
+        return
+      }
 
       var overflow = 0
 

@@ -71,47 +71,6 @@
 
       <v-spacer />
 
-      <div v-if="$route.path !== '/list'" class="text-center">
-        <v-dialog v-model="dialog" width="500">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on">
-              <v-icon left>mdi-magnify</v-icon> 검색
-            </v-btn>
-          </template>
-
-          <v-card>
-            <v-card-title> 검색 </v-card-title>
-
-            <v-card-text>
-              <v-text-field
-                v-model="search"
-                placeholder="Search"
-                autofocus
-                outlined
-                clearable
-                prepend-inner-icon="mdi-magnify"
-              />
-              <v-list v-if="search !== ''">
-                <v-list-item
-                  v-for="(item, i) in books.filter(book =>
-                    book.title.toLowerCase().includes(search)
-                  )"
-                  :key="i"
-                  :to="`/book/content/${item.time}`"
-                  @click="dialog = false"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.title" />
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-      </div>
-
-      <v-spacer />
-
       <v-slide-x-transition>
         <v-btn v-if="$route.path !== '/book/post'" icon to="/book/post">
           <v-icon>mdi-plus</v-icon>
@@ -183,7 +142,6 @@ export default {
   },
   mounted() {
     this.getSavedUserDataFromDB()
-    this.searchBook()
 
     this.$nextTick(() => {
       let deferredPrompt
@@ -235,11 +193,6 @@ export default {
       this.updateLibris(this.userInfo.uid, -0.1)
       this.items.splice(i, 1)
     },
-    searchBook() {
-      db.ref('/contents/').on('child_added', async s =>
-        this.books.push(await s.val())
-      )
-    }
   },
   components: {
     UserMenu

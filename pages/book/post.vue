@@ -54,7 +54,7 @@
           <v-select
             v-model="isbn.audioType"
             :items="['ko-KR', 'en-US']"
-            label="보이스 타이핑"
+            label="보이스 타이핑 언어"
           />
           <v-textarea v-model="typed" />
         </v-card-text>
@@ -251,7 +251,7 @@
             <v-icon left> mdi-book-search </v-icon> 책 찾기
           </v-list-item>
           <v-list-item @click="isbn.audio = true">
-            <v-icon left> mdi-cast-audio </v-icon> 보이스 타이핑
+            <v-icon left> mdi-microphone </v-icon> 보이스 타이핑
           </v-list-item>
         </v-list>
       </v-menu>
