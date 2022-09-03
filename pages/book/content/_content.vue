@@ -63,7 +63,7 @@
               </v-chip>
               <v-chip label>
                 <v-icon left>mdi-sort-clock-descending-outline</v-icon>
-                {{ parsedTime }}
+                {{ new Date(post.time).toLocaleDateString() }}
               </v-chip>
               <v-chip label>
                 <v-icon left>mdi-book</v-icon>
@@ -191,6 +191,8 @@ export default {
     async fetchContent() {
       this.loading = true
 
+      var overflow = 0
+
       const cat = [...this.post.categories]
       cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
 
@@ -198,6 +200,13 @@ export default {
         n = 5
 
       while (!done) {
+        overflow++
+
+        if (overflow > 10) {
+          done = true
+          break
+        }
+
         await fetch(
           `https://www.googleapis.com/books/v1/volumes?q=subject:${cat.join(
             ','
@@ -261,9 +270,6 @@ export default {
         .then(r => r.val())
 
       post !== null && Object.keys(post).length !== 1 && (this.post = post)
-
-      const parsedDate = new Date(parseInt(this.time))
-      this.parsedTime = `${parsedDate.getMonth()}/${parsedDate.getDate()}/${parsedDate.getFullYear()}`
     },
     growView() {
       db.ref(`contents/${this.time}/views`).transaction(view => view + 1)

@@ -79,20 +79,24 @@
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-library</v-icon>
+                <v-icon> mdi-crown-circle </v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="Math.round(targetUser.libris)" />
+                <v-list-item-title>
+                  리브리스:
+                  {{ Math.round(targetUser.libris) }}
+                </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
             <v-list-item>
               <v-list-item-icon>
-                <v-icon>mdi-book-open</v-icon>
+                <v-icon> mdi-book </v-icon>
               </v-list-item-icon>
-
               <v-list-item-content>
-                <v-list-item-title v-text="books.length" />
+                <v-list-item-title>
+                  총 책 업로드: {{ books.length }}
+                </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>

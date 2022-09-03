@@ -44,6 +44,17 @@
           <v-icon right>mdi-download</v-icon>
         </v-btn>
       </v-card-actions>
+
+      <v-card-actions>
+        <v-btn
+          text
+          href="github.com/HyunseungLee-Travis/littlechildwriter"
+          target="_blank"
+        >
+          <v-icon left>mdi-github</v-icon>
+          Github
+        </v-btn>
+      </v-card-actions>
     </v-navigation-drawer>
 
     <v-app-bar fixed app color="#23262E" class="elevation-0">
@@ -176,6 +187,11 @@ export default {
 
     this.$nextTick(() => {
       let deferredPrompt
+
+      window.addEventListener('appinstalled', () => {
+        deferredPrompt = null
+        pwainstall.style.display = 'none'
+      })
 
       window.addEventListener('beforeinstallprompt', e => {
         e.preventDefault()

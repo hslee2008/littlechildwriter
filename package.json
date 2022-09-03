@@ -12,10 +12,11 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "latest",
-    "firebase": "^9.9.3",
+    "firebase": "^9.9.4",
     "leo-profanity": "latest",
     "nuxt": "latest",
     "vue": "2.7.10",
+    "vue-listen-voice": "^1.0.4",
     "vue-server-renderer": "latest",
     "vuetify": "latest"
   },

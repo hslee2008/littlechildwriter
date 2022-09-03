@@ -1,7 +1,7 @@
 export default {
-  /*build: {
-    analyze: true
-  },*/
+  build: {
+    /*analyze: true,*/
+  },
 
   loading: {
     color: 'skyblue',

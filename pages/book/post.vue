@@ -44,6 +44,30 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="isbn.audio" width="500">
+      <v-card>
+        <v-card-title> 보이스 타이핑 </v-card-title>
+
+        <br />
+
+        <v-card-text>
+          <v-select
+            v-model="isbn.audioType"
+            :items="['ko-KR', 'en-US']"
+            label="보이스 타이핑"
+          />
+          <v-textarea v-model="typed" />
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn text @click="voiceType">시작</v-btn>
+          <v-spacer />
+          <v-btn text @click="isbn.pic = false" color="red"> 취소 </v-btn>
+          <v-btn text @click="saveAudio" color="primary"> 확인 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="isbn.input" width="500">
       <v-card>
         <v-progress-linear
@@ -226,6 +250,9 @@
           <v-list-item @click="isbn.find = true">
             <v-icon left> mdi-book-search </v-icon> 책 찾기
           </v-list-item>
+          <v-list-item @click="isbn.audio = true">
+            <v-icon left> mdi-cast-audio </v-icon> 보이스 타이핑
+          </v-list-item>
         </v-list>
       </v-menu>
     </v-card-actions>
@@ -263,13 +290,16 @@ export default {
         vid: false,
         pic: false,
         input: false,
-        find: false
+        find: false,
+        audio: false,
+        audioType: ''
       },
 
       loading: false,
       title: '',
       searched: [],
-      bc_f: ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
+      bc_f: ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a'],
+      typed: ''
     }
   },
   methods: {
@@ -429,6 +459,29 @@ export default {
         })
 
       this.loading = false
+    },
+    voiceType() {
+      const recognition = new webkitSpeechRecognition()
+      recognition.lang = this.isbn.audioType
+      recognition.start()
+
+      recognition.onresult = e => {
+        this.typed += e.results[0][0].transcript + '. '
+      }
+
+      recognition.onspeechend = () => {
+        recognition.stop()
+      }
+
+      recognition.onerror = e => {
+        console.log(e)
+        alert('다시 시도해주세요')
+      }
+    },
+    saveAudio() {
+      this.isbn.audio = false
+      this.post.content = this.typed
+      this.typed = ''
     }
   }
 }
