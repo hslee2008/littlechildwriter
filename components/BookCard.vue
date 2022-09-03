@@ -26,9 +26,7 @@
           <v-card-text>
             <span class="text--disabled">
               {{ item.views }} views ·
-              {{ new Date(parseInt(item.time)).getMonth() }}/{{
-                new Date(parseInt(item.time)).getDate()
-              }}
+              {{ new Date(parseInt(item.time)).toLocaleDateString() }}
             </span>
           </v-card-text>
         </v-card>
@@ -122,7 +120,7 @@ export default {
       db.ref(`/users/${this.userInfo.uid}/bookmarks/${time}`).set({
         title: this.items[i].title,
         image: this.items[i].image,
-        time: time
+        time
       })
       db.ref(`/contents/${time}/bookmarks/${this.userInfo.uid}`).set(true)
 

@@ -186,7 +186,7 @@ export default {
         deferredPrompt.prompt()
         deferredPrompt = null
       })
-    })
+    } )
   },
   methods: {
     clearEverything() {

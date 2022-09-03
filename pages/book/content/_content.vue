@@ -63,7 +63,7 @@
               </v-chip>
               <v-chip label>
                 <v-icon left>mdi-sort-clock-descending-outline</v-icon>
-                {{ parsedTime }}
+                {{ new Date(post.time).toLocaleDateString() }}
               </v-chip>
               <v-chip label>
                 <v-icon left>mdi-book</v-icon>
@@ -261,9 +261,6 @@ export default {
         .then(r => r.val())
 
       post !== null && Object.keys(post).length !== 1 && (this.post = post)
-
-      const parsedDate = new Date(parseInt(this.time))
-      this.parsedTime = `${parsedDate.getMonth()}/${parsedDate.getDate()}/${parsedDate.getFullYear()}`
     },
     growView() {
       db.ref(`contents/${this.time}/views`).transaction(view => view + 1)

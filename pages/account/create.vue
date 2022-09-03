@@ -14,10 +14,6 @@
         outlined
         clearable
         validate-on-blur
-        :rules="[
-          v => v || 'E-mail is required',
-          v => /.+@.+/.test(v) || 'E-mail must be valid'
-        ]"
         prepend-inner-icon="mdi-email"
       />
       <v-text-field
@@ -28,10 +24,6 @@
         outlined
         clearable
         validate-on-blur
-        :rules="[
-          v => v || 'Password is required',
-          v => v.length > 6 || 'Password must be more than 6 characters'
-        ]"
         prepend-inner-icon="mdi-key"
       />
       <v-btn color="primary" @click="makeAccount">
@@ -70,7 +62,12 @@ export default {
               subscriber: []
             })
 
-            this.$router.push('/')
+            this.$router.push('/account')
+
+            this.userInfo.uid = auth.currentUser.uid
+            this.userInfo.username = this.username
+            this.userInfo.photoURL = ''
+            this.userInfo.libris = 0
           })
           .catch(e => (this.error = e.message))
     }
