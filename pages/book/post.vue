@@ -218,7 +218,7 @@
         color="blue"
       />
 
-      <v-textarea v-model="post.content" label="책 소개" />
+      <v-textarea v-model="post.content" label="책 소개" clearable counter />
     </v-card-text>
 
     <v-card-actions class="g-10">
@@ -312,7 +312,7 @@ export default {
       this.loading = true
 
       await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${this.title}&maxResults=40&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${this.title}`
       )
         .then(res => res.json())
         .then(
@@ -323,6 +323,7 @@ export default {
                 (b.volumeInfo.imageLinks == undefined)
             ))
         )
+        .catch(err => this.checkError(err.message))
 
       this.loading = false
     },
@@ -338,6 +339,7 @@ export default {
           }
         })
         .then(s => (this.$refs.video.srcObject = s))
+        .catch(err => this.checkError(err.message))
     },
     takeISBNVideo() {
       new BarcodeDetector({
@@ -350,7 +352,7 @@ export default {
           this.isbn.vid = false
           this.fetchi()
         })
-        .catch(() => alert('다시 찍어주세요'))
+        .catch(err => this.checkError(err.message))
     },
     uploadFile(file) {
       const reader = new FileReader()
@@ -373,7 +375,7 @@ export default {
                   this.isbn.pic = false
                   this.fetchi()
                 })
-                .catch(() => alert('다시 찍어주세요'))
+                .catch(err => this.checkError(err.message))
           }
         },
         false
@@ -409,7 +411,6 @@ export default {
 
       db.ref(`/contents/${time}`).set({
         title,
-        content,
         rating,
         isbn,
         time,
@@ -423,7 +424,8 @@ export default {
         },
         views: 0,
         uid,
-        displayName
+        displayName,
+        content: content.replaceAll('\n', '<br>')
       })
 
       this.updateLibris(this.userInfo.uid, this.post.pageCount / 100)
@@ -433,7 +435,7 @@ export default {
       this.loading = true
 
       fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`
+        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
       )
         .then(res => res.json())
         .then(async res => {
@@ -453,10 +455,12 @@ export default {
             categories: await fetch(res.items[0].selfLink)
               .then(cg => cg.json())
               .then(cg => cg.volumeInfo.categories)
+              .catch(err => this.checkError(err.message))
           }
 
           this.isbn.input = false
         })
+        .catch(err => this.checkError(err.message))
 
       this.loading = false
     },
@@ -473,10 +477,7 @@ export default {
         recognition.stop()
       }
 
-      recognition.onerror = e => {
-        console.log(e)
-        alert('다시 시도해주세요')
-      }
+      recognition.onerror = e => this.checkError(e)
     },
     saveAudio() {
       this.isbn.audio = false

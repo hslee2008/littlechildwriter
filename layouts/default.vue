@@ -44,17 +44,6 @@
           <v-icon right>mdi-download</v-icon>
         </v-btn>
       </v-card-actions>
-
-      <v-card-actions>
-        <v-btn
-          text
-          href="github.com/HyunseungLee-Travis/littlechildwriter"
-          target="_blank"
-        >
-          <v-icon left>mdi-github</v-icon>
-          Github
-        </v-btn>
-      </v-card-actions>
     </v-navigation-drawer>
 
     <v-app-bar fixed app color="#23262E" class="elevation-0">
@@ -192,7 +181,7 @@ export default {
       db.ref(`/contents/${time}/bookmarks/${this.userInfo.uid}`).remove()
       this.updateLibris(this.userInfo.uid, -0.1)
       this.items.splice(i, 1)
-    },
+    }
   },
   components: {
     UserMenu

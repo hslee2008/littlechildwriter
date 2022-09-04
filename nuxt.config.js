@@ -62,10 +62,10 @@ export default {
   },
 
   css: ['@/assets/css/global.css'],
-  plugins: ['~/plugins/firebase', '~/plugins/global'],
+  plugins: ['~/plugins/firebase', '~/plugins/global', '~/plugins/error'],
   components: true,
   buildModules: ['@nuxtjs/vuetify'],
-  modules: ['@nuxtjs/pwa'],
+  modules: ['@nuxtjs/pwa', 'vue-toastification/nuxt'],
   target: 'static',
 
   pwa: {
@@ -177,5 +177,14 @@ export default {
 
       return routes
     }
+  },
+
+  toast: {
+    position: 'bottom-right',
+    duration: 3000,
+    keepOnHover: true,
+    hideProgressBar: true,
+    closeOnClick: true,
+    maxToasts: 3
   }
 }

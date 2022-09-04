@@ -8,6 +8,7 @@
     "generate": "nuxt generate --modern=server",
     "analyze": "nuxt build --modern=server --analyze",
     "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn generate",
+    "gui": "vue ui",
     "prettier": "prettier --write ."
   },
   "dependencies": {
@@ -16,8 +17,8 @@
     "leo-profanity": "latest",
     "nuxt": "latest",
     "vue": "2.7.10",
-    "vue-listen-voice": "^1.0.4",
     "vue-server-renderer": "latest",
+    "vue-toastification": "^1.7.14",
     "vuetify": "latest"
   },
   "devDependencies": {

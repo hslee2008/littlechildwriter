@@ -55,7 +55,7 @@
               background-color="white"
               :value="post.rating"
             />
-            <p class="my-5" v-text="post.content" />
+            <div class="my-5" v-html="post.content" />
             <v-chip-group class="my-5" column>
               <v-chip label>
                 <v-icon left> mdi-eye </v-icon>
@@ -127,7 +127,7 @@
       :uid="this.post.uid"
     />
 
-    <br /><br /><br /><br /><br /><br /><br /><br />
+    <br /><br /><br /><br /><br /><br />
 
     <div class="text-center">
       <v-progress-circular v-if="loading" indeterminate color="primary" large />
@@ -149,7 +149,7 @@
       </v-row>
     </template>
 
-    <br /><br /><br /><br />
+    <br /><br /><br />
   </div>
 </template>
 
@@ -215,7 +215,7 @@ export default {
         await fetch(
           `https://www.googleapis.com/books/v1/volumes?q=subject:${cat.join(
             ','
-          )}&maxResults=${n}&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`
+          )}&maxResults=${n}`
         )
           .then(res => res.json())
           .then(data => {
@@ -254,12 +254,10 @@ export default {
       let fetched = ''
 
       await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}&key=AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4`
+        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
       )
         .then(res => res.json())
-        .then(res => {
-          fetched = res.items[0].id
-        })
+        .then(res => (fetched = res.items[0].id))
 
       this.fetchedBookID = fetched
     },
