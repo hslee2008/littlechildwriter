@@ -109,7 +109,6 @@
 
 <script>
 import { auth, db } from '@/plugins/firebase'
-import { userInfo } from 'os'
 
 export default {
   data() {
@@ -122,27 +121,22 @@ export default {
     }
   },
   mounted() {
-    auth.onAuthStateChanged(u => {
-      if (u)
-        db.ref(`/users/${this.userInfo.uid}`)
-          .once('value')
-          .then(snapshot => {
-            this.userDB = snapshot.val()
-          })
+    auth.onAuthStateChanged(() => {
+      db.ref(`/users/${this.userInfo.uid}`)
+        .once('value')
+        .then(s => (this.userDB = s.val()))
     })
   },
   created() {
-    auth.onAuthStateChanged(
-      u =>
-        u &&
-        db
-          .ref('/contents/')
-          .on(
-            'child_added',
-            async s =>
-              data.uid === this.userInfo.uid &&
-              this.project.unshift(await s.val())
-          )
+    auth.onAuthStateChanged(() =>
+      db
+        .ref('/contents/')
+        .on(
+          'child_added',
+          async s =>
+            data.uid === this.userInfo.uid &&
+            this.project.unshift(await s.val())
+        )
     )
   },
   methods: {
@@ -157,13 +151,14 @@ export default {
           displayName,
           photoURL
         })
-        .then(() => {
+        .then(() =>
           db.ref(`/users/${uid}`).update({
             displayName,
             photoURL,
             bio
           })
-        })
+        )
+        .catch(e => this.catchError(e.message))
     },
     deleteAccount() {
       auth.currentUser.delete().then(() => {

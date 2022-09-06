@@ -8,9 +8,9 @@
       <div class="d-flex align-center">
         <div>
           <v-card-title v-text="targetUser.displayName" />
-          <v-card-subtitle class="grey--text"
-            >구독자 {{ subCount }}명</v-card-subtitle
-          >
+          <v-card-subtitle class="grey--text">
+            구독자 {{ subCount }}명
+          </v-card-subtitle>
         </div>
       </div>
 

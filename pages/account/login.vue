@@ -11,50 +11,36 @@
 
       <v-divider class="my-5" />
 
-      <v-form v-model="valid">
-        <v-text-field
-          v-model="email"
-          label="이메일"
-          outlined
-          required
-          clearable
-          validate-on-blur
-          :rules="[
-            v => v || 'E-mail is required',
-            v => /.+@.+/.test(v) || 'E-mail must be valid'
-          ]"
-          prepend-inner-icon="mdi-email"
-          @keyup.enter="onSubmit"
-        />
+      <v-text-field
+        v-model="email"
+        label="이메일"
+        outlined
+        required
+        clearable
+        prepend-inner-icon="mdi-email"
+        @keyup.enter="onSubmit"
+      />
 
-        <v-text-field
-          v-model="password"
-          label="암호"
-          outlined
-          required
-          clearable
-          validate-on-blur
-          :rules="[
-            v => v || 'Password is required',
-            v => v.length > 6 || 'Password must be more than 6 characters'
-          ]"
-          prepend-inner-icon="mdi-key"
-          @keyup.enter="onSubmit"
-        />
+      <v-text-field
+        v-model="password"
+        label="암호"
+        outlined
+        required
+        clearable
+        prepend-inner-icon="mdi-key"
+        @keyup.enter="onSubmit"
+      />
 
-        <v-divider class="my-5" />
+      <v-divider class="my-5" />
 
-        <div class="d-flex justify-center g-10">
-          <v-btn color="primary" @click="onSubmit">
-            <v-icon left> mdi-account </v-icon>로그인
-          </v-btn>
-          <v-btn color="success" outlined ripple @click="google">
-            <v-icon left> mdi-google </v-icon> Google
-          </v-btn>
-        </div>
-      </v-form>
-
-      <div v-if="error" class="error" v-text="error.message" />
+      <div class="d-flex justify-center g-10">
+        <v-btn color="primary" @click="onSubmit">
+          <v-icon left> mdi-account </v-icon>로그인
+        </v-btn>
+        <v-btn color="success" outlined ripple @click="google">
+          <v-icon left> mdi-google </v-icon> Google
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -66,29 +52,23 @@ export default {
   data() {
     return {
       email: '',
-      password: '',
-      error: {
-        message: ''
-      },
-      valid: false
+      password: ''
     }
   },
   methods: {
     onSubmit() {
-      this.valid
-        ? auth
-            .signInWithEmailAndPassword(this.email, this.password)
-            .then(() => this.$router.push('/'))
-            .catch(e => (this.error = e))
-        : (this.error.message = '잘못된 정보입니다.')
+      auth
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(() => this.$router.push('/account'))
+        .catch(e => this.checkError(e.message))
     },
     google() {
+      const { email, displayName, photoURL, uid } = this.userInfo
+
       auth
         .signInWithPopup(new login.GoogleAuthProvider())
-        .then(() => this.$router.push('/'))
-        .catch(e => (this.error = e))
-
-      const { email, displayName, photoURL, uid } = this.userInfo
+        .then(() => this.$router.push('/account'))
+        .catch(e => this.checkError(e.message))
 
       db.ref(`users/${uid}`).update({
         email,

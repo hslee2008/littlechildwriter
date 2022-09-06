@@ -2,7 +2,6 @@
   <div>
     <div class="d-none">
       <img ref="isbn" src="" />
-      <v-file-input ref="file" accept="image/*" @change="uploadImg($event)" />
     </div>
 
     <v-dialog v-model="isbn.vid" width="90%" height="90%">
@@ -15,6 +14,44 @@
           <v-btn color="error" @click="isbn.vid = false">
             <v-icon left> mdi-close-outline </v-icon>취소
           </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="isbn.upload" width="500">
+      <v-card>
+        <v-card-title> 책 사진 업로드 </v-card-title>
+
+        <br />
+
+        <v-card-text>
+          <v-img v-if="post.image" :src="post.image" class="rounded-lg" />
+
+          <v-tabs>
+            <v-tab> 기기에서 업로드 </v-tab>
+            <v-tab> URL로 업로드 </v-tab>
+
+            <v-tab-item>
+              <v-file-input
+                accept="image/*"
+                @change="uplo선택하세요($event)"
+                label="책 사진을 컴퓨터에서 선택하세요"
+              />
+            </v-tab-item>
+
+            <v-tab-item>
+              <v-text-field
+                v-model="post.image"
+                label="책 사진의 URL을 입력하세요"
+                prepend-icon="mdi-link"
+              />
+            </v-tab-item>
+          </v-tabs>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="isbn.upload = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -232,7 +269,7 @@
         </template>
 
         <v-list>
-          <v-list-item @click="$refs.file.$refs.input.click()">
+          <v-list-item @click="isbn.upload = true">
             <v-icon left> mdi-upload </v-icon> 책 사진 업로드
           </v-list-item>
           <v-list-item v-if="$vuetify.breakpoint.mobile" @click="showCamera">
@@ -292,6 +329,7 @@ export default {
         input: false,
         find: false,
         audio: false,
+        upload: false,
         audioType: ''
       },
 

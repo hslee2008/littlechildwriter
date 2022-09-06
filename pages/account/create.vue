@@ -2,9 +2,12 @@
   <div class="create">
     <h1>계정 만들기</h1>
     <p>계정이 있으면 <NuxtLink to="/account/login"> 로그인 </NuxtLink>하기</p>
+
     <v-divider />
+
     <br />
-    <v-form v-model="valid">
+
+    <v-form>
       <v-text-field v-model="username" label="이름" required />
       <v-text-field
         v-model="email"
@@ -13,7 +16,6 @@
         required
         outlined
         clearable
-        validate-on-blur
         prepend-inner-icon="mdi-email"
       />
       <v-text-field
@@ -23,13 +25,12 @@
         required
         outlined
         clearable
-        validate-on-blur
         prepend-inner-icon="mdi-key"
       />
+
       <v-btn color="primary" @click="makeAccount">
         <v-icon left> mdi-account </v-icon> 게정 만들기
       </v-btn>
-      <div v-if="error" class="error" v-text="error.message" />
     </v-form>
   </div>
 </template>
@@ -42,34 +43,31 @@ export default {
     return {
       email: '',
       password: '',
-      username: '',
-      valid: false,
-      error: ''
+      username: ''
     }
   },
   methods: {
     makeAccount() {
-      this.valid &&
-        auth
-          .createUserWithEmailAndPassword(this.email, this.password)
-          .then(() => {
-            db.ref(`/users/${auth.currentUser.uid}`).set({
-              username: this.username,
-              photoURL: '',
-              libris: 0,
-              bio: `새롭게 계정 만든 ${this.username}입니다. (바꾸고 깊다면 편집 버튼을 누르세요.)`,
-              subscribe: [],
-              subscriber: []
-            })
-
-            this.$router.push('/account')
-
-            this.userInfo.uid = auth.currentUser.uid
-            this.userInfo.username = this.username
-            this.userInfo.photoURL = ''
-            this.userInfo.libris = 0
+      auth
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(() => {
+          db.ref(`/users/${auth.currentUser.uid}`).set({
+            username: this.username,
+            photoURL: '',
+            libris: 0,
+            bio: `새롭게 계정 만든 ${this.username}입니다. (바꾸고 깊다면 편집 버튼을 누르세요.)`,
+            subscribe: [],
+            subscriber: []
           })
-          .catch(e => (this.error = e.message))
+
+          this.$router.push('/account')
+
+          this.userInfo.uid = auth.currentUser.uid
+          this.userInfo.username = this.username
+          this.userInfo.photoURL = ''
+          this.userInfo.libris = 0
+        })
+        .catch(e => this.checkError(e.message))
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-tabs v-model="tab">
+  <v-tabs v-model="tab" show-arrows center-active grow class="transparent">
     <v-tab>홈</v-tab>
     <v-tab>멤버</v-tab>
     <v-tab>소통 공간</v-tab>
@@ -69,17 +69,13 @@ export default {
     }
   },
   async created() {
-    await db.ref(`teams/${this.name}`).once('value', snapshot => {
-      this.team = snapshot.val()
-    })
+    await db.ref(`teams/${this.name}`).once('value', s => (this.team = s.val()))
 
-    db.ref(`contents/`).once('value', snapshot => {
-      for (let key in snapshot.val()) {
-        for (let i in this.team.members) {
-          this.team.members[i].uid === snapshot.val()[key].uid &&
-            this.book.push(snapshot.val()[key])
-        }
-      }
+    db.ref(`contents/`).once('value', s => {
+      for (let key in s.val())
+        for (let i in this.team.members)
+          this.team.members[i].uid === s.val()[key].uid &&
+            this.book.push(s.val()[key])
     })
   }
 }
