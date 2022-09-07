@@ -30,7 +30,8 @@ html {
 
 .page-enter-active,
 .page-leave-active {
-  transition: opacity 0.314s;
+  transition-property: opacity, left;
+  transition-duration: 0.5s, 0.5s;
 }
 .page-enter,
 .page-leave-to {

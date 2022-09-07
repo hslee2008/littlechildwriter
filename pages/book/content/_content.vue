@@ -24,12 +24,8 @@
 
     <v-card class="my-3 transparent">
       <div class="cardy">
-        <div class="text-center ma-auto">
-          <v-img
-            :src="post.image"
-            width="200"
-            class="ma-auto ml-5 my-5 rounded-lg"
-          >
+        <div class="ma-auto">
+          <v-img :src="post.image" width="200" class="ml-5 my-5 rounded-lg">
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey lighten-5" />
@@ -38,7 +34,7 @@
           </v-img>
         </div>
 
-        <div class="ma-auto pa-1">
+        <div class="ma-auto">
           <v-card-title class="h1 primary--text" v-text="post.title" />
 
           <v-card-subtitle>
@@ -95,9 +91,9 @@
       <v-btn text @click="loadIframe">
         <v-icon left> mdi-file-find </v-icon> 미리보기
       </v-btn>
-      <v-dialog width="700">
+      <v-dialog width="700" v-if="post.categories">
         <template #activator="{ on, attrs }">
-          <v-btn text v-bind="attrs" v-on="on" v-if="post.categories">
+          <v-btn text v-bind="attrs" v-on="on">
             <v-icon left> mdi-shape </v-icon> 카테고리
           </v-btn>
         </template>
@@ -116,6 +112,53 @@
             >
               #{{ tag }}
             </v-chip>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog width="700" v-if="post.isbn">
+        <template #activator="{ on, attrs }">
+          <v-btn text v-bind="attrs" v-on="on">
+            <v-icon left> mdi-book-information-variant </v-icon> 정보
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-text>
+            <v-card-title>
+              {{ post.title }} ({{ otherInfo.volumeInfo?.publishedDate }})
+            </v-card-title>
+            <v-card-subtitle
+              v-text="otherInfo.volumeInfo?.authors.join(', ')"
+            />
+
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Categories</th>
+                    <th class="text-left">Information</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>ISBN 13</td>
+                    <td>{{ post.isbn }}</td>
+                  </tr>
+                  <tr>
+                    <td>출판사</td>
+                    <td>{{ otherInfo.volumeInfo.publisher }}</td>
+                  </tr>
+                  <tr>
+                    <td>평균 별점 (구글)</td>
+                    <td>{{ otherInfo.volumeInfo.averageRating }}</td>
+                  </tr>
+                  <tr>
+                    <td>Google Books ID</td>
+                    <td>{{ otherInfo.id }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -179,7 +222,8 @@ export default {
 
       fetchedBookID: '',
       loading: false,
-      suggested: []
+      suggested: [],
+      otherInfo: {}
     }
   },
   async created() {
@@ -273,6 +317,14 @@ export default {
         .then(r => r.val())
 
       post !== null && Object.keys(post).length !== 1 && (this.post = post)
+
+      if (post.isbn) {
+        await fetch(
+          `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
+        )
+          .then(res => res.json())
+          .then(res => (this.otherInfo = res.items[0]))
+      }
     },
     growView() {
       db.ref(`contents/${this.time}/views`).transaction(view => view + 1)

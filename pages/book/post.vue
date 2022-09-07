@@ -4,20 +4,6 @@
       <img ref="isbn" src="" />
     </div>
 
-    <v-dialog v-model="isbn.vid" width="90%" height="90%">
-      <v-card v-if="isbn.vid" height="100%" width="100%">
-        <div id="container">
-          <video id="videoElement" ref="video" autoplay="true" width="100%" />
-        </div>
-        <v-card-actions>
-          <v-btn @click="takeISBNVideo"> ISBN 바코드 찍기 </v-btn>
-          <v-btn color="error" @click="isbn.vid = false">
-            <v-icon left> mdi-close-outline </v-icon>취소
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <v-dialog v-model="isbn.upload" width="500">
       <v-card>
         <v-card-title> 책 사진 업로드 </v-card-title>
@@ -31,15 +17,17 @@
             <v-tab> 기기에서 업로드 </v-tab>
             <v-tab> URL로 업로드 </v-tab>
 
-            <v-tab-item>
+            <v-tab-item class="pt-3">
               <v-file-input
                 accept="image/*"
-                @change="uplo선택하세요($event)"
-                label="책 사진을 컴퓨터에서 선택하세요"
+                @change="uploadImg($event)"
+                outlined
+                dense
+                label="책 사진을 선택하세요"
               />
             </v-tab-item>
 
-            <v-tab-item>
+            <v-tab-item class="pt-3">
               <v-text-field
                 v-model="post.image"
                 label="책 사진의 URL을 입력하세요"
@@ -56,27 +44,49 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="isbn.pic" width="500">
+    <v-dialog v-model="isbn.barcode" width="500">
       <v-card>
         <v-card-title> IBSN 사진 </v-card-title>
 
         <br />
 
         <v-card-text>
-          <v-file-input
-            type="file"
-            accept="image/*"
-            label="ISBN 사진"
-            color="grey"
-            outlined
-            dense
-            @change="uploadFile($event)"
-          />
+          <v-tabs>
+            <v-tab> 이미지로 </v-tab>
+            <v-tab> 카메라로 </v-tab>
+
+            <v-tab-item class="pt-3">
+              <v-file-input
+                type="file"
+                accept="image/*"
+                label="ISBN 사진"
+                color="grey"
+                outlined
+                dense
+                @change="uploadFile($event)"
+              />
+            </v-tab-item>
+
+            <v-tab-item class="pt-3">
+              <div id="container">
+                <video
+                  id="videoElement"
+                  ref="video"
+                  autoplay="true"
+                  width="100%"
+                />
+              </div>
+              <v-card-actions>
+                <v-btn @click="showCamera">시작</v-btn>
+                <v-btn @click="takeISBNVideo"> ISBN 바코드 찍기 </v-btn>
+              </v-card-actions>
+            </v-tab-item>
+          </v-tabs>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer />
-          <v-btn text @click="isbn.pic = false"> 취소 </v-btn>
+          <v-btn text @click="isbn.barcode = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -99,7 +109,7 @@
         <v-card-actions>
           <v-btn text @click="voiceType">시작</v-btn>
           <v-spacer />
-          <v-btn text @click="isbn.pic = false" color="red"> 취소 </v-btn>
+          <v-btn text @click="isbn.barcode = false" color="red"> 취소 </v-btn>
           <v-btn text @click="saveAudio" color="primary"> 확인 </v-btn>
         </v-card-actions>
       </v-card>
@@ -272,14 +282,11 @@
           <v-list-item @click="isbn.upload = true">
             <v-icon left> mdi-upload </v-icon> 책 사진 업로드
           </v-list-item>
-          <v-list-item v-if="$vuetify.breakpoint.mobile" @click="showCamera">
-            <v-icon left> mdi-barcode-scan </v-icon> 카메라로 ISBN 촬영
-          </v-list-item>
           <v-list-item
             v-if="$vuetify.breakpoint.mobile"
-            @click="isbn.pic = true"
+            @click="isbn.barcode = true"
           >
-            <v-icon left> mdi-barcode </v-icon> 사진으로 ISBN 촬영
+            <v-icon left> mdi-barcode-scan </v-icon> ISBN 촬영
           </v-list-item>
           <v-list-item @click="isbn.input = true">
             <v-icon left> mdi-form-textbox </v-icon> ISBN 입력
@@ -325,7 +332,7 @@ export default {
 
       isbn: {
         vid: false,
-        pic: false,
+        barcode: false,
         input: false,
         find: false,
         audio: false,
@@ -366,8 +373,6 @@ export default {
       this.loading = false
     },
     showCamera() {
-      this.isbn.vid = true
-
       navigator.mediaDevices
         .getUserMedia({
           video: {
@@ -380,17 +385,19 @@ export default {
         .catch(err => this.checkError(err.message))
     },
     takeISBNVideo() {
-      new BarcodeDetector({
-        bc_f: this.bc_f
-      })
-        .detect(this.$refs.video)
-        .then(res => res[0].rawValue)
-        .then(a => {
-          this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-          this.isbn.vid = false
-          this.fetchi()
+      if ('BarcodeDetector' in window)
+        new BarcodeDetector({
+          bc_f: this.bc_f
         })
-        .catch(err => this.checkError(err.message))
+          .detect(this.$refs.video)
+          .then(res => res[0].rawValue)
+          .then(a => {
+            this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
+            this.isbn.vid = false
+            this.fetchi()
+          })
+          .catch(err => this.checkError(err.message))
+      else this.checkError('BarcodeDetector is not supported')
     },
     uploadFile(file) {
       const reader = new FileReader()
@@ -410,10 +417,11 @@ export default {
                 .then(res => res[0].rawValue)
                 .then(a => {
                   this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-                  this.isbn.pic = false
+                  this.isbn.barcode = false
                   this.fetchi()
                 })
                 .catch(err => this.checkError(err.message))
+            else this.checkError('BarcodeDetector is not supported')
           }
         },
         false
