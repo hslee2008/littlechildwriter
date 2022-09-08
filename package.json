@@ -19,7 +19,8 @@
     "vue": "2.7.10",
     "vue-server-renderer": "latest",
     "vue-toastification": "^1.7.14",
-    "vuetify": "latest"
+    "vuetify": "latest",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "latest",

@@ -91,6 +91,34 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="isbn.aladdin" width="500">
+      <v-card>
+        <v-card-title> 알라딘 책 검색 </v-card-title>
+
+        <br />
+
+        <v-card-text>
+          <v-tabs>
+            <v-tab> 검색 </v-tab>
+
+            <v-tab-item class="pt-3">
+              <v-text-field
+                v-model="isbn.title"
+                label="책 제목을 입력하세요"
+                prepend-icon="mdi-magnify"
+              />
+              <v-btn @click="searchAladdin"> 검색 </v-btn>
+            </v-tab-item>
+          </v-tabs>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="isbn.aladdin = false"> 취소 </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="isbn.audio" width="500">
       <v-card>
         <v-card-title> 보이스 타이핑 </v-card-title>
@@ -291,6 +319,9 @@
           <v-list-item @click="isbn.input = true">
             <v-icon left> mdi-form-textbox </v-icon> ISBN 입력
           </v-list-item>
+          <v-list-item @click="isbn.aladdin = true">
+            <v-icon left> mdi-oil-lamp </v-icon> 알라딘 책 검색
+          </v-list-item>
           <v-list-item @click="isbn.find = true">
             <v-icon left> mdi-book-search </v-icon> 책 찾기
           </v-list-item>
@@ -331,12 +362,12 @@ export default {
       },
 
       isbn: {
-        vid: false,
         barcode: false,
         input: false,
         find: false,
         audio: false,
         upload: false,
+        aladdin: false,
         audioType: ''
       },
 
@@ -529,6 +560,14 @@ export default {
       this.isbn.audio = false
       this.post.content = this.typed
       this.typed = ''
+    },
+    async searchAladdin() {
+      await fetch(
+        `https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=ttbnightwalkerpn1126001&query=%EB%82%B4%EA%B0%80%20%EB%AA%A8%EB%A5%B4%EB%8A%94%20%EC%82%AC%EC%9D%B4%EC%97%90`,
+        {
+          mode: 'no-cors'
+        }
+      ).then(res => console.log(res))
     }
   }
 }
