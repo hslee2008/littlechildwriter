@@ -1,9 +1,5 @@
 <template>
   <div>
-    <div class="d-none">
-      <img ref="isbn" src="" />
-    </div>
-
     <v-dialog v-model="isbn.upload" width="500">
       <v-card>
         <v-card-title> 책 사진 업로드 </v-card-title>
@@ -11,7 +7,12 @@
         <br />
 
         <v-card-text>
-          <v-img v-if="post.image" :src="post.image" class="rounded-lg" />
+          <v-img
+            v-if="post.image"
+            ref="isbn"
+            :src="post.image"
+            class="rounded-lg"
+          />
 
           <v-tabs>
             <v-tab> 기기에서 업로드 </v-tab>
@@ -100,10 +101,10 @@
         <v-card-text>
           <v-select
             v-model="isbn.audioType"
-            :items="['ko-KR', 'en-US']"
+            :items="[...navigator.languages, 'en-US', 'ko-KR']"
             label="보이스 타이핑 언어"
           />
-          <v-textarea v-model="typed" />
+          <v-textarea v-model="typed" clearable counter />
         </v-card-text>
 
         <v-card-actions>
@@ -331,7 +332,6 @@ export default {
       },
 
       isbn: {
-        vid: false,
         barcode: false,
         input: false,
         find: false,
@@ -344,7 +344,8 @@ export default {
       title: '',
       searched: [],
       bc_f: ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a'],
-      typed: ''
+      typed: '',
+      shouldUploadImage: false
     }
   },
   methods: {
@@ -485,23 +486,41 @@ export default {
       )
         .then(res => res.json())
         .then(async res => {
-          const {
-            title,
-            imageLinks: { thumbnail: image },
-            authors: author,
-            pageCount
-          } = res.items[0].volumeInfo
+          if (res.items[0].volumeInfo.imageLinks) {
+            const {
+              title,
+              imageLinks: { thumbnail: image },
+              authors: author,
+              pageCount
+            } = res.items[0].volumeInfo
 
-          this.post = {
-            ...this.post,
-            title,
-            image,
-            pageCount,
-            author,
-            categories: await fetch(res.items[0].selfLink)
-              .then(cg => cg.json())
-              .then(cg => cg.volumeInfo.categories)
-              .catch(err => this.checkError(err.message))
+            this.post = {
+              ...this.post,
+              title,
+              image,
+              pageCount,
+              author,
+              categories: await fetch(res.items[0].selfLink)
+                .then(cg => cg.json())
+                .then(cg => cg.volumeInfo.categories)
+                .catch(err => this.checkError(err.message))
+            }
+          } else {
+            const {
+              title,
+              authors: author,
+              pageCount
+            } = res.items[0].volumeInfo
+
+            this.post = {
+              ...this.post,
+              title,
+              pageCount,
+              author,
+              image:
+                'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif',
+              categories: ['Juvenile Fiction / General']
+            }
           }
 
           this.isbn.input = false

@@ -125,7 +125,7 @@
         <v-card>
           <v-card-text>
             <v-card-title>
-              {{ post.title }} ({{ otherInfo.volumeInfo?.publishedDate }})
+              {{ post.title }}
             </v-card-title>
             <v-card-subtitle
               v-text="otherInfo.volumeInfo?.authors.join(', ')"
@@ -145,16 +145,20 @@
                     <td>{{ post.isbn }}</td>
                   </tr>
                   <tr>
+                    <td>출판된 날짜</td>
+                    <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
+                  </tr>
+                  <tr>
                     <td>출판사</td>
                     <td>{{ otherInfo.volumeInfo.publisher }}</td>
                   </tr>
                   <tr>
-                    <td>평균 별점 (구글)</td>
-                    <td>{{ otherInfo.volumeInfo.averageRating }}</td>
-                  </tr>
-                  <tr>
                     <td>Google Books ID</td>
                     <td>{{ otherInfo.id }}</td>
+                  </tr>
+                  <tr>
+                    <td>평균 별점 (구글)</td>
+                    <td>{{ otherInfo.volumeInfo.averageRating }}</td>
                   </tr>
                 </tbody>
               </template>

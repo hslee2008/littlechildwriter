@@ -1,6 +1,8 @@
 import { auth, db } from '@/plugins/firebase'
 import Vue from 'vue'
 
+Vue.prototype.navigator = navigator
+
 Vue.mixin({
   data: () => ({
     userInfo: {
