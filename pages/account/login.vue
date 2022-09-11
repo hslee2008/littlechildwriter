@@ -6,7 +6,7 @@
     <div>
       <h1>로그인</h1>
       <p>
-        계정이 없으면 <NuxtLink to="/account/create"> 계정 만들기 </NuxtLink>
+        계정이 없으면 <NLink to="/account/create"> 계정 만들기 </NLink>
       </p>
 
       <v-divider class="my-5" />
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { db, auth, login } from '@/plugins/firebase'
+import { auth, db, login } from '@/plugins/firebase'
 
 export default {
   data() {

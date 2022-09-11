@@ -52,11 +52,11 @@
         @click="bookmark = !bookmark"
       />
 
-      <NuxtLink to="/">
+      <NLink to="/">
         <v-avatar size="30">
           <v-img src="icon.png" />
         </v-avatar>
-      </NuxtLink>
+      </NLink>
 
       <v-spacer />
 

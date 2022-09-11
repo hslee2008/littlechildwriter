@@ -4,9 +4,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
-    "generate": "nuxt generate --modern=server",
-    "analyze": "nuxt build --modern=server --analyze",
+    "dev": "nuxi dev",
+    "generate": "nuxi generate --modern=server",
+    "analyze": "nuxi build --modern=server --analyze",
     "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn generate",
     "gui": "vue ui",
     "prettier": "prettier --write ."
@@ -15,13 +15,14 @@
     "@nuxtjs/pwa": "latest",
     "firebase": "^9.9.4",
     "leo-profanity": "^1.6.1",
-    "nuxt": "latest",
+    "nuxt-edge": "latest",
     "vue": "2.7.10",
     "vue-server-renderer": "latest",
     "vue-toastification": "^1.7.14",
     "vuetify": "latest"
   },
   "devDependencies": {
+    "@nuxt/bridge": "npm:@nuxt/bridge-edge",
     "@nuxtjs/vuetify": "latest",
     "firebase-admin": "latest"
   }

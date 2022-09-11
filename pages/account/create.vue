@@ -1,7 +1,7 @@
 <template>
   <div class="create">
     <h1>계정 만들기</h1>
-    <p>계정이 있으면 <NuxtLink to="/account/login"> 로그인 </NuxtLink>하기</p>
+    <p>계정이 있으면 <NLink to="/account/login"> 로그인 </NLink>하기</p>
 
     <v-divider />
 

@@ -20,7 +20,7 @@
           <v-card-title class="primary--text" v-text="item.title" />
 
           <v-card-subtitle>
-            <NuxtLink :to="`/user/${item.uid}`" v-text="item.displayName" />
+            <NLink :to="`/user/${item.uid}`" v-text="item.displayName" />
           </v-card-subtitle>
 
           <v-card-text>

@@ -4,3 +4,8 @@ node_modules
 yarn-error.log
 static/sw.js
 .firebase
+.output
+*.log*
+.nitro
+.cache
+.env

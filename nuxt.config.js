@@ -1,6 +1,17 @@
-export default {
+import { defineNuxtConfig } from '@nuxt/bridge'
+
+export default defineNuxtConfig({
+  alias: {
+    tslib: 'tslib/tslib.es6.js'
+  },
+
   build: {
     /*analyze: true,*/
+  },
+
+  typescript: {
+    typeCheck: true,
+    strict: true
   },
 
   loading: {
@@ -187,4 +198,4 @@ export default {
     closeOnClick: true,
     maxToasts: 3
   }
-}
+})
