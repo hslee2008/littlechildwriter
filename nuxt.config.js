@@ -62,7 +62,7 @@ export default {
   },
 
   css: ['@/assets/css/global.css'],
-  plugins: ['~/plugins/firebase', '~/plugins/global', '~/plugins/error'],
+  plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/error'],
   components: true,
   buildModules: ['@nuxtjs/vuetify'],
   modules: ['@nuxtjs/pwa', 'vue-toastification/nuxt'],

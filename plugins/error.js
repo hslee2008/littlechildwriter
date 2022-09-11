@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { db } from './firebase'
 
 Vue.mixin({
   methods: {
@@ -15,11 +16,17 @@ Vue.mixin({
         case "Cannot read properties of undefined (reading '0')":
           this.$toast.error('책을 찾을 수 없습니다.')
           break
-        case "BarcodeDetector is not supported":
-          this.$toast.error( '바코드를 인식할 수 없습니다. 모바일에서 크롬을 사용해주세요.' )
+        case 'BarcodeDetector is not supported':
+          this.$toast.error(
+            '바코드를 인식할 수 없습니다. 모바일에서 크롬을 사용해주세요.'
+          )
           break
         default:
           this.$toast.error(`알 수 없는 에러: ${message}`)
+          db.ref(`/errors/${message}`).set({
+            message,
+            time: Date.now()
+          })
           break
       }
     }

@@ -14,13 +14,12 @@
   "dependencies": {
     "@nuxtjs/pwa": "latest",
     "firebase": "^9.9.4",
-    "leo-profanity": "latest",
+    "leo-profanity": "^1.6.1",
     "nuxt": "latest",
     "vue": "2.7.10",
     "vue-server-renderer": "latest",
     "vue-toastification": "^1.7.14",
-    "vuetify": "latest",
-    "xml-js": "^1.6.11"
+    "vuetify": "latest"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "latest",

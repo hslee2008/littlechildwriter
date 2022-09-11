@@ -37,7 +37,7 @@
 
       <v-tab-item>
         <LazyCommentComponent
-          :link="`/book/content/${time}`"
+          :link="`/team/about/${team.name}`"
           :dbr="`/teams/${this.name}/comments`"
           :nofield="userInfo.uid"
         />

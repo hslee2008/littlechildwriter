@@ -74,7 +74,17 @@
       >
         <template #activator="{ on, attrs }">
           <v-btn icon class="amber--text" v-bind="attrs" v-on="on">
-            <v-icon v-text="notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell'" />
+            <v-badge avatar bordered overlap>
+              <template v-slot:badge>
+                <v-avatar v-text="notif.length" />
+              </template>
+
+              <v-avatar size="40">
+                <v-icon
+                  v-text="notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell'"
+                />
+              </v-avatar>
+            </v-badge>
           </v-btn>
         </template>
 
@@ -155,6 +165,7 @@ export default {
     clearEverything() {
       db.ref(`/users/${this.userInfo.uid}/notification`).remove()
       this.notif = []
+      navigator.clearAppBadge()
     },
     load(link) {
       this.notifOverlay = false
@@ -174,6 +185,8 @@ export default {
           'child_added',
           async s => this.notif.push(await s.val())
         )
+
+        if (navigator.setAppBadge) navigator.setAppBadge(this.notif.length)
       })
     },
     deleteBookmark(time, i) {
@@ -188,3 +201,15 @@ export default {
   }
 }
 </script>
+
+<style>
+#pwainstall {
+  display: none;
+}
+
+@media (display-mode: browser) {
+  #pwainstall {
+    display: block;
+  }
+}
+</style>
