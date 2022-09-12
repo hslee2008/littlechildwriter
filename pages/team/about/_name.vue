@@ -38,7 +38,7 @@
       <v-tab-item>
         <LazyCommentComponent
           :link="`/team/about/${team.name}`"
-          :dbr="`/teams/${this.name}/comments`"
+          :dbr="`/teams/${name}/comments`"
           :nofield="userInfo.uid"
         />
       </v-tab-item>
@@ -51,10 +51,11 @@
   </v-tabs>
 </template>
 
-<script>
+<script lang="ts">
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   asyncData({ params }) {
     const name = params.name
     return {
@@ -64,8 +65,9 @@ export default {
   data() {
     return {
       tab: 0,
-      team: {},
-      book: []
+      name: '',
+      team: {} as any,
+      book: [] as any[]
     }
   },
   async created() {
@@ -78,5 +80,5 @@ export default {
             this.book.push(s.val()[key])
     })
   }
-}
+})
 </script>

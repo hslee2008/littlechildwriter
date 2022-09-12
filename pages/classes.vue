@@ -58,16 +58,6 @@
                   v-model="classInfo.image"
                   label="클래스 사진 URL"
                 />
-
-                <v-file-input
-                  type="file"
-                  accept="image/*"
-                  label="또는... 클래스 사진 업로드"
-                  color="grey"
-                  outlined
-                  dense
-                  @change="uploadFile($event)"
-                />
               </v-card-text>
 
               <v-card-actions>
@@ -89,7 +79,7 @@
           v-if="
             item.public ||
             item.uid === userInfo.uid ||
-            Object.values(item.users).filter(e => e.uid === userInfo.uid)
+            Object.values(item.users).filter((e) => e.uid === userInfo.uid)
               .length > 0
           "
           :key="item.creator + item.name"
@@ -115,9 +105,11 @@
 </template>
 
 <script>
+// todo to typescript
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       classes: [],
@@ -128,6 +120,8 @@ export default {
         image: '',
         creator: '',
         id: '',
+        uid: '',
+        photoURL: '',
         public: true,
         users: []
       },
@@ -160,10 +154,20 @@ export default {
         .child(uid + name)
         .set(this.classInfo)
 
-      this.classInfo = {}
+      this.classInfo = {
+        name: '',
+        description: '',
+        image: '',
+        creator: '',
+        id: '',
+        uid: '',
+        photoURL: '',
+        public: true,
+        users: []
+      }
       this.dialog = false
       this.steps = 1
     }
   }
-}
+})
 </script>

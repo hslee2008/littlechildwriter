@@ -3,7 +3,7 @@ import { db } from './firebase'
 
 Vue.mixin({
   methods: {
-    checkError(message) {
+    handleError(message) {
       console.log(`%c[LCW Error] ${message}`, 'color: red')
 
       switch (message.toString()) {

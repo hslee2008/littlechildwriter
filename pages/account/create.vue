@@ -8,7 +8,7 @@
     <br />
 
     <v-form>
-      <v-text-field v-model="username" label="이름" required />
+      <v-text-field v-model="displayName" label="이름" required />
       <v-text-field
         v-model="email"
         label="Email"
@@ -35,15 +35,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { auth, db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       email: '',
       password: '',
-      username: ''
+      displayName: ''
     }
   },
   methods: {
@@ -51,26 +52,26 @@ export default {
       auth
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(() => {
-          db.ref(`/users/${auth.currentUser.uid}`).set({
-            username: this.username,
+          db.ref(`/users/${auth.currentUser?.uid}`).set({
+            displayName: this.displayName,
             photoURL: '',
             libris: 0,
-            bio: `새롭게 계정 만든 ${this.username}입니다. (바꾸고 깊다면 편집 버튼을 누르세요.)`,
+            bio: `새롭게 계정 만든 ${this.displayName}입니다. (바꾸고 깊다면 편집 버튼을 누르세요.)`,
             subscribe: [],
             subscriber: []
           })
 
-          this.$router.push('/account')
+          this.$router.push('/account/account')
 
-          this.userInfo.uid = auth.currentUser.uid
-          this.userInfo.username = this.username
+          this.userInfo.uid = auth.currentUser?.uid ?? ''
+          this.userInfo.displayName = this.displayName
           this.userInfo.photoURL = ''
           this.userInfo.libris = 0
         })
-        .catch(e => this.checkError(e.message))
+        .catch(e => this.handleError(e.message))
     }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -11,7 +11,13 @@ export default defineNuxtConfig({
 
   typescript: {
     typeCheck: true,
-    strict: true
+    strict: true,
+    shim: false,
+    typeCheck: {
+      eslint: {
+        files: './**/*.{ts,js,vue}'
+      }
+    }
   },
 
   loading: {

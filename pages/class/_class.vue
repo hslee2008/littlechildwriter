@@ -12,111 +12,30 @@
 
         <br />
 
-        <v-card v-for="(category, title) in classInfo.contents" :key="title" class="transparent">
+        <v-card
+          v-for="(category, title) in classInfo.contents"
+          :key="title"
+          class="transparent"
+        >
           <v-card-title v-text="title" />
 
-          <v-card
-            v-for="(item, i) in category"
-            v-if="item.type === '책'"
-            :key="item.title"
-            class="d-flex mt-5"
-            :to="`/book/content/${item.time}`"
-          >
-            <v-icon color="orange" class="ml-4" size="40"> mdi-book </v-icon>
-            <div>
-              <v-card-title v-text="item.displayName" />
-              <v-card-subtitle v-text="item.title" />
-              <v-card-text v-text="new Date(item.time).toLocaleDateString()" />
-            </div>
-
-            <v-spacer />
-
-            <v-card-actions>
-              <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    cols="1"
-                    v-on="on"
-                    @click.stop.prevent=""
-                  >
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item @click="deleteContent(title, i)">
-                    <v-list-item-title>
-                      <v-icon left> mdi-trash-can </v-icon> 삭제
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-card-actions>
-          </v-card>
-          <v-card
-            v-else-if="item.type === '파일'"
-            :href="item.url"
-            class="d-flex mt-5"
-          >
-            <v-icon class="ml-4"> mdi-link-variant </v-icon>
-
-            <div>
-              <v-card-title>{{ item.file }}</v-card-title>
-              <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-            </div>
-
-            <v-spacer />
-
-            <v-card-actions>
-              <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    v-bind="attrs"
-                    cols="1"
-                    v-on="on"
-                    @click.stop.prevent=""
-                  >
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item @click="deleteContent(title, i)">
-                    <v-list-item-title>
-                      <v-icon left> mdi-trash-can </v-icon> 삭제
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-card-actions>
-          </v-card>
-          <v-card
-            v-else-if="item.type === '링크'"
-            :href="item.url"
-            class="d-flex mt-5"
-          >
-            <v-icon class="ml-4"> mdi-link </v-icon>
-
-            <div>
-              <v-card-title>{{ item.name }} 링크</v-card-title>
-              <v-card-subtitle>
-                <a :href="item.link" v-text="item.title" target="_blank" />
-              </v-card-subtitle>
-            </div>
-          </v-card>
-          <v-card v-else class="mt-5">
-            <div class="d-flex">
-              <v-avatar size="40" class="ml-3 mt-6">
-                <v-img :src="item.photoURL" class="rounded-lg" />
-              </v-avatar>
+          <div v-for="(item, i) in category" :key="item.title">
+            <v-card
+                v-if="item.type === '책'"
+              class="d-flex mt-5"
+              :to="`/book/content/${item.time}`"
+            >
+              <v-icon color="orange" class="ml-4" size="40"> mdi-book </v-icon>
               <div>
-                <v-card-title>{{ item.displayName }}의 공지사항</v-card-title>
-                <v-card-subtitle
+                <v-card-title v-text="item.displayName" />
+                <v-card-subtitle v-text="item.title" />
+                <v-card-text
                   v-text="new Date(item.time).toLocaleDateString()"
                 />
               </div>
+
               <v-spacer />
+
               <v-card-actions>
                 <v-menu v-if="userInfo.uid === item.uid" offset-y>
                   <template #activator="{ on, attrs }">
@@ -139,9 +58,96 @@
                   </v-list>
                 </v-menu>
               </v-card-actions>
-            </div>
-            <v-card-text v-text="item.content" />
-          </v-card>
+            </v-card>
+            <v-card
+              v-else-if="item.type === '파일'"
+              :href="item.url"
+              class="d-flex mt-5"
+            >
+              <v-icon class="ml-4"> mdi-link-variant </v-icon>
+
+              <div>
+                <v-card-title>{{ item.file }}</v-card-title>
+                <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+              </div>
+
+              <v-spacer />
+
+              <v-card-actions>
+                <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      v-bind="attrs"
+                      cols="1"
+                      v-on="on"
+                      @click.stop.prevent=""
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item @click="deleteContent(title, i)">
+                      <v-list-item-title>
+                        <v-icon left> mdi-trash-can </v-icon> 삭제
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-card-actions>
+            </v-card>
+            <v-card
+              v-else-if="item.type === '링크'"
+              :href="item.url"
+              class="d-flex mt-5"
+            >
+              <v-icon class="ml-4"> mdi-link </v-icon>
+
+              <div>
+                <v-card-title>{{ item.name }} 링크</v-card-title>
+                <v-card-subtitle>
+                  <a :href="item.link" v-text="item.title" target="_blank" />
+                </v-card-subtitle>
+              </div>
+            </v-card>
+            <v-card v-else class="mt-5">
+              <div class="d-flex">
+                <v-avatar size="40" class="ml-3 mt-6">
+                  <v-img :src="item.photoURL" class="rounded-lg" />
+                </v-avatar>
+                <div>
+                  <v-card-title>{{ item.displayName }}의 공지사항</v-card-title>
+                  <v-card-subtitle
+                    v-text="new Date(item.time).toLocaleDateString()"
+                  />
+                </div>
+                <v-spacer />
+                <v-card-actions>
+                  <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        icon
+                        v-bind="attrs"
+                        cols="1"
+                        v-on="on"
+                        @click.stop.prevent=""
+                      >
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item @click="deleteContent(title, i)">
+                        <v-list-item-title>
+                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-card-actions>
+              </div>
+              <v-card-text v-text="item.content" />
+            </v-card>
+          </div>
         </v-card>
       </v-tab-item>
 

@@ -49,12 +49,12 @@
         <v-tab-item>
           <v-list class="transparent">
             <v-list-item
-              v-for="item in Object.keys(subscription)"
+              v-for="item in subscription"
               :key="item"
               :to="`/user/${item}`"
             >
               <v-list-item-content>
-                <v-list-item-title v-text="subscription[item]" />
+                <v-list-item-title v-text="item" />
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -64,7 +64,7 @@
           <LazyCommentComponent
             :link="`/user/${uid}`"
             :dbr="`users/${uid}/chat`"
-            :uid="this.uid"
+            :uid="uid"
           />
         </v-tab-item>
 
@@ -108,10 +108,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   asyncData({ params }) {
     const uid = params.uid
     return { uid }
@@ -122,16 +123,19 @@ export default {
       tab: 0,
 
       targetUser: {
-        libris: '',
+        libris: 0,
         displayName: '',
         photoURL: '',
         bio: ''
       },
 
-      subscription: [],
+      subscription: {} as {
+        [key: string]: string
+      },
       subscribed: false,
       subCount: 0,
-      books: []
+      books: [] as any[],
+      uid: ''
     }
   },
   created() {
@@ -185,7 +189,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

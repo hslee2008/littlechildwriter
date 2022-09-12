@@ -92,26 +92,38 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
-      teams: []
+      teams: [] as any[]
     }
   },
   created() {
     this.getTeams()
   },
   methods: {
-    removeNotification(name, createdAt, uid, i) {
+    removeNotification(
+      name: string,
+      createdAt: string,
+      uid: string,
+      i: number
+    ) {
       db.ref(`teams/${name}/notifications/${createdAt}`).remove()
       db.ref(`teams/${name}/waiting/${uid}`).remove()
       delete this.teams[i].notifications[createdAt]
       this.$forceUpdate()
     },
-    async acceptNotification(name, createdAt, uid, displayName, i) {
+    async acceptNotification(
+      name: string,
+      createdAt: string,
+      uid: string,
+      displayName: string,
+      i: number
+    ) {
       const libris = await db
         .ref(`users/${uid}/libris`)
         .once('value')
@@ -134,5 +146,5 @@ export default {
       db.ref('teams').on('child_added', s => this.teams.push(s.val()))
     }
   }
-}
+})
 </script>

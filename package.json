@@ -9,21 +9,25 @@
     "analyze": "nuxi build --modern=server --analyze",
     "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn generate",
     "gui": "vue ui",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "lint": "eslint --ext .ts,.js,.vue ."
   },
   "dependencies": {
     "@nuxtjs/pwa": "latest",
+    "eslint-plugin-nuxt": "^4.0.0",
     "firebase": "^9.9.4",
     "leo-profanity": "^1.6.1",
     "nuxt-edge": "latest",
-    "vue": "2.7.10",
-    "vue-server-renderer": "latest",
     "vue-toastification": "^1.7.14",
     "vuetify": "latest"
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
+    "@nuxt/types": "^2.15.8",
+    "@nuxtjs/eslint-config-typescript": "^11.0.0",
     "@nuxtjs/vuetify": "latest",
-    "firebase-admin": "latest"
+    "eslint": "^8.23.1",
+    "firebase-admin": "latest",
+    "typescript": "^4.8.3"
   }
 }

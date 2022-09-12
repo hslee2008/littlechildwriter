@@ -26,10 +26,11 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
 import { auth, db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   asyncData({ params }) {
     const time = params.edit
     return {
@@ -48,7 +49,8 @@ export default {
         pageCount: 0,
         isbn: '',
         uid: ''
-      }
+      },
+      time: ''
     }
   },
   mounted() {
@@ -84,5 +86,5 @@ export default {
       this.post = (await db.ref(`/contents/${this.time}`).once('value')).val()
     }
   }
-}
+})
 </script>

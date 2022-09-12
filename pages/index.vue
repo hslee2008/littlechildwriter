@@ -85,15 +85,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
-      recent: [],
-      popular: [],
-      views: [],
+      recent: [] as string[],
+      popular: [] as string[],
+      views: [] as string[],
       tab: 0
     }
   },
@@ -112,7 +113,7 @@ export default {
       .limitToLast(4)
       .on('child_added', async s => this.views.unshift(await s.val()))
   }
-}
+})
 </script>
 
 <style scoped>

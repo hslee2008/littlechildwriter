@@ -61,22 +61,23 @@
   </v-data-iterator>
 </template>
 
-<script>
+<script lang="ts">
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
-      books: [],
+      books: [] as string[],
       sortBy: 'time',
-      search: '',
+      search: '' as string | (string | null)[],
       page: 1,
       itemsPerPage: 10,
       sortDesc: true
     }
   },
   computed: {
-    numberOfPages() {
+    numberOfPages(): number {
       return Math.ceil(this.books.length / this.itemsPerPage)
     }
   },
@@ -97,5 +98,5 @@ export default {
       window.scrollTo({ top: 0 })
     }
   }
-}
+})
 </script>

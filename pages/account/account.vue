@@ -9,7 +9,6 @@
           label="Name"
           placeholder="Name"
           validate-on-blur
-          value="name"
           prepend-inner-icon="mdi-account"
         />
 
@@ -23,7 +22,6 @@
           disabled
           solo
           validate-on-blur
-          value="userInfo.email"
           prepend-inner-icon="mdi-email"
         />
         <v-text-field
@@ -36,7 +34,6 @@
           solo
           validate-on-blur
           disabled
-          value="uid"
           prepend-inner-icon="mdi-account"
         />
       </v-card-text>
@@ -59,7 +56,6 @@
           dense
           solo
           validate-on-blur
-          value="photo"
           prepend-inner-icon="mdi-camera"
         />
 
@@ -107,14 +103,15 @@
   </v-form>
 </template>
 
-<script>
+<script lang="ts">
 import { auth, db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       valid: true,
-      project: [],
+      project: [] as any,
       userDB: {
         bio: ''
       }
@@ -133,9 +130,8 @@ export default {
         .ref('/contents/')
         .on(
           'child_added',
-          async s =>
-            data.uid === this.userInfo.uid &&
-            this.project.unshift(await s.val())
+          async (s: any) =>
+            s.uid === this.userInfo.uid && this.project.unshift(await s.val())
         )
     )
   },
@@ -147,7 +143,7 @@ export default {
       this.$router.push(`/user/${uid}`)
 
       auth.currentUser
-        .updateProfile({
+        ?.updateProfile({
           displayName,
           photoURL
         })
@@ -158,14 +154,14 @@ export default {
             bio
           })
         )
-        .catch(e => this.catchError(e.message))
+        .catch(e => this.handleError(e.message))
     },
     deleteAccount() {
-      auth.currentUser.delete().then(() => {
+      auth.currentUser?.delete().then(() => {
         db.ref(`/users/${this.userInfo.uid}`).remove()
         this.$router.push('/')
       })
     }
   }
-}
+})
 </script>

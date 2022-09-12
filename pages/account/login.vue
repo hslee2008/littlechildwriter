@@ -5,9 +5,7 @@
   >
     <div>
       <h1>로그인</h1>
-      <p>
-        계정이 없으면 <NLink to="/account/create"> 계정 만들기 </NLink>
-      </p>
+      <p>계정이 없으면 <NLink to="/account/create"> 계정 만들기 </NLink></p>
 
       <v-divider class="my-5" />
 
@@ -59,16 +57,16 @@ export default {
     onSubmit() {
       auth
         .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => this.$router.push('/account'))
-        .catch(e => this.checkError(e.message))
+        .then(() => this.$router.push('/account/account'))
+        .catch(e => this.handleError(e.message))
     },
     google() {
       const { email, displayName, photoURL, uid } = this.userInfo
 
       auth
         .signInWithPopup(new login.GoogleAuthProvider())
-        .then(() => this.$router.push('/account'))
-        .catch(e => this.checkError(e.message))
+        .then(() => this.$router.push('/account/account'))
+        .catch(e => this.handleError(e.message))
 
       db.ref(`users/${uid}`).update({
         email,

@@ -170,68 +170,71 @@
         </v-card-text>
 
         <v-list>
-          <v-list-item
+          <div
             v-for="item in searched"
-            v-if="
-              item.volumeInfo.industryIdentifiers && item.volumeInfo.imageLinks
-            "
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
-            @click="
-              fetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
-            "
           >
-            <v-img
-              :src="item.volumeInfo.imageLinks.thumbnail"
-              class="mr-4 ma-2 rounded-lg"
-              max-width="100"
-            />
-
-            <v-list-item-content>
-              <v-list-item-title
-                class="primary--text h1"
-                v-text="item.volumeInfo.title"
-              />
-              <v-list-item-subtitle v-text="item.volumeInfo.subtitle" />
-
-              <v-spacer />
-
-              <v-list-item-subtitle
-                v-text="
-                  `${
-                    item.volumeInfo.authors
-                      ? item.volumeInfo.authors[0]
-                      : 'unkown'
-                  } - ${
-                    item.volumeInfo.pageCount
-                      ? item.volumeInfo.pageCount
-                      : 'unkown'
-                  }`
-                "
+            <v-list-item
+              v-if="
+                item.volumeInfo.industryIdentifiers &&
+                item.volumeInfo.imageLinks
+              "
+              @click="
+                fetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
+              "
+            >
+              <v-img
+                :src="item.volumeInfo.imageLinks.thumbnail"
+                class="mr-4 ma-2 rounded-lg"
+                max-width="100"
               />
 
-              <br />
+              <v-list-item-content>
+                <v-list-item-title
+                  class="primary--text h1"
+                  v-text="item.volumeInfo.title"
+                />
+                <v-list-item-subtitle v-text="item.volumeInfo.subtitle" />
 
-              <v-list-item-subtitle v-if="item.volumeInfo.description">
-                {{ item.volumeInfo.description.substring(0, 200) }}...
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+                <v-spacer />
 
-          <v-list-item v-else>
-            <v-list-item-content>
-              <v-list-item-title
-                class="primary--text h1"
-                v-text="item.volumeInfo.title"
-              />
-              <v-list-item-subtitle v-text="item.volumeInfo.subtitle" />
+                <v-list-item-subtitle
+                  v-text="
+                    `${
+                      item.volumeInfo.authors
+                        ? item.volumeInfo.authors[0]
+                        : 'unkown'
+                    } - ${
+                      item.volumeInfo.pageCount
+                        ? item.volumeInfo.pageCount
+                        : 'unkown'
+                    }`
+                  "
+                />
 
-              <v-spacer />
+                <br />
 
-              <v-list-item-subtitle class="red--text">
-                이 책에 대한 정보가 부족해 선택할 수 없습니다.
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+                <v-list-item-subtitle v-if="item.volumeInfo.description">
+                  {{ item.volumeInfo.description.substring(0, 200) }}...
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-else>
+              <v-list-item-content>
+                <v-list-item-title
+                  class="primary--text h1"
+                  v-text="item.volumeInfo.title"
+                />
+                <v-list-item-subtitle v-text="item.volumeInfo.subtitle" />
+
+                <v-spacer />
+
+                <v-list-item-subtitle class="red--text">
+                  이 책에 대한 정보가 부족해 선택할 수 없습니다.
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </div>
         </v-list>
 
         <v-card-actions>
@@ -314,9 +317,11 @@
 </template>
 
 <script>
+// todo to typescript
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
 
-export default {
+export default Vue.extend({
   data() {
     return {
       post: {
@@ -327,6 +332,10 @@ export default {
         categories: [],
         rating: 5,
         content: '',
+        uid: '',
+        displayName: '',
+        views: 0,
+        author: '',
         time: Date.now(),
         isPublic: true
       },
@@ -342,7 +351,7 @@ export default {
 
       loading: false,
       title: '',
-      searched: [],
+      searched: {},
       bc_f: ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a'],
       typed: '',
       shouldUploadImage: false
@@ -361,15 +370,8 @@ export default {
         `https://www.googleapis.com/books/v1/volumes?q=intitle:${this.title}`
       )
         .then(res => res.json())
-        .then(
-          books =>
-            (this.searched = books.items?.sort(
-              (a, b) =>
-                (a.volumeInfo.imageLinks == undefined) -
-                (b.volumeInfo.imageLinks == undefined)
-            ))
-        )
-        .catch(err => this.checkError(err.message))
+        .then(books => (this.searched = books.items))
+        .catch(err => this.handleError(err.message))
 
       this.loading = false
     },
@@ -383,7 +385,7 @@ export default {
           }
         })
         .then(s => (this.$refs.video.srcObject = s))
-        .catch(err => this.checkError(err.message))
+        .catch(err => this.handleError(err.message))
     },
     takeISBNVideo() {
       if ('BarcodeDetector' in window)
@@ -394,11 +396,11 @@ export default {
           .then(res => res[0].rawValue)
           .then(a => {
             this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-            this.isbn.vid = false
+            this.isbn.barcode = false
             this.fetchi()
           })
-          .catch(err => this.checkError(err.message))
-      else this.checkError('BarcodeDetector is not supported')
+          .catch(err => this.handleError(err.message))
+      else this.handleError('BarcodeDetector is not supported')
     },
     uploadFile(file) {
       const reader = new FileReader()
@@ -408,7 +410,7 @@ export default {
         () => {
           this.$refs.isbn.src = reader.result
           const tempImage = new Image()
-          tempImage.src = reader.result
+          tempImage.src = reader.result || ''
           tempImage.onload = () => {
             if ('BarcodeDetector' in window)
               new BarcodeDetector({
@@ -421,8 +423,8 @@ export default {
                   this.isbn.barcode = false
                   this.fetchi()
                 })
-                .catch(err => this.checkError(err.message))
-            else this.checkError('BarcodeDetector is not supported')
+                .catch(err => this.handleError(err.message))
+            else this.handleError('BarcodeDetector is not supported')
           }
         },
         false
@@ -435,7 +437,7 @@ export default {
 
       reader.addEventListener(
         'load',
-        () => (this.post.image = reader.result),
+        () => (this.post.image = reader.result ?? ''),
         false
       )
 
@@ -475,7 +477,7 @@ export default {
         content: content.replaceAll('\n', '<br>')
       })
 
-      this.updateLibris(this.userInfo.uid, this.post.pageCount / 100)
+      this.updateLibris(this.userInfo.uid, parseInt(this.post.pageCount) / 100)
       this.$router.push(`/book/content/${time}`)
     },
     fetchi() {
@@ -503,7 +505,7 @@ export default {
               categories: await fetch(res.items[0].selfLink)
                 .then(cg => cg.json())
                 .then(cg => cg.volumeInfo.categories)
-                .catch(err => this.checkError(err.message))
+                .catch(err => this.handleError(err.message))
             }
           } else {
             const {
@@ -525,7 +527,7 @@ export default {
 
           this.isbn.input = false
         })
-        .catch(err => this.checkError(err.message))
+        .catch(err => this.handleError(err.message))
 
       this.loading = false
     },
@@ -542,7 +544,7 @@ export default {
         recognition.stop()
       }
 
-      recognition.onerror = e => this.checkError(e)
+      recognition.onerror = e => this.handleError(e.message)
     },
     saveAudio() {
       this.isbn.audio = false
@@ -550,5 +552,5 @@ export default {
       this.typed = ''
     }
   }
-}
+})
 </script>

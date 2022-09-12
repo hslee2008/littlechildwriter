@@ -14,10 +14,13 @@
   </v-card>
 </template>
 
-<script>
-import { db } from '@/plugins/firebase'
 
-export default {
+<script>
+// todo: to typescript
+import { db } from '@/plugins/firebase'
+import Vue from 'vue'
+
+export default Vue.extend({
   data() {
     return {
       teamName: '',
@@ -51,5 +54,5 @@ export default {
       this.$router.push(`/team/about/${this.teamName}`)
     }
   }
-}
+})
 </script>
