@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-indent -->
 <template>
   <div>
     <v-dialog v-model="isbn.upload" width="500">
@@ -21,10 +22,10 @@
             <v-tab-item class="pt-3">
               <v-file-input
                 accept="image/*"
-                @change="uploadImg($event)"
                 outlined
                 dense
                 label="책 사진을 선택하세요"
+                @change="uploadImg($event)"
               />
             </v-tab-item>
 
@@ -110,8 +111,8 @@
         <v-card-actions>
           <v-btn text @click="voiceType">시작</v-btn>
           <v-spacer />
-          <v-btn text @click="isbn.barcode = false" color="red"> 취소 </v-btn>
-          <v-btn text @click="saveAudio" color="primary"> 확인 </v-btn>
+          <v-btn text color="red" @click="isbn.barcode = false"> 취소 </v-btn>
+          <v-btn text color="primary" @click="saveAudio"> 확인 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -190,27 +191,28 @@
               />
 
               <v-list-item-content>
-                <v-list-item-title
-                  class="primary--text h1"
-                  v-text="item.volumeInfo.title"
-                />
-                <v-list-item-subtitle v-text="item.volumeInfo.subtitle" />
+                <v-list-item-title class="primary--text h1">
+                  {{ item.volumeInfo.title }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ item.volumeInfo.subtitle }}
+                </v-list-item-subtitle>
 
                 <v-spacer />
 
-                <v-list-item-subtitle
-                  v-text="
-                    `${
-                      item.volumeInfo.authors
-                        ? item.volumeInfo.authors[0]
-                        : 'unkown'
-                    } - ${
-                      item.volumeInfo.pageCount
-                        ? item.volumeInfo.pageCount
-                        : 'unkown'
-                    }`
-                  "
-                />
+                <v-list-item-subtitle>
+                  {{
+                    item.volumeInfo.authors
+                      ? item.volumeInfo.authors[0]
+                      : 'unkown'
+                  }}
+                  -
+                  {{
+                    item.volumeInfo.pageCount
+                      ? item.volumeInfo.pageCount
+                      : 'unkown'
+                  }}
+                </v-list-item-subtitle>
 
                 <br />
 
@@ -221,11 +223,12 @@
             </v-list-item>
             <v-list-item v-else>
               <v-list-item-content>
-                <v-list-item-title
-                  class="primary--text h1"
-                  v-text="item.volumeInfo.title"
-                />
-                <v-list-item-subtitle v-text="item.volumeInfo.subtitle" />
+                <v-list-item-title class="primary--text h1">
+                  {{ item.volumeInfo.title }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ item.volumeInfo.subtitle }}
+                </v-list-item-subtitle>
 
                 <v-spacer />
 
@@ -277,7 +280,7 @@
 
       <v-menu bottom>
         <template #activator="{ on, attrs }">
-          <v-btn v-bind="attrs" v-on="on" elevation="0">
+          <v-btn elevation="0" v-bind="attrs" v-on="on">
             책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
@@ -318,8 +321,8 @@
 
 <script>
 // todo to typescript
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   data() {
@@ -388,7 +391,7 @@ export default Vue.extend({
         .catch(err => this.handleError(err.message))
     },
     takeISBNVideo() {
-      if ('BarcodeDetector' in window)
+      if ('BarcodeDetector' in window) {
         new BarcodeDetector({
           bc_f: this.bc_f
         })
@@ -400,7 +403,9 @@ export default Vue.extend({
             this.fetchi()
           })
           .catch(err => this.handleError(err.message))
-      else this.handleError('BarcodeDetector is not supported')
+      } else {
+        this.handleError('BarcodeDetector is not supported')
+      }
     },
     uploadFile(file) {
       const reader = new FileReader()
@@ -412,7 +417,7 @@ export default Vue.extend({
           const tempImage = new Image()
           tempImage.src = reader.result || ''
           tempImage.onload = () => {
-            if ('BarcodeDetector' in window)
+            if ('BarcodeDetector' in window) {
               new BarcodeDetector({
                 bc_f: this.bc_f
               })
@@ -424,7 +429,9 @@ export default Vue.extend({
                   this.fetchi()
                 })
                 .catch(err => this.handleError(err.message))
-            else this.handleError('BarcodeDetector is not supported')
+            } else {
+              this.handleError('BarcodeDetector is not supported')
+            }
           }
         },
         false
@@ -532,6 +539,7 @@ export default Vue.extend({
       this.loading = false
     },
     voiceType() {
+      // eslint-disable-next-line new-cap
       const recognition = new webkitSpeechRecognition()
       recognition.lang = this.isbn.audioType
       recognition.start()

@@ -44,6 +44,7 @@
 </template>
 
 <script>
+// todo to typescript
 import { auth, db, login } from '@/plugins/firebase'
 
 export default {

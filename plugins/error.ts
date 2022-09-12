@@ -4,6 +4,7 @@ import { db } from './firebase'
 Vue.mixin({
   methods: {
     handleError(message) {
+      // eslint-disable-next-line no-console
       console.log(`%c[LCW Error] ${message}`, 'color: red')
 
       switch (message.toString()) {
@@ -23,10 +24,6 @@ Vue.mixin({
           break
         default:
           this.$toast.error(`알 수 없는 에러: ${message}`)
-          db.ref(`/errors/${message}`).set({
-            message,
-            time: Date.now()
-          })
           break
       }
     }

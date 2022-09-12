@@ -8,12 +8,12 @@
     <v-tabs-items v-model="tab" class="transparent">
       <v-tab-item>
         <v-card class="transparent">
-          <v-card-title class="primary--text" v-text="team.name" />
+          <v-card-title class="primary--text">{{ team.name }}</v-card-title>
           <v-card-subtitle>
             {{ new Date(team.createdAt).toLocaleDateString() }} ·
             {{ team.members.length }}명
           </v-card-subtitle>
-          <v-card-text v-text="team.description" />
+          <v-card-text>{{ team.description }}</v-card-text>
         </v-card>
       </v-tab-item>
 
@@ -27,7 +27,9 @@
                 :to="`/user/${member.uid}`"
               >
                 <v-list-item-content>
-                  <v-list-item-title v-text="member.displayName" />
+                  <v-list-item-title>
+                    {{ member.displayName }}
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list>
@@ -52,8 +54,8 @@
 </template>
 
 <script lang="ts">
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   asyncData({ params }) {
@@ -71,13 +73,17 @@ export default Vue.extend({
     }
   },
   async created() {
-    await db.ref(`teams/${this.name}`).once('value', s => (this.team = s.val()))
+    await db
+      .ref(`teams/${this.name}`)
+      .once('value', (s) => (this.team = s.val()))
 
-    db.ref(`contents/`).once('value', s => {
-      for (let key in s.val())
-        for (let i in this.team.members)
+    db.ref('contents/').once('value', (s) => {
+      for (const key in s.val()) {
+        for (const i in this.team.members) {
           this.team.members[i].uid === s.val()[key].uid &&
             this.book.push(s.val()[key])
+        }
+      }
     })
   }
 })

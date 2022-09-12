@@ -27,8 +27,8 @@
 </template>
 
 <script lang="ts">
-import { auth, db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { auth, db } from '@/plugins/firebase'
 
 export default Vue.extend({
   asyncData({ params }) {

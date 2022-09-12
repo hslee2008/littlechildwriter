@@ -14,11 +14,10 @@
   </v-card>
 </template>
 
-
 <script>
 // todo: to typescript
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   data() {
@@ -37,7 +36,7 @@ export default Vue.extend({
       const { uid, displayName } = this.userInfo
       db.ref(`users/${uid}/joined`).push(this.teamName)
 
-      if (this.teamName)
+      if (this.teamName) {
         db.ref(`teams/${this.teamName.trim()}`).set({
           name: this.teamName,
           description: this.teamDescription,
@@ -47,6 +46,7 @@ export default Vue.extend({
           points: libris,
           notifications: []
         })
+      }
 
       this.teamName = ''
       this.teamDescription = ''

@@ -14,7 +14,7 @@
             :to="`/team/about/${team.name}`"
           >
             <v-list-item-content>
-              <v-list-item-title v-text="team.name" />
+              <v-list-item-title>{{ team.name }}</v-list-item-title>
               <v-list-item-subtitle>
                 <v-icon>mdi-account-group</v-icon>
                 {{ team.members.length }}명
@@ -93,8 +93,8 @@
 </template>
 
 <script lang="ts">
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   data() {

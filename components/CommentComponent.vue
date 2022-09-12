@@ -42,7 +42,9 @@
               class="d-flex mr-5"
               :color="message.badWord ? 'red' : '#23262E'"
             >
-              <v-card-subtitle v-if="!message.edit" v-text="message.content" />
+              <v-card-subtitle v-if="!message.edit">
+                {{ message.content }}
+              </v-card-subtitle>
               <v-text-field
                 v-else
                 v-model="updatedcomment"
@@ -126,7 +128,11 @@
       </v-slide-x-transition>
     </v-timeline>
     <div v-else>
-      <v-card v-if="comments.length === 0 && !parent" class="text-center transparent" flat>
+      <v-card
+        v-if="comments.length === 0 && !parent"
+        class="text-center transparent"
+        flat
+      >
         <v-card-text>댓글이 없습니다.</v-card-text>
       </v-card>
     </div>
@@ -134,8 +140,8 @@
 </template>
 
 <script>
-import { db } from '@/plugins/firebase'
 import * as filter from 'leo-profanity'
+import { db } from '@/plugins/firebase'
 
 export default {
   props: {
@@ -244,7 +250,7 @@ export default {
 
         if (filter.check(this.comment)) {
           this.updateLibris(this.userInfo.uid, -5)
-          this.notify(this.uid, `나쁜 말을 사용했습니다. -5점`, this.link)
+          this.notify(this.uid, '나쁜 말을 사용했습니다. -5점', this.link)
         }
       }
     }

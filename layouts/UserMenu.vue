@@ -9,8 +9,8 @@
     </template>
 
     <v-card class="pa-3">
-      <v-card-title v-text="userInfo.displayName" />
-      <v-card-subtitle v-text="userInfo.email" />
+      <v-card-title>{{ userInfo.displayName }}</v-card-title>
+      <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
 
       <v-btn :to="`/user/${userInfo.uid}`" text> 프로필 </v-btn>
       <v-btn to="/account/account" text> 편집 </v-btn>

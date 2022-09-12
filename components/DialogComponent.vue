@@ -13,8 +13,8 @@
     </template>
 
     <v-card>
-      <v-card-title v-text="title" />
-      <v-card-text v-text="text" />
+      <v-card-title>{{ title }}</v-card-title>
+      <v-card-text>{{ text }}</v-card-text>
 
       <v-card-actions>
         <v-spacer />

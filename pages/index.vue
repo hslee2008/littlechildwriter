@@ -66,7 +66,7 @@
     <v-card class="mx-5 my-10 transparent">
       <v-card-text>
         <h2>명예의 전당</h2>
-        <LazyLibris :limit="true" />
+        <LazyLibrisUsers :limit="true" />
       </v-card-text>
 
       <v-card-actions>
@@ -79,15 +79,15 @@
 
     <v-card-title> 팀 명예의 전당 </v-card-title>
     <v-divider class="mx-5 mb-5" />
-    <Teams :noTitle="true" />
+    <TeamsView :no-title="true" />
 
     <br />
   </div>
 </template>
 
 <script lang="ts">
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   data() {

@@ -1,5 +1,5 @@
-import { auth, db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { auth, db } from '@/plugins/firebase'
 
 Vue.prototype.navigator = navigator
 
@@ -14,7 +14,7 @@ Vue.mixin({
     }
   }),
   created() {
-    auth.onAuthStateChanged(async u => {
+    auth.onAuthStateChanged(u => {
       if (u) {
         const { displayName, photoURL, uid, email } = u
 
@@ -32,7 +32,7 @@ Vue.mixin({
     updateLibris(uid, val) {
       db.ref(`users/${uid}/libris`).transaction(cv => cv + val)
       db.ref(`users/${uid}/joined`).once('value', async snapshot => {
-        Object.values(await snapshot.val()).forEach(async team => {
+        Object.values(await snapshot.val()).forEach(team => {
           db.ref(`teams/${team}/libris`).transaction(cv => cv + val)
         })
       })

@@ -7,7 +7,7 @@
 
       <div class="d-flex align-center">
         <div>
-          <v-card-title v-text="targetUser.displayName" />
+          <v-card-title>{{ targetUser.displayName }}</v-card-title>
           <v-card-subtitle class="grey--text">
             구독자 {{ subCount }}명
           </v-card-subtitle>
@@ -54,7 +54,7 @@
               :to="`/user/${item}`"
             >
               <v-list-item-content>
-                <v-list-item-title v-text="item" />
+                <v-list-item-title>{{ item }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -70,7 +70,7 @@
 
         <v-tab-item>
           <div v-if="targetUser.bio">
-            <v-card-title v-text="targetUser.bio" />
+            <v-card-title>{{ targetUser.bio }}</v-card-title>
             <v-divider class="my-10" />
           </div>
 
@@ -109,8 +109,8 @@
 </template>
 
 <script lang="ts">
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   asyncData({ params }) {

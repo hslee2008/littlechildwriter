@@ -26,9 +26,8 @@
             <v-btn
               v-if="
                 team.manager.uid !== userInfo.uid &&
-                team.members.filter(member => member.uid === userInfo.uid)
-                  .length === 0 &&
-                !Object.keys(team.waiting ?? {}).includes(userInfo.uid)
+                  exists &&
+                  !Object.keys(team.waiting ?? {}).includes(userInfo.uid)
               "
               icon
               @click="joinWaitingList(team.name, i)"
@@ -54,6 +53,16 @@ export default {
   data() {
     return {
       teams: []
+    }
+  },
+  computed() {
+    return {
+      exists() {
+        return (
+          team.members.filter(member => member.uid === userInfo.uid).length ===
+          0
+        )
+      }
     }
   },
   created() {

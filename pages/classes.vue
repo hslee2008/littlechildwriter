@@ -76,16 +76,14 @@
       <v-row class="mt-5 ma-1 g-10">
         <v-card
           v-for="item in props.items"
-          v-if="
-            item.public ||
-            item.uid === userInfo.uid ||
-            Object.values(item.users).filter((e) => e.uid === userInfo.uid)
-              .length > 0
-          "
           :key="item.creator + item.name"
           class="my-3 transparent"
         >
-          <v-card class="transparent" :to="`/class/${item.id}`">
+          <v-card
+            v-if="item.public || item.uid === userInfo.uid || exists"
+            class="transparent"
+            :to="`/class/${item.id}`"
+          >
             <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">
               <v-avatar class="ma-3">
                 <v-img :src="item.photoURL" />
@@ -95,8 +93,8 @@
             <v-card-title class="primary--text">
               {{ item.name }} ({{ item.public ? '공개' : '비공개' }})
             </v-card-title>
-            <v-card-subtitle v-text="item.creator" />
-            <v-card-text v-text="item.description" />
+            <v-card-subtitle>{{ item.creator }}</v-card-subtitle>
+            <v-card-text>{{ item.description }}</v-card-text>
           </v-card>
         </v-card>
       </v-row>
@@ -106,8 +104,8 @@
 
 <script>
 // todo to typescript
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   data() {
@@ -128,6 +126,16 @@ export default Vue.extend({
 
       dialog: false,
       steps: 1
+    }
+  },
+  computed() {
+    return {
+      exists() {
+        return (
+          Object.values(this.item.users).filter(e => e.uid === userInfo.uid)
+            .length > 0
+        )
+      }
     }
   },
   created() {

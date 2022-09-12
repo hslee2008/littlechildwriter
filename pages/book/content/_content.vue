@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
     <iframe
@@ -5,8 +6,7 @@
       frameborder="0"
       scrolling="no"
       class="zmax frame"
-      :src="`https://books.google.co.kr/books?id=${fetchedBookID}&lpg=PP1&pg=PP1&output=embed&key='
-    AIzaSyCrBZ5fHvUIZpsT8LzpSRhesRhE6pTeQk4'`"
+      :src="`https://books.google.co.kr/books?id=${fetchedBookID}&lpg=PP1&pg=PP1&output=embed`"
       width="100%"
       height="100%"
     />
@@ -38,13 +38,13 @@
           <v-card-title class="h1 primary--text">
             {{ post.title }}
             <span class="white--text subtitle-2 ml-1">
-              ({{ otherInfo.volumeInfo?.authors.join(', ') }})</span
-            >
+              ({{ otherInfo.volumeInfo?.authors.join(', ') }})
+            </span>
           </v-card-title>
 
           <v-card-subtitle>
             by
-            <NLink :to="`/user/${post.uid}`" v-text="post.displayName" />
+            <NLink :to="`/user/${post.uid}`">{{ post.displayName }}</NLink>
           </v-card-subtitle>
 
           <v-card-text>
@@ -96,7 +96,7 @@
       <v-btn text @click="loadIframe">
         <v-icon left> mdi-file-find </v-icon> 미리보기
       </v-btn>
-      <v-dialog width="700" v-if="post.categories">
+      <v-dialog v-if="post.categories" width="700">
         <template #activator="{ on, attrs }">
           <v-btn text v-bind="attrs" v-on="on">
             <v-icon left> mdi-shape </v-icon> 카테고리
@@ -120,7 +120,7 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <v-dialog width="700" v-if="post.isbn">
+      <v-dialog v-if="post.isbn" width="700">
         <template #activator="{ on, attrs }">
           <v-btn text v-bind="attrs" v-on="on">
             <v-icon left> mdi-book-information-variant </v-icon> 정보
@@ -132,12 +132,12 @@
             <v-card-title>
               {{ post.title }}
             </v-card-title>
-            <v-card-subtitle
-              v-text="otherInfo.volumeInfo?.authors.join(', ')"
-            />
+            <v-card-subtitle>
+              {{ otherInfo.volumeInfo?.authors.join(', ') }}
+            </v-card-subtitle>
 
             <v-simple-table>
-              <template v-slot:default>
+              <template #default>
                 <thead>
                   <tr>
                     <th class="text-left">Categories</th>
@@ -206,8 +206,8 @@
 </template>
 
 <script lang="ts">
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   asyncData({ params }) {
@@ -259,13 +259,12 @@ export default Vue.extend({
         return
       }
 
-      var overflow = 0
-
       const cat: string[] = [...this.post.categories]
       cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
 
-      let done = false,
-        n = 5
+      let done = false
+      let n = 5
+      let overflow = 0
 
       while (!done) {
         overflow++
@@ -284,8 +283,12 @@ export default Vue.extend({
           .then(data => {
             const length = data.items.length
 
-            if (length > 4) done = true
-            else cat.shift(), (n -= length)
+            if (length > 4) {
+              done = true
+            } else {
+              cat.shift()
+              n -= length
+            }
 
             for (let i = 0; i < length; i++) {
               const book = data.items[i]
@@ -304,7 +307,9 @@ export default Vue.extend({
                   infoLink
                 })
 
-                if (i === 4) break
+                if (i === 4) {
+                  break
+                }
               }
             }
           })

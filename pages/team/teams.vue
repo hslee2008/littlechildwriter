@@ -1,3 +1,3 @@
 <template>
-  <Teams />
+  <TeamsView />
 </template>

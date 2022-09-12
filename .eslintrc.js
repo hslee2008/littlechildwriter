@@ -11,6 +11,10 @@ module.exports = {
     '@nuxtjs/eslint-config-typescript'
   ],
   plugins: [],
-  // add your custom rules here
-  rules: {}
+  rules: {
+    'space-before-function-paren': 'off',
+    'vue/singleline-html-element-content-newline': 'off',
+    'vue/html-self-closing': 'off',
+    'arrow-parens': 'off'
+  }
 }

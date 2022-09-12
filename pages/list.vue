@@ -15,8 +15,8 @@
         label="Search"
         outlined
         append-icon="mdi-swap-horizontal"
+        class="my-2"
         @click:append="sortDesc = !sortDesc"
-        class="ml-2 mr-2"
       />
     </template>
 
@@ -42,7 +42,7 @@
               :key="index"
               @click="itemsPerPage = number"
             >
-              <v-list-item-title v-text="number" />
+              <v-list-item-title>{{ number }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -62,8 +62,8 @@
 </template>
 
 <script lang="ts">
-import { db } from '@/plugins/firebase'
 import Vue from 'vue'
+import { db } from '@/plugins/firebase'
 
 export default Vue.extend({
   data() {

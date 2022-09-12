@@ -1,7 +1,12 @@
 .nuxt
-.github
 dist
 node_modules
 yarn-error.log
 static/sw.js
 .firebase
+.output
+*.log*
+.nitro
+.cache
+.env
+vue-shim.d.ts

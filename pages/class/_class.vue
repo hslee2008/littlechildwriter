@@ -17,21 +17,23 @@
           :key="title"
           class="transparent"
         >
-          <v-card-title v-text="title" />
+          <v-card-title>{{ title }}</v-card-title>
 
           <div v-for="(item, i) in category" :key="item.title">
             <v-card
-                v-if="item.type === '책'"
+              v-if="item.type === '책'"
               class="d-flex mt-5"
               :to="`/book/content/${item.time}`"
             >
               <v-icon color="orange" class="ml-4" size="40"> mdi-book </v-icon>
               <div>
-                <v-card-title v-text="item.displayName" />
-                <v-card-subtitle v-text="item.title" />
-                <v-card-text
-                  v-text="new Date(item.time).toLocaleDateString()"
-                />
+                <v-card-title>{{ item.displayName }}</v-card-title>
+                <v-card-subtitle>{{ item.title }}</v-card-subtitle>
+                <v-card-text>
+                  {{
+                    new Date(item.time).toLocaleDateString()
+                  }}
+                </v-card-text>
               </div>
 
               <v-spacer />
@@ -106,7 +108,7 @@
               <div>
                 <v-card-title>{{ item.name }} 링크</v-card-title>
                 <v-card-subtitle>
-                  <a :href="item.link" v-text="item.title" target="_blank" />
+                  <a :href="item.link" target="_blank" v-text="item.title" />
                 </v-card-subtitle>
               </div>
             </v-card>
@@ -117,9 +119,9 @@
                 </v-avatar>
                 <div>
                   <v-card-title>{{ item.displayName }}의 공지사항</v-card-title>
-                  <v-card-subtitle
-                    v-text="new Date(item.time).toLocaleDateString()"
-                  />
+                  <v-card-subtitle>
+                    {{ new Date(item.time).toLocaleDateString() }}
+                  </v-card-subtitle>
                 </div>
                 <v-spacer />
                 <v-card-actions>
@@ -145,7 +147,7 @@
                   </v-menu>
                 </v-card-actions>
               </div>
-              <v-card-text v-text="item.content" />
+              <v-card-text>{{ item.content }}</v-card-text>
             </v-card>
           </div>
         </v-card>
@@ -202,12 +204,12 @@
                   <v-card
                     v-for="i in listev.filter(i => i.uid == userInfo.uid)"
                     :key="i.title"
+                    class="elevation-0"
                     @click="
                       post.time = i.time
                       post.image = i.image
                       dialog = false
                     "
-                    class="elevation-0"
                   >
                     <v-img
                       :src="i.image"
@@ -256,6 +258,7 @@
           />
 
           <v-file-input
+            ref="file"
             v-model="post.file"
             color="deep-purple accent-4"
             counter
@@ -265,10 +268,9 @@
             prepend-icon="mdi-paperclip"
             outlined
             :show-size="1000"
-            ref="file"
             @change="f => (post.file = f)"
           >
-            <template v-slot:selection="{ index, text }">
+            <template #selection="{ index, text }">
               <v-chip
                 v-if="index < 2"
                 color="deep-purple accent-4"
@@ -402,9 +404,9 @@ export default {
       }
 
       storageRef.on(
-        `state_changed`,
+        'state_changed',
         s => (this.progress = (s.bytesTransferred / s.totalBytes) * 100),
-        e => console.log(e.message),
+        e => this.handleError(e.message),
         () =>
           storageRef.snapshot.ref
             .getDownloadURL()

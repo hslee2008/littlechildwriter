@@ -6,11 +6,10 @@ export default defineNuxtConfig({
   },
 
   build: {
-    /*analyze: true,*/
+    /* analyze: true */
   },
 
   typescript: {
-    typeCheck: true,
     strict: true,
     shim: false,
     typeCheck: {
@@ -171,26 +170,34 @@ export default defineNuxtConfig({
 
   generate: {
     async routes() {
-      var routes = []
-      var admin = require('firebase-admin')
-      var serviceAccount = require('./firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json')
+      const routes = [] as string[]
+      const admin = require('firebase-admin')
+      const serviceAccount = require('./firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json')
 
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
         databaseURL: 'https://littlechildwriter-default-rtdb.firebaseio.com'
       })
 
-      var db = admin.database()
+      const db = admin.database()
 
       const books = (await db.ref('contents').once('value')).val()
       const classes = (await db.ref('classes').once('value')).val()
       const teams = (await db.ref('teams').once('value')).val()
       const users = (await db.ref('users').once('value')).val()
 
-      for (var key in books) routes.push('/book/content/' + key)
-      for (var key in classes) routes.push('/class/' + key)
-      for (var key in teams) routes.push('/team/about/' + key)
-      for (var key in users) routes.push('/user/' + key)
+      for (const key in books) {
+        routes.push('/book/content/' + key)
+      }
+      for (const key in classes) {
+        routes.push('/class/' + key)
+      }
+      for (const key in teams) {
+        routes.push('/team/about/' + key)
+      }
+      for (const key in users) {
+        routes.push('/user/' + key)
+      }
 
       return routes
     }

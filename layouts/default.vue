@@ -39,7 +39,7 @@
       <v-divider />
 
       <v-card-actions>
-        <v-btn color="primary" block id="pwainstall">
+        <v-btn id="pwainstall" color="primary" block>
           설치
           <v-icon right>mdi-download</v-icon>
         </v-btn>
@@ -75,14 +75,14 @@
         <template #activator="{ on, attrs }">
           <v-btn icon class="amber--text" v-bind="attrs" v-on="on">
             <v-badge avatar bordered overlap>
-              <template v-slot:badge>
-                <v-avatar v-text="notif.length" />
+              <template #badge>
+                <v-avatar>{{ notif.length }}</v-avatar>
               </template>
 
               <v-avatar size="40">
-                <v-icon
-                  v-text="notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell'"
-                />
+                <v-icon>
+                  {{ notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell' }}
+                </v-icon>
               </v-avatar>
             </v-badge>
           </v-btn>
@@ -96,8 +96,8 @@
               </v-list-item-avatar>
 
               <v-list-item-content>
-                <v-list-item-title v-text="d.title" />
-                <v-list-item-subtitle v-text="d.time" />
+                <v-list-item-title>{{ d.title }}</v-list-item-title>
+                <v-list-item-subtitle>{{ d.time }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -123,10 +123,13 @@
 </template>
 
 <script>
-import { auth, db } from '@/plugins/firebase'
 import UserMenu from './UserMenu.vue'
+import { auth, db } from '@/plugins/firebase'
 
 export default {
+  components: {
+    UserMenu
+  },
   data() {
     return {
       notif: [],
@@ -155,7 +158,7 @@ export default {
         deferredPrompt = e
       })
 
-      pwainstall.addEventListener('click', async () => {
+      pwainstall.addEventListener('click', () => {
         deferredPrompt.prompt()
         deferredPrompt = null
       })
@@ -174,7 +177,9 @@ export default {
     },
     getSavedUserDataFromDB() {
       auth.onAuthStateChanged(u => {
-        if (!u) return
+        if (!u) {
+          return
+        }
 
         db.ref(`/users/${this.userInfo.uid}/bookmarks`).on(
           'child_added',
@@ -186,7 +191,7 @@ export default {
           async s => this.notif.push(await s.val())
         )
 
-        if (navigator.setAppBadge) navigator.setAppBadge(this.notif.length)
+        navigator.setAppBadge(this.notif.length)
       })
     },
     deleteBookmark(time, i) {
@@ -195,9 +200,6 @@ export default {
       this.updateLibris(this.userInfo.uid, -0.1)
       this.items.splice(i, 1)
     }
-  },
-  components: {
-    UserMenu
   }
 }
 </script>

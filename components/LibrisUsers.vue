@@ -1,12 +1,13 @@
+
 <template>
   <v-timeline :dense="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs" clipped>
     <v-timeline-item
       v-for="(item, i) in lbt"
-      v-if="item.image || item.name"
       :key="item.uid"
       :icon="iconify(i)"
     >
       <v-card
+        v-if="item.image || item.name"
         class="mx-auto"
         max-width="344"
         :to="`/user/${item.uid}`"
@@ -17,11 +18,9 @@
             <v-list-item-subtitle class="text-overline mb-4">
               {{ i + 1 }}등 ({{ Math.round(item.libris) }} Libris)
             </v-list-item-subtitle>
-            <v-list-item-title
-              v-if="item.name"
-              class="mb-1"
-              v-text="item.name"
-            />
+            <v-list-item-title v-if="item.name" class="mb-1">
+              {{ item.name }}
+            </v-list-item-title>
           </v-list-item-content>
 
           <v-list-item-avatar
@@ -66,12 +65,12 @@ export default {
         (a === 0
           ? 'king'
           : a === 1
-          ? 'queen'
-          : a === 2
-          ? 'knight'
-          : a === 3
-          ? 'bishop'
-          : 'pawn')
+            ? 'queen'
+            : a === 2
+              ? 'knight'
+              : a === 3
+                ? 'bishop'
+                : 'pawn')
       )
     },
     libris() {

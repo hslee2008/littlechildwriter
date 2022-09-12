@@ -1,3 +1,3 @@
 <template>
-  <Libris :limit="false" />
+  <LibrisUsers :limit="false" />
 </template>
