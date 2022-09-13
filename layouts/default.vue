@@ -74,16 +74,16 @@
       >
         <template #activator="{ on, attrs }">
           <v-btn icon class="amber--text" v-bind="attrs" v-on="on">
-            <v-badge avatar bordered overlap>
-              <template #badge>
-                <v-avatar>{{ notif.length }}</v-avatar>
-              </template>
-
-              <v-avatar size="40">
-                <v-icon>
-                  {{ notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell' }}
-                </v-icon>
-              </v-avatar>
+            <v-badge
+              overlap
+              left
+              transition
+              :content="notif.length"
+              :value="notif.length"
+            >
+              <v-icon>
+                {{ notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell' }}
+              </v-icon>
             </v-badge>
           </v-btn>
         </template>

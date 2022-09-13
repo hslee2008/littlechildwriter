@@ -128,14 +128,12 @@ export default Vue.extend({
       steps: 1
     }
   },
-  computed() {
-    return {
-      exists() {
-        return (
-          Object.values(this.item.users).filter(e => e.uid === userInfo.uid)
-            .length > 0
-        )
-      }
+  computed: {
+    exists() {
+      return (
+        Object.values(this.item.users).filter(e => e.uid === userInfo.uid)
+          .length > 0
+      )
     }
   },
   created() {
