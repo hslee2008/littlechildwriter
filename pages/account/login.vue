@@ -11,6 +11,8 @@
 
       <v-text-field
         v-model="email"
+        type="email"
+        class="email"
         label="이메일"
         outlined
         required
@@ -21,6 +23,8 @@
 
       <v-text-field
         v-model="password"
+        type="password"
+        class="password"
         label="암호"
         outlined
         required
@@ -32,7 +36,7 @@
       <v-divider class="my-5" />
 
       <div class="d-flex justify-center g-10">
-        <v-btn color="primary" @click="onSubmit">
+        <v-btn class="login-button" color="primary" @click="onSubmit">
           <v-icon left> mdi-account </v-icon>로그인
         </v-btn>
         <v-btn color="success" outlined ripple @click="google">

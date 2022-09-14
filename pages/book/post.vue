@@ -259,11 +259,11 @@
         />
       </v-row>
 
-      <v-text-field v-model="post.title" label="제목" />
+      <v-text-field v-model="post.title" label="제목" class="title" />
 
       <v-row class="g-10" style="margin: 0.5px 0">
-        <v-text-field v-model="post.author" label="작가" />
-        <v-text-field v-model="post.pageCount" label="페이지" />
+        <v-text-field v-model="post.author" label="작가" class="author" />
+        <v-text-field v-model="post.pageCount" label="페이지" class="page" />
       </v-row>
 
       <v-checkbox
@@ -272,11 +272,19 @@
         color="blue"
       />
 
-      <v-textarea v-model="post.content" label="책 소개" clearable counter />
+      <v-textarea
+        v-model="post.content"
+        label="책 소개"
+        clearable
+        counter
+        class="content"
+      />
     </v-card-text>
 
     <v-card-actions class="g-10">
-      <v-btn color="primary" @click="postcontent"> 업로드 </v-btn>
+      <v-btn color="primary" class="upload" @click="postcontent">
+        업로드
+      </v-btn>
 
       <v-menu bottom>
         <template #activator="{ on, attrs }">

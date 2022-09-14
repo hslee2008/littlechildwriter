@@ -31,11 +31,13 @@ Vue.mixin({
   methods: {
     updateLibris(uid, val) {
       db.ref(`users/${uid}/libris`).transaction(cv => cv + val)
-      db.ref(`users/${uid}/joined`).once('value', async snapshot => {
-        Object.values(await snapshot.val()).forEach(team => {
-          db.ref(`teams/${team}/libris`).transaction(cv => cv + val)
+      db.ref(`users/${uid}/joined`)
+        .once('value', async snapshot => {
+          Object.values(await snapshot.val()).forEach(team => {
+            db.ref(`teams/${team}/libris`).transaction(cv => cv + val)
+          })
         })
-      })
+        .catch(() => {})
     },
     notify(uid, title, link) {
       const time = new Date().toLocaleDateString()
