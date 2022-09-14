@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { db } from './firebase'
 
 Vue.mixin({
   methods: {
@@ -21,6 +20,16 @@ Vue.mixin({
           this.$toast.error(
             '바코드를 인식할 수 없습니다. 모바일에서 크롬을 사용해주세요.'
           )
+          break
+        case 'Firebase: This operation has been cancelled due to another conflicting popup being opened. (auth/cancelled-popup-request).':
+        case 'Firebase: The popup has been closed by the user before finalizing the operation. (auth/popup-closed-by-user).':
+          this.$toast('로그인 창을 닫았습니다. 다시 시도해주세요.')
+          break
+        case 'Firebase: The email address is badly formatted. (auth/invalid-email).':
+          this.$toast.error('이메일 형식이 올바르지 않습니다.')
+          break
+        case 'Firebase: The password is invalid or the user does not have a password. (auth/wrong-password).':
+          this.$toast.error('비밀번호가 올바르지 않습니다.')
           break
         default:
           this.$toast.error(`알 수 없는 에러: ${message}`)

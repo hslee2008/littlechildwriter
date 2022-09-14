@@ -1,5 +1,38 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
 
+async function getRoutes() {
+  const routes = [] as string[]
+  const admin = require('firebase-admin')
+  const serviceAccount = require('./firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json')
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://littlechildwriter-default-rtdb.firebaseio.com'
+  })
+
+  const db = admin.database()
+
+  const books = (await db.ref('contents').once('value')).val()
+  const classes = (await db.ref('classes').once('value')).val()
+  const teams = (await db.ref('teams').once('value')).val()
+  const users = (await db.ref('users').once('value')).val()
+
+  for (const key in books) {
+    routes.push('/book/content/' + key)
+  }
+  for (const key in classes) {
+    routes.push('/class/' + key)
+  }
+  for (const key in teams) {
+    routes.push('/team/about/' + key)
+  }
+  for (const key in users) {
+    routes.push('/user/' + key)
+  }
+
+  return routes
+}
+
 export default defineNuxtConfig({
   alias: {
     tslib: 'tslib/tslib.es6.js'
@@ -80,7 +113,7 @@ export default defineNuxtConfig({
   css: ['@/assets/css/global.css'],
   plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/error'],
   components: true,
-  buildModules: ['@nuxtjs/vuetify'],
+  buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
   modules: ['@nuxtjs/pwa', 'vue-toastification/nuxt'],
   target: 'static',
 
@@ -168,38 +201,10 @@ export default defineNuxtConfig({
     base: '/'
   },
 
-  generate: {
-    async routes() {
-      const routes = [] as string[]
-      const admin = require('firebase-admin')
-      const serviceAccount = require('./firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json')
-
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: 'https://littlechildwriter-default-rtdb.firebaseio.com'
-      })
-
-      const db = admin.database()
-
-      const books = (await db.ref('contents').once('value')).val()
-      const classes = (await db.ref('classes').once('value')).val()
-      const teams = (await db.ref('teams').once('value')).val()
-      const users = (await db.ref('users').once('value')).val()
-
-      for (const key in books) {
-        routes.push('/book/content/' + key)
-      }
-      for (const key in classes) {
-        routes.push('/class/' + key)
-      }
-      for (const key in teams) {
-        routes.push('/team/about/' + key)
-      }
-      for (const key in users) {
-        routes.push('/user/' + key)
-      }
-
-      return routes
+  hooks: {
+    async 'nitro:config'(config) {
+      const routes = await getRoutes()
+      config.prerender.routes.push(...routes)
     }
   },
 
@@ -210,5 +215,9 @@ export default defineNuxtConfig({
     hideProgressBar: true,
     closeOnClick: true,
     maxToasts: 3
+  },
+
+  googleAnalytics: {
+    id: 'G-F7Z7BLCQDQ'
   }
 })

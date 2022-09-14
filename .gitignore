@@ -9,3 +9,4 @@ static/sw.js
 .nitro
 .cache
 .env
+cypress

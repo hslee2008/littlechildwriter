@@ -10,12 +10,14 @@
     "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn generate",
     "gui": "vue ui",
     "prettier": "prettier --write .",
-    "lint": "eslint --ext .ts,.js,.vue ."
+    "lint": "eslint --ext .ts,.js,.vue .",
+    "lint:fix": "eslint --ext .ts,.js,.vue . --fix",
+    "e2e": "cypress open"
   },
   "dependencies": {
     "@nuxtjs/pwa": "latest",
     "eslint-plugin-nuxt": "^4.0.0",
-    "firebase": "^9.9.4",
+    "firebase": "latest",
     "leo-profanity": "^1.6.1",
     "nuxt-edge": "latest",
     "vue-toastification": "^1.7.14",
@@ -25,9 +27,11 @@
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
     "@nuxt/types": "^2.15.8",
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
+    "@nuxtjs/google-analytics": "latest",
     "@nuxtjs/vuetify": "latest",
-    "eslint": "^8.23.1",
+    "cypress": "^10.8.0",
+    "eslint": "latest",
     "firebase-admin": "latest",
-    "typescript": "^4.8.3"
+    "typescript": "latest"
   }
 }
