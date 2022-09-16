@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "latest",
+    "badwords-ko": "^1.0.3",
     "eslint-plugin-nuxt": "^4.0.0",
     "firebase": "latest",
     "leo-profanity": "^1.6.1",

@@ -3643,6 +3643,11 @@ babel-plugin-polyfill-regenerator@^0.4.0:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.3.2"
 
+badwords-ko@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/badwords-ko/-/badwords-ko-1.0.3.tgz#37f71a10add7a81e3c1d999858606e6d89a197b3"
+  integrity sha512-auGVFJtoFUK/PjJmIxu24xy8gaLluZAdeFbFpIeYAp2ZPLmRUrsHtcopRmNkmFUHofzCDR5253uKaWuIp3huHg==
+
 balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"

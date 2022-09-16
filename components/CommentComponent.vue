@@ -141,6 +141,7 @@
 
 <script>
 import * as filter from 'leo-profanity'
+import Filter from 'badwords-ko'
 import { db } from '@/plugins/firebase'
 
 export default {
@@ -228,29 +229,32 @@ export default {
     },
     commentpost() {
       filter.loadDictionary('en-us')
+      const filterKO = new Filter()
 
       if (this.comment.length > 0) {
         const comments = db.ref(this.dbr)
         const { displayName, photoURL, uid } = this.userInfo
+        const badWord =
+          filter.check(this.comment) || filterKO.isProfane(this.comment)
 
         comments.push({
           uid,
           photoURL,
           displayName,
           time: Date.now(),
-          content: filter.clean(this.comment),
-          badWord: filter.check(this.comment)
+          content: filter.clean(filterKO.clean(this.comment)),
+          badWord
         })
 
-        this.notify(this.uid, this.comment, this.link)
-        this.updateLibris(this.userInfo.uid, 0.1)
         this.cb()
-
         this.comment = ''
 
-        if (filter.check(this.comment)) {
+        if (badWord) {
           this.updateLibris(this.userInfo.uid, -5)
           this.notify(this.uid, '나쁜 말을 사용했습니다. -5점', this.link)
+        } else {
+          this.notify(this.uid, this.comment, this.link)
+          this.updateLibris(this.userInfo.uid, 0.1)
         }
       }
     }
