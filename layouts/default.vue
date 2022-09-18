@@ -105,7 +105,7 @@
           <v-card-actions>
             <v-spacer />
             <v-btn text @click="clearEverything">
-              비우기 <v-icon right> mdi-trash-can </v-icon>
+              비우기 <v-icon right> mdi-notification-clear-all </v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>

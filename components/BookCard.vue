@@ -118,7 +118,7 @@ export default {
       this.updateLibris(it.uid, 0.1)
 
       this.notify(
-        this.userInfo.uid,
+        it.uid,
         `${this.userInfo.displayName}님이 좋아합니다`,
         `/book/content/${it.time}`
       )

@@ -90,87 +90,89 @@
         </v-btn>
       </div>
 
-      <v-btn text to="/list">
-        <v-icon left>mdi-chevron-left</v-icon> 뒤로
-      </v-btn>
-      <v-btn text @click="loadIframe">
-        <v-icon left> mdi-file-find </v-icon> 미리보기
-      </v-btn>
-      <v-dialog v-if="post.categories" width="700">
-        <template #activator="{ on, attrs }">
-          <v-btn text v-bind="attrs" v-on="on">
-            <v-icon left> mdi-shape </v-icon> 카테고리
-          </v-btn>
-        </template>
+      <div v-if="post.isbn">
+        <v-btn text to="/list">
+          <v-icon left>mdi-chevron-left</v-icon> 뒤로
+        </v-btn>
+        <v-btn text @click="loadIframe">
+          <v-icon left> mdi-file-find </v-icon> 미리보기
+        </v-btn>
+        <v-dialog v-if="post.categories" width="700">
+          <template #activator="{ on, attrs }">
+            <v-btn text v-bind="attrs" v-on="on">
+              <v-icon left> mdi-shape </v-icon> 카테고리
+            </v-btn>
+          </template>
 
-        <v-card>
-          <v-card-text>
-            <br />
-            <v-chip
-              v-for="tag in post.categories"
-              :key="tag"
-              ripple
-              outlined
-              label
-              :to="`/list?search=${tag}`"
-              class="ma-2 d-block"
-            >
-              #{{ tag }}
-            </v-chip>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-      <v-dialog v-if="post.isbn" width="700">
-        <template #activator="{ on, attrs }">
-          <v-btn text v-bind="attrs" v-on="on">
-            <v-icon left> mdi-book-information-variant </v-icon> 정보
-          </v-btn>
-        </template>
+          <v-card>
+            <v-card-text>
+              <br />
+              <v-chip
+                v-for="tag in post.categories"
+                :key="tag"
+                ripple
+                outlined
+                label
+                :to="`/list?search=${tag}`"
+                class="ma-2 d-block"
+              >
+                #{{ tag }}
+              </v-chip>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-if="post.isbn" width="700">
+          <template #activator="{ on, attrs }">
+            <v-btn text v-bind="attrs" v-on="on">
+              <v-icon left> mdi-book-information-variant </v-icon> 정보
+            </v-btn>
+          </template>
 
-        <v-card>
-          <v-card-text>
-            <v-card-title>
-              {{ post.title }}
-            </v-card-title>
-            <v-card-subtitle>
-              {{ otherInfo.volumeInfo?.authors.join(', ') }}
-            </v-card-subtitle>
+          <v-card>
+            <v-card-text>
+              <v-card-title>
+                {{ post.title }}
+              </v-card-title>
+              <v-card-subtitle>
+                {{ otherInfo.volumeInfo?.authors.join(', ') }}
+              </v-card-subtitle>
 
-            <v-simple-table>
-              <template #default>
-                <thead>
-                  <tr>
-                    <th class="text-left">Categories</th>
-                    <th class="text-left">Information</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>ISBN 13</td>
-                    <td>{{ post.isbn }}</td>
-                  </tr>
-                  <tr>
-                    <td>출판된 날짜</td>
-                    <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
-                  </tr>
-                  <tr>
-                    <td>출판사</td>
-                    <td>{{ otherInfo.volumeInfo.publisher }}</td>
-                  </tr>
-                  <tr>
-                    <td>Google Books ID</td>
-                    <td>{{ otherInfo.id }}</td>
-                  </tr>
-                  <tr>
-                    <td>평균 별점 (구글)</td>
-                    <td>{{ otherInfo.volumeInfo.averageRating }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+              <v-simple-table>
+                <template #default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">Categories</th>
+                      <th class="text-left">Information</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>ISBN 13</td>
+                      <td>{{ post.isbn }}</td>
+                    </tr>
+                    <tr>
+                      <td>출판된 날짜</td>
+                      <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
+                    </tr>
+                    <tr>
+                      <td>출판사</td>
+                      <td>{{ otherInfo.volumeInfo.publisher }}</td>
+                    </tr>
+                    <tr>
+                      <td>Google Books ID</td>
+                      <td>{{ otherInfo.id }}</td>
+                    </tr>
+                    <tr>
+                      <td>평균 별점 (구글)</td>
+                      <td>{{ otherInfo.volumeInfo.averageRating }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </div>
     </div>
 
     <LazyCommentComponent

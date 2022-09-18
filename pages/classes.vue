@@ -4,7 +4,7 @@
       <v-dialog v-model="dialog" width="500">
         <template #activator="{ on, attrs }">
           <v-btn color="primary" v-bind="attrs" v-on="on">
-            <v-icon left> mdi-google-classroom </v-icon> 만들기
+            <v-icon left> mdi-checkbox-blank-badge </v-icon> 만들기
           </v-btn>
         </template>
 
@@ -19,18 +19,18 @@
 
           <v-stepper-items>
             <v-stepper-content step="1">
-              <v-card-title> 클래스 기본 정보 </v-card-title>
+              <v-card-title> 알림판 기본 정보 </v-card-title>
 
               <v-card-text>
                 <v-text-field
                   v-model="classInfo.name"
-                  label="클래스 이름"
+                  label="알림판 이름"
                   required
                 />
 
                 <v-text-field
                   v-model="classInfo.description"
-                  label="클래스 설명"
+                  label="알림판 설명"
                   required
                 />
 
@@ -51,12 +51,12 @@
             </v-stepper-content>
 
             <v-stepper-content step="2">
-              <v-card-title> 클래스 고급 정보 </v-card-title>
+              <v-card-title> 알림판 고급 정보 </v-card-title>
 
               <v-card-text>
                 <v-text-field
                   v-model="classInfo.image"
-                  label="클래스 사진 URL"
+                  label="알림판 사진 URL"
                 />
               </v-card-text>
 
@@ -104,8 +104,8 @@
 
 <script>
 // todo to typescript
-import Vue from 'vue'
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
 
 export default Vue.extend({
   data() {

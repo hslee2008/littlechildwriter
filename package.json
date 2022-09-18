@@ -16,10 +16,10 @@
   },
   "dependencies": {
     "@nuxtjs/pwa": "latest",
-    "badwords-ko": "^1.0.3",
-    "eslint-plugin-nuxt": "^4.0.0",
+    "badwords-ko": "latest",
+    "eslint-plugin-nuxt": "latest",
     "firebase": "latest",
-    "leo-profanity": "^1.6.1",
+    "leo-profanity": "latest",
     "nuxt-edge": "latest",
     "vue-toastification": "^1.7.14",
     "vuetify": "latest"
@@ -27,10 +27,10 @@
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
     "@nuxt/types": "^2.15.8",
-    "@nuxtjs/eslint-config-typescript": "^11.0.0",
+    "@nuxtjs/eslint-config-typescript": "latest",
     "@nuxtjs/google-analytics": "latest",
     "@nuxtjs/vuetify": "latest",
-    "cypress": "^10.8.0",
+    "cypress": "latest",
     "eslint": "latest",
     "firebase-admin": "latest",
     "typescript": "latest"

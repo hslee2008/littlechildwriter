@@ -2206,7 +2206,7 @@
     webpack-node-externals "^3.0.0"
     webpackbar "^5.0.2"
 
-"@nuxtjs/eslint-config-typescript@^11.0.0":
+"@nuxtjs/eslint-config-typescript@latest":
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@nuxtjs/eslint-config-typescript/-/eslint-config-typescript-11.0.0.tgz#748a0cc063a5cf93ec52dc2d5a2ed94309cacb5b"
   integrity sha512-hmFjGtXT524ql8eTbK8BaRkamcXB6Z8YOW8nSQhosTP6oBw9WtOFUeWr7holyE278UhOmx+wDFG90BnyM9D+UA==
@@ -3643,7 +3643,7 @@ babel-plugin-polyfill-regenerator@^0.4.0:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.3.2"
 
-badwords-ko@^1.0.3:
+badwords-ko@latest:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/badwords-ko/-/badwords-ko-1.0.3.tgz#37f71a10add7a81e3c1d999858606e6d89a197b3"
   integrity sha512-auGVFJtoFUK/PjJmIxu24xy8gaLluZAdeFbFpIeYAp2ZPLmRUrsHtcopRmNkmFUHofzCDR5253uKaWuIp3huHg==
@@ -4892,7 +4892,7 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha512-NJGVKPS81XejHcLhaLJS7plab0fK3slPh11mESeeDq2W4ZI5kUKK/LRRdVDvjJseojbPB7ZwjnyOybg3Igea/A==
 
-cypress@^10.8.0:
+cypress@latest:
   version "10.8.0"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-10.8.0.tgz#12a681f2642b6f13d636bab65d5b71abdb1497a5"
   integrity sha512-QVse0dnLm018hgti2enKMVZR9qbIO488YGX06nH5j3Dg1isL38DwrBtyrax02CANU6y8F4EJUuyW6HJKw1jsFA==
@@ -5801,7 +5801,7 @@ eslint-plugin-node@^11.1.0:
     resolve "^1.10.1"
     semver "^6.1.0"
 
-eslint-plugin-nuxt@^4.0.0:
+eslint-plugin-nuxt@latest:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-nuxt/-/eslint-plugin-nuxt-4.0.0.tgz#f124b05c9038207ffaae74e2741f4a2e87472bae"
   integrity sha512-v3Vwdk8YKe52bAz8eSIDqQuTtfL/T1r9dSl1uhC5SyR5pgLxgKkQdxXVf/Bf6Ax7uyd9rHqiAuYVdqqDb7ILdA==
@@ -8109,7 +8109,7 @@ lazystream@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
-leo-profanity@^1.6.1:
+leo-profanity@latest:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/leo-profanity/-/leo-profanity-1.6.1.tgz#0497aa5c6e4b1ccb11ee5377c011c326cade0bcc"
   integrity sha512-3qD74EI62jSjk76pSiBgHZF4wDwzDeJAfCc8Yp/JAdrDvdMwZXZ0lRewKLQbePg0NJpqiNMPuoZ0JFnD4KROJg==

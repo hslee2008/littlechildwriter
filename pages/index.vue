@@ -32,7 +32,9 @@
             팀 플레이 <v-icon right> mdi-microsoft-teams </v-icon>
           </v-btn>
           <v-btn to="/classes" class="mx-3">
-            클래스 <v-icon right> mdi-google-classroom </v-icon>
+알림판
+<v-icon right> mdi-checkbox-blank-badge </v-icon>
+
           </v-btn>
         </div>
       </div>
@@ -86,8 +88,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import { db } from '@/plugins/firebase'
+import Vue from 'vue'
+
 
 export default Vue.extend({
   data() {
