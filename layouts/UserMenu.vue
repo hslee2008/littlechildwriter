@@ -1,5 +1,5 @@
 <template>
-  <v-menu v-if="userInfo.displayName" right rounded>
+  <v-menu v-if="userInfo.uid" right rounded>
     <template #activator="{ on }">
       <v-btn icon v-on="on">
         <v-avatar size="35">
@@ -13,6 +13,7 @@
       <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
 
       <v-btn :to="`/user/${userInfo.uid}`" text> 프로필 </v-btn>
+
       <v-btn to="/account/account" text> 편집 </v-btn>
       <v-btn text @click="logout"> 로그아웃 </v-btn>
     </v-card>
@@ -22,16 +23,21 @@
   </v-btn>
 </template>
 
-<script>
+<script setup lang="ts">
 import { auth } from '@/plugins/firebase'
+import { User } from '@/plugins/global'
 
-export default {
-  methods: {
-    logout() {
-      this.userInfo = {}
-      auth.signOut()
-      this.$router.push('/account/login')
-    }
+const userInfo = User()
+const router = useRouter()
+
+const logout = () => {
+  auth.signOut()
+  router.push('/account/login')
+  userInfo.value = {
+    displayName: '',
+    email: '',
+    photoURL: '',
+    uid: ''
   }
 }
 </script>

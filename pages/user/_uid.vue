@@ -15,7 +15,7 @@
       </div>
 
       <div class="ml-auto my-auto float-right">
-        <v-btn v-if="userInfo.uid !== uid" color="red" @click="subscribe">
+        <v-btn v-if="userInfo.uid !== uid" color="red" @click="Subscribe">
           {{ subscribed ? '구독 취소' : '구독' }}
         </v-btn>
         <v-btn v-else color="primary" to="/account/account">
@@ -38,12 +38,7 @@
             label="평점 선택"
             outlined
           />
-          <LazyBookCard
-            :items="
-              books.filter(i => (rating === '모두' ? 1 : i.rating === rating))
-            "
-            :simple="true"
-          />
+          <LazyBookCard :items="books.filter(filterRating)" :simple="true" />
         </v-tab-item>
 
         <v-tab-item>
@@ -108,88 +103,80 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { db } from '@/plugins/firebase'
+<script setup lang="ts">
+import { db } from '@/plugins/firebase'; import { Libris, User } from
+'@/plugins/global'; import { Ref } from 'vue';
 
-export default Vue.extend({
-  asyncData({ params }) {
-    const uid = params.uid
-    return { uid }
-  },
-  data() {
-    return {
-      rating: '모두',
-      tab: 0,
 
-      targetUser: {
-        libris: 0,
-        displayName: '',
-        photoURL: '',
-        bio: ''
-      },
-
-      subscription: {} as {
-        [key: string]: string
-      },
-      subscribed: false,
-      subCount: 0,
-      books: [] as any[],
-      uid: ''
-    }
-  },
-  created() {
-    db.ref('/contents/').on('child_added', async s => {
-      const data = await s.val()
-      data.uid === this.uid && this.books.unshift(data)
-    })
-
-    db.ref(`/users/${this.uid}/`)
-      .once('value')
-      .then(res => res.val())
-      .then(({ libris, displayName, photoURL, bio, subscriber }) => {
-        this.targetUser = {
-          libris,
-          displayName,
-          photoURL,
-          bio
-        }
-
-        this.subscription = subscriber ?? []
-        this.subCount = Object.keys(subscriber).length
-        this.subscribed = Object.keys(subscriber).includes(this.userInfo.uid)
-      })
-  },
-  methods: {
-    subscribe() {
-      if (this.subscribed) {
-        db.ref(`/users/${this.userInfo.uid}/subscribe/${this.uid}`).remove()
-        db.ref(`/users/${this.uid}/subscriber/${this.userInfo.uid}`).remove()
-
-        delete this.subscription[this.userInfo.uid]
-        this.subscribed = false
-        this.subCount--
-        this.targetUser.libris -= 10
-
-        this.updateLibris(this.uid, -10)
-      } else {
-        db.ref(`/users/${this.userInfo.uid}/subscribe/${this.uid}`).set(
-          this.targetUser.displayName
-        )
-        db.ref(`/users/${this.uid}/subscriber/${this.userInfo.uid}`).set(
-          this.userInfo.displayName
-        )
-
-        this.subscription[this.userInfo.uid] = this.userInfo.displayName
-        this.subscribed = true
-        this.subCount++
-        this.targetUser.libris += 10
-
-        this.updateLibris(this.uid, 10)
-      }
-    }
-  }
+const userInfo = User()
+const route = useRoute()
+const rating = ref<string>('모두')
+const tab = ref<number>(0)
+const uid = route.params.uid
+const targetUser = ref<any>({
+  libris: 0,
+  displayName: '',
+  photoURL: '',
+  bio: ''
 })
+const books = ref<any>([])
+const subscription = ref<any>({})
+const subscribed = ref<boolean>(false)
+const subCount = ref<number>(0)
+
+onBeforeMount(() => {
+  db.ref('/contents/').on('child_added', async s => {
+    const data = await s.val()
+    data.uid === uid && books.value.unshift(data)
+  })
+
+  db.ref(`/users/${uid}/`)
+    .once('value')
+    .then(res => res.val())
+    .then(({ libris, displayName, photoURL, bio, subscriber }) => {
+      targetUser.value = {
+        libris,
+        displayName,
+        photoURL,
+        bio
+      }
+
+      subscription.value = subscriber ?? []
+      subCount.value = Object.keys(subscriber).length
+      subscribed.value = Object.keys(subscriber).includes(userInfo.value.uid)
+    })
+})
+
+const filterRating = (a: { rating: Ref<string> }) =>
+  rating.value === '모두' ? 1 : a.rating === rating
+
+const Subscribe = () => {
+  if (subscribed.value) {
+    db.ref(`/users/${userInfo.value.uid}/subscribe/${uid}`).remove()
+    db.ref(`/users/${uid}/subscriber/${userInfo.value.uid}`).remove()
+
+    delete subscription[userInfo.value.uid]
+    subscribed.value = false
+    subCount.value--
+    targetUser.value.libris -= 10
+
+    Libris(uid, -10)
+  } else {
+    db.ref(`/users/${userInfo.value.uid}/subscribe/${uid}`).set(
+      targetUser.value.displayName
+    )
+    db.ref(`/users/${uid}/subscriber/${userInfo.value.uid}`).set(
+      userInfo.value.displayName
+    )
+
+    subscription[userInfo.value.uid] = userInfo.value.displayName
+    subscribed.value = true
+    subCount.value++
+    targetUser.value.libris += 10
+
+    Libris(uid, 10)
+  }
+}
 </script>
 
 <style scoped>

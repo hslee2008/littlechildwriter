@@ -21,15 +21,15 @@
     "firebase": "latest",
     "leo-profanity": "latest",
     "nuxt-edge": "latest",
-    "vue-toastification": "^1.7.14",
     "vuetify": "latest"
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
-    "@nuxt/types": "^2.15.8",
+    "@nuxt/types": "latest",
     "@nuxtjs/eslint-config-typescript": "latest",
     "@nuxtjs/google-analytics": "latest",
     "@nuxtjs/vuetify": "latest",
+    "@types/leo-profanity": "^1.5.0",
     "cypress": "latest",
     "eslint": "latest",
     "firebase-admin": "latest",

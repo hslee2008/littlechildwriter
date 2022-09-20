@@ -50,10 +50,10 @@
         <v-spacer />
 
         <span class="mr-4 grey--text"> {{ page }} / {{ numberOfPages }} </span>
-        <v-btn icon color="blue darken-3" @click="formerPage">
+        <v-btn icon color="blue darken-3" @click="Before">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
-        <v-btn icon color="blue darken-3" @click="nextPage">
+        <v-btn icon color="blue darken-3" @click="Next">
           <v-icon>mdi-chevron-right</v-icon>
         </v-btn>
       </v-row>
@@ -61,42 +61,38 @@
   </v-data-iterator>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script setup lang="ts">
 import { db } from '@/plugins/firebase'
+import { Book } from '@/plugins/global'
 
-export default Vue.extend({
-  data() {
-    return {
-      books: [] as string[],
-      sortBy: 'time',
-      search: '' as string | (string | null)[],
-      page: 1,
-      itemsPerPage: 10,
-      sortDesc: true
-    }
-  },
-  computed: {
-    numberOfPages(): number {
-      return Math.ceil(this.books.length / this.itemsPerPage)
-    }
-  },
-  created() {
-    this.$route.query.search && (this.search = this.$route.query.search)
+const route = useRoute()
+const books = ref<Book[]>([])
+const sortBy = ref<string>('time')
+// eslint-disable-next-line func-call-spacing
+const search = ref<string | (string | null)[]>('')
+const page = ref<number>(1)
+const itemsPerPage = ref<number>(10)
+const sortDesc = ref<boolean>(true)
 
-    db.ref('/contents/').on('child_added', async s =>
-      this.books.unshift(await s.val())
-    )
-  },
-  methods: {
-    nextPage() {
-      this.page + 1 <= this.numberOfPages && (this.page += 1)
-      window.scrollTo({ top: 0 })
-    },
-    formerPage() {
-      this.page - 1 >= 1 && (this.page -= 1)
-      window.scrollTo({ top: 0 })
-    }
-  }
+const numberOfPages = computed(() =>
+  Math.ceil(books.value.length / itemsPerPage.value)
+)
+
+onBeforeMount(() => {
+  route.query.search && (search.value = route.query.search)
+
+  db.ref('/contents/').on('child_added', async s =>
+    books.value.unshift(await s.val())
+  )
 })
+
+const Next = () => {
+  page.value + 1 <= numberOfPages.value && (page.value += 1)
+  window.scrollTo({ top: 0 })
+}
+
+const Before = () => {
+  page.value - 1 >= 1 && (page.value -= 1)
+  window.scrollTo({ top: 0 })
+}
 </script>

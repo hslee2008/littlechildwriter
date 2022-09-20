@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/html-indent -->
 <template>
   <div>
     <v-dialog v-model="isbn.upload" width="500">
@@ -10,7 +9,7 @@
         <v-card-text>
           <v-img
             v-if="post.image"
-            ref="isbn"
+            ref="isbnImageElement"
             :src="post.image"
             class="rounded-lg"
           />
@@ -166,7 +165,7 @@
             v-model="title"
             autofocus
             label="책 제목"
-            @keyup.enter="fetchISBN"
+            @keyup.enter="FetchWithTitle"
           />
         </v-card-text>
 
@@ -181,7 +180,7 @@
                 item.volumeInfo.imageLinks
               "
               @click="
-                fetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
+                FetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
               "
             >
               <v-img
@@ -282,9 +281,7 @@
     </v-card-text>
 
     <v-card-actions class="g-10">
-      <v-btn color="primary" class="upload" @click="postcontent">
-        업로드
-      </v-btn>
+      <v-btn color="primary" class="upload" @click="Post"> 업로드 </v-btn>
 
       <v-menu bottom>
         <template #activator="{ on, attrs }">
@@ -327,246 +324,241 @@
   </div>
 </template>
 
-<script>
-// todo to typescript
-import Vue from 'vue'
-import { db } from '@/plugins/firebase'
+<script lang="ts" setup>
+import { db } from '@/plugins/firebase';
+import { Libris, User } from '@/plugins/global';
 
-export default Vue.extend({
-  data() {
-    return {
-      post: {
-        isbn: '',
-        title: '',
-        image: '',
-        pageCount: '',
-        categories: [],
-        rating: 5,
-        content: '',
-        uid: '',
-        displayName: '',
-        views: 0,
-        author: '',
-        time: Date.now(),
-        isPublic: true
-      },
 
-      isbn: {
-        barcode: false,
-        input: false,
-        find: false,
-        audio: false,
-        upload: false,
-        audioType: ''
-      },
-
-      loading: false,
-      title: '',
-      searched: {},
-      bc_f: ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a'],
-      typed: '',
-      shouldUploadImage: false
-    }
-  },
-  methods: {
-    fetchBook(isbn) {
-      this.post.isbn = isbn
-      this.fetchi()
-      this.isbn.find = false
-    },
-    async fetchISBN() {
-      this.loading = true
-
-      await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${this.title}`
-      )
-        .then(res => res.json())
-        .then(books => (this.searched = books.items))
-        .catch(err => this.handleError(err.message))
-
-      this.loading = false
-    },
-    showCamera() {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            facingMode: 'environment',
-            width: { ideal: 4096 },
-            height: { ideal: 2160 }
-          }
-        })
-        .then(s => (this.$refs.video.srcObject = s))
-        .catch(err => this.handleError(err.message))
-    },
-    takeISBNVideo() {
-      if ('BarcodeDetector' in window) {
-        new BarcodeDetector({
-          bc_f: this.bc_f
-        })
-          .detect(this.$refs.video)
-          .then(res => res[0].rawValue)
-          .then(a => {
-            this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-            this.isbn.barcode = false
-            this.fetchi()
-          })
-          .catch(err => this.handleError(err.message))
-      } else {
-        this.handleError('BarcodeDetector is not supported')
-      }
-    },
-    uploadFile(file) {
-      const reader = new FileReader()
-
-      reader.addEventListener(
-        'load',
-        () => {
-          this.$refs.isbn.src = reader.result
-          const tempImage = new Image()
-          tempImage.src = reader.result || ''
-          tempImage.onload = () => {
-            if ('BarcodeDetector' in window) {
-              new BarcodeDetector({
-                bc_f: this.bc_f
-              })
-                .detect(this.$refs.isbn)
-                .then(res => res[0].rawValue)
-                .then(a => {
-                  this.post.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-                  this.isbn.barcode = false
-                  this.fetchi()
-                })
-                .catch(err => this.handleError(err.message))
-            } else {
-              this.handleError('BarcodeDetector is not supported')
-            }
-          }
-        },
-        false
-      )
-
-      reader.readAsDataURL(file)
-    },
-    uploadImg(f) {
-      const reader = new FileReader()
-
-      reader.addEventListener(
-        'load',
-        () => (this.post.image = reader.result ?? ''),
-        false
-      )
-
-      f && reader.readAsDataURL(f)
-    },
-    postcontent() {
-      const {
-        title,
-        content,
-        rating,
-        isbn,
-        time,
-        image,
-        pageCount,
-        categories,
-        isPublic
-      } = this.post
-
-      const { uid, displayName } = this.userInfo
-
-      db.ref(`/contents/${time}`).set({
-        title,
-        rating,
-        isbn,
-        time,
-        image,
-        pageCount,
-        categories,
-        isPublic,
-        likes: 1,
-        liked: {
-          [this.userInfo.uid]: true
-        },
-        views: 0,
-        uid,
-        displayName,
-        content: content.replaceAll('\n', '<br>')
-      })
-
-      this.updateLibris(this.userInfo.uid, parseInt(this.post.pageCount) / 100)
-      this.$router.push(`/book/content/${time}`)
-    },
-    fetchi() {
-      this.loading = true
-
-      fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
-      )
-        .then(res => res.json())
-        .then(async res => {
-          if (res.items[0].volumeInfo.imageLinks) {
-            const {
-              title,
-              imageLinks: { thumbnail: image },
-              authors: author,
-              pageCount
-            } = res.items[0].volumeInfo
-
-            this.post = {
-              ...this.post,
-              title,
-              image,
-              pageCount,
-              author,
-              categories: await fetch(res.items[0].selfLink)
-                .then(cg => cg.json())
-                .then(cg => cg.volumeInfo.categories)
-                .catch(err => this.handleError(err.message))
-            }
-          } else {
-            const {
-              title,
-              authors: author,
-              pageCount
-            } = res.items[0].volumeInfo
-
-            this.post = {
-              ...this.post,
-              title,
-              pageCount,
-              author,
-              image:
-                'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif',
-              categories: ['Juvenile Fiction / General']
-            }
-          }
-
-          this.isbn.input = false
-        })
-        .catch(err => this.handleError(err.message))
-
-      this.loading = false
-    },
-    voiceType() {
-      // eslint-disable-next-line new-cap
-      const recognition = new webkitSpeechRecognition()
-      recognition.lang = this.isbn.audioType
-      recognition.start()
-
-      recognition.onresult = e => {
-        this.typed += e.results[0][0].transcript + '. '
-      }
-
-      recognition.onspeechend = () => {
-        recognition.stop()
-      }
-
-      recognition.onerror = e => this.handleError(e.message)
-    },
-    saveAudio() {
-      this.isbn.audio = false
-      this.post.content = this.typed
-      this.typed = ''
-    }
-  }
+const userInfo = User()
+const post = ref<any>({
+  isbn: '',
+  title: '',
+  image: '',
+  pageCount: '',
+  categories: [] as string[],
+  rating: 5,
+  content: '',
+  uid: '',
+  displayName: '',
+  author: '',
+  views: 0,
+  time: Date.now(),
+  isPublic: true
 })
+const isbn = ref<any>({
+  barcode: false,
+  input: false,
+  find: false,
+  audio: false,
+  upload: false,
+  audioType: ''
+})
+const router = useRouter()
+const loading = ref<boolean>(false)
+const title = ref<string>('')
+const searched = ref<any>({})
+const bc_f = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
+const typed = ref<string>('')
+const video = ref<any>(null)
+const isbnImageElement = ref<any>(null)
+
+const FetchBook = (bookISBN: string) => {
+  post.value.isbn = bookISBN
+  fetchi()
+  isbn.value.find = false
+}
+
+const FetchWithTitle = async () => {
+  loading.value = true
+
+  await fetch(
+    `https://www.googleapis.com/books/v1/volumes?q=intitle:${title.value}`
+  )
+    .then(res => res.json())
+    .then(books => (searched.value = books.items))
+
+  loading.value = false
+}
+
+const showCamera = () =>
+  navigator.mediaDevices
+    .getUserMedia({
+      video: {
+        facingMode: 'environment',
+        width: { ideal: 4096 },
+        height: { ideal: 2160 }
+      }
+    })
+    .then(s => (video.value.srcObject = s))
+
+const takeISBNVideo = () => {
+  if ('BarcodeDetector' in window) {
+    const BarcodeDetector = window.BarcodeDetector
+
+    new BarcodeDetector({
+      bc_f
+    })
+      .detect(video.value)
+      .then((res: any) => res[0].rawValue)
+      .then((a: any) => {
+        post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
+        isbn.value.barcode = false
+        fetchi()
+      })
+  } else {
+    Error('BarcodeDetector is not supported')
+  }
+}
+
+const uploadFile = (file: File) => {
+  const reader = new FileReader()
+
+  reader.addEventListener(
+    'load',
+    () => {
+      isbnImageElement.value.src = reader.result || ''
+
+      const tempImage: any = new Image()
+      tempImage.src = reader.result
+      tempImage.onload = () => {
+        if ('BarcodeDetector' in window) {
+          const BarcodeDetector = window.BarcodeDetector
+
+          new BarcodeDetector({
+            bc_f
+          })
+            .detect(isbnImageElement)
+            .then((res: any) => res[0].rawValue)
+            .then((a: any) => {
+              post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
+              isbn.value.barcode = false
+              fetchi()
+            })
+        } else {
+          Error('BarcodeDetector is not supported')
+        }
+      }
+    },
+    false
+  )
+
+  reader.readAsDataURL(file)
+}
+
+const fetchi = () => {
+  loading.value = true
+
+  fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${post.value.isbn}`)
+    .then(res => res.json())
+    .then(async res => {
+      if (res.items[0].volumeInfo.imageLinks) {
+        const {
+          title,
+          imageLinks: { thumbnail: image },
+          authors: author,
+          pageCount
+        } = res.items[0].volumeInfo
+
+        post.value = {
+          ...post.value,
+          title,
+          image,
+          pageCount,
+          author,
+          categories: await fetch(res.items[0].selfLink)
+            .then(cg => cg.json())
+            .then(cg => cg.volumeInfo.categories)
+        }
+      } else {
+        const { title, authors: author, pageCount } = res.items[0].volumeInfo
+
+        post.value = {
+          ...post.value,
+          title,
+          pageCount,
+          author,
+          image:
+            'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif',
+          categories: ['Juvenile Fiction / General']
+        }
+      }
+
+      isbn.value.input = false
+    })
+
+  loading.value = false
+}
+
+const uploadImg = (f: File) => {
+  const reader = new FileReader()
+
+  reader.addEventListener(
+    'load',
+    () => (post.value.image = reader.result as string),
+    false
+  )
+
+  f && reader.readAsDataURL(f)
+}
+
+const Post = () => {
+  const {
+    title,
+    content,
+    rating,
+    isbn,
+    time,
+    image,
+    pageCount,
+    categories,
+    isPublic
+  } = post.value
+
+  const { uid, displayName } = userInfo.value
+
+  db.ref(`/contents/${time}`).set({
+    title,
+    rating,
+    isbn,
+    time,
+    image,
+    pageCount,
+    categories,
+    isPublic,
+    likes: 1,
+    liked: {
+      [userInfo.value.uid]: true
+    },
+    views: 0,
+    uid,
+    displayName,
+    content: content.replaceAll('\n', '<br>')
+  })
+
+  Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 100)
+  router.push(`/book/content/${time}`)
+}
+
+const voiceType = () => {
+  const webkitSpeechRecognition = window.webkitSpeechRecognition
+  const recognition = new webkitSpeechRecognition()
+  recognition.lang = isbn.value.audioType
+  recognition.start()
+
+  recognition.onresult = (e: any) => {
+    typed.value += e.results[0][0].transcript + '. '
+  }
+
+  recognition.onspeechend = () => {
+    recognition.stop()
+  }
+
+  recognition.onerror = (e: Error) => Error(e.message)
+}
+
+const saveAudio = () => {
+  isbn.value.audio = false
+  post.value.content += typed.value
+  typed.value = ''
+}
 </script>

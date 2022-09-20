@@ -30,9 +30,7 @@
                 <v-card-title>{{ item.displayName }}</v-card-title>
                 <v-card-subtitle>{{ item.title }}</v-card-subtitle>
                 <v-card-text>
-                  {{
-                    new Date(item.time).toLocaleDateString()
-                  }}
+                  {{ new Date(item.time).toLocaleDateString() }}
                 </v-card-text>
               </div>
 
@@ -52,7 +50,7 @@
                     </v-btn>
                   </template>
                   <v-list>
-                    <v-list-item @click="deleteContent(title, i)">
+                    <v-list-item @click="DeleteContent(title, i)">
                       <v-list-item-title>
                         <v-icon left> mdi-trash-can </v-icon> 삭제
                       </v-list-item-title>
@@ -89,7 +87,7 @@
                     </v-btn>
                   </template>
                   <v-list>
-                    <v-list-item @click="deleteContent(title, i)">
+                    <v-list-item @click="DeleteContent(title, i)">
                       <v-list-item-title>
                         <v-icon left> mdi-trash-can </v-icon> 삭제
                       </v-list-item-title>
@@ -138,7 +136,7 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-item @click="deleteContent(title, i)">
+                      <v-list-item @click="DeleteContent(title, i)">
                         <v-list-item-title>
                           <v-icon left> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
@@ -227,7 +225,7 @@
               :disabled="post.title === ''"
               color="primary"
               class="elevation-0"
-              @click="postcontent"
+              @click="Post"
             >
               게시
             </v-btn>
@@ -244,7 +242,7 @@
               :disabled="post.title === ''"
               color="primary"
               class="elevation-0"
-              @click="postcontent"
+              @click="Post"
             >
               게시
             </v-btn>
@@ -254,6 +252,7 @@
           <v-progress-linear
             v-if="progress > 0"
             color="primary"
+            class="mb-5"
             :value="progress"
           />
 
@@ -268,7 +267,7 @@
             prepend-icon="mdi-paperclip"
             outlined
             :show-size="1000"
-            @change="f => (post.file = f)"
+            @change="UploadFile"
           >
             <template #selection="{ index, text }">
               <v-chip
@@ -280,16 +279,9 @@
               >
                 {{ text }}
               </v-chip>
-
-              <span
-                v-else-if="index === 2"
-                class="text-overline grey--text text--darken-3 mx-2"
-              >
-                +{{ files.length - 2 }} File(s)
-              </span>
             </template>
           </v-file-input>
-          <v-btn color="primary" @click="upload">
+          <v-btn color="primary" @click="Upload">
             <v-icon left>mdi-file-upload</v-icon>
             파일 게시
           </v-btn>
@@ -323,7 +315,7 @@
               color="primary"
               class="mt-5"
               :disabled="!classInfo.name || !classInfo.description"
-              @click="updateClass"
+              @click="Update"
             >
               수업 정보 수정
             </v-btn>
@@ -333,7 +325,7 @@
           <v-card-title>삭제</v-card-title>
           <v-card-text>
             <LazyDialogComponent
-              :cb="deleteClass"
+              :cb="DeleteClass"
               btn-title="삭제"
               title="진짜로 삭제하겠습니까?"
               text="삭제하면 복구할 수 없습니다"
@@ -346,122 +338,152 @@
   </v-tabs>
 </template>
 
-<script>
-import { db, storage } from '@/plugins/firebase'
+<script setup lang="ts">
+import { db, storage } from '@/plugins/firebase';
+import { User } from '@/plugins/global';
 
-export default {
-  asyncData({ params }) {
-    const id = params.class
-    return { id }
-  },
-  data() {
-    return {
-      classInfo: {
-        contents: [],
-        users: []
-      },
-      listev: [],
-      post: {
-        title: '',
-        link: '',
-        time: Date.now(),
-        category: '',
-        file: [],
-        type: '책'
-      },
 
-      dialog: false,
-      tab: 0,
-      progress: 0
-    }
-  },
-  created() {
-    db.ref(`/classes/${this.id}`).on(
-      'value',
-      async s => (this.classInfo = await s.val())
-    )
+const userInfo = User()
+const route = useRoute()
+const router = useRouter()
+const id = route.params.class
+const classInfo = ref<any>({})
+const listev = ref<any[]>([])
+const post = ref<any>({
+  isbn: '',
+  title: '',
+  image: '',
+  pageCount: '',
+  categories: [] as string[],
+  rating: 5,
+  content: '',
+  uid: '',
+  displayName: '',
+  author: '',
+  views: 0,
+  time: Date.now(),
+  isPublic: true,
+  file: [] as File[],
+  type: '포스트',
+  category: '기타',
+  book: true,
+  link: ''
+})
+const dialog = ref<boolean>(false)
+const tab = ref<number>(0)
+const progress = ref<number>(0)
 
-    db.ref('/contents/').on('child_added', s => {
-      const { title, time, uid, displayName, image } = s.val()
+onBeforeMount(() => {
+  db.ref(`/classes/${id}`).on(
+    'value',
+    async s => (classInfo.value = await s.val())
+  )
 
-      this.listev.unshift({
-        title,
-        time,
-        uid,
-        displayName,
-        image
-      })
+  db.ref('/contents/').on('child_added', s => {
+    const { title, time, uid, displayName, image } = s.val()
+
+    listev.value.unshift({
+      title,
+      time,
+      uid,
+      displayName,
+      image
     })
-  },
-  methods: {
-    upload() {
-      let storageRef
+  })
+})
 
-      for (let i = 0; i < this.post.file.length; i++) {
-        storageRef = storage
-          .ref(`${this.post.file[i].name}`)
-          .put(this.post.file[i])
-      }
+const Upload = () => {
+  let storageRef: any
 
-      storageRef.on(
-        'state_changed',
-        s => (this.progress = (s.bytesTransferred / s.totalBytes) * 100),
-        e => this.handleError(e.message),
-        () =>
-          storageRef.snapshot.ref
-            .getDownloadURL()
-            .then(url => {
-              const { type, file, category } = this.post
-              const { uid, displayName } = this.userInfo
-
-              db.ref(`classes/${this.id}/contents/${category}`).push({
-                type,
-                uid,
-                displayName,
-                url,
-                file: file[0].name
-              })
-            })
-            .then(() => {
-              this.tab = 0
-              this.post.title = ''
-              this.post.time = ''
-              this.post.file = []
-              this.post.book = true
-              this.post.type = '책'
-              this.progress = 0
-            })
-      )
-    },
-    updateClass() {
-      db.ref(`/classes/${this.id}`).update(this.classInfo)
-      this.tab = 0
-    },
-    deleteContent(title, i) {
-      delete this.classInfo.contents[i]
-      db.ref(`/classes/${this.id}/contents/${title}/${i}`).remove()
-    },
-    postcontent() {
-      const { title, time, category, type, link } = this.post
-      const { uid, displayName } = this.userInfo
-
-      db.ref(`/classes/${this.id}/contents/${category}`).push({
-        title,
-        uid,
-        time,
-        displayName,
-        type,
-        link
-      })
-
-      this.post = {}
-      this.tab = 0
-    },
-    deleteClass() {
-      db.ref('classes').child(this.id).remove()
-      this.$router.push('/classes')
-    }
+  for (let i = 0; i < post.value.file.length; i++) {
+    storageRef = storage
+      .ref(`${post.value.file[i].name}`)
+      .put(post.value.file[i])
   }
+
+  storageRef.on(
+    'state_changed',
+    (s: any) => (progress.value = (s.bytesTransferred / s.totalBytes) * 100),
+    (e: Error) => Error(e.message),
+    () =>
+      storageRef.snapshot.ref
+        .getDownloadURL()
+        .then((url: any) => {
+          const { type, file, category } = post.value
+          const { uid, displayName } = userInfo.value
+
+          db.ref(`classes/${id}/contents/${category}`).push({
+            type,
+            uid,
+            displayName,
+            url,
+            file: file[0].name
+          })
+        })
+        .then(() => {
+          tab.value = 0
+          post.value.title = ''
+          post.value.time = 0
+          post.value.file = []
+          post.value.book = true
+          post.value.type = '책'
+          progress.value = 0
+        })
+  )
+}
+
+const Update = () => {
+  db.ref(`/classes/${id}`).update(classInfo)
+  tab.value = 0
+}
+
+const DeleteContent = (title: number, i: number) => {
+  db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
+}
+
+const UploadFile = (f: File[]) => {
+  post.value.file = f
+}
+
+const Post = () => {
+  const { title, time, category, type, link } = post.value
+  const { uid, displayName } = userInfo.value
+
+  db.ref(`/classes/${id}/contents/${category}`).push({
+    title,
+    uid,
+    time,
+    displayName,
+    type,
+    link
+  })
+
+  post.value = {
+    isbn: '',
+    title: '',
+    image: '',
+    pageCount: '',
+    categories: [] as string[],
+    rating: 5,
+    content: '',
+    uid: '',
+    displayName: '',
+    author: '',
+    views: 0,
+    time: Date.now(),
+    isPublic: true,
+    file: [] as File[],
+    type: '포스트',
+    category: '기타',
+    book: true,
+    link: ''
+  }
+  tab.value = 0
+}
+
+const DeleteClass = () => {
+  db.ref('classes').child(id).remove()
+  router.push('/classes')
 }
 </script>
 

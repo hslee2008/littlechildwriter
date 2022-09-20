@@ -10,3 +10,4 @@ static/sw.js
 .cache
 .env
 cypress
+.firebase

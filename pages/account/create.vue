@@ -20,6 +20,7 @@
       />
       <v-text-field
         v-model="password"
+        type="password"
         label="Password"
         placeholder="Password"
         required
@@ -28,50 +29,35 @@
         prepend-inner-icon="mdi-key"
       />
 
-      <v-btn color="primary" @click="makeAccount">
+      <v-btn color="primary" @click="Make">
         <v-icon left> mdi-account </v-icon> 게정 만들기
       </v-btn>
     </v-form>
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { auth, db } from '@/plugins/firebase'
+<script setup lang="ts">
+import { auth, db } from '@/plugins/firebase';
 
-export default Vue.extend({
-  data() {
-    return {
-      email: '',
-      password: '',
-      displayName: ''
-    }
-  },
-  methods: {
-    makeAccount() {
-      auth
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(() => {
-          db.ref(`/users/${auth.currentUser?.uid}`).set({
-            displayName: this.displayName,
-            photoURL: '',
-            libris: 0,
-            bio: `새롭게 계정 만든 ${this.displayName}입니다. (바꾸고 깊다면 편집 버튼을 누르세요.)`,
-            subscribe: [],
-            subscriber: []
-          })
+const router = useRouter()
+const email = ref<string>('')
+const password = ref<string>('')
+const displayName = ref<string>('')
 
-          this.$router.push('/account/account')
+const Make = () => {
+  auth.createUserWithEmailAndPassword(email.value, password.value).then(() => {
+    db.ref(`/users/${auth.currentUser?.uid}`).set({
+      displayName,
+      photoURL: '',
+      libris: 0,
+      bio: `새롭게 계정 만든 ${displayName}입니다. (바꾸고 깊다면 편집 버튼을 누르세요.)`,
+      subscribe: [],
+      subscriber: []
+    })
 
-          this.userInfo.uid = auth.currentUser?.uid ?? ''
-          this.userInfo.displayName = this.displayName
-          this.userInfo.photoURL = ''
-          this.userInfo.libris = 0
-        })
-        .catch(e => this.handleError(e.message))
-    }
-  }
-})
+    router.push('/account/account')
+  })
+}
 </script>
 
 <style scoped>

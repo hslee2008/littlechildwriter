@@ -3,51 +3,68 @@ import { auth, db } from '@/plugins/firebase'
 
 Vue.prototype.navigator = navigator
 
-Vue.mixin({
-  data: () => ({
-    userInfo: {
-      displayName: '',
-      photoURL: '',
-      uid: '',
-      email: '',
-      libris: 0
-    }
-  }),
-  created() {
-    auth.onAuthStateChanged(u => {
-      if (u) {
-        const { displayName, photoURL, uid, email } = u
+interface UserInfo {
+  uid: string
+  email: string
+  displayName: string
+  photoURL: string
+}
 
-        this.userInfo = {
-          ...this.userInfo,
-          displayName,
-          photoURL,
-          email,
-          uid
-        }
-      }
-    })
-  },
-  methods: {
-    updateLibris(uid, val) {
-      db.ref(`users/${uid}/libris`).transaction(cv => cv + val)
-      db.ref(`users/${uid}/joined`)
-        .once('value', async snapshot => {
-          Object.values(await snapshot.val()).forEach(team => {
-            db.ref(`teams/${team}/libris`).transaction(cv => cv + val)
-          })
+interface Book {
+  categories: string[]
+  bookmarks: string[]
+  content: string
+  displayName: string
+  image: string
+  isPublic: boolean
+  isbn: string
+  liked: any
+  pageCount: number
+  rating: number
+  time: number
+  title: string
+  uid: string
+  views: number
+}
+
+export function User() {
+  const userInfo = ref<UserInfo>({
+    uid: '',
+    email: '',
+    displayName: '',
+    photoURL: ''
+  })
+  auth.onAuthStateChanged(u =>
+    u
+      ? (userInfo.value = u)
+      : (userInfo.value = {
+          uid: '',
+          email: '',
+          displayName: '',
+          photoURL: ''
         })
-        .catch(() => {})
-    },
-    notify(uid, title, link) {
-      const time = new Date().toLocaleDateString()
+  )
+  return userInfo
+}
 
-      db.ref(`users/${uid}/notification`).push({
-        title,
-        time,
-        link,
-        photoURL: this.userInfo.photoURL
-      })
-    }
-  }
-})
+export function Libris(uid: string, incrementBy: number) {
+  db.ref(`users/${uid}/libris`).transaction(v => v + incrementBy)
+}
+
+export function Notify(
+  uid: string,
+  photoURL: string,
+  title: string,
+  link: string
+) {
+  const time = new Date().toLocaleDateString()
+
+  db.ref(`users/${uid}/notification`).push({
+    title,
+    time,
+    link,
+    photoURL
+  })
+}
+
+export { UserInfo, Book }

@@ -28,13 +28,9 @@
           <v-btn to="/list" class="mx-3">
             글 <v-icon right> mdi-text-box-multiple-outline </v-icon>
           </v-btn>
-          <v-btn to="/team/my" class="mx-3">
-            팀 플레이 <v-icon right> mdi-microsoft-teams </v-icon>
-          </v-btn>
           <v-btn to="/classes" class="mx-3">
-알림판
-<v-icon right> mdi-checkbox-blank-badge </v-icon>
-
+            알림판
+            <v-icon right> mdi-checkbox-blank-badge </v-icon>
           </v-btn>
         </div>
       </div>
@@ -79,43 +75,35 @@
       </v-card-actions>
     </v-card>
 
-    <v-card-title> 팀 명예의 전당 </v-card-title>
-    <v-divider class="mx-5 mb-5" />
-    <TeamsView :no-title="true" />
-
     <br />
   </div>
 </template>
 
-<script lang="ts">
-import { db } from '@/plugins/firebase'
-import Vue from 'vue'
+<script setup lang="ts">
+import { db } from '@/plugins/firebase'; import { Book, User } from
+'@/plugins/global';
 
 
-export default Vue.extend({
-  data() {
-    return {
-      recent: [] as string[],
-      popular: [] as string[],
-      views: [] as string[],
-      tab: 0
-    }
-  },
-  created() {
-    db.ref('/contents')
-      .limitToLast(4)
-      .on('child_added', async s => this.recent.unshift(await s.val()))
+const userInfo = User()
+const recent = ref<Book[]>([])
+const popular = ref<Book[]>([])
+const views = ref<Book[]>([])
+const tab = ref<number>(0)
 
-    db.ref('/contents')
-      .orderByChild('likes')
-      .limitToLast(4)
-      .on('child_added', async s => this.popular.unshift(await s.val()))
+onBeforeMount(() => {
+  db.ref('/contents')
+    .limitToLast(4)
+    .on('child_added', async s => recent.value.unshift(await s.val()))
 
-    db.ref('/contents')
-      .orderByChild('views')
-      .limitToLast(4)
-      .on('child_added', async s => this.views.unshift(await s.val()))
-  }
+  db.ref('/contents')
+    .orderByChild('likes')
+    .limitToLast(4)
+    .on('child_added', async s => popular.value.unshift(await s.val()))
+
+  db.ref('/contents')
+    .orderByChild('views')
+    .limitToLast(4)
+    .on('child_added', async s => views.value.unshift(await s.val()))
 })
 </script>
 

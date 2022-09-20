@@ -1,26 +1,25 @@
 import Vue from 'vue'
 
 declare module '*.vue' {
-  import Vue from 'vue'
   export default Vue
 }
 
+declare module 'badwords-ko'
+declare module 'leo-profanity'
+
 declare module 'vue/types/vue' {
   interface Vue {
-    userInfo: {
-      displayName: string
-      email: string
-      uid: string
-      photoURL: string
-      libris: number
-    }
 
-    updateLibris: (uid: string, val: number) => void
-    handleError: (err: any) => void
-    notify: (uid: string, title: string, link: string) => void
-
+  BarcodeDetector: any
     navigator: {
       languages: string[]
     }
+  }
+}
+
+declare global {
+  interface Window {
+    BarcodeDetector: any
+    webkitSpeechRecognition: any
   }
 }

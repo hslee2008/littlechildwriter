@@ -85,7 +85,7 @@
       <v-card-title>계정 삭제</v-card-title>
       <v-card-text>
         <LazyDialogComponent
-          :cb="deleteAccount"
+          :cb="Delete"
           btn-title="삭제"
           title="진짜로 삭제하겠습니까?"
           text="삭제를 하면 계정 정보는 삭제되지만 올렸던 글은 아직 남아 있습니다. 글들도 삭제하고 싶다면 글을 먼저 삭제하고 계정을 삭제해주세요."
@@ -95,7 +95,7 @@
     </v-card>
 
     <v-row justify="center" class="g-10">
-      <v-btn color="primary" @click="update">
+      <v-btn color="primary" @click="Update">
         <v-icon left> mdi-account </v-icon>
         업데이트
       </v-btn>
@@ -103,65 +103,61 @@
   </v-form>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { auth, db } from '@/plugins/firebase'
+<script setup lang="ts">
+import { auth, db } from '@/plugins/firebase';
+import { User } from '@/plugins/global';
 
-export default Vue.extend({
-  data() {
-    return {
-      valid: true,
-      project: [] as any,
-      userDB: {
-        bio: ''
-      }
-    }
-  },
-  mounted() {
-    auth.onAuthStateChanged(() => {
-      db.ref(`/users/${this.userInfo.uid}`)
-        .once('value')
-        .then(s => (this.userDB = s.val()))
+
+const userInfo = User()
+const router = useRouter()
+const valid = ref<boolean>(true)
+const project = ref<any>([])
+const userDB = ref<any>({ bio: '' })
+
+onBeforeMount(() =>
+  auth.onAuthStateChanged(() =>
+    db
+      .ref('/contents/')
+      .on(
+        'child_added',
+        async (s: any) =>
+          s.uid === userInfo.value.uid && project.value.unshift(await s.val())
+      )
+  )
+)
+
+onMounted(() =>
+  auth.onAuthStateChanged(() => {
+    db.ref(`/users/${userInfo.value.uid}`)
+      .once('value')
+      .then(s => (userDB.value = s.val()))
+  })
+)
+
+const Update = () => {
+  const { displayName, photoURL, uid } = userInfo.value
+  const { bio } = userDB.value
+
+  auth.currentUser
+    ?.updateProfile({
+      displayName,
+      photoURL
     })
-  },
-  created() {
-    auth.onAuthStateChanged(() =>
-      db
-        .ref('/contents/')
-        .on(
-          'child_added',
-          async (s: any) =>
-            s.uid === this.userInfo.uid && this.project.unshift(await s.val())
-        )
-    )
-  },
-  methods: {
-    update() {
-      const { displayName, photoURL, uid } = this.userInfo
-      const { bio } = this.userDB
-
-      this.$router.push(`/user/${uid}`)
-
-      auth.currentUser
-        ?.updateProfile({
-          displayName,
-          photoURL
-        })
-        .then(() =>
-          db.ref(`/users/${uid}`).update({
-            displayName,
-            photoURL,
-            bio
-          })
-        )
-        .catch(e => this.handleError(e.message))
-    },
-    deleteAccount() {
-      auth.currentUser?.delete().then(() => {
-        db.ref(`/users/${this.userInfo.uid}`).remove()
-        this.$router.push('/')
+    .then(() => {
+      db.ref(`/users/${uid}`).update({
+        displayName,
+        photoURL,
+        bio
       })
-    }
-  }
-})
+
+      router.push(`/user/${uid}`)
+    })
+}
+
+const Delete = () => {
+  auth.currentUser?.delete().then(() => {
+    db.ref(`/users/${userInfo.value.uid}`).remove()
+    router.push('/')
+  })
+}
 </script>

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-indent -->
 <template>
   <v-data-iterator :items="classes" hide-default-footer>
     <template #header>
@@ -62,7 +63,7 @@
 
               <v-card-actions>
                 <v-spacer />
-                <v-btn text @click="makeAClass">
+                <v-btn text @click="Make">
                   <v-icon left> mdi-check </v-icon> 만들기
                 </v-btn>
               </v-card-actions>
@@ -80,7 +81,11 @@
           class="my-3 transparent"
         >
           <v-card
-            v-if="item.public || item.uid === userInfo.uid || exists"
+            v-if="
+              item.public ||
+              item.uid === userInfo.uid ||
+              Object.values(item.users).filter(filterUsers).length > 0
+            "
             class="transparent"
             :to="`/class/${item.id}`"
           >
@@ -102,78 +107,64 @@
   </v-data-iterator>
 </template>
 
-<script>
-// todo to typescript
+<script setup lang="ts">
 import { db } from '@/plugins/firebase'
-import Vue from 'vue'
+import { User } from '@/plugins/global'
 
-export default Vue.extend({
-  data() {
-    return {
-      classes: [],
-
-      classInfo: {
-        name: '',
-        description: '',
-        image: '',
-        creator: '',
-        id: '',
-        uid: '',
-        photoURL: '',
-        public: true,
-        users: []
-      },
-
-      dialog: false,
-      steps: 1
-    }
-  },
-  computed: {
-    exists() {
-      return (
-        Object.values(this.item.users).filter(e => e.uid === userInfo.uid)
-          .length > 0
-      )
-    }
-  },
-  created() {
-    db.ref('classes').on('child_added', async s =>
-      this.classes.push(await s.val())
-    )
-  },
-  methods: {
-    makeAClass() {
-      this.dialog = false
-
-      const { displayName, uid, photoURL } = this.userInfo
-      const { name } = this.classInfo
-
-      this.classInfo = {
-        ...this.classInfo,
-        creator: displayName,
-        id: uid + name,
-        uid,
-        photoURL
-      }
-
-      db.ref('classes')
-        .child(uid + name)
-        .set(this.classInfo)
-
-      this.classInfo = {
-        name: '',
-        description: '',
-        image: '',
-        creator: '',
-        id: '',
-        uid: '',
-        photoURL: '',
-        public: true,
-        users: []
-      }
-      this.dialog = false
-      this.steps = 1
-    }
-  }
+const userInfo = User()
+const classes = ref<any>([])
+const classInfo = ref<any>({
+  name: '',
+  description: '',
+  image: '',
+  creator: '',
+  id: '',
+  uid: '',
+  photoURL: '',
+  public: true,
+  users: []
 })
+const dialog = ref<boolean>(false)
+const steps = ref<number>(1)
+
+onBeforeMount(() =>
+  db
+    .ref('classes')
+    .on('child_added', async s => classes.value.push(await s.val()))
+)
+
+const filterUsers = (e: any) => e.uid === userInfo.value.uid
+
+const Make = () => {
+  dialog.value = false
+
+  const { displayName, uid, photoURL } = userInfo.value
+  const { name } = classInfo.value
+
+  classInfo.value = {
+    ...classInfo.value,
+    creator: displayName,
+    id: uid + name,
+    uid,
+    photoURL
+  }
+
+  db.ref('classes')
+    .child(uid + name)
+    .set(classInfo)
+
+  classInfo.value = {
+    name: '',
+    description: '',
+    image: '',
+    creator: '',
+    id: '',
+    uid: '',
+    photoURL: '',
+    public: true,
+    users: []
+  }
+  dialog.value = false
+  steps.value = 1
+}
 </script>

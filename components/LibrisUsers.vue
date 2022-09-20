@@ -1,13 +1,8 @@
-
 <template>
   <v-timeline :dense="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs" clipped>
-    <v-timeline-item
-      v-for="(item, i) in lbt"
-      :key="item.uid"
-      :icon="iconify(i)"
-    >
+    <v-timeline-item v-for="(item, i) in lbt" :key="item.uid" :icon="Icon(i)">
       <v-card
-        v-if="item.image || item.name"
+        v-if="item.photoURL || item.displayName"
         class="mx-auto"
         max-width="344"
         :to="`/user/${item.uid}`"
@@ -18,16 +13,20 @@
             <v-list-item-subtitle class="text-overline mb-4">
               {{ i + 1 }}등 ({{ Math.round(item.libris) }} Libris)
             </v-list-item-subtitle>
-            <v-list-item-title v-if="item.name" class="mb-1">
-              {{ item.name }}
+            <v-list-item-title v-if="item.displayName" class="mb-1">
+              {{ item.displayName }}
             </v-list-item-title>
           </v-list-item-content>
 
           <v-list-item-avatar
-            v-if="item.image"
+            v-if="item.photoURL"
             :size="$vuetify.breakpoint.xs ? 50 : 70"
           >
-            <v-img :src="item.image" :lazy-src="item.image" class="rounded-lg">
+            <v-img
+              :src="item.photoURL"
+              :lazy-src="item.photoURL"
+              class="rounded-lg"
+            >
               <template #placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
                   <v-progress-circular indeterminate color="grey lighten-5" />
@@ -41,67 +40,66 @@
   </v-timeline>
 </template>
 
-<script>
+<script setup lang="ts">
 import { db } from '@/plugins/firebase'
+import { User } from '@/plugins/global'
 
-export default {
-  props: {
-    limit: {
-      type: Boolean
-    }
-  },
-  data() {
-    return {
-      lbt: []
-    }
-  },
-  created() {
-    this.limit ? this.librisLimited() : this.libris()
-  },
-  methods: {
-    iconify(a) {
-      return (
-        'mdi-chess-' +
-        (a === 0
-          ? 'king'
-          : a === 1
-            ? 'queen'
-            : a === 2
-              ? 'knight'
-              : a === 3
-                ? 'bishop'
-                : 'pawn')
-      )
-    },
-    libris() {
-      db.ref('/users')
-        .orderByChild('libris')
-        .on('child_added', async s => {
-          const data = await s.val()
+const userInfo = User()
+const props = defineProps({
+  limit: {
+    type: Boolean,
+    required: true
+  }
+})
+const lbt = ref<any>([])
 
-          this.lbt.unshift({
-            name: data.displayName,
-            libris: data.libris ?? 0,
-            image: data.photoURL,
-            uid: s.key
-          })
-        })
-    },
-    librisLimited() {
-      db.ref('/users')
-        .orderByChild('libris')
-        .limitToLast(5)
-        .on('child_added', async s => {
-          const data = await s.val()
+onBeforeMount(() => (props.limit ? Limited() : UnLimited()))
 
-          this.lbt.unshift({
-            name: data.displayName,
-            libris: data.libris ?? 0,
-            image: data.photoURL,
-            uid: s.key
-          })
-        })
-    }
+const Limited = async () => {
+  db.ref('/users')
+    .orderByChild('libris')
+    .limitToLast(5)
+    .on('child_added', async s => {
+      const { displayName, libris, photoURL } = await s.val()
+
+      lbt.value.unshift({
+        displayName,
+        libris,
+        photoURL,
+        uid: s.key
+      })
+    })
+}
+
+const UnLimited = async () => {
+  db.ref('/users')
+    .orderByChild('libris')
+    .on('child_added', async s => {
+      const { displayName, libris, photoURL, uid } = await s.val()
+
+      lbt.value.unshift({
+        displayName,
+        libris,
+        photoURL,
+        uid
+      })
+    })
+}
+
+const Icon = (a: number) => {
+  switch (a) {
+    case 0:
+      return 'mdi-chess-king'
+    case 1:
+      return 'mdi-chess-queen'
+    case 2:
+      return 'mdi-chess-knight'
+    case 3:
+      return 'mdi-chess-bishop'
+    case 4:
+      return 'mdi-chess-rook'
+    default:
+      return 'mdi-chess-pawn'
   }
 }
 </script>

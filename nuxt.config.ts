@@ -17,18 +17,10 @@ async function getRoutes() {
   const teams = (await db.ref('teams').once('value')).val()
   const users = (await db.ref('users').once('value')).val()
 
-  for (const key in books) {
-    routes.push('/book/content/' + key)
-  }
-  for (const key in classes) {
-    routes.push('/class/' + key)
-  }
-  for (const key in teams) {
-    routes.push('/team/about/' + key)
-  }
-  for (const key in users) {
-    routes.push('/user/' + key)
-  }
+  for (const r in books) routes.push(`/book/content/${r}`)
+  for (const r in classes) routes.push(`/class/${r}`)
+  for (const r in teams) routes.push(`/team/about/${r}`)
+  for (const r in users) routes.push(`/user/${r}`)
 
   return routes
 }
@@ -111,10 +103,10 @@ export default defineNuxtConfig({
   },
 
   css: ['@/assets/css/global.css'],
-  plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/error'],
+  plugins: ['@/plugins/firebase', '@/plugins/global'],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
-  modules: ['@nuxtjs/pwa', 'vue-toastification/nuxt'],
+  modules: ['@nuxtjs/pwa', '@nuxtjs/toast'],
   target: 'static',
 
   pwa: {
@@ -209,12 +201,7 @@ export default defineNuxtConfig({
   },
 
   toast: {
-    position: 'bottom-right',
-    duration: 3000,
-    keepOnHover: true,
-    hideProgressBar: true,
-    closeOnClick: true,
-    maxToasts: 3
+    position: 'top-center'
   },
 
   googleAnalytics: {

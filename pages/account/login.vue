@@ -47,38 +47,20 @@
   </div>
 </template>
 
-<script>
-// todo to typescript
-import { auth, db, login } from '@/plugins/firebase'
+<script setup script="ts">
+import { auth, login } from '@/plugins/firebase';
 
-export default {
-  data() {
-    return {
-      email: '',
-      password: ''
-    }
-  },
-  methods: {
-    onSubmit() {
-      auth
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(() => this.$router.push('/account/account'))
-        .catch(e => this.handleError(e.message))
-    },
-    google() {
-      const { email, displayName, photoURL, uid } = this.userInfo
+const email = ref<string>('')
+const password = ref<string>('')
+const router = useRouter()
 
-      auth
-        .signInWithPopup(new login.GoogleAuthProvider())
-        .then(() => this.$router.push('/account/account'))
-        .catch(e => this.handleError(e.message))
+const onSubmit = () =>
+  auth
+    .signInWithEmailAndPassword(email.value, password.value)
+    .then(() => router.push)
 
-      db.ref(`users/${uid}`).update({
-        email,
-        displayName,
-        photoURL
-      })
-    }
-  }
-}
+const google = () =>
+  auth
+    .signInWithPopup(new login.GoogleAuthProvider())
+    .then(() => router.push('/account/account'))
 </script>

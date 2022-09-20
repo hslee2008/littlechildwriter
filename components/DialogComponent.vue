@@ -24,34 +24,28 @@
   </v-dialog>
 </template>
 
-<script>
-export default {
-  props: {
-    cb: {
-      type: Function,
-      required: true
-    },
-    btnTitle: {
-      type: String,
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    text: {
-      type: String,
-      required: true
-    },
-    icon: {
-      type: String,
-      required: true
-    }
+<script setup lang="ts">
+const dialog = ref<boolean>(false)
+const props = defineProps({
+  title: {
+    type: String,
+    required: true
   },
-  data() {
-    return {
-      dialog: false
-    }
+  text: {
+    type: String,
+    required: true
+  },
+  cb: {
+    type: Function,
+    required: true
+  },
+  btnTitle: {
+    type: String,
+    required: true
+  },
+  icon: {
+    type: String,
+    required: true
   }
-}
+})
 </script>

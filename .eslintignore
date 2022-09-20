@@ -9,5 +9,5 @@ static/sw.js
 .nitro
 .cache
 .env
-vue-shim.d.ts
 cypress
+.firebase

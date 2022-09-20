@@ -1,22 +1,22 @@
 <template>
   <div>
     <v-text-field
-      v-if="userInfo.uid && !nofield"
+      v-if="userInfo && !nofield"
       v-model="comment"
       flat
       solo
       hide-details
       label="댓글 달기"
-      @keydown.enter="commentpost"
+      @keydown.enter="Comment"
     >
       <template #append>
-        <v-btn icon depressed @click="commentpost">
+        <v-btn icon depressed @click="Comment">
           <v-icon>mdi-send</v-icon>
         </v-btn>
       </template>
     </v-text-field>
 
-    <v-timeline v-if="!nocomments && comments.length > 0" dense clipped>
+    <v-timeline v-if="comments.length > 0" dense clipped>
       <v-slide-x-transition group>
         <v-timeline-item v-for="(message, i) in comments" :key="message.time">
           <template #icon>
@@ -49,7 +49,7 @@
                 v-else
                 v-model="updatedcomment"
                 flat
-                @keydown.enter="updatecomment(i)"
+                @keydown.enter="Update(i)"
               >
                 <template #append>
                   <v-btn
@@ -64,7 +64,7 @@
                     color="primary"
                     text
                     :disabled="message.content === updatedcomment"
-                    @click="updatecomment(i)"
+                    @click="Update(i)"
                   >
                     저장
                   </v-btn>
@@ -87,21 +87,18 @@
                     </v-btn>
                   </template>
                   <v-list>
-                    <v-list-item
-                      v-if="!message.badWord"
-                      @click="editcomment(i)"
-                    >
+                    <v-list-item v-if="!message.badWord" @click="Edit(i)">
                       <v-list-item-title>
                         <v-icon left> mdi-pencil </v-icon>
                         {{ comments[i].edit ? '취소' : '수정' }}
                       </v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click="delcomment(i)">
+                    <v-list-item @click="Delete(i)">
                       <v-list-item-title>
                         <v-icon left> mdi-trash-can </v-icon> 삭제
                       </v-list-item-title>
                     </v-list-item>
-                    <v-list-item v-if="!parent" @click="replycomment(i)">
+                    <v-list-item v-if="!parent" @click="Reply(i)">
                       <v-list-item-title>
                         <v-icon left> mdi-reply </v-icon> 답장
                       </v-list-item-title>
@@ -139,125 +136,111 @@
   </div>
 </template>
 
-<script>
-import * as filter from 'leo-profanity'
+<script setup lang="ts">
 import Filter from 'badwords-ko'
+import * as filter from 'leo-profanity'
 import { db } from '@/plugins/firebase'
+import { Libris, Notify, User } from '@/plugins/global'
 
-export default {
-  props: {
-    link: {
-      type: String,
-      required: true
-    },
-    uid: {
-      type: String,
-      required: true
-    },
-    dbr: {
-      type: String,
-      required: true
-    },
-    nocomments: {
-      type: Boolean,
-      default: false
-    },
-    nofield: {
-      type: Boolean,
-      default: false
-    },
-    cb: {
-      type: Function,
-      default: () => {}
-    },
-    parent: {
-      type: Boolean,
-      default: false
-    }
+const userInfo = User()
+const props = defineProps({
+  link: {
+    type: String,
+    required: true
   },
-  data() {
-    return {
-      comment: '',
-      updatedcomment: '',
-      reply: '',
-      replying: -1,
-      comments: []
-    }
+  dbr: {
+    type: String,
+    required: true
   },
-  created() {
-    db.ref(this.dbr).on('child_added', async s =>
-      this.comments.push({ ...(await s.val()), id: s.key })
+  uid: {
+    type: String,
+    required: true
+  },
+  nofield: {
+    type: Boolean,
+    default: false
+  },
+  cb: {
+    type: Function,
+    default: () => {}
+  },
+  parent: {
+    type: Boolean,
+    default: false
+  }
+})
+const comment = ref<string>('')
+const updatedcomment = ref<string>('')
+const comments = ref<any>([])
+const replying = ref<number>(-1)
+
+onBeforeMount(() =>
+  db
+    .ref(props.dbr)
+    .on('child_added', async s =>
+      comments.value.push({ ...(await s.val()), id: s.key })
     )
-  },
-  methods: {
-    editcomment(i) {
-      this.comments[i].edit = !this.comments[i].edit
-      this.updatedcomment = this.comments[i].content
-      this.$forceUpdate()
-    },
-    replycomment(i) {
-      this.replying = i
-      this.$forceUpdate()
-    },
-    replycommentpost(i) {
-      if (this.reply) {
-        db.ref(`${this.dbr}/${i}/reply`).push({
-          displayName: this.userInfo.displayName,
-          photoURL: this.userInfo.photoURL,
-          content: this.reply,
-          time: Date.now()
-        })
-      }
-    },
-    updatecomment(i) {
-      this.comments[Object.keys(this.comments)[i]] = {
-        ...this.comments[i],
-        content: this.updatedcomment,
-        edited: true,
-        time: Date.now()
-      }
+)
 
-      delete this.comments[i].edit
-      this.$forceUpdate()
-      db.ref(this.dbr).set(this.comments)
-    },
-    delcomment(i) {
-      const cmt = db.ref(this.dbr)
-      this.comments.splice(i, 1)
-      cmt.set(this.comments)
-      this.$forceUpdate()
-    },
-    commentpost() {
-      filter.loadDictionary('en-us')
-      const filterKO = new Filter()
+const Edit = (i: number) => {
+  comments.value[i].edit = true
+  updatedcomment.value = comments.value[i].content
+}
 
-      if (this.comment.length > 0) {
-        const comments = db.ref(this.dbr)
-        const { displayName, photoURL, uid } = this.userInfo
-        const badWord =
-          filter.check(this.comment) || filterKO.isProfane(this.comment)
+const Reply = (i: number) => (replying.value = i)
 
-        comments.push({
-          uid,
-          photoURL,
-          displayName,
-          time: Date.now(),
-          content: filter.clean(filterKO.clean(this.comment)),
-          badWord
-        })
+const Update = (i: number) => {
+  comments.value[Object.keys(comments.value)[i]] = {
+    ...comments.value[i],
+    content: updatedcomment.value,
+    edited: true,
+    time: Date.now()
+  }
 
-        this.cb()
-        this.comment = ''
+  delete comments.value[i].edit
+  db.ref(props.dbr).set(comments.value)
+}
 
-        if (badWord) {
-          this.updateLibris(this.userInfo.uid, -5)
-          this.notify(this.uid, '나쁜 말을 사용했습니다. -5점', this.link)
-        } else {
-          this.notify(this.uid, this.comment, this.link)
-          this.updateLibris(this.userInfo.uid, 0.1)
-        }
-      }
+const Delete = (i: number) => {
+  const cmt = db.ref(props.dbr)
+  comments.value.splice(i, 1)
+  cmt.set(comments.value)
+}
+
+const Comment = () => {
+  filter.loadDictionary('en-us')
+  const filterKO = new Filter()
+
+  if (comment.value.length > 0) {
+    const comments = db.ref(props.dbr)
+    const { displayName, photoURL, uid } = userInfo.value
+    const badWord =
+      filter.check(comment.value) || filterKO.isProfane(comment.value)
+
+    comments.push({
+      uid,
+      photoURL,
+      displayName,
+      time: Date.now(),
+      content: filterKO.clean(filter.clean(comment.value)),
+      badWord
+    })
+
+    if (badWord.value) {
+      Libris(userInfo.value.uid, -5)
+      Notify(
+        props.uid,
+        userInfo.value.photoURL,
+        '나쁜 말을 사용했습니다. -5점',
+        props.link
+      )
+    } else {
+      Notify(props.uid, userInfo.value.photoURL, comment.value, props.link)
+      Libris(userInfo.value.uid, 0.1)
     }
+
+    props.cb()
+    comment.value = ''
   }
 }
 </script>

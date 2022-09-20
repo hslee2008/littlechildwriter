@@ -35,22 +35,10 @@
           </v-list-item>
         </v-list>
       </template>
-
-      <v-divider />
-
-      <v-card-actions>
-        <v-btn id="pwainstall" color="primary" block>
-          설치
-          <v-icon right>mdi-download</v-icon>
-        </v-btn>
-      </v-card-actions>
     </v-navigation-drawer>
 
     <v-app-bar fixed app color="#23262E" class="elevation-0">
-      <v-app-bar-nav-icon
-        v-if="userInfo.displayName"
-        @click="bookmark = !bookmark"
-      />
+      <v-app-bar-nav-icon v-if="userInfo.uid" @click="bookmark = !bookmark" />
 
       <NLink to="/">
         <v-avatar size="30">
@@ -122,85 +110,46 @@
   </v-app>
 </template>
 
-<script>
-import UserMenu from './UserMenu.vue'
-import { auth, db } from '@/plugins/firebase'
+<script setup lang="ts">
+import { auth, db } from '@/plugins/firebase'; import { User } from
+'@/plugins/global'; import UserMenu from './UserMenu.vue';
 
-export default {
-  components: {
-    UserMenu
-  },
-  data() {
-    return {
-      notif: [],
-      items: [],
-      books: [],
 
-      notifOverlay: false,
-      bookmark: false,
-      dialog: false,
-      search: ''
-    }
-  },
-  mounted() {
-    this.getSavedUserDataFromDB()
+const router = useRouter()
+const userInfo = User()
+const notif = ref<any>([])
+const items = ref<any>([])
+const notifOverlay = ref<boolean>(false)
+const bookmark = ref<boolean>(false)
 
-    this.$nextTick(() => {
-      let deferredPrompt
+onMounted(() => {
+  auth.onAuthStateChanged(u => {
+    if (!u) return
 
-      window.addEventListener('appinstalled', () => {
-        deferredPrompt = null
-        pwainstall.style.display = 'none'
-      })
+    db.ref(`/users/${u.uid}/bookmarks`).on('child_added', async s =>
+      items.value.push(await s.val())
+    )
 
-      window.addEventListener('beforeinstallprompt', e => {
-        e.preventDefault()
-        deferredPrompt = e
-      })
+    db.ref(`/users/${u.uid}/notification`).on('child_added', async s =>
+      notif.value.push(await s.val())
+    )
+  })
+})
 
-      pwainstall.addEventListener('click', () => {
-        deferredPrompt.prompt()
-        deferredPrompt = null
-      })
-    })
-  },
-  methods: {
-    clearEverything() {
-      db.ref(`/users/${this.userInfo.uid}/notification`).remove()
-      this.notif = []
-      navigator.clearAppBadge()
-    },
-    load(link) {
-      this.notifOverlay = false
-      this.$forceUpdate()
-      this.$router.push(link)
-    },
-    getSavedUserDataFromDB() {
-      auth.onAuthStateChanged(u => {
-        if (!u) {
-          return
-        }
+const clearEverything = () => {
+  db.ref(`/users/${userInfo.value.uid}/notification`).remove()
+  notif.value = []
+}
 
-        db.ref(`/users/${this.userInfo.uid}/bookmarks`).on(
-          'child_added',
-          async s => this.items.push(await s.val())
-        )
+const load = (link: string) => {
+  notifOverlay.value = false
+  router.push(link)
+}
 
-        db.ref(`/users/${this.userInfo.uid}/notification`).on(
-          'child_added',
-          async s => this.notif.push(await s.val())
-        )
-
-        navigator.setAppBadge(this.notif.length)
-      })
-    },
-    deleteBookmark(time, i) {
-      db.ref(`/users/${this.userInfo.uid}/bookmarks/${time}`).remove()
-      db.ref(`/contents/${time}/bookmarks/${this.userInfo.uid}`).remove()
-      this.updateLibris(this.userInfo.uid, -0.1)
-      this.items.splice(i, 1)
-    }
-  }
+const deleteBookmark = (time: string, i: number) => {
+  db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
+  db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
+  items.value.splice(i, 1)
 }
 </script>
 

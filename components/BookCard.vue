@@ -41,7 +41,7 @@
                   Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
                 "
                 color="primary"
-                @click="bookmark(item.time, i)"
+                @click="Bookmark(item.time, i)"
               >
                 <v-icon>
                   mdi-bookmark{{
@@ -55,7 +55,7 @@
                 icon
                 :disabled="item.liked[userInfo.uid] == true"
                 class="mr-2"
-                @click="likeBook(item)"
+                @click="Like(item)"
               >
                 <v-icon> mdi-thumb-up </v-icon>
               </v-btn>
@@ -83,64 +83,60 @@
   </v-lazy>
 </template>
 
-<script>
+<script setup lang="ts">
 import { db } from '@/plugins/firebase'
+import { Libris, Notify, User } from '@/plugins/global'
 
-export default {
-  props: {
-    items: {
-      type: Array,
-      required: true
-    },
-    simple: {
-      type: Boolean,
-      default: false
-    },
-    showprivate: {
-      type: Boolean,
-      default: false
-    }
+const userInfo = User()
+const props = defineProps({
+  items: {
+    type: Array as unknown as any[],
+    required: true
   },
-  data() {
-    return {
-      bookmarkSnackbar: false
-    }
+  simple: {
+    type: Boolean,
+    default: false
   },
-  methods: {
-    likeBook(it) {
-      it.likes++
-      it.liked[this.userInfo.uid] = true
-
-      db.ref(`/contents/${it.time}/liked/${this.userInfo.uid}`).set(true)
-      db.ref(`/contents/${it.time}/likes`).set(it.likes)
-
-      this.updateLibris(this.userInfo.uid, 0.1)
-      this.updateLibris(it.uid, 0.1)
-
-      this.notify(
-        it.uid,
-        `${this.userInfo.displayName}님이 좋아합니다`,
-        `/book/content/${it.time}`
-      )
-    },
-    bookmark(time, i) {
-      this.bookmarkSnackbar = true
-
-      db.ref(`/users/${this.userInfo.uid}/bookmarks/${time}`).set({
-        title: this.items[i].title,
-        image: this.items[i].image,
-        time
-      })
-      db.ref(`/contents/${time}/bookmarks/${this.userInfo.uid}`).set(true)
-
-      // eslint-disable-next-line vue/no-mutating-props
-      this.items[i].bookmarks = {
-        ...this.items[i].bookmarks,
-        [this.userInfo.uid]: true
-      }
-      this.updateLibris(this.userInfo.uid, 0.1)
-    }
+  showprivate: {
+    type: Boolean,
+    default: false
   }
+})
+const bookmarkSnackbar = ref<boolean>(false)
+
+const Like = (item: any) => {
+  item.likes++
+  item.liked[userInfo.value.uid] = true
+
+  db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(true)
+  db.ref(`/contents/${item.time}/likes`).set(item.likes)
+
+  Libris(userInfo.value.uid, 0.1)
+  Libris(item.uid, 0.1)
+  Notify(
+    item.uid,
+    userInfo.value.photoURL,
+    `${userInfo.value.displayName}님이 좋아요를 눌렀습니다.`,
+    `/book/content/${item.time}`
+  )
+}
+
+const Bookmark = (time: string, i: number) => {
+  bookmarkSnackbar.value = true
+  const { title, image } = props.items[i]
+
+  db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).set({
+    title,
+    image,
+    time
+  })
+  db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
+
+  props.items[i].bookmarks = {
+    ...props.items[i].bookmarks,
+    [userInfo.value.uid]: true
+  }
+  Libris(userInfo.value.uid, 0.1)
 }
 </script>
 

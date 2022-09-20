@@ -19,72 +19,53 @@
 
       <v-spacer />
 
-      <v-btn outlined color="primary" class="elevation-0" @click="update">
+      <v-btn outlined color="primary" class="elevation-0" @click="Update">
         업데이트
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { auth, db } from '@/plugins/firebase'
+<script lang="ts" setup>
+import { auth, db } from '@/plugins/firebase';
 
-export default Vue.extend({
-  asyncData({ params }) {
-    const time = params.edit
-    return {
-      time
-    }
-  },
-  data() {
-    return {
-      post: {
-        title: '',
-        content: '',
-        image: '',
-        time: '',
-        rating: 0,
-        displayName: '',
-        pageCount: 0,
-        isbn: '',
-        uid: ''
-      },
-      time: ''
-    }
-  },
-  mounted() {
-    auth.onAuthStateChanged(u => u && this.getPost())
-  },
-  methods: {
-    update() {
-      const {
-        title,
-        content,
-        image,
-        time,
-        rating,
-        displayName,
-        pageCount,
-        isbn
-      } = this.post
 
-      db.ref(`/contents/${this.time}`).update({
-        title,
-        content,
-        rating,
-        isbn,
-        image,
-        pageCount,
-        displayName,
-        time: parseInt(time)
-      })
-
-      this.$router.push(`/book/content/${time}`)
-    },
-    async getPost() {
-      this.post = (await db.ref(`/contents/${this.time}`).once('value')).val()
-    }
-  }
+const route = useRoute()
+const router = useRouter()
+const time = route.params.edit
+const post = ref<any>({
+  isbn: '',
+  title: '',
+  image: '',
+  pageCount: '',
+  categories: [] as string[],
+  rating: 5,
+  content: '',
+  uid: '',
+  displayName: '',
+  views: 0,
+  time: Date.now()
 })
+
+onMounted(() => auth.onAuthStateChanged(u => u && Post()))
+
+const Post = async () =>
+  (post.value = (await db.ref(`/contents/${time}`).once('value')).val())
+
+const Update = () => {
+  const { title, content, image, time, rating, displayName, pageCount, isbn } =
+    post.value
+
+  db.ref(`/contents/${time}`).update({
+    title,
+    content,
+    rating,
+    isbn,
+    image,
+    pageCount,
+    displayName
+  })
+
+  router.push(`/book/content/${time}`)
+}
 </script>

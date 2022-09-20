@@ -1,23 +1,22 @@
-<!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
     <iframe
-      v-if="fetchedBookID"
+      v-if="GBid"
       frameborder="0"
       scrolling="no"
       class="zmax frame"
-      :src="`https://books.google.co.kr/books?id=${fetchedBookID}&lpg=PP1&pg=PP1&output=embed`"
+      :src="`https://books.google.co.kr/books?id=${GBid}&lpg=PP1&pg=PP1&output=embed`"
       width="100%"
       height="100%"
     />
     <v-btn
-      v-if="fetchedBookID"
+      v-if="GBid"
       bottom
       right
       fixed
       color="primary"
       class="zmax"
-      @click="fetchedBookID = ''"
+      @click="GBid = ''"
     >
       닫기
     </v-btn>
@@ -79,7 +78,7 @@
     <div class="text-center my-10">
       <div v-if="post.uid === userInfo.uid" class="mb-10">
         <LazyDialogComponent
-          :cb="del"
+          :cb="Del"
           btn-title="삭제"
           title="진짜로 삭제하겠습니까?"
           text="삭제하면 복구할 수 없습니다"
@@ -94,7 +93,7 @@
         <v-btn text to="/list">
           <v-icon left>mdi-chevron-left</v-icon> 뒤로
         </v-btn>
-        <v-btn text @click="loadIframe">
+        <v-btn text @click="Iframe">
           <v-icon left> mdi-file-find </v-icon> 미리보기
         </v-btn>
         <v-dialog v-if="post.categories" width="700">
@@ -160,7 +159,7 @@
                     </tr>
                     <tr>
                       <td>Google Books ID</td>
-                      <td>{{ otherInfo.id }}</td>
+                      <td>{{ otherInfo.GBid }}</td>
                     </tr>
                     <tr>
                       <td>평균 별점 (구글)</td>
@@ -207,161 +206,154 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { db } from '@/plugins/firebase'
+<script setup lang="ts">
+import { db } from '@/plugins/firebase';
+import { Libris, User } from '@/plugins/global';
 
-export default Vue.extend({
-  asyncData({ params }) {
-    const time = params.content
-    return {
-      time
+
+const userInfo = User()
+const router = useRouter()
+const route = useRoute()
+const time = route.params.content
+const post = ref<any>({
+  isbn: '',
+  title: '',
+  image: '',
+  pageCount: '',
+  categories: [] as string[],
+  rating: 5,
+  content: '',
+  uid: '',
+  displayName: '',
+  views: 0,
+  time: Date.now()
+})
+const otherInfo = ref<any>({
+  volumeInfo: {
+    authors: [],
+    publisher: '',
+    publishedDate: '',
+    averageRating: 0
+  },
+  GBid: ''
+})
+const suggested = ref<any>([])
+const loading = ref<boolean>(true)
+const GBid = ref<string>('')
+
+const Content = async () => {
+  const data = await db
+    .ref(`/contents/${time}`)
+    .once('value')
+    .then(r => r.val())
+
+  data !== null && Object.keys(data).length !== 1 && (post.value = data)
+
+  if (data.isbn)
+    await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=isbn:${data.isbn}`
+    )
+      .then(res => res.json())
+      .then(res => (otherInfo.value = res.items[0]))
+}
+
+const View = () => {
+  db.ref(`contents/${time}/views`).transaction(view => view + 1)
+  Libris(post.value.uid, 0.1)
+  Libris(userInfo.value.uid, 0.1)
+}
+
+const Suggestion = async () => {
+  loading.value = true
+
+  if (!post.value.categories) {
+    loading.value = false
+    return
+  }
+
+  const cat: string[] = [...post.value.categories]
+  cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
+
+  let done = false
+  let n = 5
+  let overflow = 0
+
+  while (!done) {
+    overflow++
+
+    if (overflow > 10) {
+      done = true
+      break
     }
-  },
-  data() {
-    return {
-      parsedTime: '',
 
-      comment: '',
-      comments: [],
+    await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=subject:${cat.join(
+        ','
+      )}&maxResults=${n}`
+    )
+      .then(res => res.json())
+      .then(data => {
+        const length = data.items.length
 
-      post: {
-        isbn: '',
-        title: '',
-        image: '',
-        pageCount: '',
-        categories: [],
-        rating: 5,
-        content: '',
-        uid: '',
-        displayName: '',
-        views: 0,
-        time: Date.now()
-      },
-
-      fetchedBookID: '',
-      loading: false,
-      suggested: [] as { thumbnail: string; infoLink: string }[],
-      otherInfo: {} as any,
-
-      time: ''
-    }
-  },
-  async created() {
-    await this.getPost()
-    this.growView()
-    this.fetchContent()
-  },
-  methods: {
-    async fetchContent() {
-      this.loading = true
-
-      if (!this.post.categories) {
-        this.loading = false
-        return
-      }
-
-      const cat: string[] = [...this.post.categories]
-      cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
-
-      let done = false
-      let n = 5
-      let overflow = 0
-
-      while (!done) {
-        overflow++
-
-        if (overflow > 10) {
+        if (length > 4) {
           done = true
-          break
+        } else {
+          cat.shift()
+          n -= length
         }
 
-        await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q=subject:${cat.join(
-            ','
-          )}&maxResults=${n}`
-        )
-          .then(res => res.json())
-          .then(data => {
-            const length = data.items.length
+        for (let i = 0; i < length; i++) {
+          const book = data.items[i]
 
-            if (length > 4) {
-              done = true
-            } else {
-              cat.shift()
-              n -= length
+          if (
+            book.volumeInfo.imageLinks.thumbnail &&
+            book.volumeInfo.title !== post.value.title
+          ) {
+            const {
+              imageLinks: { thumbnail },
+              infoLink
+            } = book.volumeInfo
+
+            suggested.value.push({
+              thumbnail,
+              infoLink
+            })
+
+            if (i === 4) {
+              break
             }
-
-            for (let i = 0; i < length; i++) {
-              const book = data.items[i]
-
-              if (
-                book.volumeInfo.imageLinks.thumbnail &&
-                book.volumeInfo.title !== this.post.title
-              ) {
-                const {
-                  imageLinks: { thumbnail },
-                  infoLink
-                } = book.volumeInfo
-
-                this.suggested.push({
-                  thumbnail,
-                  infoLink
-                })
-
-                if (i === 4) {
-                  break
-                }
-              }
-            }
-          })
-          .catch(() => cat.shift())
-      }
-
-      this.loading = false
-    },
-    async loadIframe() {
-      let fetched = ''
-
-      await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
-      )
-        .then(res => res.json())
-        .then(res => (fetched = res.items[0].id))
-
-      this.fetchedBookID = fetched
-    },
-    del() {
-      db.ref(`contents/${this.time}`).remove()
-      this.updateLibris(
-        this.userInfo.uid,
-        -(parseInt(this.post.pageCount) / 100)
-      )
-      this.$router.push('/list')
-    },
-    async getPost() {
-      const post = await db
-        .ref(`/contents/${this.time}`)
-        .once('value')
-        .then(r => r.val())
-
-      post !== null && Object.keys(post).length !== 1 && (this.post = post)
-
-      if (post.isbn) {
-        await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q=isbn:${this.post.isbn}`
-        )
-          .then(res => res.json())
-          .then(res => (this.otherInfo = res.items[0]))
-      }
-    },
-    growView() {
-      db.ref(`contents/${this.time}/views`).transaction(view => view + 1)
-      this.updateLibris(this.post.uid, 0.1)
-      this.updateLibris(this.userInfo.uid, 0.1)
-    }
+          }
+        }
+      })
+      .catch(() => cat.shift())
   }
+
+  loading.value = false
+}
+
+onBeforeMount(async () => {
+  await Content()
+  View()
+  Suggestion()
 })
+
+const Iframe = async () => {
+  let fetched = ''
+
+  await fetch(
+    `https://www.googleapis.com/books/v1/volumes?q=isbn:${post.value.isbn}`
+  )
+    .then(res => res.json())
+    .then(res => (fetched = res.items[0].id))
+
+  GBid.value = fetched
+}
+
+const Del = () => {
+  db.ref(`contents/${time}`).remove()
+  Libris(userInfo.value.uid, -(parseInt(post.value.pageCount) / 100))
+  router.push('/list')
+}
 </script>
 
 <style scoped>
