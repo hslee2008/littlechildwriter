@@ -111,9 +111,9 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from '@/plugins/firebase'; import { User } from
-'@/plugins/global'; import UserMenu from './UserMenu.vue';
-
+import UserMenu from './UserMenu.vue'
+import { auth, db } from '@/plugins/firebase'
+import { User } from '@/plugins/global'
 
 const router = useRouter()
 const userInfo = User()
@@ -124,7 +124,9 @@ const bookmark = ref<boolean>(false)
 
 onMounted(() => {
   auth.onAuthStateChanged(u => {
-    if (!u) return
+    if (!u) {
+      return
+    }
 
     db.ref(`/users/${u.uid}/bookmarks`).on('child_added', async s =>
       items.value.push(await s.val())
