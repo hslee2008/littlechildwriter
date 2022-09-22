@@ -34,7 +34,7 @@
         </div>
 
         <div class="ma-auto">
-          <v-card-title class="h1 primary--text">
+          <v-card-title class="h1 primary--text title">
             {{ post.title }}
             <span v-if="post.isbn" class="white--text subtitle-2 ml-1">
               ({{ otherInfo.volumeInfo?.authors.join(', ') }})
@@ -84,7 +84,7 @@
           text="삭제하면 복구할 수 없습니다"
           icon="trash-can"
         />
-        <v-btn :to="`/book/edit/${time}`" class="ml-3" color="blue lighten-2">
+        <v-btn :to="`/book/edit/${time}`" class="ml-3 edit" color="blue lighten-2">
           <v-icon left> mdi-pencil </v-icon> 편집
         </v-btn>
       </div>
@@ -207,9 +207,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase';
-import { Libris, User } from '@/plugins/global';
-
+import { db } from '@/plugins/firebase'
+import { Libris, User } from '@/plugins/global'
 
 const userInfo = User()
 const router = useRouter()
@@ -249,12 +248,13 @@ const Content = async () => {
 
   data !== null && Object.keys(data).length !== 1 && (post.value = data)
 
-  if (data.isbn)
+  if (data.isbn) {
     await fetch(
       `https://www.googleapis.com/books/v1/volumes?q=isbn:${data.isbn}`
     )
       .then(res => res.json())
       .then(res => (otherInfo.value = res.items[0]))
+  }
 }
 
 const View = () => {

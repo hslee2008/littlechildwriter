@@ -3,7 +3,7 @@
     <v-card-text>
       <v-rating v-model="post.rating" color="blue" size="30" class="my-10" />
 
-      <v-text-field v-model="post.title" label="제목" />
+      <v-text-field v-model="post.title" label="제목" class="title" />
       <v-text-field v-model="post.pageCount" label="페이지" />
       <v-textarea v-model="post.content" label="책 소개" />
     </v-card-text>
@@ -19,7 +19,12 @@
 
       <v-spacer />
 
-      <v-btn outlined color="primary" class="elevation-0" @click="Update">
+      <v-btn
+        outlined
+        color="primary"
+        class="elevation-0 update"
+        @click="Update"
+      >
         업데이트
       </v-btn>
     </v-card-actions>
@@ -27,8 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import { auth, db } from '@/plugins/firebase';
-
+import { auth, db } from '@/plugins/firebase'
 
 const route = useRoute()
 const router = useRouter()
@@ -53,8 +57,7 @@ const Post = async () =>
   (post.value = (await db.ref(`/contents/${time}`).once('value')).val())
 
 const Update = () => {
-  const { title, content, image, time, rating, displayName, pageCount, isbn } =
-    post.value
+  const { title, content, image, time, rating, pageCount, isbn } = post.value
 
   db.ref(`/contents/${time}`).update({
     title,
@@ -62,8 +65,7 @@ const Update = () => {
     rating,
     isbn,
     image,
-    pageCount,
-    displayName
+    pageCount
   })
 
   router.push(`/book/content/${time}`)

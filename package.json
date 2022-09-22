@@ -17,7 +17,6 @@
   "dependencies": {
     "@nuxtjs/pwa": "latest",
     "badwords-ko": "latest",
-    "eslint-plugin-nuxt": "latest",
     "firebase": "latest",
     "leo-profanity": "latest",
     "nuxt-edge": "latest",
@@ -29,7 +28,7 @@
     "@nuxtjs/eslint-config-typescript": "latest",
     "@nuxtjs/google-analytics": "latest",
     "@nuxtjs/vuetify": "latest",
-    "@types/leo-profanity": "^1.5.0",
+    "@types/leo-profanity": "latest",
     "cypress": "latest",
     "eslint": "latest",
     "firebase-admin": "latest",

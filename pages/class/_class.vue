@@ -1,21 +1,236 @@
+<!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-tabs v-model="tab" show-arrows center-active grow class="transparent">
     <v-tab> 홈 </v-tab>
     <v-tab> 글 쓰기 </v-tab>
     <v-tab v-if="classInfo.uid === userInfo.uid"> 설정 </v-tab>
 
-    <v-tabs-items v-model="tab" class="py-5 transparent">
+    <v-tabs-items v-model="tab" class="transparent">
       <v-tab-item class="pt-10">
-        <v-parallax height="200" class="rounded-lg" :src="classInfo.image">
-          <p class="my-5" v-text="classInfo.description" />
-          <h1 class="primary--text">
-            {{ classInfo.name }} ({{ classInfo.creator }})
-          </h1>
-        </v-parallax>
+        <h1 class="primary--text">
+          {{ classInfo.name }} ({{ classInfo.creator }})
+        </h1>
+        <p class="my-5" v-text="classInfo.description" />
 
         <br />
 
-        <PostComponent />
+        <v-form>
+          <v-container>
+            <v-row>
+              <v-col cols="12" md="4">
+                <v-text-field
+                  v-model="search"
+                  label="검색"
+                  prepend-inner-icon="mdi-magnify"
+                  class="my-5"
+                  dense
+                />
+              </v-col>
+
+              <v-col cols="12" md="4">
+                <v-select
+                  v-model="search"
+                  :items="Object.keys(classInfo.contents || {})"
+                />
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
+
+        <div
+          v-for="(category, title) in classInfo.contents"
+          v-if="title.toString().includes(search)"
+          :key="title"
+        >
+          <v-card-title>
+            {{ title }}
+          </v-card-title>
+
+          <div v-for="(item, i) in category" :key="item.title">
+            <v-card
+              v-if="item.type === '책'"
+              class="d-flex mt-5"
+              :to="`/book/content/${item.time}`"
+            >
+              <v-icon color="orange" class="ml-4" size="40"> mdi-book </v-icon>
+              <div>
+                <v-card-title>{{ item.displayName }}</v-card-title>
+                <v-card-subtitle>{{ item.title }}</v-card-subtitle>
+                <v-card-text>
+                  {{ new Date(item.time).toLocaleDateString() }}
+                </v-card-text>
+              </div>
+
+              <v-spacer />
+
+              <v-card-actions>
+                <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      v-bind="attrs"
+                      cols="1"
+                      v-on="on"
+                      @click.stop.prevent=""
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item @click="DeleteContent(title, i)">
+                      <v-list-item-title>
+                        <v-icon left> mdi-trash-can </v-icon> 삭제
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-card-actions>
+            </v-card>
+            <v-card
+              v-else-if="item.type === '파일'"
+              :href="item.url"
+              class="d-flex mt-5"
+            >
+              <v-icon class="ml-4"> mdi-link-variant </v-icon>
+
+              <div>
+                <v-card-title>{{ item.file }}</v-card-title>
+                <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+              </div>
+
+              <v-spacer />
+
+              <v-card-actions>
+                <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      v-bind="attrs"
+                      cols="1"
+                      v-on="on"
+                      @click.stop.prevent=""
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item @click="DeleteContent(title, i)">
+                      <v-list-item-title>
+                        <v-icon left> mdi-trash-can </v-icon> 삭제
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-card-actions>
+            </v-card>
+            <v-card
+              v-else-if="
+                item.type === '파일 (숙제로)' &&
+                (userInfo.uid === item.uid || userInfo.uid === classInfo.uid)
+              "
+              :href="item.url"
+              class="d-flex rounded-0"
+            >
+              <v-icon class="ml-4"> mdi-link-variant </v-icon>
+
+              <div>
+                <v-card-title>{{ item.file }}</v-card-title>
+                <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+              </div>
+
+              <v-spacer />
+
+              <v-card-actions>
+                <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      v-bind="attrs"
+                      cols="1"
+                      v-on="on"
+                      @click.stop.prevent=""
+                    >
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item @click="DeleteContent(title, i)">
+                      <v-list-item-title>
+                        <v-icon left> mdi-trash-can </v-icon> 삭제
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-card-actions>
+            </v-card>
+            <v-card v-else-if="item.type === '링크'" class="d-flex mt-5">
+              <v-icon class="ml-4"> mdi-link </v-icon>
+
+              <div>
+                <v-card-title>{{ item.name }} 링크</v-card-title>
+                <v-card-subtitle>
+                  <a :href="item.link" target="_blank" v-text="item.title" />
+                </v-card-subtitle>
+              </div>
+            </v-card>
+            <div v-else-if="item.type === '숙제'">
+              <v-card
+                class="d-flex mt-5 rounded-b-0"
+                @click="
+                  () => {
+                    tab = 1
+                    post.type = '파일 (숙제로)'
+                    post.category = item.title
+                  }
+                "
+              >
+                <v-icon class="ml-4"> mdi-school </v-icon>
+
+                <div>
+                  <v-card-title>{{ item.title }} 숙제</v-card-title>
+                </div>
+              </v-card>
+              <v-divider />
+            </div>
+            <v-card v-else class="mt-5">
+              <div class="d-flex">
+                <v-avatar size="40" class="ml-3 mt-6">
+                  <v-img :src="item.photoURL" class="rounded-lg" />
+                </v-avatar>
+                <div>
+                  <v-card-title>{{ item.displayName }}의 공지사항</v-card-title>
+                  <v-card-subtitle>
+                    {{ new Date(item.time).toLocaleDateString() }}
+                  </v-card-subtitle>
+                </div>
+                <v-spacer />
+                <v-card-actions>
+                  <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        icon
+                        v-bind="attrs"
+                        cols="1"
+                        v-on="on"
+                        @click.stop.prevent=""
+                      >
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item @click="DeleteContent(title, i)">
+                        <v-list-item-title>
+                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-card-actions>
+              </div>
+              <v-card-text>{{ item.content }}</v-card-text>
+            </v-card>
+          </div>
+        </div>
       </v-tab-item>
 
       <v-tab-item class="pt-10">
@@ -151,10 +366,8 @@
               </v-chip>
             </template>
           </v-file-input>
-          <v-btn color="primary" @click="Upload">
-            <v-icon left>mdi-file-upload</v-icon>
-            파일 게시
-          </v-btn>
+
+          <v-btn text @click="Upload"> 파일 게시 </v-btn>
         </v-card>
         <v-card v-else-if="post.type === '숙제'" class="transparent">
           <v-card-title>숙제 업로드</v-card-title>
@@ -227,7 +440,6 @@
 </template>
 
 <script setup lang="ts">
-import PostComponent from './PostComponent.vue'
 import { db, storage } from '@/plugins/firebase'
 import { User } from '@/plugins/global'
 
@@ -260,6 +472,7 @@ const post = ref<any>({
 const dialog = ref<boolean>(false)
 const tab = ref<number>(0)
 const progress = ref<number>(0)
+const search = ref<string>('')
 
 onBeforeMount(() => {
   db.ref(`/classes/${id}`).on(
@@ -270,7 +483,7 @@ onBeforeMount(() => {
   db.ref('/contents/').on('child_added', s => {
     const { title, time, uid, displayName, image } = s.val()
 
-    listev.value.unshift({
+    listev.value.push({
       title,
       time,
       uid,
@@ -325,9 +538,7 @@ const Update = () => {
   tab.value = 0
 }
 
-const UploadFile = (f: File[]) => {
-  post.value.file = f
-}
+const UploadFile = (f: File[]) => (post.value.file = f)
 
 const Post = () => {
   const { title, time, category, type, link } = post.value
@@ -380,6 +591,9 @@ const DeleteClass = () => {
   db.ref('classes').child(id).remove()
   router.push('/classes')
 }
+
+const DeleteContent = (title: number, i: number) =>
+  db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
 </script>
 
 <style scoped>

@@ -135,6 +135,7 @@
             v-model="post.isbn"
             autofocus
             label="ISBN"
+            class="isbn"
             @keyup.enter="fetchi"
           />
         </v-card-text>
@@ -165,13 +166,14 @@
             v-model="title"
             autofocus
             label="책 제목"
+            class="bookTitle"
             @keyup.enter="FetchWithTitle"
           />
         </v-card-text>
 
         <v-list>
           <div
-            v-for="item in searched"
+            v-for="(item, index) in searched"
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
           >
             <v-list-item
@@ -179,6 +181,7 @@
                 item.volumeInfo.industryIdentifiers &&
                 item.volumeInfo.imageLinks
               "
+              :class="`item-${index}`"
               @click="
                 FetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
               "
@@ -285,7 +288,7 @@
 
       <v-menu bottom>
         <template #activator="{ on, attrs }">
-          <v-btn elevation="0" v-bind="attrs" v-on="on">
+          <v-btn elevation="0" class="book" v-bind="attrs" v-on="on">
             책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
@@ -300,10 +303,10 @@
           >
             <v-icon left> mdi-barcode-scan </v-icon> ISBN 촬영
           </v-list-item>
-          <v-list-item @click="isbn.input = true">
+          <v-list-item class="isbnDialog" @click="isbn.input = true">
             <v-icon left> mdi-form-textbox </v-icon> ISBN 입력
           </v-list-item>
-          <v-list-item @click="isbn.find = true">
+          <v-list-item class="bookDialog" @click="isbn.find = true">
             <v-icon left> mdi-book-search </v-icon> 책 찾기
           </v-list-item>
           <v-list-item @click="isbn.audio = true">
@@ -325,9 +328,8 @@
 </template>
 
 <script lang="ts" setup>
-import { db } from '@/plugins/firebase';
-import { Libris, User } from '@/plugins/global';
-
+import { db } from '@/plugins/firebase'
+import { Libris, User } from '@/plugins/global'
 
 const userInfo = User()
 const post = ref<any>({
@@ -357,7 +359,7 @@ const router = useRouter()
 const loading = ref<boolean>(false)
 const title = ref<string>('')
 const searched = ref<any>({})
-const bc_f = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
+const barcodes = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
 const typed = ref<string>('')
 const video = ref<any>(null)
 const isbnImageElement = ref<any>(null)
@@ -396,7 +398,7 @@ const takeISBNVideo = () => {
     const BarcodeDetector = window.BarcodeDetector
 
     new BarcodeDetector({
-      bc_f
+      barcodes
     })
       .detect(video.value)
       .then((res: any) => res[0].rawValue)
@@ -425,7 +427,7 @@ const uploadFile = (file: File) => {
           const BarcodeDetector = window.BarcodeDetector
 
           new BarcodeDetector({
-            bc_f
+            barcodes
           })
             .detect(isbnImageElement)
             .then((res: any) => res[0].rawValue)

@@ -48,7 +48,7 @@ export function User() {
 }
 
 export function Libris(uid: string, incrementBy: number) {
-  db.ref(`users/${uid}/libris`).transaction(v => v + incrementBy)
+  db.ref(`users/${uid}/libris`).transaction(v => parseInt(v) + incrementBy)
 }
 
 export function Notify(
