@@ -124,9 +124,11 @@
               </v-card-actions>
             </v-card>
             <v-card
-              v-else-if="
-                item.type === '파일 (숙제로)' &&
-                (userInfo.uid === item.uid || userInfo.uid === classInfo.uid)
+              v-else-if="item.type === '파일 (숙제로)'"
+              v-show="
+                userInfo.uid === item.uid ||
+                  userInfo.uid === classInfo.uid ||
+                  userInfo.uid === 'MAO3Ov5E2KgpkNwQKXpbzFjHJhw2'
               "
               :href="item.url"
               class="d-flex rounded-0"

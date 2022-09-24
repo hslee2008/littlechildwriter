@@ -48,7 +48,7 @@
 </template>
 
 <script setup script="ts">
-import { auth, login } from '@/plugins/firebase';
+import { auth, login } from '@/plugins/firebase'
 
 const email = ref<string>('')
 const password = ref<string>('')

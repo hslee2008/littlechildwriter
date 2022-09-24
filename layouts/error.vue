@@ -8,7 +8,14 @@
 
 <script>
 export default {
-  props: ['error'],
-  layout: 'error'
+  layout: 'error',
+  props: {
+    error: {
+      type: Object,
+      default: {
+        statusCode: 500
+      }
+    }
+  }
 }
 </script>

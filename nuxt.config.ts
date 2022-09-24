@@ -17,10 +17,10 @@ async function getRoutes() {
   const teams = (await db.ref('teams').once('value')).val()
   const users = (await db.ref('users').once('value')).val()
 
-  for (const r in books) routes.push(`/book/content/${r}`)
-  for (const r in classes) routes.push(`/class/${r}`)
-  for (const r in teams) routes.push(`/team/about/${r}`)
-  for (const r in users) routes.push(`/user/${r}`)
+  for (const r in books) { routes.push(`/book/content/${r}`) }
+  for (const r in classes) { routes.push(`/class/${r}`) }
+  for (const r in teams) { routes.push(`/team/about/${r}`) }
+  for (const r in users) { routes.push(`/user/${r}`) }
 
   return routes
 }
@@ -106,7 +106,7 @@ export default defineNuxtConfig({
   plugins: ['@/plugins/firebase', '@/plugins/global'],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
-  modules: ['@nuxtjs/pwa', '@nuxtjs/toast'],
+  modules: ['@nuxtjs/pwa'],
   target: 'static',
 
   pwa: {
@@ -198,10 +198,6 @@ export default defineNuxtConfig({
       const routes = await getRoutes()
       config.prerender.routes.push(...routes)
     }
-  },
-
-  toast: {
-    position: 'top-center'
   },
 
   googleAnalytics: {

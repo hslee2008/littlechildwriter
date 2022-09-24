@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from '@/plugins/firebase';
+import { auth, db } from '@/plugins/firebase'
 
 const router = useRouter()
 const email = ref<string>('')

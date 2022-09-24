@@ -55,7 +55,7 @@ const lbt = ref<any>([])
 
 onBeforeMount(() => (props.limit ? Limited() : UnLimited()))
 
-const Limited = async () => {
+const Limited = () => {
   db.ref('/users')
     .orderByChild('libris')
     .limitToLast(5)
@@ -71,7 +71,7 @@ const Limited = async () => {
     })
 }
 
-const UnLimited = async () => {
+const UnLimited = () => {
   db.ref('/users')
     .orderByChild('libris')
     .on('child_added', async s => {

@@ -84,7 +84,11 @@
           text="삭제하면 복구할 수 없습니다"
           icon="trash-can"
         />
-        <v-btn :to="`/book/edit/${time}`" class="ml-3 edit" color="blue lighten-2">
+        <v-btn
+          :to="`/book/edit/${time}`"
+          class="ml-3 edit"
+          color="blue lighten-2"
+        >
           <v-icon left> mdi-pencil </v-icon> 편집
         </v-btn>
       </div>

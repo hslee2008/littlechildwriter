@@ -132,10 +132,7 @@ const Bookmark = (time: string, i: number) => {
   })
   db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
 
-  props.items[i].bookmarks = {
-    ...props.items[i].bookmarks,
-    [userInfo.value.uid]: true
-  }
+  props.items[i].bookmarks[userInfo.value.uid] = true
   Libris(userInfo.value.uid, 0.1)
 }
 </script>

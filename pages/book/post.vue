@@ -179,7 +179,7 @@
             <v-list-item
               v-if="
                 item.volumeInfo.industryIdentifiers &&
-                item.volumeInfo.imageLinks
+                  item.volumeInfo.imageLinks
               "
               :class="`item-${index}`"
               @click="

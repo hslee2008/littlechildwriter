@@ -81,8 +81,7 @@
 
 <script setup lang="ts">
 import { db } from '@/plugins/firebase'; import { Book, User } from
-'@/plugins/global';
-
+  '@/plugins/global'
 
 const userInfo = User()
 const recent = ref<Book[]>([])
