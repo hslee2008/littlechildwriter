@@ -89,6 +89,11 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
+          <div v-else>
+            <v-card-text class="text-center grey--text">
+              알림이 없습니다.
+            </v-card-text>
+          </div>
 
           <v-card-actions>
             <v-spacer />

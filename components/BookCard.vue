@@ -1,68 +1,66 @@
+<!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-lazy>
     <v-row class="row">
       <v-card
         v-for="(item, i) in items"
+        v-if="showprivate ? !item.isPublic : item.isPublic"
         :key="i"
         :width="$vuetify.breakpoint.mobile ? 150 : 200"
         class="mx-auto my-5 transparent"
       >
-        <template
-          v-if="showprivate ? item.isPublic === false : item.isPublic !== false"
-        >
-          <v-card :to="`/book/content/${item.time}`" class="transparent">
-            <v-img :src="item.image" :lazy-src="item.image" class="rounded-lg">
-              <template #placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-row>
-              </template>
-            </v-img>
+        <v-card :to="`/book/content/${item.time}`" class="transparent">
+          <v-img :src="item.image" :lazy-src="item.image" class="rounded-lg">
+            <template #placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-row>
+            </template>
+          </v-img>
 
-            <v-card-title class="primary--text">{{ item.title }}</v-card-title>
+          <v-card-title class="primary--text">{{ item.title }}</v-card-title>
 
-            <v-card-subtitle>
-              <NLink :to="`/user/${item.uid}`">{{ item.displayName }}</NLink>
-            </v-card-subtitle>
+          <v-card-subtitle>
+            <NLink :to="`/user/${item.uid}`">{{ item.displayName }}</NLink>
+          </v-card-subtitle>
 
-            <v-card-text>
-              <span class="text--disabled">
-                {{ item.views }} views ·
-                {{ new Date(parseInt(item.time)).toLocaleDateString() }}
-              </span>
-            </v-card-text>
-          </v-card>
+          <v-card-text>
+            <span class="text--disabled">
+              {{ item.views }} views ·
+              {{ new Date(parseInt(item.time)).toLocaleDateString() }}
+            </span>
+          </v-card-text>
+        </v-card>
 
-          <v-card v-show="!simple" class="transparent">
-            <v-card-actions v-if="userInfo.uid">
-              <v-btn
-                icon
-                :disabled="
+        <v-card v-show="!simple" class="transparent">
+          <v-card-actions v-if="userInfo.uid">
+            <v-btn
+              icon
+              :disabled="
+                Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
+              "
+              color="primary"
+              @click="Bookmark(item.time, i)"
+            >
+              <v-icon>
+                mdi-bookmark{{
                   Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
-                "
-                color="primary"
-                @click="Bookmark(item.time, i)"
-              >
-                <v-icon>
-                  mdi-bookmark{{
-                    Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
-                      ? ''
-                      : '-outline'
-                  }}
-                </v-icon>
-              </v-btn>
-              <v-btn
-                icon
-                :disabled="item.liked[userInfo.uid] == true"
-                class="mr-2"
-                @click="Like(item)"
-              >
-                <v-icon> mdi-thumb-up </v-icon>
-              </v-btn>
-              <span class="subheading" v-text="item.likes" />
-            </v-card-actions>
-          </v-card>
-        </template>
+                    ? ''
+                    : '-outline'
+                }}
+              </v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              :disabled="item.liked[userInfo.uid] == true"
+              class="mr-2"
+              @click="Like(item)"
+            >
+              <v-icon> mdi-thumb-up </v-icon>
+            </v-btn>
+            <span class="subheading" v-text="item.likes" />
+          </v-card-actions>
+        </v-card>
       </v-card>
 
       <v-snackbar v-model="bookmarkSnackbar">
@@ -132,6 +130,7 @@ const Bookmark = (time: string, i: number) => {
   })
   db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
 
+  // eslint-disable-next-line vue/no-mutating-props
   props.items[i].bookmarks[userInfo.value.uid] = true
   Libris(userInfo.value.uid, 0.1)
 }

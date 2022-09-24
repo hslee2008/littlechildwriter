@@ -104,6 +104,7 @@
 </template>
 
 <script setup lang="ts">
+import { Ref } from 'vue'
 import { db } from '@/plugins/firebase'
 import { Libris, User } from '@/plugins/global'
 

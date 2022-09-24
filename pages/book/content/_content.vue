@@ -37,7 +37,7 @@
           <v-card-title class="h1 primary--text title">
             {{ post.title }}
             <span v-if="post.isbn" class="white--text subtitle-2 ml-1">
-              ({{ otherInfo.volumeInfo?.authors.join(', ') }})
+              ({{ (otherInfo.volumeInfo?.authors || []).join(', ') }})
             </span>
           </v-card-title>
 
@@ -137,7 +137,7 @@
                 {{ post.title }}
               </v-card-title>
               <v-card-subtitle>
-                {{ otherInfo.volumeInfo?.authors.join(', ') }}
+                {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
               </v-card-subtitle>
 
               <v-simple-table>

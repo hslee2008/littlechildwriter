@@ -7,15 +7,18 @@
     :sort-by="sortBy.toLowerCase()"
     :sort-desc="sortDesc"
     hide-default-footer
+    loading-text="로딩중..."
     class="mb-10"
   >
     <template #header>
-      <v-text-field
+      <v-combobox
         v-model="search"
+        :items="categories"
         label="Search"
         outlined
+        hide-selected
         append-icon="mdi-swap-horizontal"
-        class="my-2"
+        class="my-2 mr-2"
         @click:append="sortDesc = !sortDesc"
       />
     </template>
@@ -38,7 +41,7 @@
 
           <v-list>
             <v-list-item
-              v-for="(number, index) in [10, 50, 100, 150]"
+              v-for="(number, index) in [10, 50, 150, 200]"
               :key="index"
               @click="itemsPerPage = number"
             >
@@ -67,6 +70,7 @@ import { Book } from '@/plugins/global'
 
 const route = useRoute()
 const books = ref<Book[]>([])
+const categories = ref<string[]>([])
 const sortBy = ref<string>('time')
 // eslint-disable-next-line func-call-spacing
 const search = ref<string | (string | null)[]>('')
@@ -81,9 +85,17 @@ const numberOfPages = computed(() =>
 onBeforeMount(() => {
   route.query.search && (search.value = route.query.search)
 
-  db.ref('/contents/').on('child_added', async s =>
-    books.value.unshift(await s.val())
-  )
+  db.ref('/contents/').on('child_added', async s => {
+    const book = await s.val()
+    books.value.unshift(book)
+    categories.value.push(
+      ...(book.categories || ['Juvenile Fiction / General']).map((c: any) => {
+        const category = c.split(' / ')
+        return category[1]
+      })
+    )
+    categories.value = [...new Set(categories.value)]
+  })
 })
 
 const Next = () => {
