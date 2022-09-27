@@ -28,7 +28,7 @@
           <v-btn to="/list" class="mx-3">
             글 <v-icon right> mdi-text-box-multiple-outline </v-icon>
           </v-btn>
-          <v-btn to="/classes" class="mx-3">
+          <v-btn v-if="userInfo.uid" to="/classes" class="mx-3">
             알림판
             <v-icon right> mdi-checkbox-blank-badge </v-icon>
           </v-btn>
@@ -80,8 +80,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'; import { Book, User } from
-  '@/plugins/global'
+import { db } from '@/plugins/firebase'
+import { Book, User } from '@/plugins/global'
 
 const userInfo = User()
 const recent = ref<Book[]>([])

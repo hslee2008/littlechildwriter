@@ -6,36 +6,18 @@
       <v-card-text>
         <v-text-field
           v-model="userInfo.displayName"
-          label="Name"
           placeholder="Name"
           validate-on-blur
           prepend-inner-icon="mdi-account"
         />
-
         <v-text-field
           v-model="userInfo.email"
-          label="Email"
           placeholder="Email"
-          filled
-          required
-          dense
-          disabled
-          solo
           validate-on-blur
           prepend-inner-icon="mdi-email"
         />
-        <v-text-field
-          v-model="userInfo.uid"
-          label="UID"
-          placeholder="UID"
-          filled
-          required
-          dense
-          solo
-          validate-on-blur
-          disabled
-          prepend-inner-icon="mdi-account"
-        />
+
+        UID: {{ userInfo.uid }}
       </v-card-text>
     </v-card>
 
@@ -63,7 +45,6 @@
           v-model="userDB.bio"
           required
           flat
-          outlined
           dense
           solo
           validate-on-blur
@@ -133,24 +114,23 @@ onMounted(() =>
   })
 )
 
-const Update = () => {
-  const { displayName, photoURL, uid } = userInfo.value
+const Update = async () => {
+  const { displayName, photoURL, uid, email } = userInfo.value
   const { bio } = userDB.value
 
-  auth.currentUser
-    ?.updateProfile({
-      displayName,
-      photoURL
-    })
-    .then(() => {
-      db.ref(`/users/${uid}`).update({
-        displayName,
-        photoURL,
-        bio
-      })
+  await auth.currentUser?.updateEmail(email)
+  await auth.currentUser?.updateProfile({
+    displayName,
+    photoURL
+  })
 
-      router.push(`/user/${uid}`)
-    })
+  db.ref(`/users/${uid}`).update({
+    displayName,
+    photoURL,
+    bio
+  })
+
+  router.push(`/user/${uid}`)
 }
 
 const Delete = () => {

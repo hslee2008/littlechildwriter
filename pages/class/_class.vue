@@ -37,16 +37,17 @@
           </v-container>
         </v-form>
 
-        <div
+        <v-card
           v-for="(category, title) in classInfo.contents"
           v-if="title.toString().includes(search)"
           :key="title"
+          class="transparent"
         >
           <v-card-title>
-            {{ title }}
+            {{ title.toString().replaceAll('_', ' - ') }}
           </v-card-title>
 
-          <div v-for="(item, i) in category" :key="item.title">
+          <v-card-text v-for="(item, i) in category" :key="item.title">
             <v-card
               v-if="item.type === '책'"
               class="d-flex mt-5"
@@ -123,48 +124,50 @@
                 </v-menu>
               </v-card-actions>
             </v-card>
-            <v-card
-              v-else-if="item.type === '파일 (숙제로)'"
-              v-show="
-                userInfo.uid === item.uid ||
-                  userInfo.uid === classInfo.uid ||
-                  userInfo.uid === 'MAO3Ov5E2KgpkNwQKXpbzFjHJhw2'
-              "
-              :href="item.url"
-              class="d-flex rounded-0"
-            >
-              <v-icon class="ml-4"> mdi-link-variant </v-icon>
+            <div v-else-if="item.type === '파일 (숙제로)'">
+              <v-card
+                v-if="
+                  userInfo.uid === item.uid || userInfo.uid === classInfo.uid
+                "
+                :href="item.url"
+                class="d-flex rounded-0"
+              >
+                <v-icon class="ml-4"> mdi-link-variant </v-icon>
 
-              <div>
-                <v-card-title>{{ item.file }}</v-card-title>
-                <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-              </div>
+                <div>
+                  <v-card-title>{{ item.file }}</v-card-title>
+                  <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+                </div>
 
-              <v-spacer />
+                <v-spacer />
 
-              <v-card-actions>
-                <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                  <template #activator="{ on, attrs }">
-                    <v-btn
-                      icon
-                      v-bind="attrs"
-                      cols="1"
-                      v-on="on"
-                      @click.stop.prevent=""
-                    >
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item @click="DeleteContent(title, i)">
-                      <v-list-item-title>
-                        <v-icon left> mdi-trash-can </v-icon> 삭제
-                      </v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-card-actions>
-            </v-card>
+                <v-card-actions>
+                  <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        icon
+                        v-bind="attrs"
+                        cols="1"
+                        v-on="on"
+                        @click.stop.prevent=""
+                      >
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item @click="DeleteContent(title, i)">
+                        <v-list-item-title>
+                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-card-actions>
+              </v-card>
+              <v-card v-else>
+                <v-card-text>{{ item.displayName }}님이 제출함</v-card-text>
+              </v-card>
+            </div>
             <v-card v-else-if="item.type === '링크'" class="d-flex mt-5">
               <v-icon class="ml-4"> mdi-link </v-icon>
 
@@ -231,8 +234,8 @@
               </div>
               <v-card-text>{{ item.content }}</v-card-text>
             </v-card>
-          </div>
-        </div>
+          </v-card-text>
+        </v-card>
       </v-tab-item>
 
       <v-tab-item class="pt-10">

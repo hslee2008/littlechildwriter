@@ -48,7 +48,8 @@ const Make = () => {
   auth.createUserWithEmailAndPassword(email.value, password.value).then(() => {
     db.ref(`/users/${auth.currentUser?.uid}`).set({
       displayName,
-      photoURL: '',
+      photoURL:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWM85l8_8g0csORwtfpgd5Dyv-f9twzcVuQ0v2FzawHw&s',
       libris: 0,
       bio: `새롭게 계정 만든 ${displayName}입니다. (바꾸고 깊다면 편집 버튼을 누르세요.)`,
       subscribe: [],
