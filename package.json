@@ -15,7 +15,6 @@
     "e2e": "cypress open"
   },
   "dependencies": {
-    "@nuxtjs/pwa": "latest",
     "badwords-ko": "latest",
     "firebase": "latest",
     "firebaseui": "^6.0.1",
@@ -25,6 +24,7 @@
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
+    "@nuxtjs/pwa": "latest",
     "@nuxt/types": "latest",
     "@nuxtjs/eslint-config-typescript": "latest",
     "@nuxtjs/google-analytics": "latest",

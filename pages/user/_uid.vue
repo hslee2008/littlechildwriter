@@ -38,7 +38,14 @@
             label="평점 선택"
             outlined
           />
-          <LazyBookCard :items="books.filter(filterRating)" :simple="true" />
+          <LazyBookCard
+            :items="
+              books.filter(a =>
+                rating === '모두' ? 1 : a.rating === rating
+              )
+            "
+            :simple="true"
+          />
         </v-tab-item>
 
         <v-tab-item>
@@ -146,9 +153,6 @@ onBeforeMount(() => {
       subscribed.value = Object.keys(subscriber).includes(userInfo.value.uid)
     })
 })
-
-const filterRating = (a: { rating: Ref<string> }) =>
-  rating.value === '모두' ? 1 : a.rating === rating
 
 const Subscribe = () => {
   if (subscribed.value) {

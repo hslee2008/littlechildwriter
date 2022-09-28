@@ -14,123 +14,76 @@
 
         <br />
 
-        <v-form>
-          <v-container>
-            <v-row>
-              <v-col cols="12" md="4">
-                <v-text-field
-                  v-model="search"
-                  label="검색"
-                  prepend-inner-icon="mdi-magnify"
-                  class="my-5"
-                  dense
-                />
-              </v-col>
+        <v-combobox
+          v-model="search"
+          :items="Object.keys(classInfo.contents || {})"
+          label="Search"
+          outlined
+          hide-selected
+          clearable
+          prepend-inner-icon="mdi-magnify"
+          class="my-2 mr-2"
+        />
 
-              <v-col cols="12" md="4">
-                <v-select
-                  v-model="search"
-                  :items="Object.keys(classInfo.contents || {})"
-                />
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-form>
+        <v-expansion-panels focusable>
+          <v-expansion-panel
+            v-for="(category, title) in classInfo.contents"
+            v-if="title.toString().includes(search)"
+            :key="title"
+          >
+            <v-expansion-panel-header>
+              {{ title.toString().replaceAll('_', ' - ') }}
+            </v-expansion-panel-header>
 
-        <v-card
-          v-for="(category, title) in classInfo.contents"
-          v-if="title.toString().includes(search)"
-          :key="title"
-          class="transparent"
-        >
-          <v-card-title>
-            {{ title.toString().replaceAll('_', ' - ') }}
-          </v-card-title>
-
-          <v-card-text v-for="(item, i) in category" :key="item.title">
-            <v-card
-              v-if="item.type === '책'"
-              class="d-flex mt-5"
-              :to="`/book/content/${item.time}`"
+            <v-expansion-panel-content
+              v-for="(item, i) in category"
+              :key="item.title"
             >
-              <v-icon color="orange" class="ml-4" size="40"> mdi-book </v-icon>
-              <div>
-                <v-card-title>{{ item.displayName }}</v-card-title>
-                <v-card-subtitle>{{ item.title }}</v-card-subtitle>
-                <v-card-text>
-                  {{ new Date(item.time).toLocaleDateString() }}
-                </v-card-text>
-              </div>
-
-              <v-spacer />
-
-              <v-card-actions>
-                <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                  <template #activator="{ on, attrs }">
-                    <v-btn
-                      icon
-                      v-bind="attrs"
-                      cols="1"
-                      v-on="on"
-                      @click.stop.prevent=""
-                    >
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item @click="DeleteContent(title, i)">
-                      <v-list-item-title>
-                        <v-icon left> mdi-trash-can </v-icon> 삭제
-                      </v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-card-actions>
-            </v-card>
-            <v-card
-              v-else-if="item.type === '파일'"
-              :href="item.url"
-              class="d-flex mt-5"
-            >
-              <v-icon class="ml-4"> mdi-link-variant </v-icon>
-
-              <div>
-                <v-card-title>{{ item.file }}</v-card-title>
-                <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-              </div>
-
-              <v-spacer />
-
-              <v-card-actions>
-                <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                  <template #activator="{ on, attrs }">
-                    <v-btn
-                      icon
-                      v-bind="attrs"
-                      cols="1"
-                      v-on="on"
-                      @click.stop.prevent=""
-                    >
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item @click="DeleteContent(title, i)">
-                      <v-list-item-title>
-                        <v-icon left> mdi-trash-can </v-icon> 삭제
-                      </v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-card-actions>
-            </v-card>
-            <div v-else-if="item.type === '파일 (숙제로)'">
               <v-card
-                v-if="
-                  userInfo.uid === item.uid || userInfo.uid === classInfo.uid
-                "
+                v-if="item.type === '책'"
+                class="d-flex mt-5"
+                :to="`/book/content/${item.time}`"
+              >
+                <v-icon color="orange" class="ml-4" size="40">
+                  mdi-book
+                </v-icon>
+                <div>
+                  <v-card-title>{{ item.displayName }}</v-card-title>
+                  <v-card-subtitle>{{ item.title }}</v-card-subtitle>
+                  <v-card-text>
+                    {{ new Date(item.time).toLocaleDateString() }}
+                  </v-card-text>
+                </div>
+
+                <v-spacer />
+
+                <v-card-actions>
+                  <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                    <template #activator="{ on, attrs }">
+                      <v-btn
+                        icon
+                        v-bind="attrs"
+                        cols="1"
+                        v-on="on"
+                        @click.stop.prevent=""
+                      >
+                        <v-icon>mdi-dots-vertical</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item @click="DeleteContent(title, i)">
+                        <v-list-item-title>
+                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-card-actions>
+              </v-card>
+              <v-card
+                v-else-if="item.type === '파일'"
                 :href="item.url"
-                class="d-flex rounded-0"
+                class="d-flex mt-5"
               >
                 <v-icon class="ml-4"> mdi-link-variant </v-icon>
 
@@ -164,78 +117,121 @@
                   </v-menu>
                 </v-card-actions>
               </v-card>
-              <v-card v-else>
-                <v-card-text>{{ item.displayName }}님이 제출함</v-card-text>
-              </v-card>
-            </div>
-            <v-card v-else-if="item.type === '링크'" class="d-flex mt-5">
-              <v-icon class="ml-4"> mdi-link </v-icon>
+              <div v-else-if="item.type === '파일 (숙제로)'">
+                <v-card
+                  v-if="
+                    userInfo.uid === item.uid || userInfo.uid === classInfo.uid
+                  "
+                  :href="item.url"
+                  class="d-flex rounded-0"
+                >
+                  <v-icon class="ml-4"> mdi-link-variant </v-icon>
 
-              <div>
-                <v-card-title>{{ item.name }} 링크</v-card-title>
-                <v-card-subtitle>
-                  <a :href="item.link" target="_blank" v-text="item.title" />
-                </v-card-subtitle>
+                  <div>
+                    <v-card-title>{{ item.file }}</v-card-title>
+                    <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+                  </div>
+
+                  <v-spacer />
+
+                  <v-card-actions>
+                    <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          icon
+                          v-bind="attrs"
+                          cols="1"
+                          v-on="on"
+                          @click.stop.prevent=""
+                        >
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item @click="DeleteContent(title, i)">
+                          <v-list-item-title>
+                            <v-icon left> mdi-trash-can </v-icon> 삭제
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-card-actions>
+                </v-card>
+                <v-card v-else>
+                  <v-card-text>{{ item.displayName }}님이 제출함</v-card-text>
+                </v-card>
               </div>
-            </v-card>
-            <div v-else-if="item.type === '숙제'">
-              <v-card
-                class="d-flex mt-5 rounded-b-0"
-                @click="
-                  () => {
-                    tab = 1
-                    post.type = '파일 (숙제로)'
-                    post.category = item.title
-                  }
-                "
-              >
-                <v-icon class="ml-4"> mdi-school </v-icon>
+              <v-card v-else-if="item.type === '링크'" class="d-flex mt-5">
+                <v-icon class="ml-4"> mdi-link </v-icon>
 
                 <div>
-                  <v-card-title>{{ item.title }} 숙제</v-card-title>
-                </div>
-              </v-card>
-              <v-divider />
-            </div>
-            <v-card v-else class="mt-5">
-              <div class="d-flex">
-                <v-avatar size="40" class="ml-3 mt-6">
-                  <v-img :src="item.photoURL" class="rounded-lg" />
-                </v-avatar>
-                <div>
-                  <v-card-title>{{ item.displayName }}의 공지사항</v-card-title>
+                  <v-card-title>{{ item.name }} 링크</v-card-title>
                   <v-card-subtitle>
-                    {{ new Date(item.time).toLocaleDateString() }}
+                    <a :href="item.link" target="_blank" v-text="item.title" />
                   </v-card-subtitle>
                 </div>
-                <v-spacer />
-                <v-card-actions>
-                  <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        icon
-                        v-bind="attrs"
-                        cols="1"
-                        v-on="on"
-                        @click.stop.prevent=""
-                      >
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item @click="DeleteContent(title, i)">
-                        <v-list-item-title>
-                          <v-icon left> mdi-trash-can </v-icon> 삭제
-                        </v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </v-card-actions>
+              </v-card>
+              <div v-else-if="item.type === '숙제'">
+                <v-card
+                  class="d-flex mt-5 rounded-b-0"
+                  @click="
+                    () => {
+                      tab = 1
+                      post.type = '파일 (숙제로)'
+                      post.category = item.title
+                    }
+                  "
+                >
+                  <v-icon class="ml-4"> mdi-school </v-icon>
+
+                  <div>
+                    <v-card-title>{{ item.title }} 숙제</v-card-title>
+                  </div>
+                </v-card>
+                <v-divider />
               </div>
-              <v-card-text>{{ item.content }}</v-card-text>
-            </v-card>
-          </v-card-text>
-        </v-card>
+              <v-card v-else class="mt-5">
+                <div class="d-flex">
+                  <v-avatar size="40" class="ml-3 mt-6">
+                    <v-img :src="item.photoURL" class="rounded-lg" />
+                  </v-avatar>
+                  <div>
+                    <v-card-title>
+                      {{ item.displayName }}의 공지사항
+                    </v-card-title>
+                    <v-card-subtitle>
+                      {{ new Date(item.time).toLocaleDateString() }}
+                    </v-card-subtitle>
+                  </div>
+                  <v-spacer />
+                  <v-card-actions>
+                    <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          icon
+                          v-bind="attrs"
+                          cols="1"
+                          v-on="on"
+                          @click.stop.prevent=""
+                        >
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item @click="DeleteContent(title, i)">
+                          <v-list-item-title>
+                            <v-icon left> mdi-trash-can </v-icon> 삭제
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-card-actions>
+                </div>
+                <v-card-text>{{ item.content }}</v-card-text>
+              </v-card>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </v-tab-item>
 
       <v-tab-item class="pt-10">
