@@ -139,4 +139,8 @@ const Delete = () => {
     router.push('/')
   })
 }
+
+useHead({
+  title: '계정 - LCW'
+})
 </script>

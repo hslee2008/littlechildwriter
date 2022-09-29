@@ -70,4 +70,8 @@ const Update = () => {
 
   router.push(`/book/content/${time}`)
 }
+
+useHead({
+  title: '편집 - LCW'
+})
 </script>

@@ -40,9 +40,7 @@
           />
           <LazyBookCard
             :items="
-              books.filter(a =>
-                rating === '모두' ? 1 : a.rating === rating
-              )
+              books.filter(a => (rating === '모두' ? 1 : a.rating === rating))
             "
             :simple="true"
           />
@@ -51,9 +49,9 @@
         <v-tab-item>
           <v-list class="transparent">
             <v-list-item
-              v-for="item in subscription"
+              v-for="(item, UID) in subscription"
               :key="item"
-              :to="`/user/${item}`"
+              :to="`/user/${UID}`"
             >
               <v-list-item-content>
                 <v-list-item-title>{{ item }}</v-list-item-title>
@@ -111,7 +109,6 @@
 </template>
 
 <script setup lang="ts">
-import { Ref } from 'vue'
 import { db } from '@/plugins/firebase'
 import { Libris, User } from '@/plugins/global'
 
@@ -181,6 +178,10 @@ const Subscribe = () => {
     Libris(uid, 10)
   }
 }
+
+useHead({
+  title: '유저 - LCW'
+})
 </script>
 
 <style scoped>

@@ -17,5 +17,9 @@ onMounted(() => {
   }
   const ui = new authF.AuthUI(firebase.auth())
   ui.start('#firebaseui-auth-container', uiConfig)
+} )
+
+useHead({
+  title: '로그인 - LCW'
 })
 </script>

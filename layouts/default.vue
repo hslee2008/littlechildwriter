@@ -37,7 +37,7 @@
       </template>
     </v-navigation-drawer>
 
-    <v-app-bar fixed app color="#23262E" class="elevation-0">
+    <v-app-bar fixed app color="#23262E" outlined>
       <v-app-bar-nav-icon v-if="userInfo.uid" @click="bookmark = !bookmark" />
 
       <NLink to="/">
@@ -104,7 +104,36 @@
         </v-card>
       </v-dialog>
 
-      <UserMenu />
+      <v-menu v-if="userInfo.uid" right rounded>
+        <template #activator="{ on }">
+          <v-btn icon v-on="on">
+            <v-avatar size="35">
+              <v-img alt="User photoURL" :src="userInfo.photoURL" />
+            </v-avatar>
+          </v-btn>
+        </template>
+
+        <v-card class="pa-3 text-center">
+          <div class="d-flex">
+            <v-btn to="/account/account" icon class="ma-auto">
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            <div>
+              <v-card-title>{{ userInfo.displayName }}</v-card-title>
+              <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
+            </div>
+          </div>
+
+          <v-btn :to="`/user/${userInfo.uid}`" text> 프로필 </v-btn>
+
+          <v-btn text @click="logout">
+            <v-icon left>mdi-logout</v-icon> 로그아웃
+          </v-btn>
+        </v-card>
+      </v-menu>
+      <v-btn v-else to="/account/login" icon>
+        <v-icon>mdi-account-circle</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -116,7 +145,6 @@
 </template>
 
 <script setup lang="ts">
-import UserMenu from './UserMenu.vue'
 import { auth, db } from '@/plugins/firebase'
 import { User } from '@/plugins/global'
 
@@ -158,16 +186,15 @@ const deleteBookmark = (time: string, i: number) => {
   db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
   items.value.splice(i, 1)
 }
-</script>
 
-<style>
-#pwainstall {
-  display: none;
-}
-
-@media (display-mode: browser) {
-  #pwainstall {
-    display: block;
+const logout = () => {
+  auth.signOut()
+  router.push('/account/login')
+  userInfo.value = {
+    displayName: '',
+    email: '',
+    photoURL: '',
+    uid: ''
   }
 }
-</style>
+</script>

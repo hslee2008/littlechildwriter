@@ -9,6 +9,9 @@
 <script>
 export default {
   layout: 'error',
+  head: {
+    title: 'Error'
+  },
   props: {
     error: {
       type: Object,

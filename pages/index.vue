@@ -76,6 +76,10 @@
     </v-card>
 
     <br />
+
+    <BookCard :items="random" :simple="true" />
+
+    <br />
   </div>
 </template>
 
@@ -84,25 +88,34 @@ import { db } from '@/plugins/firebase'
 import { Book, User } from '@/plugins/global'
 
 const userInfo = User()
-const recent = ref<Book[]>([])
+const recent = ref<any>([])
+const random = ref<any>([])
 const popular = ref<Book[]>([])
 const views = ref<Book[]>([])
 const tab = ref<number>(0)
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   db.ref('/contents')
-    .limitToLast(4)
+    .limitToLast(5)
     .on('child_added', async s => recent.value.unshift(await s.val()))
 
   db.ref('/contents')
     .orderByChild('likes')
-    .limitToLast(4)
+    .limitToLast(5)
     .on('child_added', async s => popular.value.unshift(await s.val()))
 
   db.ref('/contents')
     .orderByChild('views')
-    .limitToLast(4)
+    .limitToLast(5)
     .on('child_added', async s => views.value.unshift(await s.val()))
+
+  const all = await db
+    .ref('/contents')
+    .once('value')
+    .then(s => s.val())
+  random.value = Object.values(all)
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 5)
 })
 </script>
 

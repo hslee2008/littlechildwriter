@@ -59,6 +59,10 @@ const Make = () => {
     router.push('/account/account')
   })
 }
+
+useHead({
+  title: '만들기 - LCW'
+})
 </script>
 
 <style scoped>

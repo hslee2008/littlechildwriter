@@ -595,6 +595,10 @@ const DeleteClass = () => {
 
 const DeleteContent = (title: number, i: number) =>
   db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
+
+useHead({
+  title: '클래스 (자세히) - LCW'
+})
 </script>
 
 <style scoped>

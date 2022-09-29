@@ -167,4 +167,8 @@ const Make = () => {
   dialog.value = false
   steps.value = 1
 }
+
+useHead({
+  title: '알림판 - LCW'
+})
 </script>

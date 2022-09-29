@@ -17,10 +17,18 @@ async function getRoutes() {
   const teams = (await db.ref('teams').once('value')).val()
   const users = (await db.ref('users').once('value')).val()
 
-  for (const r in books) { routes.push(`/book/content/${r}`) }
-  for (const r in classes) { routes.push(`/class/${r}`) }
-  for (const r in teams) { routes.push(`/team/about/${r}`) }
-  for (const r in users) { routes.push(`/user/${r}`) }
+  for (const r in books) {
+    routes.push(`/book/content/${r}`)
+  }
+  for (const r in classes) {
+    routes.push(`/class/${r}`)
+  }
+  for (const r in teams) {
+    routes.push(`/team/about/${r}`)
+  }
+  for (const r in users) {
+    routes.push(`/user/${r}`)
+  }
 
   return routes
 }
@@ -32,6 +40,10 @@ export default defineNuxtConfig({
 
   build: {
     /* analyze: true */
+  },
+
+  bridge: {
+    meta: true
   },
 
   typescript: {
@@ -103,7 +115,7 @@ export default defineNuxtConfig({
   },
 
   css: ['@/assets/css/global.css'],
-  plugins: ['@/plugins/firebase', '@/plugins/global'],
+  plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/analytics'],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
   modules: ['@nuxtjs/pwa'],
@@ -195,12 +207,11 @@ export default defineNuxtConfig({
 
   hooks: {
     async 'nitro:config'(config) {
-      const routes = await getRoutes()
-      config.prerender.routes.push(...routes)
+      config.prerender.routes.push(...(await getRoutes()))
     }
   },
 
   googleAnalytics: {
-    id: 'G-F7Z7BLCQDQ'
+    id: 'G-F7Z7BLCQDQyy'
   }
 })

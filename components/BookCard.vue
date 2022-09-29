@@ -26,7 +26,7 @@
 
           <v-card-text>
             <span class="text--disabled">
-              {{ item.views }} views ·
+              {{ formatter.format(item.views) }} views ·
               {{ new Date(parseInt(item.time)).toLocaleDateString() }}
             </span>
           </v-card-text>
@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { db } from '@/plugins/firebase'
-import { Libris, Notify, User } from '@/plugins/global'
+import { Libris, Notify, User, formatter } from '@/plugins/global'
 
 const userInfo = User()
 const props = defineProps({

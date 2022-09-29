@@ -67,4 +67,10 @@ export function Notify(
   })
 }
 
-export { UserInfo, Book }
+const formatter = new Intl.NumberFormat('en-US', {
+  notation: 'compact',
+  compactDisplay: 'short',
+  maximumFractionDigits: 1
+})
+
+export { UserInfo, Book, formatter }

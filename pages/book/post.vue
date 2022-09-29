@@ -179,7 +179,7 @@
             <v-list-item
               v-if="
                 item.volumeInfo.industryIdentifiers &&
-                  item.volumeInfo.imageLinks
+                item.volumeInfo.imageLinks
               "
               :class="`item-${index}`"
               @click="
@@ -563,4 +563,8 @@ const saveAudio = () => {
   post.value.content += typed.value
   typed.value = ''
 }
+
+useHead({
+  title: '포스트 - LCW'
+})
 </script>

@@ -59,7 +59,7 @@
             <v-chip-group class="my-5" column>
               <v-chip label>
                 <v-icon left> mdi-eye </v-icon>
-                {{ post.views + 1 }}
+                {{ formatter.format(post.views + 1) }}
               </v-chip>
               <v-chip label>
                 <v-icon left>mdi-sort-clock-descending-outline</v-icon>
@@ -132,14 +132,14 @@
           </template>
 
           <v-card>
-            <v-card-text>
-              <v-card-title>
-                {{ post.title }}
-              </v-card-title>
-              <v-card-subtitle>
-                {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
-              </v-card-subtitle>
+            <v-card-title>
+              {{ post.title }}
+            </v-card-title>
+            <v-card-subtitle>
+              {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
+            </v-card-subtitle>
 
+            <v-card-text>
               <v-simple-table>
                 <template #default>
                   <thead>
@@ -154,6 +154,14 @@
                       <td>{{ post.isbn }}</td>
                     </tr>
                     <tr>
+                      <td>ISBN 10</td>
+                      <td>
+                        {{
+                          otherInfo.volumeInfo.industryIdentifiers[1].identifier
+                        }}
+                      </td>
+                    </tr>
+                    <tr>
                       <td>출판된 날짜</td>
                       <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
                     </tr>
@@ -161,7 +169,7 @@
                       <td>출판사</td>
                       <td>{{ otherInfo.volumeInfo.publisher }}</td>
                     </tr>
-                    <tr>
+                    <tr v-if="otherInfo.GBid">
                       <td>Google Books ID</td>
                       <td>{{ otherInfo.GBid }}</td>
                     </tr>
@@ -212,7 +220,7 @@
 
 <script setup lang="ts">
 import { db } from '@/plugins/firebase'
-import { Libris, User } from '@/plugins/global'
+import { Libris, User, formatter } from '@/plugins/global'
 
 const userInfo = User()
 const router = useRouter()
@@ -258,6 +266,8 @@ const Content = async () => {
     )
       .then(res => res.json())
       .then(res => (otherInfo.value = res.items[0]))
+
+    console.log(otherInfo.value)
   }
 }
 
@@ -358,6 +368,10 @@ const Del = () => {
   Libris(userInfo.value.uid, -(parseInt(post.value.pageCount) / 100))
   router.push('/list')
 }
+
+useHead({
+  title: '컨텐츠 - LCW'
+})
 </script>
 
 <style scoped>

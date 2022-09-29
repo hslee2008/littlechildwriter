@@ -107,4 +107,8 @@ const Before = () => {
   page.value - 1 >= 1 && (page.value -= 1)
   window.scrollTo({ top: 0 })
 }
+
+useHead({
+  title: '리스트 - LCW'
+})
 </script>

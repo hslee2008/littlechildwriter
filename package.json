@@ -15,19 +15,21 @@
     "e2e": "cypress open"
   },
   "dependencies": {
+    "@vueuse/head": "^0.7.12",
     "badwords-ko": "latest",
     "firebase": "latest",
     "firebaseui": "^6.0.1",
     "leo-profanity": "latest",
     "nuxt-edge": "latest",
+    "vue-gtag": "1",
     "vuetify": "latest"
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
-    "@nuxtjs/pwa": "latest",
     "@nuxt/types": "latest",
     "@nuxtjs/eslint-config-typescript": "latest",
-    "@nuxtjs/google-analytics": "latest",
+    "@nuxtjs/google-analytics": "^2.4.0",
+    "@nuxtjs/pwa": "latest",
     "@nuxtjs/vuetify": "latest",
     "@types/leo-profanity": "latest",
     "cypress": "latest",
