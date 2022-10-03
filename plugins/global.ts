@@ -36,7 +36,12 @@ export function User() {
   })
   auth.onAuthStateChanged(u =>
     u
-      ? (userInfo.value = u)
+      ? (userInfo.value = {
+          uid: u.uid || '',
+          email: u.email || '',
+          displayName: u.displayName || '',
+          photoURL: u.photoURL || ''
+        })
       : (userInfo.value = {
           uid: '',
           email: '',

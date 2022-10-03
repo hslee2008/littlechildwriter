@@ -48,12 +48,7 @@ export default defineNuxtConfig({
 
   typescript: {
     strict: true,
-    shim: false,
-    typeCheck: {
-      eslint: {
-        files: './**/*.{ts,js,vue}'
-      }
-    }
+    shim: false
   },
 
   loading: {
@@ -207,7 +202,7 @@ export default defineNuxtConfig({
 
   hooks: {
     async 'nitro:config'(config) {
-      config.prerender.routes.push(...(await getRoutes()))
+      config?.prerender?.routes?.push(...(await getRoutes()))
     }
   },
 
