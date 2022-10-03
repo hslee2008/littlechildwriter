@@ -19,7 +19,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn color="primary" class="ma-3 ok" @click="cb"> 확인 </v-btn>
+        <v-btn color="primary" class="m-3 ok" @click="cb"> 확인 </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -74,7 +74,7 @@
     </template>
 
     <template #default="props">
-      <v-row class="mt-5 ma-1 g-10">
+      <v-row class="mt-5 m-1 g-10">
         <v-card
           v-for="item in props.items"
           :key="item.creator + item.name"
@@ -89,8 +89,8 @@
             class="transparent"
             :to="`/class/${item.id}`"
           >
-            <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">
-              <v-avatar class="ma-3">
+            <v-img :src="item.image" width="50vh" class="m-auto rounded-lg">
+              <v-avatar class="m-3">
                 <v-img :src="item.photoURL" />
               </v-avatar>
             </v-img>

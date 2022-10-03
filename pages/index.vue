@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-parallax class="parallax" src="/background.avif">
-      <div class="ma-auto">
+      <div class="m-auto">
         <div class="mx-3">
           <v-btn v-if="userInfo.uid" to="/book/post" color="primary" block>
             <v-icon left> mdi-pencil </v-icon> 작성하기

@@ -243,7 +243,7 @@
           class="mb-10"
         />
 
-        <v-row style="gap: 10px" class="ma-10">
+        <v-row style="gap: 10px" class="m-10">
           <v-text-field
             v-if="classInfo.uid === userInfo.uid"
             v-model="post.category"
@@ -270,7 +270,7 @@
             </div>
           </v-card-text>
 
-          <v-card-actions class="ma-2 gap20">
+          <v-card-actions class="m-2 gap20">
             <v-dialog v-model="dialog" width="700">
               <template #activator="{ on, attrs }">
                 <div class="text-center">
@@ -294,7 +294,7 @@
                   >
                     <v-img
                       :src="i.image"
-                      class="rounded-lg ma-3"
+                      class="rounded-lg m-3"
                       max-width="100"
                     />
                   </v-card>
@@ -320,7 +320,7 @@
             <v-text-field v-model="post.title" label="제목" />
             <v-text-field v-model="post.link" label="링크" />
           </v-card-text>
-          <v-card-actions class="ma-2 gap20">
+          <v-card-actions class="m-2 gap20">
             <v-btn
               :disabled="post.title === ''"
               color="primary"
@@ -377,7 +377,7 @@
             <v-text-field v-model="post.content" label="내용" />
             숙제는 선생님과 올린 사람만 확인할 수 있습니다.
           </v-card-text>
-          <v-card-actions class="ma-2 gap20">
+          <v-card-actions class="m-2 gap20">
             <v-btn
               :disabled="post.title === ''"
               color="primary"
@@ -441,8 +441,8 @@
 </template>
 
 <script setup lang="ts">
-import { db, storage } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { db, storage } from '@/plugins/firebase';
+import { User } from '@/plugins/global';
 
 const userInfo = User()
 const route = useRoute()

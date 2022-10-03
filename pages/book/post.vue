@@ -188,7 +188,7 @@
             >
               <v-img
                 :src="item.volumeInfo.imageLinks.thumbnail"
-                class="mr-4 ma-2 rounded-lg"
+                class="mr-4 m-2 rounded-lg"
                 max-width="100"
               />
 
@@ -316,7 +316,7 @@
       </v-menu>
     </v-card-actions>
 
-    <div class="ma-auto mt-10">
+    <div class="m-auto mt-10">
       <v-img
         v-if="post.image"
         :src="post.image"
@@ -328,8 +328,8 @@
 </template>
 
 <script lang="ts" setup>
-import { db } from '@/plugins/firebase'
-import { Libris, User } from '@/plugins/global'
+import { db } from '@/plugins/firebase';
+import { Libris, User } from '@/plugins/global';
 
 const userInfo = User()
 const post = ref<any>({

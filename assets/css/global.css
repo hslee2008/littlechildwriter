@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Scroll Bar */
 ::-webkit-scrollbar {
   width: 7px;

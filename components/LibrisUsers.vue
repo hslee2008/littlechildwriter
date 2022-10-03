@@ -1,11 +1,11 @@
 <template>
   <v-timeline :dense="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs" clipped>
-    <v-timeline-item v-for="(item, i) in lbt" :key="item.uid" :icon="Icon(i)">
+    <v-timeline-item v-for="(item, i) in lbt" :key="lbt[i].uid" :icon="Icon(i)">
       <v-card
         v-if="item.photoURL || item.displayName"
         class="mx-auto"
         max-width="344"
-        :to="`/user/${item.uid}`"
+        :to="`/user/${lbt[i].uid}`"
         :color="item.uid === userInfo.uid ? 'primary' : ''"
       >
         <v-list-item>
@@ -28,7 +28,7 @@
               class="rounded-lg"
             >
               <template #placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-row class="fill-height m-0" align="center" justify="center">
                   <v-progress-circular indeterminate color="grey lighten-5" />
                 </v-row>
               </template>

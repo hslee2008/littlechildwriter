@@ -16,26 +16,30 @@
   },
   "dependencies": {
     "@vueuse/head": "^0.7.12",
-    "badwords-ko": "latest",
-    "firebase": "latest",
+    "badwords-ko": "1.0.3",
+    "firebase": "^9.10.0",
     "firebaseui": "^6.0.1",
-    "leo-profanity": "latest",
-    "nuxt-edge": "latest",
-    "vue-gtag": "1",
-    "vuetify": "latest"
+    "leo-profanity": "1.6.1",
+    "nuxt-edge": "^2.16.0-27720022.54e852f",
+    "vue-gtag": "1.16.1",
+    "vuetify": "2.6.10"
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
-    "@nuxt/types": "latest",
-    "@nuxtjs/eslint-config-typescript": "latest",
+    "@nuxt/postcss8": "^1.1.3",
+    "@nuxt/types": "2.15.8",
+    "@nuxtjs/eslint-config-typescript": "11.0.0",
     "@nuxtjs/google-analytics": "^2.4.0",
-    "@nuxtjs/pwa": "latest",
-    "@nuxtjs/vuetify": "latest",
-    "@types/leo-profanity": "latest",
-    "cypress": "latest",
-    "eslint": "latest",
-    "eslint-plugin-nuxt": "latest",
-    "firebase-admin": "latest",
-    "typescript": "latest"
+    "@nuxtjs/pwa": "3.3.5",
+    "@nuxtjs/vuetify": "1.12.3",
+    "@types/leo-profanity": "1.5.0",
+    "autoprefixer": "^10.4.12",
+    "cypress": "^10.9.0",
+    "eslint": "^8.24.0",
+    "eslint-plugin-nuxt": "4.0.0",
+    "firebase-admin": "11.0.1",
+    "postcss": "^8.4.17",
+    "tailwindcss": "^3.1.8",
+    "typescript": "^4.8.4"
   }
 }
