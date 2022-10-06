@@ -74,7 +74,7 @@
             <v-divider class="my-10" />
           </div>
 
-          <v-list flat class="rounded-lg">
+          <v-list flat class="rounded">
             <v-subheader>통계</v-subheader>
 
             <v-list-item>

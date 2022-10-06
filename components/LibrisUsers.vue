@@ -25,7 +25,7 @@
             <v-img
               :src="item.photoURL"
               :lazy-src="item.photoURL"
-              class="rounded-lg"
+              class="rounded"
             >
               <template #placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">

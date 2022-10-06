@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="500">
+  <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="500">
     <template #activator="{ on, attrs }">
       <v-btn
         color="red lighten-2"
@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 const dialog = ref<boolean>(false)
-const props = defineProps({
+defineProps({
   title: {
     type: String,
     required: true

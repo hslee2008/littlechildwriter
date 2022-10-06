@@ -14,6 +14,8 @@
       <v-combobox
         v-model="search"
         :items="categories"
+        auto-select-first
+        cache-items
         label="Search"
         outlined
         hide-selected

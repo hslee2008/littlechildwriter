@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
     <iframe
@@ -100,7 +101,11 @@
         <v-btn text @click="Iframe">
           <v-icon left> mdi-file-find </v-icon> 미리보기
         </v-btn>
-        <v-dialog v-if="post.categories" width="700">
+        <v-dialog
+          v-if="post.categories"
+          transition="dialog-bottom-transition"
+          width="700"
+        >
           <template #activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
               <v-icon left> mdi-shape </v-icon> 카테고리
@@ -124,7 +129,11 @@
             </v-card-text>
           </v-card>
         </v-dialog>
-        <v-dialog v-if="post.isbn" width="700">
+        <v-dialog
+          v-if="post.isbn"
+          transition="dialog-bottom-transition"
+          width="700"
+        >
           <template #activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
               <v-icon left> mdi-book-information-variant </v-icon> 정보

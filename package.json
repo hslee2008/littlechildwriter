@@ -17,12 +17,12 @@
   "dependencies": {
     "@vueuse/head": "^0.7.12",
     "badwords-ko": "latest",
-    "firebase": "latest",
+    "firebase": "^9.10.0",
     "firebaseui": "^6.0.1",
     "leo-profanity": "latest",
-    "nuxt-edge": "latest",
+    "nuxt-edge": "^2.16.0-27720022.54e852f",
     "vue-gtag": "1",
-    "vuetify": "latest"
+    "vuetify": "^2.6.11"
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
@@ -32,10 +32,10 @@
     "@nuxtjs/pwa": "latest",
     "@nuxtjs/vuetify": "latest",
     "@types/leo-profanity": "latest",
-    "cypress": "latest",
-    "eslint": "latest",
+    "cypress": "^10.9.0",
+    "eslint": "^8.24.0",
     "eslint-plugin-nuxt": "latest",
     "firebase-admin": "latest",
-    "typescript": "latest"
+    "typescript": "^4.8.4"
   }
 }

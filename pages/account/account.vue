@@ -43,6 +43,7 @@
 
         <v-textarea
           v-model="userDB.bio"
+          auto-grow
           required
           flat
           dense

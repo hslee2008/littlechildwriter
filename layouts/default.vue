@@ -57,6 +57,7 @@
       <v-dialog
         v-if="userInfo.uid"
         v-model="notifOverlay"
+        transition="dialog-bottom-transition"
         width="700"
         scrollable
       >
@@ -138,6 +139,7 @@
 
     <v-main>
       <v-container>
+        <br />
         <Nuxt />
       </v-container>
     </v-main>

@@ -10,7 +10,7 @@
         class="mx-auto my-5 transparent"
       >
         <v-card :to="`/book/content/${item.time}`" class="transparent">
-          <v-img :src="item.image" :lazy-src="item.image" class="rounded-lg">
+          <v-img :src="item.image" :lazy-src="item.image" class="rounded">
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey lighten-5" />

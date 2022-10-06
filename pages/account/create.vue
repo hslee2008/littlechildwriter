@@ -8,12 +8,11 @@
     <br />
 
     <v-form>
-      <v-text-field v-model="displayName" label="이름" required />
+      <v-text-field v-model="displayName" label="이름" />
       <v-text-field
         v-model="email"
         label="Email"
         placeholder="Email"
-        required
         outlined
         clearable
         prepend-inner-icon="mdi-email"
@@ -23,7 +22,6 @@
         type="password"
         label="Password"
         placeholder="Password"
-        required
         outlined
         clearable
         prepend-inner-icon="mdi-key"

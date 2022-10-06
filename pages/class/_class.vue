@@ -193,7 +193,7 @@
               <v-card v-else class="mt-5">
                 <div class="d-flex">
                   <v-avatar size="40" class="ml-3 mt-6">
-                    <v-img :src="item.photoURL" class="rounded-lg" />
+                    <v-img :src="item.photoURL" class="rounded" />
                   </v-avatar>
                   <div>
                     <v-card-title>
@@ -266,12 +266,16 @@
             <div v-if="post.time">
               <h2>선택됨</h2>
               <br />
-              <v-img :src="post.image" max-width="200" class="rounded-lg" />
+              <v-img :src="post.image" max-width="200" class="rounded" />
             </div>
           </v-card-text>
 
           <v-card-actions class="ma-2 gap20">
-            <v-dialog v-model="dialog" width="700">
+            <v-dialog
+              v-model="dialog"
+              transition="dialog-bottom-transition"
+              width="700"
+            >
               <template #activator="{ on, attrs }">
                 <div class="text-center">
                   <v-btn color="primary" v-bind="attrs" v-on="on">
@@ -294,7 +298,7 @@
                   >
                     <v-img
                       :src="i.image"
-                      class="rounded-lg ma-3"
+                      class="rounded ma-3"
                       max-width="100"
                     />
                   </v-card>
@@ -402,16 +406,15 @@
         <v-card class="mt-5">
           <v-card-title>수업 세부정보</v-card-title>
           <v-card-text>
-            <v-text-field v-model="classInfo.name" label="수업 이름" required />
+            <v-text-field v-model="classInfo.name" label="수업 이름" />
             <v-textarea
               v-model="classInfo.description"
               label="수업 설명"
-              required
+              auto-grow
             />
             <v-checkbox
               v-model="classInfo.public"
               label="수업 전체 공개 여부"
-              required
             />
             <v-btn
               color="primary"
@@ -441,8 +444,8 @@
 </template>
 
 <script setup lang="ts">
-import { db, storage } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { db, storage } from '@/plugins/firebase';
+import { User } from '@/plugins/global';
 
 const userInfo = User()
 const route = useRoute()

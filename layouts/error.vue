@@ -9,16 +9,16 @@
 <script>
 export default {
   layout: 'error',
-  head: {
-    title: 'Error'
-  },
   props: {
     error: {
       type: Object,
-      default: {
-        statusCode: 500
-      }
+      default: () => ({
+        statusCode: 404
+      })
     }
+  },
+  head: {
+    title: 'Error'
   }
 }
 </script>

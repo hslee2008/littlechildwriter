@@ -2,7 +2,11 @@
 <template>
   <v-data-iterator :items="classes" hide-default-footer>
     <template #header>
-      <v-dialog v-model="dialog" width="500">
+      <v-dialog
+        v-model="dialog"
+        transition="dialog-bottom-transition"
+        width="500"
+      >
         <template #activator="{ on, attrs }">
           <v-btn color="primary" v-bind="attrs" v-on="on">
             <v-icon left> mdi-checkbox-blank-badge </v-icon> 만들기
@@ -23,16 +27,11 @@
               <v-card-title> 알림판 기본 정보 </v-card-title>
 
               <v-card-text>
-                <v-text-field
-                  v-model="classInfo.name"
-                  label="알림판 이름"
-                  required
-                />
+                <v-text-field v-model="classInfo.name" label="알림판 이름" />
 
                 <v-text-field
                   v-model="classInfo.description"
                   label="알림판 설명"
-                  required
                 />
 
                 <v-checkbox v-model="classInfo.public" label="공개" />
@@ -89,7 +88,7 @@
             class="transparent"
             :to="`/class/${item.id}`"
           >
-            <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">
+            <v-img :src="item.image" width="50vh" class="ma-auto rounded">
               <v-avatar class="ma-3">
                 <v-img :src="item.photoURL" />
               </v-avatar>
@@ -108,8 +107,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { db } from '@/plugins/firebase';
+import { User } from '@/plugins/global';
 
 const userInfo = User()
 const classes = ref<any>([])

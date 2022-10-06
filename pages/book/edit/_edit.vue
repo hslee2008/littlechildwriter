@@ -1,11 +1,17 @@
 <template>
   <v-card class="transparent">
     <v-card-text>
-      <v-rating v-model="post.rating" color="blue" size="30" class="my-10" />
+      <v-rating
+        v-model="post.rating"
+        half-increments
+        color="blue"
+        size="30"
+        class="my-10"
+      />
 
       <v-text-field v-model="post.title" label="제목" class="title" />
       <v-text-field v-model="post.pageCount" label="페이지" />
-      <v-textarea v-model="post.content" label="책 소개" />
+      <v-textarea v-model="post.content" label="책 소개" auto-grow counter />
     </v-card-text>
 
     <v-card-actions>
