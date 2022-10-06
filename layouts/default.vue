@@ -142,6 +142,7 @@
       <v-container>
         <br />
         <Nuxt />
+        <br />
       </v-container>
     </v-main>
   </v-app>

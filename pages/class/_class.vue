@@ -25,7 +25,7 @@
           class="my-2 mr-2"
         />
 
-        <v-expansion-panels focusable>
+        <v-expansion-panels focusable popout>
           <v-expansion-panel
             v-for="(category, title) in classInfo.contents"
             v-if="title.toString().includes(search)"

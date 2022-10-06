@@ -27,8 +27,8 @@
     <v-tabs v-model="tab" show-arrows center-active grow class="transparent">
       <v-tab> 게시물 </v-tab>
       <v-tab> 구독자 </v-tab>
-      <v-tab> 소통 </v-tab>
       <v-tab> 정보 </v-tab>
+      <v-tab v-if="userInfo.uid === uid"> 비공개 글 </v-tab>
 
       <v-tabs-items v-model="tab" class="py-5 transparent">
         <v-tab-item>
@@ -58,14 +58,6 @@
               </v-list-item-content>
             </v-list-item>
           </v-list>
-        </v-tab-item>
-
-        <v-tab-item>
-          <LazyCommentComponent
-            :link="`/user/${uid}`"
-            :dbr="`users/${uid}/chat`"
-            :uid="uid"
-          />
         </v-tab-item>
 
         <v-tab-item>
@@ -113,6 +105,10 @@
               </div>
             </dl>
           </div>
+        </v-tab-item>
+
+        <v-tab-item>
+          <LazyBookCard :items="books" :simple="true" :showprivate="true" />
         </v-tab-item>
       </v-tabs-items>
     </v-tabs>

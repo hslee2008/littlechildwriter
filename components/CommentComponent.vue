@@ -17,7 +17,7 @@
     </v-text-field>
 
     <v-timeline v-if="comments.length > 0" dense clipped>
-      <v-slide-x-transition group>
+      <v-slide-y-transition group>
         <v-timeline-item v-for="(message, i) in comments" :key="message.time">
           <template #icon>
             <v-tooltip left>
@@ -122,7 +122,7 @@
             :parent="true"
           />
         </v-timeline-item>
-      </v-slide-x-transition>
+      </v-slide-y-transition>
     </v-timeline>
     <div v-else>
       <v-card
@@ -208,7 +208,7 @@ const Delete = (i: number) => {
 }
 
 const Comment = () => {
-  filter.loadDictionary('en-us')
+  filter.loadDictionary('en')
   const filterKO = new Filter()
 
   if (comment.value.length > 0) {
@@ -226,18 +226,8 @@ const Comment = () => {
       badWord
     })
 
-    if (badWord.value) {
-      Libris(userInfo.value.uid, -5)
-      Notify(
-        props.uid,
-        userInfo.value.photoURL,
-        '나쁜 말을 사용했습니다. -5점',
-        props.link
-      )
-    } else {
-      Notify(props.uid, userInfo.value.photoURL, comment.value, props.link)
-      Libris(userInfo.value.uid, 0.1)
-    }
+    Notify(props.uid, userInfo.value.photoURL, comment.value, props.link)
+    Libris(userInfo.value.uid, 0.1)
 
     props.cb()
     comment.value = ''

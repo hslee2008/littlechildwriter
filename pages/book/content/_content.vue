@@ -332,6 +332,11 @@ const View = () => {
   db.ref(`contents/${time}/views`).transaction(view => view + 1)
   Libris(post.value.uid, 0.1)
   Libris(userInfo.value.uid, 0.1)
+
+  if (userInfo.value.uid === post.value.uid) {
+    db.ref(`contents/${time}/views`).transaction(view => view - 1)
+    post.value.views--
+  }
 }
 
 const Suggestion = async () => {

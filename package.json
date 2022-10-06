@@ -24,7 +24,7 @@
     "leo-profanity": "1.6.1",
     "nuxt-edge": "^2.16.0-27720022.54e852f",
     "vue-gtag": "1.16.1",
-    "vuetify": "2.6.10"
+    "vuetify": "2.6.11"
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",

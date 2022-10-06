@@ -42,7 +42,7 @@
       center-active
       grow
       class="transparent"
-      style="margin-top: 600px"
+      style="margin-top: 500px"
     >
       <v-tab>최근 포스트</v-tab>
       <v-tab>좋아요 많은 포스트</v-tab>
