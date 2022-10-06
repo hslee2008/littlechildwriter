@@ -1,10 +1,6 @@
 <template>
   <div>
-    <v-dialog
-      v-model="isbn.upload"
-      transition="dialog-bottom-transition"
-      width="500"
-    >
+    <v-dialog v-model="isbn.upload" width="500">
       <v-card>
         <v-card-title> 책 사진 업로드 </v-card-title>
 
@@ -15,7 +11,7 @@
             v-if="post.image"
             ref="isbnImageElement"
             :src="post.image"
-            class="rounded"
+            class="rounded-lg"
           />
 
           <v-tabs>
@@ -49,11 +45,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="isbn.barcode"
-      transition="dialog-bottom-transition"
-      width="500"
-    >
+    <v-dialog v-model="isbn.barcode" width="500">
       <v-card>
         <v-card-title> IBSN 사진 </v-card-title>
 
@@ -100,11 +92,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="isbn.audio"
-      transition="dialog-bottom-transition"
-      width="500"
-    >
+    <v-dialog v-model="isbn.audio" width="500">
       <v-card>
         <v-card-title> 보이스 타이핑 </v-card-title>
 
@@ -116,7 +104,7 @@
             :items="[...navigator.languages, 'en-US', 'ko-KR']"
             label="보이스 타이핑 언어"
           />
-          <v-textarea v-model="typed" clearable counter auto-grow />
+          <v-textarea v-model="typed" clearable counter />
         </v-card-text>
 
         <v-card-actions>
@@ -128,11 +116,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="isbn.input"
-      transition="dialog-bottom-transition"
-      width="500"
-    >
+    <v-dialog v-model="isbn.input" width="500">
       <v-card>
         <v-progress-linear
           v-if="loading"
@@ -163,11 +147,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog
-      v-model="isbn.find"
-      transition="dialog-bottom-transition"
-      width="700"
-    >
+    <v-dialog v-model="isbn.find" width="700">
       <v-card>
         <v-progress-linear
           v-if="loading"
@@ -197,7 +177,10 @@
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
           >
             <v-list-item
-              v-if="item.volumeInfo.imageLinks"
+              v-if="
+                item.volumeInfo.industryIdentifiers &&
+                item.volumeInfo.imageLinks
+              "
               :class="`item-${index}`"
               @click="
                 FetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
@@ -205,7 +188,7 @@
             >
               <v-img
                 :src="item.volumeInfo.imageLinks.thumbnail"
-                class="mr-4 ma-2 rounded"
+                class="mr-4 m-2 rounded-lg"
                 max-width="100"
               />
 
@@ -240,7 +223,7 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
-            <vv-list-itemv-else>
+            <v-list-item v-else>
               <v-list-item-content>
                 <v-list-item-title class="primary--text h1">
                   {{ item.volumeInfo.title }}
@@ -255,7 +238,7 @@
                   이 책에 대한 정보가 부족해 선택할 수 없습니다.
                 </v-list-item-subtitle>
               </v-list-item-content>
-            </vv-list-itemv-else>
+            </v-list-item>
           </div>
         </v-list>
 
@@ -270,9 +253,8 @@
       <v-row class="my-10">
         <v-rating
           v-model="post.rating"
-          hover
-          half-increments
           color="blue"
+          required
           ripple
           size="30"
           class="mx-auto"
@@ -334,11 +316,11 @@
       </v-menu>
     </v-card-actions>
 
-    <div class="ma-auto mt-10">
+    <div class="m-auto mt-10">
       <v-img
         v-if="post.image"
         :src="post.image"
-        class="rounded"
+        class="rounded-lg"
         max-width="200"
       />
     </div>
@@ -346,8 +328,8 @@
 </template>
 
 <script lang="ts" setup>
-import { db } from '@/plugins/firebase'
-import { Libris, User } from '@/plugins/global'
+import { db } from '@/plugins/firebase';
+import { Libris, User } from '@/plugins/global';
 
 const userInfo = User()
 const post = ref<any>({
@@ -561,7 +543,6 @@ const Post = () => {
 
 const voiceType = () => {
   const webkitSpeechRecognition = window.webkitSpeechRecognition
-  // eslint-disable-next-line new-cap
   const recognition = new webkitSpeechRecognition()
   recognition.lang = isbn.value.audioType
   recognition.start()

@@ -72,7 +72,7 @@ export function Notify(
   })
 }
 
-const formatter = new Intl.NumberFormat('en-US', {
+const formatter = new Intl.NumberFormat('ko-kr', {
   notation: 'compact',
   compactDisplay: 'short',
   maximumFractionDigits: 1

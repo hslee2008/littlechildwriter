@@ -116,7 +116,7 @@
 
         <v-card class="pa-3 text-center">
           <div class="d-flex">
-            <v-btn to="/account/account" icon class="ma-auto">
+            <v-btn to="/account/account" icon class="m-auto">
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
             <div>

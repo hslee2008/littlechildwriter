@@ -39,7 +39,13 @@ export default defineNuxtConfig({
   },
 
   build: {
-    /* analyze: true */
+    postcss: {
+      plugins: {
+        tailwindcss: {},
+        autoprefixer: {}
+      }
+    }
+    // analyze: true
   },
 
   bridge: {
@@ -112,7 +118,11 @@ export default defineNuxtConfig({
   css: ['@/assets/css/global.css'],
   plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/analytics'],
   components: true,
-  buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
+  buildModules: [
+    '@nuxtjs/vuetify',
+    '@nuxtjs/google-analytics',
+    '@nuxt/postcss8'
+  ],
   modules: ['@nuxtjs/pwa'],
   target: 'static',
 
