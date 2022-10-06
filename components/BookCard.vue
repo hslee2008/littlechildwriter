@@ -52,7 +52,7 @@
             </v-btn>
             <v-btn
               icon
-              :disabled="item.liked[userInfo.uid] == true"
+              :disabled="item.liked[userInfo.uid]"
               class="mr-2"
               @click="Like(item)"
             >
@@ -131,7 +131,13 @@ const Bookmark = (time: string, i: number) => {
   db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
 
   // eslint-disable-next-line vue/no-mutating-props
-  props.items[i].bookmarks[userInfo.value.uid] = true
+  props.items[i] = {
+    ...props.items[i],
+    bookmarks: {
+      ...props.items[i].bookmarks,
+      [userInfo.value.uid]: true
+    }
+  }
   Libris(userInfo.value.uid, 0.1)
 }
 </script>

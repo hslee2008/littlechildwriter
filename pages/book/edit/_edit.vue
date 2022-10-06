@@ -37,7 +37,7 @@
   </v-card>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { auth, db } from '@/plugins/firebase'
 
 const route = useRoute()

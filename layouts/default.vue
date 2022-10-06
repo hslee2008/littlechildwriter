@@ -1,40 +1,41 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="bookmark" fixed app temporary color="#23262E">
-      <template v-if="items.length > 0">
-        <v-card-title> <v-icon left>mdi-bookmark</v-icon> 북마크 </v-card-title>
-        <v-list>
-          <v-list-item
-            v-for="(item, i) in items"
-            :key="i"
-            :to="`/book/content/${item.time}`"
-          >
-            <v-list-item-content>
-              <v-list-item-title> {{ item.title }} </v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-spacer />
-              <v-menu offset-y>
-                <template #activator="{ on, attrs }">
-                  <v-btn icon v-bind="attrs" cols="1" v-on="on" @click.prevent>
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item @click="deleteBookmark(item.time, i)">
-                    <v-list-item-content>
-                      <v-list-item-title>
-                        <v-icon left> mdi-trash-can </v-icon>
-                        삭제
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </template>
+      <v-card-title> <v-icon left>mdi-bookmark</v-icon> 북마크 </v-card-title>
+      <v-list v-if="items.length > 0">
+        <v-list-item
+          v-for="(item, i) in items"
+          :key="i"
+          :to="`/book/content/${item.time}`"
+        >
+          <v-list-item-content>
+            <v-list-item-title> {{ item.title }} </v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-spacer />
+            <v-menu offset-y>
+              <template #activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" cols="1" v-on="on" @click.prevent>
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item @click="deleteBookmark(item.time, i)">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <v-icon left> mdi-trash-can </v-icon>
+                      삭제
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+      <v-card v-else class="transparent">
+        <v-card-text> 북마크가 없습니다. </v-card-text>
+      </v-card>
     </v-navigation-drawer>
 
     <v-app-bar fixed app color="#23262E" outlined>
@@ -147,8 +148,8 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from '@/plugins/firebase';
-import { User } from '@/plugins/global';
+import { auth, db } from '@/plugins/firebase'
+import { User } from '@/plugins/global'
 
 const router = useRouter()
 const userInfo = User()
