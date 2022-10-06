@@ -294,7 +294,7 @@
                   >
                     <v-img
                       :src="i.image"
-                      class="rounded-lg m-3"
+                      class="rounded-lg ma-3"
                       max-width="100"
                     />
                   </v-card>

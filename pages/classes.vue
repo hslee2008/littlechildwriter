@@ -89,8 +89,8 @@
             class="transparent"
             :to="`/class/${item.id}`"
           >
-            <v-img :src="item.image" width="50vh" class="m-auto rounded-lg">
-              <v-avatar class="m-3">
+            <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">
+              <v-avatar class="ma-3">
                 <v-img :src="item.photoURL" />
               </v-avatar>
             </v-img>
@@ -108,8 +108,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'; import { User } from
-  '@/plugins/global'
+import { db } from '@/plugins/firebase';
+import { User } from '@/plugins/global';
 
 const userInfo = User()
 const classes = ref<any>([])

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-parallax class="parallax" src="/background.avif">
-      <div class="m-auto">
+      <div class="ma-auto">
         <div class="mx-3">
           <v-btn v-if="userInfo.uid" to="/book/post" color="primary" block>
             <v-icon left> mdi-pencil </v-icon> 작성하기
@@ -28,7 +28,7 @@
           <v-btn to="/list" class="mx-3">
             글 <v-icon right> mdi-text-box-multiple-outline </v-icon>
           </v-btn>
-          <v-btn v-if="userInfo.uid" to="/classes" class="mx-3">
+          <v-btn to="/classes" class="mx-3">
             알림판
             <v-icon right> mdi-checkbox-blank-badge </v-icon>
           </v-btn>
@@ -113,6 +113,7 @@ onBeforeMount(async () => {
     .ref('/contents')
     .once('value')
     .then(s => s.val())
+
   random.value = Object.values(all)
     .sort(() => 0.5 - Math.random())
     .slice(0, 5)

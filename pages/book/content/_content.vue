@@ -24,17 +24,64 @@
 
     <v-card class="my-3 transparent">
       <div class="cardy">
-        <div class="m-auto">
-          <v-img :src="post.image" width="200" class="ml-5 my-5 rounded-lg">
-            <template #placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
+        <div class="ma-auto">
+          <v-bottom-sheet v-model="sheet">
+            <template #activator="{ on, attrs }">
+              <v-img
+                :src="post.image"
+                width="200"
+                class="ml-5 my-5 rounded-lg pointer"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <template #placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular indeterminate color="grey lighten-5" />
+                  </v-row>
+                </template>
+              </v-img>
             </template>
-          </v-img>
+            <v-list>
+              <v-subheader>외부 사이트</v-subheader>
+
+              <v-list-item
+                target="_blank"
+                :href="`https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=${post.title}`"
+              >
+                <v-list-item-avatar>
+                  <v-avatar size="32px" tile>
+                    <img
+                      src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
+                      alt="알라딘"
+                    />
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-title>알라딘</v-list-item-title>
+              </v-list-item>
+
+              <v-list-item
+                target="_blank"
+                :href="`https://www.yes24.com/product/search?domain=all&query=${post.title}`"
+              >
+                <v-list-item-avatar>
+                  <v-avatar size="32px" tile>
+                    <img
+                      src="https://play-lh.googleusercontent.com/ujk5bP2q6hYKSOnPrCRgJx4gW-oLdvFB3EfXQs6jdn11LOVRcPljdBqrgNBTxkFNRxY7"
+                      alt="yes24"
+                    />
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-title>yes24</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-bottom-sheet>
         </div>
 
-        <div class="m-auto">
+        <div class="ma-auto">
           <v-card-title class="h1 primary--text title">
             {{ post.title }}
             <span v-if="post.isbn" class="white--text subtitle-2 ml-1">
@@ -258,8 +305,9 @@ const otherInfo = ref<any>({
   GBid: ''
 })
 const suggested = ref<any>([])
-const loading = ref<boolean>(true)
 const GBid = ref<string>('')
+const loading = ref<boolean>(true)
+const sheet = ref<boolean>(false)
 
 const Content = async () => {
   const data = await db
@@ -394,6 +442,10 @@ useHead({
 .cardy {
   display: flex;
   padding: 10px;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 @media screen and (max-width: 605px) {

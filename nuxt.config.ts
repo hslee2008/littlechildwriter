@@ -39,12 +39,6 @@ export default defineNuxtConfig({
   },
 
   build: {
-    postcss: {
-      plugins: {
-        tailwindcss: {},
-        autoprefixer: {}
-      }
-    }
     // analyze: true
   },
 
@@ -121,7 +115,8 @@ export default defineNuxtConfig({
   buildModules: [
     '@nuxtjs/vuetify',
     '@nuxtjs/google-analytics',
-    '@nuxt/postcss8'
+    '@nuxtjs/robots',
+    '@nuxtjs/sitemap'
   ],
   modules: ['@nuxtjs/pwa'],
   target: 'static',
@@ -206,6 +201,20 @@ export default defineNuxtConfig({
     }
   },
 
+  sitemap: {
+    hostname: 'https://littlechildwriter.web.app',
+    gzip: true,
+    exclude: ['/admin/**'],
+    routes: async () => {
+      return await getRoutes()
+    }
+  },
+
+  robots: {
+    UserAgent: '*',
+    Disallow: '/admin'
+  },
+
   router: {
     base: '/'
   },
@@ -213,6 +222,9 @@ export default defineNuxtConfig({
   hooks: {
     async 'nitro:config'(config) {
       config?.prerender?.routes?.push(...(await getRoutes()))
+    },
+    async 'sitemap:generate:before'(sitemap) {
+      sitemap.routes.push(...(await getRoutes()))
     }
   },
 

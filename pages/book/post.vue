@@ -317,7 +317,7 @@
       </v-menu>
     </v-card-actions>
 
-    <div class="m-auto mt-10">
+    <div class="ma-auto mt-10">
       <v-img
         v-if="post.image"
         :src="post.image"
@@ -329,8 +329,8 @@
 </template>
 
 <script lang="ts" setup>
-import { db } from '@/plugins/firebase'
-import { Libris, User } from '@/plugins/global'
+import { db } from '@/plugins/firebase';
+import { Libris, User } from '@/plugins/global';
 
 const userInfo = User()
 const post = ref<any>({
