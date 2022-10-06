@@ -27,7 +27,7 @@
         <div class="m-auto">
           <v-img :src="post.image" width="200" class="ml-5 my-5 rounded-lg">
             <template #placeholder>
-              <v-row class="fill-height m-0" align="center" justify="center">
+              <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey lighten-5" />
               </v-row>
             </template>
@@ -122,7 +122,7 @@
                 outlined
                 label
                 :to="`/list?search=${tag}`"
-                class="m-2 d-block"
+                class="ma-2 d-block"
               >
                 #{{ tag }}
               </v-chip>
@@ -228,8 +228,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase';
-import { formatter, Libris, User } from '@/plugins/global';
+import { db } from '@/plugins/firebase'
+import { formatter, Libris, User } from '@/plugins/global'
 
 const userInfo = User()
 const router = useRouter()

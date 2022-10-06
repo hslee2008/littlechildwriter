@@ -74,7 +74,7 @@
     </template>
 
     <template #default="props">
-      <v-row class="mt-5 m-1 g-10">
+      <v-row class="mt-5 ma-1 g-10">
         <v-card
           v-for="item in props.items"
           :key="item.creator + item.name"
@@ -108,8 +108,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { db } from '@/plugins/firebase'; import { User } from
+  '@/plugins/global'
 
 const userInfo = User()
 const classes = ref<any>([])

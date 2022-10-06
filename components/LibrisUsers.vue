@@ -28,7 +28,7 @@
               class="rounded"
             >
               <template #placeholder>
-                <v-row class="fill-height m-0" align="center" justify="center">
+                <v-row class="fill-height ma-0" align="center" justify="center">
                   <v-progress-circular indeterminate color="grey lighten-5" />
                 </v-row>
               </template>
@@ -41,8 +41,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { db } from '@/plugins/firebase'; import { User } from
+  '@/plugins/global'
 
 const userInfo = User()
 const props = defineProps({

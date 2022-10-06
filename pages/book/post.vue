@@ -179,7 +179,7 @@
             <v-list-item
               v-if="
                 item.volumeInfo.industryIdentifiers &&
-                item.volumeInfo.imageLinks
+                  item.volumeInfo.imageLinks
               "
               :class="`item-${index}`"
               @click="
@@ -188,7 +188,8 @@
             >
               <v-img
                 :src="item.volumeInfo.imageLinks.thumbnail"
-                class="mr-4 m-2 rounded-lg"
+                class="mr-4 ma-2 rounded-lg"
+
                 max-width="100"
               />
 
@@ -328,8 +329,8 @@
 </template>
 
 <script lang="ts" setup>
-import { db } from '@/plugins/firebase';
-import { Libris, User } from '@/plugins/global';
+import { db } from '@/plugins/firebase'
+import { Libris, User } from '@/plugins/global'
 
 const userInfo = User()
 const post = ref<any>({
@@ -543,6 +544,7 @@ const Post = () => {
 
 const voiceType = () => {
   const webkitSpeechRecognition = window.webkitSpeechRecognition
+  // eslint-disable-next-line new-cap
   const recognition = new webkitSpeechRecognition()
   recognition.lang = isbn.value.audioType
   recognition.start()
