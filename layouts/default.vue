@@ -43,7 +43,7 @@
 
       <NLink to="/">
         <v-avatar size="30">
-          <v-img src="icon.png" />
+          <img src="icon.png" alt="Logo" />
         </v-avatar>
       </NLink>
 
@@ -172,6 +172,15 @@ onMounted(() => {
     db.ref(`/users/${u.uid}/notification`).on('child_added', async s =>
       notif.value.push(await s.val())
     )
+
+    db.ref('.info/connected').on('value', s => {
+      if (s.val()) {
+        db.ref(`/users/${userInfo.value.uid}/status`)
+          .onDisconnect()
+          .set('offline')
+        db.ref(`/users/${userInfo.value.uid}/status`).set('online')
+      }
+    })
   })
 })
 

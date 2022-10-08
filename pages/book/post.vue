@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-indent -->
 <template>
   <div>
     <v-dialog v-model="isbn.upload" width="500">

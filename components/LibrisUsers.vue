@@ -18,6 +18,10 @@
             </v-list-item-title>
           </v-list-item-content>
 
+          <v-list-item-avatar v-if="item.status === 'online'">
+            <v-icon>mdi-account-badge</v-icon>
+          </v-list-item-avatar>
+
           <v-list-item-avatar
             v-if="item.photoURL"
             :size="$vuetify.breakpoint.xs ? 50 : 70"
@@ -41,8 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'; import { User } from
-  '@/plugins/global'
+import { db } from '@/plugins/firebase'
+import { User } from '@/plugins/global'
 
 const userInfo = User()
 const props = defineProps({
@@ -60,12 +64,13 @@ const Limited = () => {
     .orderByChild('libris')
     .limitToLast(5)
     .on('child_added', async s => {
-      const { displayName, libris, photoURL } = await s.val()
+      const { displayName, libris, photoURL, status } = await s.val()
 
       lbt.value.unshift({
         displayName,
         libris,
         photoURL,
+        status,
         uid: s.key
       })
     })
@@ -75,13 +80,14 @@ const UnLimited = () => {
   db.ref('/users')
     .orderByChild('libris')
     .on('child_added', async s => {
-      const { displayName, libris, photoURL, uid } = await s.val()
+      const { displayName, libris, photoURL, status } = await s.val()
 
       lbt.value.unshift({
         displayName,
         libris,
         photoURL,
-        uid
+        status,
+        uid: s.key
       })
     })
 }

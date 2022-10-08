@@ -124,22 +124,7 @@
     </v-card>
 
     <div class="text-center my-10">
-      <div v-if="post.uid === userInfo.uid" class="mb-10">
-        <LazyDialogComponent
-          :cb="Del"
-          btn-title="삭제"
-          title="진짜로 삭제하겠습니까?"
-          text="삭제하면 복구할 수 없습니다"
-          icon="trash-can"
-        />
-        <v-btn
-          :to="`/book/edit/${time}`"
-          class="ml-3 edit"
-          color="blue lighten-2"
-        >
-          <v-icon left> mdi-pencil </v-icon> 편집
-        </v-btn>
-      </div>
+      <div v-if="post.uid === userInfo.uid" class="mb-10"></div>
 
       <div v-if="post.isbn">
         <v-btn text to="/list">
@@ -271,6 +256,29 @@
     </template>
 
     <br /><br /><br />
+
+    <v-speed-dial
+      v-model="fab"
+      bottom
+      right
+      open-on-hover
+      direction="top"
+      transition="slide-y-reverse-transition"
+      style="position: fixed"
+    >
+      <template #activator>
+        <v-btn v-model="fab" color="blue darken-2" dark fab>
+          <v-icon v-if="fab"> mdi-cog-off </v-icon>
+          <v-icon v-else> mdi-cog </v-icon>
+        </v-btn>
+      </template>
+      <v-btn fab dark small color="green" :to="`/book/edit/${time}`">
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+      <v-btn fab dark small color="red" @click="Del">
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
+    </v-speed-dial>
   </div>
 </template>
 
@@ -308,6 +316,7 @@ const suggested = ref<any>([])
 const GBid = ref<string>('')
 const loading = ref<boolean>(true)
 const sheet = ref<boolean>(false)
+const fab = ref<boolean>(false)
 
 const Content = async () => {
   const data = await db

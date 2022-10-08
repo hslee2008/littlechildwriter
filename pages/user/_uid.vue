@@ -66,45 +66,32 @@
             <v-divider class="my-10" />
           </div>
 
-          <div class="mt-8 sm:mt-12">
-            <dl class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div
-                class="flex flex-col rounded-lg border border-gray-100 px-4 py-8 text-center"
-              >
-                <dt class="order-last text-lg font-medium text-gray-500">
-                  리브리스
-                </dt>
+          <v-list flat class="rounded-lg">
+            <v-subheader>통계</v-subheader>
 
-                <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl">
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon> mdi-crown-circle </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  리브리스:
                   {{ Math.round(targetUser.libris) }}
-                </dd>
-              </div>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
 
-              <div
-                class="flex flex-col rounded-lg border border-gray-100 px-4 py-8 text-center"
-              >
-                <dt class="order-last text-lg font-medium text-gray-500">
-                  총 책 업로드
-                </dt>
-
-                <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl">
-                  {{ books.length }}
-                </dd>
-              </div>
-
-              <div
-                class="flex flex-col rounded-lg border border-gray-100 px-4 py-8 text-center"
-              >
-                <dt class="order-last text-lg font-medium text-gray-500">
-                  구독자
-                </dt>
-
-                <dd class="text-4xl font-extrabold text-blue-600 md:text-5xl">
-                  {{ subCount }}
-                </dd>
-              </div>
-            </dl>
-          </div>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon> mdi-book </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  총 책 업로드: {{ books.length }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
         </v-tab-item>
 
         <v-tab-item>

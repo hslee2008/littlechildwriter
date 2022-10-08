@@ -17,5 +17,8 @@
     },
     "types": ["@types/node", "@nuxt/types", "@nuxtjs/vuetify", "@nuxtjs/pwa"]
   },
+  "vueCompilerOptions": {
+    "target": 2.7
+  },
   "exclude": ["node_modules"]
 }
