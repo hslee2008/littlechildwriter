@@ -258,6 +258,7 @@
     <br /><br /><br />
 
     <v-speed-dial
+      v-if="userInfo.uid === post.uid"
       v-model="fab"
       bottom
       right

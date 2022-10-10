@@ -40,8 +40,11 @@
         </v-card-text>
 
         <v-card-actions>
+          <v-btn text @click="isbn.upload = false"> 확인 </v-btn>
           <v-spacer />
-          <v-btn text @click="isbn.upload = false"> 취소 </v-btn>
+          <v-btn text @click=";(isbn.upload = false), (post.image = '')">
+            취소
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

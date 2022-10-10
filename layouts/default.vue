@@ -43,7 +43,7 @@
 
       <NLink to="/">
         <v-avatar size="30">
-          <img src="icon.png" alt="Logo" />
+          <img src="/icon.png" alt="Logo" />
         </v-avatar>
       </NLink>
 

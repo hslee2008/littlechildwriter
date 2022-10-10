@@ -171,24 +171,43 @@
                   </v-card-subtitle>
                 </div>
               </v-card>
-              <div v-else-if="item.type === '숙제'">
-                <v-card
-                  class="d-flex mt-5 rounded-b-0"
-                  @click="
-                    () => {
-                      tab = 1
-                      post.type = '파일 (숙제로)'
-                      post.category = item.title
-                    }
-                  "
-                >
-                  <v-icon class="ml-4"> mdi-school </v-icon>
-
+              <div v-else-if="item.type === '숙제 제출 (학생)'">
+                <v-card class="d-flex mt-5">
+                  <v-icon color="orange" class="ml-4">
+                    mdi-school
+                  </v-icon>
                   <div>
-                    <v-card-title>{{ item.title }} 숙제</v-card-title>
+                    <v-card-title>{{ item.title }}</v-card-title>
+                    <v-card-text>
+                      {{ item.content }}
+                    </v-card-text>
                   </div>
+
+                  <v-spacer />
+
+                  <v-card-actions>
+                    <v-menu v-if="userInfo.uid === item.uid" offset-y>
+                      <template #activator="{ on, attrs }">
+                        <v-btn
+                          icon
+                          v-bind="attrs"
+                          cols="1"
+                          v-on="on"
+                          @click.stop.prevent=""
+                        >
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item @click="DeleteContent(title, i)">
+                          <v-list-item-title>
+                            <v-icon left> mdi-trash-can </v-icon> 삭제
+                          </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-card-actions>
                 </v-card>
-                <v-divider />
               </div>
               <v-card v-else class="mt-5">
                 <div class="d-flex">
@@ -237,7 +256,14 @@
       <v-tab-item class="pt-10">
         <v-select
           v-model="post.type"
-          :items="['책', '공지사항', '파일', '파일 (숙제로)', '링크', '숙제']"
+          :items="[
+            '책',
+            '공지사항',
+            '파일',
+            '파일 (숙제로)',
+            '링크',
+            '숙제 제출 (학생)'
+          ]"
           label="종류 선택"
           outlined
           class="mb-10"
@@ -370,12 +396,14 @@
 
           <v-btn text @click="Upload"> 파일 게시 </v-btn>
         </v-card>
-        <v-card v-else-if="post.type === '숙제'" class="transparent">
+        <v-card
+          v-else-if="post.type === '숙제 제출 (학생)'"
+          class="transparent"
+        >
           <v-card-title>숙제 업로드</v-card-title>
           <v-card-text>
             <v-text-field v-model="post.title" label="제목" />
-            <v-text-field v-model="post.content" label="내용" />
-            숙제는 선생님과 올린 사람만 확인할 수 있습니다.
+            <v-textarea v-model="post.content" label="내용" />
           </v-card-text>
           <v-card-actions class="ma-2 gap20">
             <v-btn
@@ -542,17 +570,17 @@ const Update = () => {
 const UploadFile = (f: File[]) => (post.value.file = f)
 
 const Post = () => {
-  const { title, time, category, type, link } = post.value
+  const { title, time, category, type, content } = post.value
   const { uid, displayName } = userInfo.value
 
-  if (type === '숙제') {
-    db.ref(`classes/${id}/contents/${category}/${category}`).set({
+  if (type === '숙제 제출 (학생)') {
+    db.ref(`classes/${id}/contents/${category}/${time}`).set({
       title,
       time,
       uid,
       displayName,
       type,
-      link
+      content
     })
   } else {
     db.ref(`/classes/${id}/contents/${category}`).push({
@@ -561,7 +589,7 @@ const Post = () => {
       time,
       displayName,
       type,
-      link
+      content
     })
   }
 
