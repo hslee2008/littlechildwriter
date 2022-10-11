@@ -19,7 +19,7 @@
     "@nuxtjs/sitemap": "^2.4.0",
     "@vueuse/head": "^0.7.12",
     "badwords-ko": "1.0.3",
-    "firebase": "^9.10.0",
+    "firebase": "^9.11.0",
     "firebaseui": "^6.0.1",
     "leo-profanity": "1.6.1",
     "nuxt-edge": "^2.16.0-27720022.54e852f",
@@ -37,7 +37,7 @@
     "cypress": "^10.9.0",
     "eslint": "^8.24.0",
     "eslint-plugin-nuxt": "4.0.0",
-    "firebase-admin": "11.0.1",
+    "firebase-admin": "11.1.0",
     "typescript": "^4.8.4"
   }
 }
