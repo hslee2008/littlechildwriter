@@ -71,7 +71,7 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-item @click="DeleteContent(title, i)">
+                      <v-list-item @click="DeleteContent(title, i, 'other')">
                         <v-list-item-title>
                           <v-icon left> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
@@ -108,7 +108,7 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-item @click="DeleteContent(title, i)">
+                      <v-list-item @click="DeleteContent(title, i, 'file')">
                         <v-list-item-title>
                           <v-icon left> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
@@ -148,7 +148,7 @@
                         </v-btn>
                       </template>
                       <v-list>
-                        <v-list-item @click="DeleteContent(title, i)">
+                        <v-list-item @click="DeleteContent(title, i, 'file')">
                           <v-list-item-title>
                             <v-icon left> mdi-trash-can </v-icon> 삭제
                           </v-list-item-title>
@@ -173,9 +173,7 @@
               </v-card>
               <div v-else-if="item.type === '숙제 제출 (학생)'">
                 <v-card class="d-flex mt-5">
-                  <v-icon color="orange" class="ml-4">
-                    mdi-school
-                  </v-icon>
+                  <v-icon color="orange" class="ml-4"> mdi-school </v-icon>
                   <div>
                     <v-card-title>{{ item.title }}</v-card-title>
                     <v-card-text>
@@ -199,7 +197,7 @@
                         </v-btn>
                       </template>
                       <v-list>
-                        <v-list-item @click="DeleteContent(title, i)">
+                        <v-list-item @click="DeleteContent(title, i, 'other')">
                           <v-list-item-title>
                             <v-icon left> mdi-trash-can </v-icon> 삭제
                           </v-list-item-title>
@@ -237,7 +235,7 @@
                         </v-btn>
                       </template>
                       <v-list>
-                        <v-list-item @click="DeleteContent(title, i)">
+                        <v-list-item @click="DeleteContent(title, i, 'other')">
                           <v-list-item-title>
                             <v-icon left> mdi-trash-can </v-icon> 삭제
                           </v-list-item-title>
@@ -621,8 +619,13 @@ const DeleteClass = () => {
   router.push('/classes')
 }
 
-const DeleteContent = (title: number, i: number) =>
+const DeleteContent = (title: number, i: number, type: string) => {
   db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
+
+  if (type === '파일') {
+    storage.ref(`${type}`).delete()
+  }
+}
 
 useHead({
   title: '클래스 (자세히) - LCW'

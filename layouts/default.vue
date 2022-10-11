@@ -38,7 +38,13 @@
       </v-card>
     </v-navigation-drawer>
 
-    <v-app-bar fixed app color="#23262E" outlined>
+    <v-app-bar
+      fixed
+      app
+      color="#23262E"
+      outlined
+      :collapse="$route.path.startsWith('/class')"
+    >
       <v-app-bar-nav-icon v-if="userInfo.uid" @click="bookmark = !bookmark" />
 
       <NLink to="/">
@@ -49,98 +55,104 @@
 
       <v-spacer />
 
-      <v-slide-x-transition>
-        <v-btn v-if="$route.path !== '/book/post'" icon to="/book/post">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </v-slide-x-transition>
-
-      <v-dialog
-        v-if="userInfo.uid"
-        v-model="notifOverlay"
-        transition="dialog-bottom-transition"
-        width="700"
-        scrollable
-      >
-        <template #activator="{ on, attrs }">
-          <v-btn icon class="amber--text" v-bind="attrs" v-on="on">
-            <v-badge
-              overlap
-              left
-              transition
-              :content="notif.length"
-              :value="notif.length"
-            >
-              <v-icon>
-                {{ notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell' }}
-              </v-icon>
-            </v-badge>
+      <div v-if="!$route.path.startsWith('/class')">
+        <v-slide-x-transition>
+          <v-btn v-if="$route.path !== '/book/post'" icon to="/book/post">
+            <v-icon>mdi-plus</v-icon>
           </v-btn>
-        </template>
+        </v-slide-x-transition>
 
-        <v-card>
-          <v-list v-if="notif.length > 0">
-            <v-list-item v-for="(d, i) in notif" :key="i" @click="load(d.link)">
-              <v-list-item-avatar>
-                <v-img :src="d.photoURL" />
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <v-list-item-title>{{ d.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ d.time }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-          <div v-else>
-            <v-card-text class="text-center grey--text">
-              알림이 없습니다.
-            </v-card-text>
-          </div>
-
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text @click="clearEverything">
-              비우기 <v-icon right> mdi-notification-clear-all </v-icon>
+        <v-dialog
+          v-if="userInfo.uid"
+          v-model="notifOverlay"
+          transition="dialog-bottom-transition"
+          width="700"
+          scrollable
+        >
+          <template #activator="{ on, attrs }">
+            <v-btn icon class="amber--text" v-bind="attrs" v-on="on">
+              <v-badge
+                overlap
+                left
+                transition
+                :content="notif.length"
+                :value="notif.length"
+              >
+                <v-icon>
+                  {{ notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell' }}
+                </v-icon>
+              </v-badge>
             </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+          </template>
 
-      <v-menu v-if="userInfo.uid" right rounded>
-        <template #activator="{ on }">
-          <v-btn icon v-on="on">
-            <v-avatar size="35">
-              <v-img alt="User photoURL" :src="userInfo.photoURL" />
-            </v-avatar>
-          </v-btn>
-        </template>
+          <v-card>
+            <v-list v-if="notif.length > 0">
+              <v-list-item
+                v-for="(d, i) in notif"
+                :key="i"
+                @click="load(d.link)"
+              >
+                <v-list-item-avatar>
+                  <v-img :src="d.photoURL" />
+                </v-list-item-avatar>
 
-        <v-card class="pa-3 text-center">
-          <div class="d-flex">
-            <v-btn to="/account/account" icon class="ma-auto">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-            <div>
-              <v-card-title>{{ userInfo.displayName }}</v-card-title>
-              <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
+                <v-list-item-content>
+                  <v-list-item-title>{{ d.title }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ d.time }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+            <div v-else>
+              <v-card-text class="text-center grey--text">
+                알림이 없습니다.
+              </v-card-text>
             </div>
-          </div>
 
-          <v-btn :to="`/user/${userInfo.uid}`" text> 프로필 </v-btn>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn text @click="clearEverything">
+                비우기 <v-icon right> mdi-notification-clear-all </v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
-          <v-btn text @click="logout">
-            <v-icon left>mdi-logout</v-icon> 로그아웃
-          </v-btn>
-        </v-card>
-      </v-menu>
-      <v-btn v-else to="/account/login" icon>
-        <v-icon>mdi-account-circle</v-icon>
-      </v-btn>
+        <v-menu v-if="userInfo.uid" right rounded>
+          <template #activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-avatar size="35">
+                <v-img alt="User photoURL" :src="userInfo.photoURL" />
+              </v-avatar>
+            </v-btn>
+          </template>
+
+          <v-card class="pa-3 text-center">
+            <div class="d-flex">
+              <v-btn to="/account/account" icon class="ma-auto">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <div>
+                <v-card-title>{{ userInfo.displayName }}</v-card-title>
+                <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
+              </div>
+            </div>
+
+            <v-btn :to="`/user/${userInfo.uid}`" text> 프로필 </v-btn>
+
+            <v-btn text @click="logout">
+              <v-icon left>mdi-logout</v-icon> 로그아웃
+            </v-btn>
+          </v-card>
+        </v-menu>
+        <v-btn v-else to="/account/login" icon>
+          <v-icon>mdi-account-circle</v-icon>
+        </v-btn>
+      </div>
     </v-app-bar>
 
     <v-main>
       <v-container>
-        <br />
+        <br v-if="!$route.path.startsWith('/class')" />
         <Nuxt />
         <br />
       </v-container>
