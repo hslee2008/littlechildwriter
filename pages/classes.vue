@@ -67,6 +67,7 @@
         </v-stepper-items>
       </v-stepper>
     </v-dialog>
+
     <v-data-iterator :items="classes" hide-default-footer>
       <template #default="props">
         <v-row class="mt-5 ma-1 g-10">

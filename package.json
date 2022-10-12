@@ -19,7 +19,7 @@
     "@nuxtjs/sitemap": "^2.4.0",
     "@vueuse/head": "^0.7.12",
     "badwords-ko": "1.0.3",
-    "firebase": "^9.11.0",
+    "firebase": "^9.12.0",
     "firebaseui": "^6.0.1",
     "leo-profanity": "1.6.1",
     "nuxt-edge": "^2.16.0-27720022.54e852f",

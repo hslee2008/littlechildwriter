@@ -1,16 +1,26 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
-  <v-tabs v-model="tab" show-arrows center-active grow class="transparent">
+  <v-tabs
+    v-model="tab"
+    grow
+    centered
+    show-arrows
+    center-active
+    align-with-title
+    class="transparent"
+  >
     <v-tab> 홈 </v-tab>
     <v-tab> 글 쓰기 </v-tab>
     <v-tab v-if="classInfo.uid === userInfo.uid"> 설정 </v-tab>
 
     <v-tabs-items v-model="tab" class="transparent">
-      <v-tab-item class="pt-10">
-        <h1 class="primary--text">
+      <v-tab-item class="pt-5">
+        <v-card-subtitle>
+          {{ classInfo.description }}
+        </v-card-subtitle>
+        <v-card-title class="primary--text text-h3">
           {{ classInfo.name }} ({{ classInfo.creator }})
-        </h1>
-        <p class="my-5" v-text="classInfo.description" />
+        </v-card-title>
 
         <br />
 
@@ -25,7 +35,7 @@
           class="my-2 mr-2"
         />
 
-        <v-expansion-panels focusable popout>
+        <v-expansion-panels focusable>
           <v-expansion-panel
             v-for="(category, title) in classInfo.contents"
             v-if="title.toString().includes(search)"
@@ -57,28 +67,13 @@
 
                 <v-spacer />
 
-                <v-card-actions>
-                  <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        icon
-                        v-bind="attrs"
-                        cols="1"
-                        v-on="on"
-                        @click.stop.prevent=""
-                      >
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item @click="DeleteContent(title, i, 'other')">
-                        <v-list-item-title>
-                          <v-icon left> mdi-trash-can </v-icon> 삭제
-                        </v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </v-card-actions>
+                <Actions
+                  v-if="item.uid === userInfo.uid"
+                  :item="item"
+                  :i="i"
+                  :title="title"
+                  type="other"
+                />
               </v-card>
               <v-card
                 v-else-if="item.type === '파일'"
@@ -94,28 +89,13 @@
 
                 <v-spacer />
 
-                <v-card-actions>
-                  <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                    <template #activator="{ on, attrs }">
-                      <v-btn
-                        icon
-                        v-bind="attrs"
-                        cols="1"
-                        v-on="on"
-                        @click.stop.prevent=""
-                      >
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item @click="DeleteContent(title, i, 'file')">
-                        <v-list-item-title>
-                          <v-icon left> mdi-trash-can </v-icon> 삭제
-                        </v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </v-card-actions>
+                <Actions
+                  v-if="item.uid === userInfo.uid"
+                  :item="item"
+                  :i="i"
+                  :title="title"
+                  type="파일"
+                />
               </v-card>
               <div v-else-if="item.type === '파일 (숙제로)'">
                 <v-card
@@ -134,28 +114,13 @@
 
                   <v-spacer />
 
-                  <v-card-actions>
-                    <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                      <template #activator="{ on, attrs }">
-                        <v-btn
-                          icon
-                          v-bind="attrs"
-                          cols="1"
-                          v-on="on"
-                          @click.stop.prevent=""
-                        >
-                          <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item @click="DeleteContent(title, i, 'file')">
-                          <v-list-item-title>
-                            <v-icon left> mdi-trash-can </v-icon> 삭제
-                          </v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-card-actions>
+                  <Actions
+                    v-if="item.uid === userInfo.uid"
+                    :item="item"
+                    :i="i"
+                    :title="title"
+                    type="파일"
+                  />
                 </v-card>
                 <v-card v-else>
                   <v-card-text>{{ item.displayName }}님이 제출함</v-card-text>
@@ -170,6 +135,16 @@
                     <a :href="item.link" target="_blank" v-text="item.title" />
                   </v-card-subtitle>
                 </div>
+
+                <v-spacer />
+
+                <Actions
+                  v-if="item.uid === userInfo.uid"
+                  :item="item"
+                  :i="i"
+                  :title="title"
+                  type="other"
+                />
               </v-card>
               <div v-else-if="item.type === '숙제 제출 (학생)'">
                 <v-card class="d-flex mt-5">
@@ -183,28 +158,13 @@
 
                   <v-spacer />
 
-                  <v-card-actions>
-                    <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                      <template #activator="{ on, attrs }">
-                        <v-btn
-                          icon
-                          v-bind="attrs"
-                          cols="1"
-                          v-on="on"
-                          @click.stop.prevent=""
-                        >
-                          <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item @click="DeleteContent(title, i, 'other')">
-                          <v-list-item-title>
-                            <v-icon left> mdi-trash-can </v-icon> 삭제
-                          </v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-card-actions>
+                  <Actions
+                    v-if="item.uid === userInfo.uid"
+                    :item="item"
+                    :i="i"
+                    :title="title"
+                    type="other"
+                  />
                 </v-card>
               </div>
               <v-card v-else class="mt-5">
@@ -220,29 +180,16 @@
                       {{ new Date(item.time).toLocaleDateString() }}
                     </v-card-subtitle>
                   </div>
+
                   <v-spacer />
-                  <v-card-actions>
-                    <v-menu v-if="userInfo.uid === item.uid" offset-y>
-                      <template #activator="{ on, attrs }">
-                        <v-btn
-                          icon
-                          v-bind="attrs"
-                          cols="1"
-                          v-on="on"
-                          @click.stop.prevent=""
-                        >
-                          <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                      </template>
-                      <v-list>
-                        <v-list-item @click="DeleteContent(title, i, 'other')">
-                          <v-list-item-title>
-                            <v-icon left> mdi-trash-can </v-icon> 삭제
-                          </v-list-item-title>
-                        </v-list-item>
-                      </v-list>
-                    </v-menu>
-                  </v-card-actions>
+
+                  <Actions
+                    v-if="item.uid === userInfo.uid"
+                    :item="item"
+                    :i="i"
+                    :title="title"
+                    type="other"
+                  />
                 </div>
                 <v-card-text>{{ item.content }}</v-card-text>
               </v-card>
@@ -251,35 +198,41 @@
         </v-expansion-panels>
       </v-tab-item>
 
-      <v-tab-item class="pt-10">
-        <v-select
-          v-model="post.type"
-          :items="[
-            '책',
-            '공지사항',
-            '파일',
-            '파일 (숙제로)',
-            '링크',
-            '숙제 제출 (학생)'
-          ]"
-          label="종류 선택"
-          outlined
-          class="mb-10"
-        />
-
-        <v-row style="gap: 10px" class="ma-10">
-          <v-text-field
-            v-if="classInfo.uid === userInfo.uid"
-            v-model="post.category"
-            label="수업 이름"
-            outlined
-          />
+      <v-tab-item class="pt-5">
+        <v-row style="gap: 5px" class="ma-3">
           <v-select
-            v-model="post.category"
-            :items="Object.keys(classInfo.contents || {})"
+            v-model="post.type"
+            :items="[
+              '책',
+              '공지사항',
+              '파일',
+              '파일 (숙제로)',
+              '링크',
+              '숙제 제출 (학생)'
+            ]"
             label="종류 선택"
             outlined
+            class="mb-10"
           />
+          <div>
+            <v-combobox
+              v-if="classInfo.uid === userInfo.uid"
+              v-model="post.category"
+              :items="Object.keys(classInfo.contents || {})"
+              label="Search"
+              outlined
+              hide-selected
+              clearable
+              prepend-inner-icon="mdi-magnify"
+            />
+            <v-select
+              v-else
+              v-model="post.category"
+              :items="Object.keys(classInfo.contents || {})"
+              label="종류 선택"
+              outlined
+            />
+          </div>
         </v-row>
 
         <v-card v-if="post.type === '책'">
@@ -424,7 +377,7 @@
         />
       </v-tab-item>
 
-      <v-tab-item v-if="classInfo.uid === userInfo.uid" class="pt-10">
+      <v-tab-item v-if="classInfo.uid === userInfo.uid" class="pt-5">
         <v-card class="mt-5">
           <v-card-title>수업 세부정보</v-card-title>
           <v-card-text>
@@ -467,6 +420,7 @@
 </template>
 
 <script setup lang="ts">
+import Actions from './components/Actions.vue'
 import { db, storage } from '@/plugins/firebase'
 import { User } from '@/plugins/global'
 
@@ -619,16 +573,8 @@ const DeleteClass = () => {
   router.push('/classes')
 }
 
-const DeleteContent = (title: number, i: number, type: string) => {
-  db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
-
-  if (type === '파일') {
-    storage.ref(`${type}`).delete()
-  }
-}
-
 useHead({
-  title: '클래스 (자세히) - LCW'
+  title: '알림판 (자세히) - LCW'
 })
 </script>
 
