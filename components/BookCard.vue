@@ -111,12 +111,6 @@ const Like = (item: any) => {
 
   Libris(userInfo.value.uid, 0.1)
   Libris(item.uid, 0.1)
-  Notify(
-    item.uid,
-    userInfo.value.photoURL,
-    `${userInfo.value.displayName}님이 좋아요를 눌렀습니다.`,
-    `/book/content/${item.time}`
-  )
 }
 
 const Bookmark = (time: string, i: number) => {
