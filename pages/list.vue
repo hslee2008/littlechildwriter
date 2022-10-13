@@ -19,7 +19,7 @@
         label="Search"
         outlined
         hide-selected
-        append-icon="mdi-swap-horizontal"
+        :append-icon="`mdi-toggle-switch${sortDesc ? '-off' : ''}`"
         class="my-2 mr-2"
         @click:append="sortDesc = !sortDesc"
       />

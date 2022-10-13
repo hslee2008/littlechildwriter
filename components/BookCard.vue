@@ -45,7 +45,7 @@
               <v-icon>
                 mdi-bookmark{{
                   Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
-                    ? ''
+                    ? '-check'
                     : '-outline'
                 }}
               </v-icon>

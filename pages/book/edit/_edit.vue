@@ -26,7 +26,6 @@
       <v-spacer />
 
       <v-btn
-        outlined
         color="primary"
         class="elevation-0 update"
         @click="Update"

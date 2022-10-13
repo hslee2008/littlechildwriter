@@ -26,7 +26,7 @@
 
         <div class="d-flex justify-center">
           <v-btn to="/list" class="mx-3">
-            글 <v-icon right> mdi-text-box-multiple-outline </v-icon>
+            글 <v-icon right> mdi-format-list-bulleted-square </v-icon>
           </v-btn>
           <v-btn to="/classes" class="mx-3">
             알림판

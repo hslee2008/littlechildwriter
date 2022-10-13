@@ -50,10 +50,10 @@
 
               <v-list-item
                 target="_blank"
-                :href="`https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=${post.title}`"
+                :href="`https://aladin.co.kr/shop/wproduct.aspx?isbn=${post.isbn}`"
               >
                 <v-list-item-avatar>
-                  <v-avatar size="32px" tile>
+                  <v-avatar size="32px">
                     <img
                       src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
                       alt="알라딘"
@@ -65,10 +65,10 @@
 
               <v-list-item
                 target="_blank"
-                :href="`https://www.yes24.com/product/search?domain=all&query=${post.title}`"
+                :href="`https://www.yes24.com/product/search?query=${post.isbn}&domain=all`"
               >
                 <v-list-item-avatar>
-                  <v-avatar size="32px" tile>
+                  <v-avatar size="32px">
                     <img
                       src="https://play-lh.googleusercontent.com/ujk5bP2q6hYKSOnPrCRgJx4gW-oLdvFB3EfXQs6jdn11LOVRcPljdBqrgNBTxkFNRxY7"
                       alt="yes24"
@@ -76,6 +76,21 @@
                   </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-title>yes24</v-list-item-title>
+              </v-list-item>
+
+              <v-list-item
+                target="_blank"
+                :href="`https://www.amazon.com/s?k=${post.isbn}&i=stripbooks&linkCode=qs`"
+              >
+                <v-list-item-avatar>
+                  <v-avatar size="32px">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
+                      alt="yes24"
+                    />
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-title>아마존</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-bottom-sheet>
