@@ -15,12 +15,12 @@
 
     <v-tabs-items v-model="tab" class="transparent">
       <v-tab-item class="pt-5">
-        <v-card-subtitle>
-          {{ classInfo.description }}
-        </v-card-subtitle>
-        <v-card-title class="primary--text text-h3">
-          {{ classInfo.name }} ({{ classInfo.creator }})
-        </v-card-title>
+        <h4 class="mb-3">
+          {{ classInfo.description }} ({{ classInfo.creator }})
+        </h4>
+        <h1 class="primary--text text-h4">
+          {{ classInfo.name }}
+        </h1>
 
         <br />
 
@@ -146,6 +146,24 @@
                   type="other"
                 />
               </v-card>
+              <v-card v-else-if="item.type === '사진'" class="mt-5">
+                <div class="d-flex">
+                  <div>
+                    <v-card-title>{{ item.file }}</v-card-title>
+                    <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+                  </div>
+
+                  <Actions
+                    v-if="item.uid === userInfo.uid"
+                    :item="item"
+                    :i="i"
+                    :title="title"
+                    type="파일"
+                  />
+                </div>
+
+                <v-img :src="item.url" />
+              </v-card>
               <div v-else-if="item.type === '숙제 제출 (학생)'">
                 <v-card class="d-flex mt-5">
                   <v-icon color="orange" class="ml-4"> mdi-school </v-icon>
@@ -202,14 +220,7 @@
         <v-row style="gap: 5px" class="ma-3">
           <v-select
             v-model="post.type"
-            :items="[
-              '책',
-              '공지사항',
-              '파일',
-              '파일 (숙제로)',
-              '링크',
-              '숙제 제출 (학생)'
-            ]"
+            :items="['책', '공지사항', '파일', '링크', '숙제 제출 (학생)']"
             label="종류 선택"
             outlined
             class="mb-10"
@@ -309,9 +320,19 @@
           </v-card-actions>
         </v-card>
         <v-card
-          v-else-if="post.type === '파일' || post.type === '파일 (숙제로)'"
+          v-else-if="
+            post.type === '파일' ||
+            post.type === '파일 (숙제로)' ||
+            post.type === '사진'
+          "
           class="transparent"
         >
+          <v-radio-group v-model="post.type">
+            <v-radio key="숙제" label="파일 (숙제로)" value="파일 (숙제로)" />
+            <v-radio key="파일" label="파일" value="업로드" />
+            <v-radio key="사진" label="사진" value="사진" />
+          </v-radio-group>
+
           <v-progress-linear
             v-if="progress > 0"
             color="primary"
