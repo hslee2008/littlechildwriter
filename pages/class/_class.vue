@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-tabs
     v-model="tab"
@@ -24,196 +23,7 @@
 
         <br />
 
-        <v-combobox
-          v-model="search"
-          :items="Object.keys(classInfo.contents || {})"
-          label="Search"
-          outlined
-          hide-selected
-          clearable
-          prepend-inner-icon="mdi-magnify"
-          class="my-2 mr-2"
-        />
-
-        <v-expansion-panels focusable>
-          <v-expansion-panel
-            v-for="(category, title) in classInfo.contents"
-            v-if="title.toString().includes(search)"
-            :key="title"
-          >
-            <v-expansion-panel-header>
-              {{ title.toString().replaceAll('_', ' - ') }}
-            </v-expansion-panel-header>
-
-            <v-expansion-panel-content
-              v-for="(item, i) in category"
-              :key="item.title"
-            >
-              <v-card
-                v-if="item.type === '책'"
-                class="d-flex mt-5"
-                :to="`/book/content/${item.time}`"
-              >
-                <v-icon color="orange" class="ml-4" size="40">
-                  mdi-book
-                </v-icon>
-                <div>
-                  <v-card-title>{{ item.displayName }}</v-card-title>
-                  <v-card-subtitle>{{ item.title }}</v-card-subtitle>
-                  <v-card-text>
-                    {{ new Date(item.time).toLocaleDateString() }}
-                  </v-card-text>
-                </div>
-
-                <v-spacer />
-
-                <Actions
-                  v-if="item.uid === userInfo.uid"
-                  :item="item"
-                  :i="i"
-                  :title="title"
-                  type="other"
-                />
-              </v-card>
-              <v-card
-                v-else-if="item.type === '파일'"
-                :href="item.url"
-                class="d-flex mt-5"
-              >
-                <v-icon class="ml-4"> mdi-link-variant </v-icon>
-
-                <div>
-                  <v-card-title>{{ item.file }}</v-card-title>
-                  <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-                </div>
-
-                <v-spacer />
-
-                <Actions
-                  v-if="item.uid === userInfo.uid"
-                  :item="item"
-                  :i="i"
-                  :title="title"
-                  type="파일"
-                />
-              </v-card>
-              <div v-else-if="item.type === '파일 (숙제로)'">
-                <v-card
-                  v-if="
-                    userInfo.uid === item.uid || userInfo.uid === classInfo.uid
-                  "
-                  :href="item.url"
-                  class="d-flex rounded-0"
-                >
-                  <v-icon class="ml-4"> mdi-link-variant </v-icon>
-
-                  <div>
-                    <v-card-title>{{ item.file }}</v-card-title>
-                    <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-                  </div>
-
-                  <v-spacer />
-
-                  <Actions
-                    v-if="item.uid === userInfo.uid"
-                    :item="item"
-                    :i="i"
-                    :title="title"
-                    type="파일"
-                  />
-                </v-card>
-                <v-card v-else>
-                  <v-card-text>{{ item.displayName }}님이 제출함</v-card-text>
-                </v-card>
-              </div>
-              <v-card v-else-if="item.type === '링크'" class="d-flex mt-5">
-                <v-icon class="ml-4"> mdi-link </v-icon>
-
-                <div>
-                  <v-card-title>{{ item.name }} 링크</v-card-title>
-                  <v-card-subtitle>
-                    <a :href="item.link" target="_blank" v-text="item.title" />
-                  </v-card-subtitle>
-                </div>
-
-                <v-spacer />
-
-                <Actions
-                  v-if="item.uid === userInfo.uid"
-                  :item="item"
-                  :i="i"
-                  :title="title"
-                  type="other"
-                />
-              </v-card>
-              <v-card v-else-if="item.type === '사진'" class="mt-5">
-                <div class="d-flex">
-                  <div>
-                    <v-card-title>{{ item.file }}</v-card-title>
-                    <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-                  </div>
-
-                  <Actions
-                    v-if="item.uid === userInfo.uid"
-                    :item="item"
-                    :i="i"
-                    :title="title"
-                    type="파일"
-                  />
-                </div>
-
-                <v-img :src="item.url" />
-              </v-card>
-              <div v-else-if="item.type === '숙제 제출 (학생)'">
-                <v-card class="d-flex mt-5">
-                  <v-icon color="orange" class="ml-4"> mdi-school </v-icon>
-                  <div>
-                    <v-card-title>{{ item.title }}</v-card-title>
-                    <v-card-text>
-                      {{ item.content }}
-                    </v-card-text>
-                  </div>
-
-                  <v-spacer />
-
-                  <Actions
-                    v-if="item.uid === userInfo.uid"
-                    :item="item"
-                    :i="i"
-                    :title="title"
-                    type="other"
-                  />
-                </v-card>
-              </div>
-              <v-card v-else class="mt-5">
-                <div class="d-flex">
-                  <v-avatar size="40" class="ml-3 mt-6">
-                    <v-img :src="item.photoURL" class="rounded-lg" />
-                  </v-avatar>
-                  <div>
-                    <v-card-title>
-                      {{ item.displayName }}의 공지사항
-                    </v-card-title>
-                    <v-card-subtitle>
-                      {{ new Date(item.time).toLocaleDateString() }}
-                    </v-card-subtitle>
-                  </div>
-
-                  <v-spacer />
-
-                  <Actions
-                    v-if="item.uid === userInfo.uid"
-                    :item="item"
-                    :i="i"
-                    :title="title"
-                    type="other"
-                  />
-                </div>
-                <v-card-text>{{ item.content }}</v-card-text>
-              </v-card>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
+        <DisplayCards :class-info="classInfo" />
       </v-tab-item>
 
       <v-tab-item class="pt-5">
@@ -319,18 +129,12 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-        <v-card
-          v-else-if="
-            post.type === '파일' ||
-            post.type === '파일 (숙제로)' ||
-            post.type === '사진'
-          "
-          class="transparent"
-        >
+        <v-card v-else-if="post.type.startsWith('파일')" class="transparent">
           <v-radio-group v-model="post.type">
             <v-radio key="숙제" label="파일 (숙제로)" value="파일 (숙제로)" />
-            <v-radio key="파일" label="파일" value="업로드" />
-            <v-radio key="사진" label="사진" value="사진" />
+            <v-radio key="파일" label="파일" value="파일" />
+            <v-radio key="사진" label="사진" value="파일 사진" />
+            <v-radio key="비디오" label="비디오" value="파일 비디오" />
           </v-radio-group>
 
           <v-progress-linear
@@ -441,7 +245,7 @@
 </template>
 
 <script setup lang="ts">
-import Actions from './components/Actions.vue'
+import DisplayCards from './components/DisplayCards.vue'
 import { db, storage } from '@/plugins/firebase'
 import { User } from '@/plugins/global'
 
@@ -474,7 +278,6 @@ const post = ref<any>({
 const dialog = ref<boolean>(false)
 const tab = ref<number>(0)
 const progress = ref<number>(0)
-const search = ref<string>('')
 
 onBeforeMount(() => {
   db.ref(`/classes/${id}`).on(
