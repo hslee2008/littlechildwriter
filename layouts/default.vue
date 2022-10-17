@@ -1,6 +1,12 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="bookmark" fixed app temporary color="#23262E">
+    <v-navigation-drawer
+      v-model="bookmark"
+      fixed
+      app
+      temporary
+      :color="$vuetify.theme.dark ? '#23262E' : '#f5f5f5'"
+    >
       <v-card-title> <v-icon left>mdi-bookmark</v-icon> 북마크 </v-card-title>
       <v-list v-if="items.length > 0">
         <v-list-item
@@ -36,14 +42,31 @@
       <v-card v-else class="transparent">
         <v-card-text> 북마크가 없습니다. </v-card-text>
       </v-card>
+
+      <br />
+      <v-divider />
+      <br />
+
+      <v-card class="transparent">
+        <v-card-actions>
+          <v-btn color="primary" text @click="$vuetify.theme.dark = false">
+            <v-icon left> mdi-lightbulb-on </v-icon>
+            Light
+          </v-btn>
+          <v-btn color="primary" text @click="$vuetify.theme.dark = true">
+            <v-icon left> mdi-lightbulb-on-outline </v-icon>
+            Dark
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-navigation-drawer>
 
     <v-app-bar
       fixed
       app
-      color="#23262E"
       outlined
       :collapse="$route.path.startsWith('/class')"
+      :color="$vuetify.theme.dark ? '#23262E' : '#f5f5f5'"
     >
       <v-app-bar-nav-icon v-if="userInfo.uid" @click="bookmark = !bookmark" />
 
@@ -180,6 +203,7 @@ const notif = ref<any>([])
 const items = ref<any>([])
 const notifOverlay = ref<boolean>(false)
 const bookmark = ref<boolean>(false)
+const dark = ref<boolean>(false)
 
 onMounted(() => {
   auth.onAuthStateChanged(u => {

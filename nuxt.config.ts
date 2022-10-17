@@ -112,12 +112,7 @@ export default defineNuxtConfig({
   css: ['@/assets/css/global.css'],
   plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/analytics'],
   components: true,
-  buildModules: [
-    '@nuxtjs/vuetify',
-    '@nuxtjs/google-analytics',
-    '@nuxtjs/robots',
-    '@nuxtjs/sitemap'
-  ],
+  buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
   modules: ['@nuxtjs/pwa'],
   target: 'static',
 
@@ -197,22 +192,10 @@ export default defineNuxtConfig({
   vue: {
     config: {
       productionTip: true,
-      devtools: true
+      devtools: true,
+      silent: false,
+      performance: true
     }
-  },
-
-  sitemap: {
-    hostname: 'https://littlechildwriter.web.app',
-    gzip: true,
-    exclude: ['/admin/**'],
-    routes: async () => {
-      return await getRoutes()
-    }
-  },
-
-  robots: {
-    UserAgent: '*',
-    Disallow: '/admin'
   },
 
   router: {
@@ -222,9 +205,6 @@ export default defineNuxtConfig({
   hooks: {
     async 'nitro:config'(config) {
       config?.prerender?.routes?.push(...(await getRoutes()))
-    },
-    async 'sitemap:generate:before'(sitemap) {
-      sitemap.routes.push(...(await getRoutes()))
     }
   },
 

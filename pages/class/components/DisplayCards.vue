@@ -7,13 +7,20 @@
       :key="title"
       class="transparent"
     >
-      <v-expansion-panel-header style="background-color: #1e1e1e !important">
+      <v-expansion-panel-header
+        :style="`background-color: #${
+          $vuetify.theme.dark ? '1e1e1e' : 'f5f5f5'
+        } !important`"
+      >
         {{ title.toString().replaceAll('_', ' - ') }}
       </v-expansion-panel-header>
 
       <v-expansion-panel-content
         v-for="(item, i) in category"
         :key="item.title"
+        :style="`background-color: ${
+          $vuetify.theme.dark ? 'transparent' : '#f5f5f5'
+        } !important`"
       >
         <v-card
           v-if="item.type === '책'"
