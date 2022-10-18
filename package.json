@@ -1,18 +1,16 @@
 {
   "name": "littlechildwriter",
   "description": "Source code for littlechildwriter.web.app",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
     "generate": "nuxi generate --modern=server",
     "analyze": "nuxi build --modern=server --analyze",
     "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn generate",
-    "ui": "vue ui",
     "prettier": "prettier --write .",
     "lint": "eslint --ext .ts,.js,.vue .",
-    "lint:fix": "eslint --ext .ts,.js,.vue . --fix",
-    "e2e": "cypress open"
+    "lint:fix": "eslint --ext .ts,.js,.vue . --fix"
   },
   "dependencies": {
     "@vueuse/head": "^0.7.12",
@@ -21,18 +19,17 @@
     "firebaseui": "^6.0.1",
     "leo-profanity": "1.6.1",
     "nuxt-edge": "^2.16.0-27720022.54e852f",
-    "vue-gtag": "1.16.1",
-    "vuetify": "2.6.11"
+    "vuetify": "^2.6.12"
   },
   "devDependencies": {
     "@nuxt/bridge": "npm:@nuxt/bridge-edge",
     "@nuxt/types": "2.15.8",
     "@nuxtjs/eslint-config-typescript": "11.0.0",
     "@nuxtjs/google-analytics": "^2.4.0",
+    "@nuxtjs/google-gtag": "^1.0.4",
     "@nuxtjs/pwa": "3.3.5",
     "@nuxtjs/vuetify": "1.12.3",
     "@types/leo-profanity": "1.5.0",
-    "cypress": "^10.9.0",
     "eslint": "^8.24.0",
     "eslint-plugin-nuxt": "4.0.0",
     "firebase-admin": "11.1.0",
