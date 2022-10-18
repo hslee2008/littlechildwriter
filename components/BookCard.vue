@@ -34,20 +34,9 @@
 
         <v-card v-show="!simple" class="transparent">
           <v-card-actions v-if="userInfo.uid">
-            <v-btn
-              icon
-              :disabled="
-                Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
-              "
-              color="primary"
-              @click="Bookmark(item.time, i)"
-            >
+            <v-btn icon color="primary" @click="Bookmark(item.time, i)">
               <v-icon>
-                mdi-bookmark{{
-                  Object.keys(item.bookmarks ?? {}).includes(userInfo.uid)
-                    ? '-check'
-                    : '-outline'
-                }}
+                mdi-bookmark{{ bookmarked(i) ? '-check' : '-outline' }}
               </v-icon>
             </v-btn>
             <v-btn
@@ -77,13 +66,27 @@
           </v-btn>
         </template>
       </v-snackbar>
+      <v-snackbar v-model="bookmarkSnackbarDel">
+        북마크가 삭제되었습니다.
+
+        <template #action="{ attrs }">
+          <v-btn
+            color="pink"
+            text
+            v-bind="attrs"
+            @click="bookmarkSnackbarDel = false"
+          >
+            닫기
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-row>
   </v-lazy>
 </template>
 
 <script setup lang="ts">
 import { db } from '@/plugins/firebase'
-import { formatter, Libris, Notify, User } from '@/plugins/global'
+import { formatter, Libris, User } from '@/plugins/global'
 
 const userInfo = User()
 const props = defineProps({
@@ -101,6 +104,12 @@ const props = defineProps({
   }
 })
 const bookmarkSnackbar = ref<boolean>(false)
+const bookmarkSnackbarDel = ref<boolean>(false)
+const bookmarked = (i: number) => {
+  return Object.keys(props.items[i].bookmarks ?? {}).includes(
+    userInfo.value.uid
+  )
+}
 
 const Like = (item: any) => {
   item.likes++
@@ -114,25 +123,42 @@ const Like = (item: any) => {
 }
 
 const Bookmark = (time: string, i: number) => {
-  bookmarkSnackbar.value = true
-  const { title, image } = props.items[i]
+  if (bookmarked(i)) {
+    bookmarkSnackbar.value = false
+    bookmarkSnackbarDel.value = true
 
-  db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).set({
-    title,
-    image,
-    time
-  })
-  db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
+    db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
+    db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
 
-  // eslint-disable-next-line vue/no-mutating-props
-  props.items[i] = {
-    ...props.items[i],
-    bookmarks: {
-      ...props.items[i].bookmarks,
-      [userInfo.value.uid]: true
+    // eslint-disable-next-line vue/no-mutating-props
+    props.items[i].bookmarks = Object.fromEntries(
+      Object.entries(props.items[i].bookmarks ?? {}).filter(
+        ([key]) => key !== userInfo.value.uid
+      )
+    )
+  } else {
+    const { title, image } = props.items[i]
+
+    bookmarkSnackbarDel.value = false
+    bookmarkSnackbar.value = true
+
+    db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).set({
+      title,
+      image,
+      time
+    })
+    db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
+
+    // eslint-disable-next-line vue/no-mutating-props
+    props.items[i] = {
+      ...props.items[i],
+      bookmarks: {
+        ...props.items[i].bookmarks,
+        [userInfo.value.uid]: true
+      }
     }
+    Libris(userInfo.value.uid, 0.1)
   }
-  Libris(userInfo.value.uid, 0.1)
 }
 </script>
 

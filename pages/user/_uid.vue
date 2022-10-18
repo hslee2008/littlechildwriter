@@ -9,7 +9,7 @@
         <div>
           <v-card-title>{{ targetUser.displayName }}</v-card-title>
           <v-card-subtitle class="grey--text">
-            구독자 {{ subCount }}명
+            구독자 {{ formatter.format(subCount) }}명
           </v-card-subtitle>
         </div>
       </div>
@@ -107,7 +107,7 @@
 
 <script setup lang="ts">
 import { db } from '@/plugins/firebase'
-import { Libris, User } from '@/plugins/global'
+import { formatter, Libris, User } from '@/plugins/global'
 
 const userInfo = User()
 const route = useRoute()

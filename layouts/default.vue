@@ -80,7 +80,7 @@
 
       <div v-if="!$route.path.startsWith('/class')">
         <v-slide-x-transition>
-          <v-btn v-if="$route.path !== '/book/post'" icon to="/book/post">
+          <v-btn v-if="$route.path !== '/book/post' && userInfo.uid" icon to="/book/post">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </v-slide-x-transition>
@@ -149,7 +149,11 @@
             </v-btn>
           </template>
 
-          <v-card class="pa-3 text-center">
+          <v-card class="d-flex pa-3 text-center">
+            <v-avatar size="35" class="ma-auto">
+              <v-img alt="User Avatar" :src="userInfo.photoURL" />
+            </v-avatar>
+
             <div>
               <v-card-title>{{ userInfo.displayName }}</v-card-title>
               <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
@@ -203,7 +207,6 @@ const notif = ref<any>([])
 const items = ref<any>([])
 const notifOverlay = ref<boolean>(false)
 const bookmark = ref<boolean>(false)
-const dark = ref<boolean>(false)
 
 onMounted(() => {
   auth.onAuthStateChanged(u => {

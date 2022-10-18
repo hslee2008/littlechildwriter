@@ -17,11 +17,9 @@
         <h4 class="mb-3">
           {{ classInfo.description }} ({{ classInfo.creator }})
         </h4>
-        <h1 class="primary--text text-h4">
+        <h1 class="primary--text text-h4 mb-8">
           {{ classInfo.name }}
         </h1>
-
-        <br />
 
         <DisplayCards :class-info="classInfo" />
       </v-tab-item>
@@ -30,7 +28,7 @@
         <v-row style="gap: 5px" class="ma-3">
           <v-select
             v-model="post.type"
-            :items="['책', '공지사항', '파일', '링크', '숙제 제출 (학생)']"
+            :items="['책', '공지사항', '파일', '링크', '글 제출 (학생)']"
             label="종류 선택"
             outlined
             class="mb-10"
@@ -56,8 +54,8 @@
           </div>
         </v-row>
 
-        <v-card v-if="post.type === '책'">
-          <v-card-title>책 링크 업로드</v-card-title>
+        <v-card v-if="post.type === '책'" class="transparent">
+          <v-card-title>책 업로드</v-card-title>
           <v-card-text>
             <v-text-field v-model="post.title" label="제목" />
 
@@ -137,12 +135,9 @@
             <v-radio key="비디오" label="비디오" value="파일 비디오" />
           </v-radio-group>
 
-          <v-progress-linear
-            v-if="progress > 0"
-            color="primary"
-            class="mb-5"
-            :value="progress"
-          />
+          <v-overlay :value="progress">
+            <v-progress-circular indeterminate size="64" />
+          </v-overlay>
 
           <v-file-input
             ref="file"
@@ -172,10 +167,7 @@
 
           <v-btn text @click="Upload"> 파일 게시 </v-btn>
         </v-card>
-        <v-card
-          v-else-if="post.type === '숙제 제출 (학생)'"
-          class="transparent"
-        >
+        <v-card v-else-if="post.type === '글 제출 (학생)'" class="transparent">
           <v-card-title>숙제 업로드</v-card-title>
           <v-card-text>
             <v-text-field v-model="post.title" label="제목" />
@@ -276,8 +268,8 @@ const post = ref<any>({
   link: ''
 })
 const dialog = ref<boolean>(false)
+const progress = ref<boolean>(false)
 const tab = ref<number>(0)
-const progress = ref<number>(0)
 
 onBeforeMount(() => {
   db.ref(`/classes/${id}`).on(
@@ -309,7 +301,7 @@ const Upload = () => {
 
   storageRef.on(
     'state_changed',
-    (s: any) => (progress.value = (s.bytesTransferred / s.totalBytes) * 100),
+    (s: any) => (progress.value = s.bytesTransferred >= s.totalBytes),
     (e: Error) => Error(e.message),
     () =>
       storageRef.snapshot.ref
@@ -333,7 +325,7 @@ const Upload = () => {
           post.value.file = []
           post.value.book = true
           post.value.type = '책'
-          progress.value = 0
+          progress.value = false
         })
   )
 }
@@ -349,7 +341,7 @@ const Post = () => {
   const { title, time, category, type, content } = post.value
   const { uid, displayName } = userInfo.value
 
-  if (type === '숙제 제출 (학생)') {
+  if (type === '글 제출 (학생)') {
     db.ref(`classes/${id}/contents/${category}/${time}`).set({
       title,
       time,
