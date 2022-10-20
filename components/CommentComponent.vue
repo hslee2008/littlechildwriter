@@ -111,9 +111,7 @@
                 <template v-if="message.badWord">
                   <v-tooltip bottom>
                     <template #activator="{ on, attrs }">
-                      <v-icon v-bind="attrs" v-on="on">
-                        mdi-alert
-                      </v-icon>
+                      <v-icon v-bind="attrs" v-on="on"> mdi-alert </v-icon>
                     </template>
                     <span>
                       {{ message.probably }}:
