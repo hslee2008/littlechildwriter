@@ -74,36 +74,51 @@
               <v-spacer />
 
               <v-card-actions v-if="!message.edit">
+                <v-btn
+                  v-if="(message.love || []).length > 0"
+                  icon
+                  depressed
+                  disabled
+                  :color="message.love?.includes(userInfo.uid) ? 'red' : 'grey'"
+                  @click="Love(i)"
+                >
+                  <v-icon>mdi-heart</v-icon>
+                  <span v-text="message.love?.length" />
+                </v-btn>
                 <v-menu offset-y>
                   <template #activator="{ on, attrs }">
-                    <v-btn
-                      v-if="userInfo.displayName === message.displayName"
-                      icon
-                      v-bind="attrs"
-                      cols="1"
-                      v-on="on"
-                    >
+                    <v-btn icon v-bind="attrs" cols="1" v-on="on">
                       <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
                   </template>
                   <v-list>
-                    <v-list-item v-if="!message.badWord" @click="Edit(i)">
-                      <v-list-item-title>
-                        <v-icon left> mdi-pencil </v-icon>
-                        {{ comments[i].edit ? '취소' : '수정' }}
-                      </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="Delete(i)">
-                      <v-list-item-title>
-                        <v-icon left> mdi-trash-can </v-icon> 삭제
-                      </v-list-item-title>
-                    </v-list-item>
+                    <template
+                      v-if="userInfo.displayName === message.displayName"
+                    >
+                      <v-list-item v-if="!message.badWord" @click="Edit(i)">
+                        <v-list-item-title>
+                          <v-icon left> mdi-pencil </v-icon>
+                          {{ comments[i].edit ? '취소' : '수정' }}
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="Delete(i)">
+                        <v-list-item-title>
+                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                        </v-list-item-title>
+                      </v-list-item>
+                    </template>
+
                     <v-list-item
                       v-if="!parent && !message.badWord"
                       @click="Reply(i)"
                     >
                       <v-list-item-title>
                         <v-icon left> mdi-reply </v-icon> 답장
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="Love(i)">
+                      <v-list-item-title>
+                        <v-icon left> mdi-heart </v-icon> 좋아요
                       </v-list-item-title>
                     </v-list-item>
                   </v-list>
@@ -194,6 +209,7 @@ onBeforeMount(() =>
 const Edit = (i: number) => {
   comments.value[i].edit = true
   updatedcomment.value = comments.value[i].content
+  comments.value = [...comments.value]
 }
 
 const Reply = (i: number) => (replying.value = i)
@@ -216,6 +232,29 @@ const Delete = (i: number) => {
   cmt.set(comments.value)
 }
 
+const Love = (i: number) => {
+  const cmt = db.ref(props.dbr)
+  const love = comments.value[i].love
+  if (love) {
+    if (love.includes(userInfo.value.uid)) {
+      love.splice(love.indexOf(userInfo.value.uid), 1)
+    } else {
+      love.push(userInfo.value.uid)
+
+      Notify(
+        comments.value[i].uid,
+        userInfo.value.photoURL,
+        '좋아요 ❤️',
+        props.link
+      )
+    }
+  } else {
+    comments.value[i].love = [userInfo.value.uid]
+  }
+  cmt.set(comments.value)
+  comments.value = [...comments.value]
+}
+
 const Comment = async () => {
   const Perspective = require('perspective-api-client')
   const perspective = new Perspective({
@@ -234,22 +273,39 @@ const Comment = async () => {
   )
 
   if (comment.value.length > 0) {
-    const comments = db.ref(props.dbr)
     const { displayName, photoURL, uid } = userInfo.value
     const badWord = score > 0.6
+    const content = comment.value
 
-    comments.push({
+    db.ref(props.dbr).push({
       uid,
       photoURL,
       displayName,
       time: Date.now(),
-      content: comment.value,
-      badWord,
       probably: badWord ? mostProbable : 'good',
+      content,
+      badWord,
       score
     })
 
-    Notify(props.uid, userInfo.value.photoURL, comment.value, props.link)
+    db.ref(`${props.dbr.replace('/comments', '')}/joined`).update({
+      [uid]: {
+        displayName,
+        photoURL
+      }
+    })
+
+    db.ref(`${props.dbr.replace('/comments', '')}/joined`).once(
+      'value',
+      async s => {
+        const joined = Object.keys(await s.val())
+
+        for (const user in joined) {
+          Notify(joined[user], userInfo.value.photoURL, content, props.link)
+        }
+      }
+    )
+
     Libris(userInfo.value.uid, 0.1)
 
     props.cb()
