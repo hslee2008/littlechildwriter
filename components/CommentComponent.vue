@@ -137,8 +137,6 @@
 </template>
 
 <script setup lang="ts">
-import Filter from 'badwords-ko'
-import * as filter from 'leo-profanity'
 import { db } from '@/plugins/firebase'
 import { Libris, Notify, User } from '@/plugins/global'
 
@@ -207,22 +205,26 @@ const Delete = (i: number) => {
   cmt.set(comments.value)
 }
 
-const Comment = () => {
-  filter.loadDictionary('en')
-  const filterKO = new Filter()
+const Comment = async () => {
+  const Perspective = require('perspective-api-client')
+  const perspective = new Perspective({
+    apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
+  })
+
+  const result = await perspective.analyze(comment.value)
+  const score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
 
   if (comment.value.length > 0) {
     const comments = db.ref(props.dbr)
     const { displayName, photoURL, uid } = userInfo.value
-    const badWord =
-      filter.check(comment.value) || filterKO.isProfane(comment.value)
+    const badWord = score > 0.6
 
     comments.push({
       uid,
       photoURL,
       displayName,
       time: Date.now(),
-      content: filterKO.clean(filter.clean(comment.value)),
+      content: comment.value,
       badWord
     })
 
