@@ -102,7 +102,7 @@
                 :value="notif.length"
               >
                 <v-icon>
-                  {{ notif.length > 0 ? 'mdi-bell-ring' : 'mdi-bell' }}
+                  {{ notif.length > 0 ? 'mdi-bell-ring-outline' : 'mdi-bell-outline' }}
                 </v-icon>
               </v-badge>
             </v-btn>

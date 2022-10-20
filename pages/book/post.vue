@@ -107,15 +107,16 @@
             v-model="isbn.audioType"
             :items="[...navigator.languages, 'en-US', 'ko-KR']"
             label="보이스 타이핑 언어"
+            prepend-icon="mdi-microphone-settings"
           />
           <v-textarea v-model="typed" clearable counter />
         </v-card-text>
 
         <v-card-actions>
-          <v-btn text @click="voiceType">시작</v-btn>
+          <v-btn icon @click="voiceType"><v-icon>mdi-microphone</v-icon></v-btn>
           <v-spacer />
-          <v-btn text color="red" @click="isbn.barcode = false"> 취소 </v-btn>
-          <v-btn text color="primary" @click="saveAudio"> 확인 </v-btn>
+          <v-btn icon color="red" @click="isbn.barcode = false"> <v-icon>mdi-cancel</v-icon> </v-btn>
+          <v-btn icon color="primary" @click="saveAudio"> <v-icon>mdi-check</v-icon> </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

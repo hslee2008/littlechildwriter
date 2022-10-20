@@ -98,7 +98,10 @@
                         <v-icon left> mdi-trash-can </v-icon> 삭제
                       </v-list-item-title>
                     </v-list-item>
-                    <v-list-item v-if="!parent" @click="Reply(i)">
+                    <v-list-item
+                      v-if="!parent && !message.badWord"
+                      @click="Reply(i)"
+                    >
                       <v-list-item-title>
                         <v-icon left> mdi-reply </v-icon> 답장
                       </v-list-item-title>
@@ -106,7 +109,17 @@
                   </v-list>
                 </v-menu>
                 <template v-if="message.badWord">
-                  <v-icon>mdi-alert-circle</v-icon>
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <v-icon v-bind="attrs" v-on="on">
+                        mdi-alert
+                      </v-icon>
+                    </template>
+                    <span>
+                      {{ message.probably }}:
+                      {{ Math.round(message.score * 1000) / 10 }}%
+                    </span>
+                  </v-tooltip>
                 </template>
               </v-card-actions>
             </v-card>
@@ -137,8 +150,6 @@
 </template>
 
 <script setup lang="ts">
-import Filter from 'badwords-ko'
-import * as filter from 'leo-profanity'
 import { db } from '@/plugins/firebase'
 import { Libris, Notify, User } from '@/plugins/global'
 
@@ -207,23 +218,37 @@ const Delete = (i: number) => {
   cmt.set(comments.value)
 }
 
-const Comment = () => {
-  filter.loadDictionary('en')
-  const filterKO = new Filter()
+const Comment = async () => {
+  const Perspective = require('perspective-api-client')
+  const perspective = new Perspective({
+    apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
+  })
+
+  const result = await perspective.analyze(comment.value, {
+    attributes: ['TOXICITY', 'spam', 'insult', 'threat', 'unsubstantial']
+  })
+  const score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
+  const mostProbable = Object.keys(result.attributeScores).reduce((a, b) =>
+    result.attributeScores[a].summaryScore.value >
+    result.attributeScores[b].summaryScore.value
+      ? a
+      : b
+  )
 
   if (comment.value.length > 0) {
     const comments = db.ref(props.dbr)
     const { displayName, photoURL, uid } = userInfo.value
-    const badWord =
-      filter.check(comment.value) || filterKO.isProfane(comment.value)
+    const badWord = score > 0.6
 
     comments.push({
       uid,
       photoURL,
       displayName,
       time: Date.now(),
-      content: filterKO.clean(filter.clean(comment.value)),
-      badWord
+      content: comment.value,
+      badWord,
+      probably: badWord ? mostProbable : 'good',
+      score
     })
 
     Notify(props.uid, userInfo.value.photoURL, comment.value, props.link)

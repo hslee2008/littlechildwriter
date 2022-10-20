@@ -348,8 +348,6 @@ const Content = async () => {
     )
       .then(res => res.json())
       .then(res => (otherInfo.value = res.items[0]))
-
-    console.log(otherInfo.value)
   }
 }
 
