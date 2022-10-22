@@ -271,7 +271,7 @@ const Love = (i: number) => {
 
 const Comment = async () => {
   const result = await perspective.analyze(comment.value, {
-    attributes: ['TOXICITY', 'spam', 'insult', 'threat', 'unsubstantial']
+    attributes: ['TOXICITY']
   })
   const score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
   const mostProbable = Object.keys(result.attributeScores).reduce((a, b) =>
