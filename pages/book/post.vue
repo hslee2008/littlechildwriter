@@ -105,18 +105,17 @@
         <v-card-text>
           <v-select
             v-model="isbn.audioType"
-            :items="[...navigator.languages, 'en-US', 'ko-KR']"
+            :items="['en-US', 'ko-KR']"
             label="보이스 타이핑 언어"
-            prepend-icon="mdi-microphone-settings"
           />
           <v-textarea v-model="typed" clearable counter />
         </v-card-text>
 
         <v-card-actions>
-          <v-btn icon @click="voiceType"><v-icon>mdi-microphone</v-icon></v-btn>
+          <v-btn text @click="voiceType">시작</v-btn>
           <v-spacer />
-          <v-btn icon color="red" @click="isbn.barcode = false"> <v-icon>mdi-cancel</v-icon> </v-btn>
-          <v-btn icon color="primary" @click="saveAudio"> <v-icon>mdi-check</v-icon> </v-btn>
+          <v-btn text color="red" @click="isbn.barcode = false"> 취소 </v-btn>
+          <v-btn text color="primary" @click="saveAudio"> 확인 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -270,7 +269,13 @@
 
       <v-row class="g-10" style="margin: 0.5px 0">
         <v-text-field v-model="post.author" label="작가" class="author" />
-        <v-text-field v-model="post.pageCount" label="페이지" class="page" />
+        <v-text-field
+          v-model="post.pageCount"
+          label="페이지"
+          class="page"
+          type="number"
+          :rules="[v => !isNaN(parseFloat(v))]"
+        />
       </v-row>
 
       <v-checkbox
@@ -329,6 +334,23 @@
         max-width="200"
       />
     </div>
+
+    <v-snackbar
+      v-model="snackbar"
+    >
+      제목, 작가, 페이지, 책 소개를 모두 입력해주세요.
+
+      <template #action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -368,6 +390,7 @@ const barcodes = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
 const typed = ref<string>('')
 const video = ref<any>(null)
 const isbnImageElement = ref<any>(null)
+const snackbar = ref<boolean>(false)
 
 const FetchBook = (bookISBN: string) => {
   post.value.isbn = bookISBN
@@ -518,10 +541,16 @@ const Post = () => {
     image,
     pageCount,
     categories,
-    isPublic
+    isPublic,
+    author
   } = post.value
 
   const { uid, displayName } = userInfo.value
+
+  if (!title || !content || !pageCount || !author) {
+    snackbar.value = true
+    return
+  }
 
   db.ref(`/contents/${time}`).set({
     title,

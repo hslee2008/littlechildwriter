@@ -263,6 +263,7 @@
           :width="$vuetify.breakpoint.width < 1264 ? 150 : 210"
         >
           <v-img :src="item.thumbnail" class="rounded-lg" />
+          <v-card-title class="text-h6">{{ item.title }}</v-card-title>
         </v-card>
       </v-row>
     </template>
@@ -407,12 +408,14 @@ const Suggestion = async () => {
           ) {
             const {
               imageLinks: { thumbnail },
-              infoLink
+              infoLink,
+              title
             } = book.volumeInfo
 
             suggested.value.push({
               thumbnail,
-              infoLink
+              infoLink,
+              title
             })
 
             if (i === 4) {

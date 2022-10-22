@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div
       class="d-flex justify-center align-center text-center login"
       style="height: calc(100vh - 100px)"
@@ -11,38 +10,39 @@
 
         <v-divider class="my-5" />
 
-        <v-text-field
-          v-model="email"
-          type="email"
-          class="email"
-          label="이메일"
-          outlined
-          required
-          clearable
-          prepend-inner-icon="mdi-email"
-          @keyup.enter="onSubmit"
-        />
+        <v-form>
+          <v-text-field
+            v-model="email"
+            type="email"
+            class="email"
+            label="이메일"
+            outlined
+            required
+            clearable
+            prepend-inner-icon="mdi-email"
+            @keyup.enter="onSubmit"
+          />
 
-        <v-text-field
-          v-model="password"
-          type="password"
-          class="password"
-          label="암호"
-          outlined
-          required
-          clearable
-          prepend-inner-icon="mdi-key"
-          @keyup.enter="onSubmit"
-        />
+          <v-text-field
+            v-model="password"
+            type="password"
+            class="password"
+            label="암호"
+            outlined
+            required
+            clearable
+            prepend-inner-icon="mdi-key"
+            @keyup.enter="onSubmit"
+          />
 
-        <v-divider class="my-5" />
-
-        <div>
           <v-btn class="login-button" color="primary" @click="onSubmit">
             <v-icon left> mdi-account </v-icon>로그인
           </v-btn>
-          <section id="firebaseui-auth-container"></section>
-        </div>
+        </v-form>
+
+        <v-divider class="my-5" />
+
+        <section id="firebaseui-auth-container" />
       </div>
     </div>
   </div>
@@ -53,8 +53,8 @@ import { auth as authF } from 'firebaseui'
 import firebase from 'firebase/compat/app'
 import 'firebaseui/dist/firebaseui.css'
 
-const email = ref<string>('')
-const password = ref<string>('')
+const email = ref('')
+const password = ref('')
 const router = useRouter()
 
 const onSubmit = () =>
@@ -80,3 +80,14 @@ useHead({
   title: '로그인 - LCW'
 })
 </script>
+
+<style>
+.v-application ul,
+.v-application ol {
+  padding-left: 0 !important;
+}
+
+.mdl-button {
+  border-radius: 5px !important;
+}
+</style>
