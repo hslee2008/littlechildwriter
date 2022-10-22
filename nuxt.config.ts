@@ -110,10 +110,10 @@ export default defineNuxtConfig({
   },
 
   css: ['@/assets/css/global.css'],
-  plugins: ['@/plugins/firebase', '@/plugins/global'],
+  plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/gtag'],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
-  modules: ['@nuxtjs/pwa', '@nuxtjs/google-gtag'],
+  modules: ['@nuxtjs/pwa'],
   target: 'static',
 
   pwa: {
@@ -210,14 +210,5 @@ export default defineNuxtConfig({
 
   googleAnalytics: {
     id: 'G-F7Z7BLCQDQyy'
-  },
-
-  'google-gtag': {
-    id: 'G-F7Z7BLCQDQyy',
-    config: {
-      anonymize_ip: true,
-      send_page_view: false
-    },
-    debug: true
   }
 })

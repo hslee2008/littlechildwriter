@@ -10,39 +10,39 @@
 
         <v-divider class="my-5" />
 
-        <v-form>
-          <v-text-field
-            v-model="email"
-            type="email"
-            class="email"
-            label="이메일"
-            outlined
-            required
-            clearable
-            prepend-inner-icon="mdi-email"
-            @keyup.enter="onSubmit"
-          />
+        <div :class="`d-${$vuetify.breakpoint.xs ? '' : 'flex'}`">
+          <section id="firebaseui-auth-container" />
 
-          <v-text-field
-            v-model="password"
-            type="password"
-            class="password"
-            label="암호"
-            outlined
-            required
-            clearable
-            prepend-inner-icon="mdi-key"
-            @keyup.enter="onSubmit"
-          />
+          <v-form class="mt-4">
+            <v-text-field
+              v-model="email"
+              type="email"
+              class="email"
+              label="이메일"
+              outlined
+              required
+              clearable
+              prepend-inner-icon="mdi-email"
+              @keyup.enter="onSubmit"
+            />
 
-          <v-btn class="login-button" color="primary" @click="onSubmit">
-            <v-icon left> mdi-account </v-icon>로그인
-          </v-btn>
-        </v-form>
+            <v-text-field
+              v-model="password"
+              type="password"
+              class="password"
+              label="암호"
+              outlined
+              required
+              clearable
+              prepend-inner-icon="mdi-key"
+              @keyup.enter="onSubmit"
+            />
 
-        <v-divider class="my-5" />
-
-        <section id="firebaseui-auth-container" />
+            <v-btn class="login-button" color="primary" @click="onSubmit">
+              <v-icon left> mdi-account </v-icon>로그인
+            </v-btn>
+          </v-form>
+        </div>
       </div>
     </div>
   </div>
@@ -57,23 +57,30 @@ const email = ref('')
 const password = ref('')
 const router = useRouter()
 
+const uiConfig = {
+  signInSuccessUrl: '/account/account',
+  signInOptions: [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    firebase.auth.GithubAuthProvider.PROVIDER_ID,
+    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+  ]
+}
+const ui = new authF.AuthUI(firebase.auth())
+
 const onSubmit = () =>
   authF
     .signInWithEmailAndPassword(email.value, password.value)
     .then(() => router.push)
 
 onMounted(() => {
-  const uiConfig = {
-    signInSuccessUrl: '/account/account',
-    signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      firebase.auth.GithubAuthProvider.PROVIDER_ID,
-      firebase.auth.FacebookAuthProvider.PROVIDER_ID
-    ]
-  }
-  const ui = new authF.AuthUI(firebase.auth())
   ui.start('#firebaseui-auth-container', uiConfig)
+})
+
+onUnmounted(() => {
+  ui.delete()
 })
 
 useHead({

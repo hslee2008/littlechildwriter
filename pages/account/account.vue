@@ -4,21 +4,31 @@
       <v-card-title>기본 설정</v-card-title>
 
       <v-card-text>
-        <v-text-field
-          v-model="userInfo.displayName"
-          placeholder="Name"
-          validate-on-blur
-          prepend-inner-icon="mdi-account"
-        />
-        <v-text-field
-          v-model="userInfo.email"
-          placeholder="Email"
-          validate-on-blur
-          prepend-inner-icon="mdi-email"
-        />
+        <div class="d-flex">
+          <v-text-field
+            v-model="userInfo.displayName"
+            placeholder="Name"
+            validate-on-blur
+            prepend-inner-icon="mdi-account"
+            class="mr-2"
+          />
+          <v-text-field
+            v-model="userInfo.email"
+            placeholder="Email"
+            validate-on-blur
+            prepend-inner-icon="mdi-email"
+            class="ml-2"
+          />
+        </div>
 
         UID: {{ userInfo.uid }}
       </v-card-text>
+
+      <v-card-actions class="ml-2">
+        <v-btn outlined color="primary" class="mr-2" @click="resetPassword">
+          <v-icon left>mdi-key</v-icon> 암호 재설정
+        </v-btn>
+      </v-card-actions>
     </v-card>
 
     <v-card class="mb-10 transparent">
@@ -119,6 +129,11 @@ const Update = async () => {
   })
 
   router.push(`/user/${uid}`)
+}
+
+const resetPassword = async () => {
+  const { email } = userInfo.value
+  await auth.sendPasswordResetEmail(email)
 }
 
 useHead({
