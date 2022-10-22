@@ -63,19 +63,6 @@
       <LazyBookCard :items="project" :simple="true" :showprivate="true" />
     </div>
 
-    <v-card class="mb-10 transparent">
-      <v-card-title>계정 삭제</v-card-title>
-      <v-card-text>
-        <LazyDialogComponent
-          :cb="Delete"
-          btn-title="삭제"
-          title="진짜로 삭제하겠습니까?"
-          text="삭제를 하면 계정 정보는 삭제되지만 올렸던 글은 아직 남아 있습니다. 글들도 삭제하고 싶다면 글을 먼저 삭제하고 계정을 삭제해주세요."
-          icon="trash-can"
-        />
-      </v-card-text>
-    </v-card>
-
     <v-row justify="center" class="g-10">
       <v-btn color="primary" @click="Update">
         <v-icon left> mdi-account </v-icon>
@@ -132,13 +119,6 @@ const Update = async () => {
   })
 
   router.push(`/user/${uid}`)
-}
-
-const Delete = () => {
-  auth.currentUser?.delete().then(() => {
-    db.ref(`/users/${userInfo.value.uid}`).remove()
-    router.push('/')
-  })
 }
 
 useHead({

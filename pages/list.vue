@@ -8,6 +8,7 @@
     :sort-desc="sortDesc"
     hide-default-footer
     loading-text="로딩중..."
+    no-data-text="로딩중..."
     class="mb-10"
   >
     <template #header>

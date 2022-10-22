@@ -116,10 +116,20 @@
                         <v-icon left> mdi-reply </v-icon> 답장
                       </v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click="Love(i)">
-                      <v-list-item-title>
-                        <v-icon left> mdi-heart </v-icon> 좋아요
-                      </v-list-item-title>
+                    <v-list-item v-if="message.uid !== userInfo.uid">
+                      <v-col cols="2">
+                        <v-btn
+                          icon
+                          :color="
+                            message.love?.includes(userInfo.uid)
+                              ? 'red'
+                              : 'grey'
+                          "
+                          @click="Love(i)"
+                        >
+                          <v-icon> mdi-heart </v-icon>
+                        </v-btn>
+                      </v-col>
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -165,6 +175,11 @@
 <script setup lang="ts">
 import { db } from '@/plugins/firebase'
 import { Libris, Notify, User } from '@/plugins/global'
+
+const Perspective = require('perspective-api-client')
+const perspective = new Perspective({
+  apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
+})
 
 const userInfo = User()
 const props = defineProps({
@@ -227,9 +242,8 @@ const Update = (i: number) => {
 }
 
 const Delete = (i: number) => {
-  const cmt = db.ref(props.dbr)
+  db.ref(props.dbr).child(comments.value[i].id).remove()
   comments.value.splice(i, 1)
-  cmt.set(comments.value)
 }
 
 const Love = (i: number) => {
@@ -256,11 +270,6 @@ const Love = (i: number) => {
 }
 
 const Comment = async () => {
-  const Perspective = require('perspective-api-client')
-  const perspective = new Perspective({
-    apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
-  })
-
   const result = await perspective.analyze(comment.value, {
     attributes: ['TOXICITY', 'spam', 'insult', 'threat', 'unsubstantial']
   })
@@ -301,6 +310,7 @@ const Comment = async () => {
         const joined = Object.keys(await s.val())
 
         for (const user in joined) {
+          if (joined[user] === userInfo.value.uid) continue
           Notify(joined[user], userInfo.value.photoURL, content, props.link)
         }
       }

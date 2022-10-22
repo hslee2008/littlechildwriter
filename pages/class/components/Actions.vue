@@ -23,13 +23,13 @@ import { db, storage } from '@/plugins/firebase'
 const route = useRoute()
 const props = defineProps<{
   item: any
-  i: number
-  title: number
+  i: string
+  title: string
   type: string
 }>()
 const id = route.params.class
 
-const DeleteContent = (title: number, i: number) => {
+const DeleteContent = (title: string, i: string) => {
   db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
 
   if (props.type === '파일') {

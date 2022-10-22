@@ -142,9 +142,6 @@
       <div v-if="post.uid === userInfo.uid" class="mb-10"></div>
 
       <div v-if="post.isbn">
-        <v-btn text to="/list">
-          <v-icon left>mdi-chevron-left</v-icon> 뒤로
-        </v-btn>
         <v-btn text @click="Iframe">
           <v-icon left> mdi-file-find </v-icon> 미리보기
         </v-btn>

@@ -80,7 +80,11 @@
 
       <div v-if="!$route.path.startsWith('/class')">
         <v-slide-x-transition>
-          <v-btn v-if="$route.path !== '/book/post' && userInfo.uid" icon to="/book/post">
+          <v-btn
+            v-if="$route.path !== '/book/post' && userInfo.uid"
+            icon
+            to="/book/post"
+          >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </v-slide-x-transition>
@@ -102,7 +106,11 @@
                 :value="notif.length"
               >
                 <v-icon>
-                  {{ notif.length > 0 ? 'mdi-bell-ring-outline' : 'mdi-bell-outline' }}
+                  {{
+                    notif.length > 0
+                      ? 'mdi-bell-ring-outline'
+                      : 'mdi-bell-outline'
+                  }}
                 </v-icon>
               </v-badge>
             </v-btn>
@@ -140,7 +148,7 @@
           </v-card>
         </v-dialog>
 
-        <v-menu v-if="userInfo.uid" right rounded>
+        <v-menu v-if="userInfo.uid" right>
           <template #activator="{ on }">
             <v-btn icon v-on="on">
               <v-avatar size="35">
@@ -149,7 +157,7 @@
             </v-btn>
           </template>
 
-          <v-card class="d-flex pa-3 text-center">
+          <v-card class="d-flex pa-3 text-center rounded-0">
             <v-avatar size="35" class="ma-auto">
               <v-img alt="User Avatar" :src="userInfo.photoURL" />
             </v-avatar>
