@@ -113,7 +113,7 @@ export default defineNuxtConfig({
   plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/gtag'],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
-  modules: ['@nuxtjs/pwa'],
+  modules: ['@nuxtjs/pwa', '@nuxtjs/axios'],
   target: 'static',
 
   pwa: {

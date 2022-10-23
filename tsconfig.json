@@ -15,7 +15,13 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@types/node", "@nuxt/types", "@nuxtjs/vuetify", "@nuxtjs/pwa"]
+    "types": [
+      "@types/node",
+      "@nuxt/types",
+      "@nuxtjs/vuetify",
+      "@nuxtjs/pwa",
+      "@nuxtjs/axios"
+    ]
   },
   "vueCompilerOptions": {
     "target": 2.7
