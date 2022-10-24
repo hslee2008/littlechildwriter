@@ -148,7 +148,7 @@ const Make = () => {
 
   db.ref('classes')
     .child(uid + name)
-    .set(classInfo)
+    .set(classInfo.value)
 
   classInfo.value = {
     name: '',
