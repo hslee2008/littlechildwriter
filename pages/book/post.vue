@@ -177,7 +177,7 @@
 
         <v-list>
           <div
-            v-for="(item, index) in searched"
+            v-for="(item) in searched"
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
           >
             <v-list-item
@@ -185,7 +185,6 @@
                 item.volumeInfo.industryIdentifiers &&
                 item.volumeInfo.imageLinks
               "
-              :class="`item-${index}`"
               @click="
                 FetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
               "
@@ -335,18 +334,11 @@
       />
     </div>
 
-    <v-snackbar
-      v-model="snackbar"
-    >
+    <v-snackbar v-model="snackbar">
       제목, 작가, 페이지, 책 소개를 모두 입력해주세요.
 
       <template #action="{ attrs }">
-        <v-btn
-          color="pink"
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
       </template>

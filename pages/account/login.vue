@@ -38,7 +38,7 @@
               @keyup.enter="onSubmit"
             />
 
-            <v-btn class="login-button" color="primary" @click="onSubmit">
+            <v-btn color="primary" @click="onSubmit">
               <v-icon left> mdi-account </v-icon>로그인
             </v-btn>
           </v-form>

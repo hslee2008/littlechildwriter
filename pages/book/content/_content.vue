@@ -139,8 +139,64 @@
     </v-card>
 
     <div class="text-center my-10">
-      <div v-if="post.uid === userInfo.uid" class="mb-10"></div>
+      <v-dialog transition="dialog-bottom-transition" width="700">
+        <template #activator="{ on, attrs }">
+          <v-btn text v-bind="attrs" v-on="on">
+            <v-icon left> mdi-town-hall </v-icon>
+            학교 도서관
+          </v-btn>
+        </template>
 
+        <v-card class="pa-1">
+          <v-card-text class="d-flex">
+            <v-select
+              v-model="school.local"
+              :items="school.list"
+              label="지역 선택"
+              class="mr-2"
+            />
+            <v-text-field
+              v-model="school.name"
+              label="학교 이름"
+              :rules="[
+                v => v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
+              ]"
+              class="mx-2"
+            />
+            <v-btn text class="ma-auto" @click="schoolBookSearch">
+              <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+          </v-card-text>
+
+          <v-list v-if="!school.resultString.endsWith('찾을 수 없습니다.')">
+            <v-list-item
+              v-for="item in school.result"
+              :key="item.callNumber"
+              :style="`
+                border: 1px solid #${item.canRental ? '4caf50' : 'f44336'};
+              `"
+            >
+              <img
+                :src="item.previewImage"
+                alt="학교 도서관"
+                width="100"
+                class="rounded-lg ma-2"
+              />
+
+              <div>
+                <v-list-item-title class="primary--text">
+                  {{ item.title }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ item.writer }}
+                </v-list-item-subtitle>
+                {{ item.canRental ? '대출 가능' : '대출 불가능' }}
+              </div>
+            </v-list-item>
+          </v-list>
+          <v-card-text v-else>{{ school.resultString }}</v-card-text>
+        </v-card>
+      </v-dialog>
       <div v-if="post.isbn">
         <v-btn text @click="Iframe">
           <v-icon left> mdi-file-find </v-icon> 미리보기
@@ -327,10 +383,46 @@ const otherInfo = ref<any>({
   GBid: ''
 })
 const suggested = ref<any>([])
+const school = ref({
+  list: [
+    '서울',
+    '부산',
+    '대구',
+    '인천',
+    '광주',
+    '대전',
+    '울산',
+    '세종',
+    '경기',
+    '강원',
+    '충북',
+    '충남',
+    '전북',
+    '전남',
+    '경북',
+    '경남',
+    '제주'
+  ] as string[],
+  result: [] as any,
+  resultString: '',
+  local: '',
+  name: ''
+})
 const GBid = ref<string>('')
 const loading = ref<boolean>(true)
 const sheet = ref<boolean>(false)
 const fab = ref<boolean>(false)
+
+const schoolBookSearch = async () => {
+  await fetch(
+    `http://152.69.227.191:3000/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
+  )
+    .then(res => res.json())
+    .then(json => {
+      school.value.result = json.result
+      school.value.resultString = json.result.toString()
+    })
+}
 
 const Content = async () => {
   const data = await db
