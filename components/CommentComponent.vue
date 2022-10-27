@@ -16,150 +16,122 @@
       </template>
     </v-text-field>
 
-    <v-timeline v-if="comments.length > 0" dense clipped>
-      <v-slide-y-transition group>
-        <v-timeline-item v-for="(message, i) in comments" :key="message.time">
-          <template #icon>
-            <v-tooltip left>
-              <template #activator="{ on, attrs }">
-                <v-avatar
-                  v-bind="attrs"
-                  size="40"
-                  :color="message.badWord ? 'red' : '#23262E'"
-                  v-on="on"
-                >
-                  <v-img :src="message.photoURL" />
-                </v-avatar>
-              </template>
-              <span v-text="message.displayName" />
-            </v-tooltip>
-          </template>
+    <v-list v-if="comments.length > 0" dense clipped class="transparent">
+      <v-list-item
+        v-for="(message, i) in comments"
+        :key="message.time"
+        class="my-3 d-inline"
+      >
+        <v-card
+          rounded
+          width="100%"
+          class="d-flex mr-5"
+          :color="message.badWord ? 'red' : '#23262E'"
+        >
+          <NLink :to="`/user/${message.uid}`" class="ma-auto">
+            <v-avatar size="40" :color="message.badWord ? 'red' : '#23262E'">
+              <v-img :src="message.photoURL" />
+            </v-avatar>
+          </NLink>
 
-          <v-row>
-            <v-card
-              rounded
-              width="100%"
-              class="d-flex mr-5"
-              :color="message.badWord ? 'red' : '#23262E'"
-            >
-              <v-card-subtitle v-if="!message.edit">
-                {{ message.content }}
-              </v-card-subtitle>
-              <v-text-field
-                v-else
-                v-model="updatedcomment"
-                flat
-                @keydown.enter="Update(i)"
+          <div v-if="!message.edit">
+            <v-card-title>{{ message.displayName }}</v-card-title>
+            <v-card-subtitle>
+              {{ message.content }}
+            </v-card-subtitle>
+          </div>
+          <v-text-field
+            v-else
+            v-model="updatedcomment"
+            flat
+            class="ml-2"
+            @keydown.enter="Update(i)"
+          >
+            <template #append>
+              <v-btn
+                color="error"
+                text
+                depressed
+                @click=";(message.edit = false), (comments = [...comments])"
               >
-                <template #append>
-                  <v-btn
-                    color="error"
-                    text
-                    depressed
-                    @click="message.edit = false"
-                  >
-                    취소
-                  </v-btn>
-                  <v-btn
-                    color="primary"
-                    text
-                    :disabled="message.content === updatedcomment"
-                    @click="Update(i)"
-                  >
-                    저장
-                  </v-btn>
-                </template>
-              </v-text-field>
+                취소
+              </v-btn>
+              <v-btn
+                color="primary"
+                text
+                :disabled="message.content === updatedcomment"
+                @click="Update(i)"
+              >
+                저장
+              </v-btn>
+            </template>
+          </v-text-field>
 
-              <v-spacer />
+          <v-spacer />
 
-              <v-card-actions v-if="!message.edit">
-                <v-btn
-                  v-if="(message.love || []).length > 0"
-                  icon
-                  depressed
-                  disabled
-                  :color="message.love?.includes(userInfo.uid) ? 'red' : 'grey'"
-                  @click="Love(i)"
-                >
-                  <v-icon>mdi-heart</v-icon>
-                  <span v-text="message.love?.length" />
+          <v-card-actions v-if="!message.edit">
+            <v-btn
+              v-if="(message.love || []).length > 0"
+              icon
+              depressed
+              disabled
+              :color="message.love?.includes(userInfo.uid) ? 'red' : 'grey'"
+              @click="Love(i)"
+            >
+              <v-icon>mdi-heart</v-icon>
+              <span v-text="message.love?.length" />
+            </v-btn>
+            <v-menu offset-y>
+              <template #activator="{ on, attrs }">
+                <v-btn icon v-bind="attrs" cols="1" v-on="on">
+                  <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
-                <v-menu offset-y>
-                  <template #activator="{ on, attrs }">
-                    <v-btn icon v-bind="attrs" cols="1" v-on="on">
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <template
-                      v-if="userInfo.displayName === message.displayName"
-                    >
-                      <v-list-item v-if="!message.badWord" @click="Edit(i)">
-                        <v-list-item-title>
-                          <v-icon left> mdi-pencil </v-icon>
-                          {{ comments[i].edit ? '취소' : '수정' }}
-                        </v-list-item-title>
-                      </v-list-item>
-                      <v-list-item @click="Delete(i)">
-                        <v-list-item-title>
-                          <v-icon left> mdi-trash-can </v-icon> 삭제
-                        </v-list-item-title>
-                      </v-list-item>
-                    </template>
-
-                    <v-list-item
-                      v-if="!parent && !message.badWord"
-                      @click="Reply(i)"
-                    >
-                      <v-list-item-title>
-                        <v-icon left> mdi-reply </v-icon> 답장
-                      </v-list-item-title>
-                    </v-list-item>
-                    <v-list-item v-if="message.uid !== userInfo.uid">
-                      <v-col cols="2">
-                        <v-btn
-                          icon
-                          :color="
-                            message.love?.includes(userInfo.uid)
-                              ? 'red'
-                              : 'grey'
-                          "
-                          @click="Love(i)"
-                        >
-                          <v-icon> mdi-heart </v-icon>
-                        </v-btn>
-                      </v-col>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-                <template v-if="message.badWord">
-                  <v-tooltip bottom>
-                    <template #activator="{ on, attrs }">
-                      <v-icon v-bind="attrs" v-on="on"> mdi-alert </v-icon>
-                    </template>
-                    <span>
-                      {{ message.probably }}:
-                      {{ Math.round(message.score * 1000) / 10 }}%
-                    </span>
-                  </v-tooltip>
+              </template>
+              <v-list>
+                <template v-if="userInfo.displayName === message.displayName">
+                  <v-list-item v-if="!message.badWord" @click="Edit(i)">
+                    <v-list-item-title>
+                      <v-icon left> mdi-pencil </v-icon>
+                      {{ comments[i].edit ? '취소' : '수정' }}
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="Delete(i)">
+                    <v-list-item-title>
+                      <v-icon left> mdi-trash-can </v-icon> 삭제
+                    </v-list-item-title>
+                  </v-list-item>
                 </template>
-              </v-card-actions>
-            </v-card>
-          </v-row>
 
-          <LazyCommentComponent
-            v-if="!parent"
-            :link="link"
-            :dbr="`${dbr}/${message.id}/reply`"
-            :uid="userInfo.uid"
-            :nofield="replying !== i"
-            :cb="() => (replying = -1)"
-            :parent="true"
-          />
-        </v-timeline-item>
-      </v-slide-y-transition>
-    </v-timeline>
+                <v-list-item v-if="message.uid !== userInfo.uid">
+                  <v-col cols="2">
+                    <v-btn
+                      icon
+                      :color="
+                        message.love?.includes(userInfo.uid) ? 'red' : 'grey'
+                      "
+                      @click="Love(i)"
+                    >
+                      <v-icon> mdi-heart </v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+            <template v-if="message.badWord">
+              <v-tooltip bottom>
+                <template #activator="{ on, attrs }">
+                  <v-icon v-bind="attrs" v-on="on"> mdi-alert </v-icon>
+                </template>
+                <span>
+                  {{ message.probably }}:
+                  {{ Math.round(message.score * 1000) / 10 }}%
+                </span>
+              </v-tooltip>
+            </template>
+          </v-card-actions>
+        </v-card>
+      </v-list-item>
+    </v-list>
     <div v-else>
       <v-card
         v-if="comments.length === 0 && !parent"
@@ -211,7 +183,6 @@ const props = defineProps({
 const comment = ref<string>('')
 const updatedcomment = ref<string>('')
 const comments = ref<any>([])
-const replying = ref<number>(-1)
 
 onBeforeMount(() =>
   db
@@ -227,18 +198,13 @@ const Edit = (i: number) => {
   comments.value = [...comments.value]
 }
 
-const Reply = (i: number) => (replying.value = i)
-
 const Update = (i: number) => {
-  comments.value[Object.keys(comments.value)[i]] = {
+  comments.value[i].edit = false
+  db.ref(`${props.dbr}/${Object.keys(comments.value)[i]}`).update({
     ...comments.value[i],
-    content: updatedcomment.value,
-    edited: true,
-    time: Date.now()
-  }
-
-  delete comments.value[i].edit
-  db.ref(props.dbr).set(comments.value)
+    content: updatedcomment.value
+  })
+  comments.value = [...comments.value]
 }
 
 const Delete = (i: number) => {

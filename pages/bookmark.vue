@@ -1,12 +1,18 @@
 <template>
   <div>
     <h1><v-icon left>mdi-bookmark</v-icon> 책갈피</h1>
-    <v-list v-if="items.length > 0" nav class="transparent">
+    <v-list
+      v-if="items.length > 0"
+      v-model="items"
+      class="transparent"
+      nav
+      @change="onChange"
+    >
       <v-list-item
         v-for="(item, i) in items"
         :key="i"
         :to="`/book/content/${item.time}`"
-        style="background-color: #22262E"
+        style="background-color: #22262e"
       >
         <v-list-item-content>
           <v-list-item-title> {{ item.title }} </v-list-item-title>
@@ -40,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import draggable from 'vuedraggable'
 import { auth, db } from '@/plugins/firebase'
 import { User } from '@/plugins/global'
 
@@ -62,5 +69,9 @@ const deleteBookmark = (time: string, i: number) => {
   db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
   db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
   items.value.splice(i, 1)
+}
+
+const onChange = () => {
+  db.ref(`/users/${userInfo.value.uid}/bookmarks`).set(items.value)
 }
 </script>

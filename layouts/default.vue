@@ -13,7 +13,7 @@
             <v-icon left>mdi-home</v-icon> 홈페이지
           </v-list-item-title>
         </v-list-item>
-        <v-list-item to="/classes">
+        <v-list-item to="/class/classes">
           <v-list-item-title>
             <v-icon left>mdi-clipboard</v-icon> 알림판
           </v-list-item-title>
@@ -209,13 +209,13 @@
 
 <script setup lang="ts">
 import { auth, db } from '@/plugins/firebase'
-import { User, vUsers } from '@/plugins/global'
+import { User } from '@/plugins/global'
 
 const router = useRouter()
 const userInfo = User()
 const notif = ref<any>([])
 const notifOverlay = ref<boolean>(false)
-const bookmark = ref<boolean>(true)
+const bookmark = ref<boolean>(false)
 
 onMounted(() => {
   auth.onAuthStateChanged(u => {
