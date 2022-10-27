@@ -3,74 +3,64 @@
     <v-navigation-drawer
       v-model="bookmark"
       fixed
+      clipped
       app
-      temporary
       :color="$vuetify.theme.dark ? '#23262E' : '#f5f5f5'"
     >
-      <v-card-title> <v-icon left>mdi-bookmark</v-icon> 북마크 </v-card-title>
-      <v-list v-if="items.length > 0">
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="`/book/content/${item.time}`"
-        >
-          <v-list-item-content>
-            <v-list-item-title> {{ item.title }} </v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-spacer />
-            <v-menu offset-y>
-              <template #activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" cols="1" v-on="on" @click.prevent>
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item @click="deleteBookmark(item.time, i)">
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      <v-icon left> mdi-trash-can </v-icon>
-                      삭제
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-list-item-action>
+      <v-list nav expand>
+        <v-list-item to="/">
+          <v-list-item-title>
+            <v-icon left>mdi-home</v-icon> 홈페이지
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/classes">
+          <v-list-item-title>
+            <v-icon left>mdi-clipboard</v-icon> 알림판
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/list">
+          <v-list-item-title>
+            <v-icon left>mdi-format-list-text</v-icon> 책 목록
+          </v-list-item-title>
+        </v-list-item>
+
+        <template v-if="userInfo.uid">
+          <v-divider class="my-1" />
+
+          <v-list-item to="/bookmark">
+            <v-list-item-title>
+              <v-icon left>mdi-bookmark</v-icon> 책갈피
+            </v-list-item-title>
+          </v-list-item>
+
+          <v-list-item to="/subscription">
+            <v-list-item-title>
+              <v-icon left>mdi-youtube-subscription</v-icon> 구독
+            </v-list-item-title>
+          </v-list-item>
+        </template>
+
+        <v-divider class="my-1" />
+
+        <v-list-item to="/libris">
+          <v-list-item-title>
+            <v-icon left>mdi-crown-outline</v-icon> 명예의 전당
+          </v-list-item-title>
         </v-list-item>
       </v-list>
-      <v-card v-else class="transparent">
-        <v-card-text> 북마크가 없습니다. </v-card-text>
-      </v-card>
-
-      <br />
-      <v-divider />
-      <br />
-
-      <v-card class="transparent">
-        <v-card-actions>
-          <v-btn color="primary" text @click="$vuetify.theme.dark = false">
-            <v-icon left> mdi-lightbulb-on </v-icon>
-            Light
-          </v-btn>
-          <v-btn color="primary" text @click="$vuetify.theme.dark = true">
-            <v-icon left> mdi-lightbulb-on-outline </v-icon>
-            Dark
-          </v-btn>
-        </v-card-actions>
-      </v-card>
     </v-navigation-drawer>
 
     <v-app-bar
       fixed
       app
-      outlined
+      clipped-left
+      class="elevation-0"
       :collapse="$route.path.startsWith('/class')"
       :color="$vuetify.theme.dark ? '#23262E' : '#f5f5f5'"
     >
       <v-app-bar-nav-icon v-if="userInfo.uid" @click="bookmark = !bookmark" />
 
-      <NLink to="/">
+      <NLink to="/" class="ml-2">
         <v-avatar size="30">
           <img src="/icon.png" alt="Logo" />
         </v-avatar>
@@ -85,7 +75,7 @@
             icon
             to="/book/post"
           >
-            <v-icon>mdi-plus</v-icon>
+            <v-icon>mdi-plus-circle-outline</v-icon>
           </v-btn>
         </v-slide-x-transition>
 
@@ -158,7 +148,7 @@
           </template>
 
           <v-card class="d-flex pa-3 text-center rounded-0">
-            <v-avatar size="35" class="ma-auto">
+            <v-avatar size="45" class="ma-auto">
               <v-img alt="User Avatar" :src="userInfo.photoURL" />
             </v-avatar>
 
@@ -187,6 +177,18 @@
                 <v-icon left>mdi-logout</v-icon> 로그아웃
               </v-list-item-title>
             </v-list-item>
+
+            <v-list-item>
+              <v-switch
+                v-model="$vuetify.theme.dark"
+                :label="$vuetify.theme.dark ? 'Dark' : 'Light'"
+                :prepend-icon="
+                  $vuetify.theme.dark
+                    ? 'mdi-weather-night'
+                    : 'mdi-white-balance-sunny'
+                "
+              />
+            </v-list-item>
           </v-list>
         </v-menu>
         <v-btn v-else to="/account/login" icon>
@@ -207,24 +209,19 @@
 
 <script setup lang="ts">
 import { auth, db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { User, vUsers } from '@/plugins/global'
 
 const router = useRouter()
 const userInfo = User()
 const notif = ref<any>([])
-const items = ref<any>([])
 const notifOverlay = ref<boolean>(false)
-const bookmark = ref<boolean>(false)
+const bookmark = ref<boolean>(true)
 
 onMounted(() => {
   auth.onAuthStateChanged(u => {
     if (!u) {
       return
     }
-
-    db.ref(`/users/${u.uid}/bookmarks`).on('child_added', async s =>
-      items.value.push(await s.val())
-    )
 
     db.ref(`/users/${u.uid}/notification`).on('child_added', async s =>
       notif.value.push(await s.val())
@@ -249,12 +246,6 @@ const clearEverything = () => {
 const load = (link: string) => {
   notifOverlay.value = false
   router.push(link)
-}
-
-const deleteBookmark = (time: string, i: number) => {
-  db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
-  db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
-  items.value.splice(i, 1)
 }
 
 const logout = () => {

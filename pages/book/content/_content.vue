@@ -547,7 +547,13 @@ const Del = () => {
 }
 
 useHead({
-  title: '컨텐츠 - LCW'
+  title: '컨텐츠 - LCW',
+  meta: [
+    {
+      'http-equiv': 'Content-Security-Policy',
+      content: 'upgrade-insecure-requests'
+    }
+  ]
 })
 </script>
 
