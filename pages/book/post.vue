@@ -175,7 +175,7 @@
           />
         </v-card-text>
 
-        <v-list>
+        <v-list nav>
           <div
             v-for="item in searched"
             :key="item.volumeInfo.industryIdentifiers[0].identifier"

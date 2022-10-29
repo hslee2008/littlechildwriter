@@ -25,7 +25,7 @@
     <v-card class="my-3 transparent">
       <div class="cardy">
         <div class="ma-auto">
-          <v-bottom-sheet v-model="sheet">
+          <v-bottom-sheet v-model="sheet" inset>
             <template #activator="{ on, attrs }">
               <v-img
                 :src="post.image"
@@ -45,12 +45,17 @@
                 </template>
               </v-img>
             </template>
-            <v-list>
+            <v-list nav>
               <v-subheader>외부 사이트</v-subheader>
 
               <v-list-item
                 target="_blank"
-                :href="`https://aladin.co.kr/shop/wproduct.aspx?isbn=${post.isbn}`"
+                :href="`https://aladin.co.kr/${
+                  post.isbn
+                    ? 'shop/wproduct.aspx?isbn=' + post.isbn
+                    : 'search/wsearchresult.aspx?SearchTarget=All&SearchWord=' +
+                      post.title
+                }`"
               >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
@@ -65,7 +70,7 @@
 
               <v-list-item
                 target="_blank"
-                :href="`https://www.yes24.com/product/search?query=${post.isbn}&domain=all`"
+                :href="`https://www.yes24.com/product/search?query=${post.isbn || post.title}&domain=all`"
               >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
@@ -80,7 +85,7 @@
 
               <v-list-item
                 target="_blank"
-                :href="`https://www.amazon.com/s?k=${post.isbn}&i=stripbooks&linkCode=qs`"
+                :href="`https://www.amazon.com/s?k=${post.isbn || post.title}&i=stripbooks&linkCode=qs`"
               >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
@@ -99,7 +104,10 @@
         <div class="ma-auto">
           <v-card-title class="h1 primary--text title">
             {{ post.title }}
-            <span v-if="post.isbn && otherInfo.volumeInfo?.authors" class="subtitle-2 ml-1">
+            <span
+              v-if="post.isbn && otherInfo.volumeInfo?.authors"
+              class="subtitle-2 ml-1"
+            >
               ({{ (otherInfo.volumeInfo?.authors || []).join(', ') }})
             </span>
           </v-card-title>

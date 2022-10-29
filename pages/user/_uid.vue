@@ -48,7 +48,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <v-list class="transparent">
+          <v-list nav class="transparent">
             <v-list-item
               v-for="(item, UID) in subscription"
               :key="item"

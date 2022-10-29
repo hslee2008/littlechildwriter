@@ -16,7 +16,7 @@
       </template>
     </v-text-field>
 
-    <v-list v-if="comments.length > 0" dense clipped class="transparent">
+    <v-list v-if="comments.length > 0" dense clipped nav class="transparent">
       <v-list-item
         v-for="(message, i) in comments"
         :key="message.time"
