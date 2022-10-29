@@ -414,8 +414,19 @@ const sheet = ref<boolean>(false)
 const fab = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
+  console.log(
+    `http://152.69.227.191:3000?book=${encodeURIComponent(
+      post.value.title
+    )}=${encodeURIComponent(school.value.name)}&local=${encodeURIComponent(
+      school.value.local
+    )}`
+  )
   await fetch(
-    `152.69.227.191:3000/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
+    `http://152.69.227.191:3000?book=${encodeURIComponent(
+      post.value.title
+    )}=${encodeURIComponent(school.value.name)}&local=${encodeURIComponent(
+      school.value.local
+    )}`
   )
     .then(res => res.json())
     .then(json => {
