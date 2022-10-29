@@ -1,9 +1,24 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
-    <iframe v-if="GBid" frameborder="0" scrolling="no" class="zmax frame"
-      :src="`https://books.google.co.kr/books?id=${GBid}&lpg=PP1&pg=PP1&output=embed`" width="100%" height="100%" />
-    <v-btn v-if="GBid" bottom right fixed color="primary" class="zmax" @click="GBid = ''">
+    <iframe
+      v-if="GBid"
+      frameborder="0"
+      scrolling="no"
+      class="zmax frame"
+      :src="`https://books.google.co.kr/books?id=${GBid}&lpg=PP1&pg=PP1&output=embed`"
+      width="100%"
+      height="100%"
+    />
+    <v-btn
+      v-if="GBid"
+      bottom
+      right
+      fixed
+      color="primary"
+      class="zmax"
+      @click="GBid = ''"
+    >
       닫기
     </v-btn>
 
@@ -12,9 +27,19 @@
         <div class="ma-auto">
           <v-bottom-sheet v-model="sheet">
             <template #activator="{ on, attrs }">
-              <v-img :src="post.image" width="200" class="ml-5 my-5 rounded-lg pointer" v-bind="attrs" v-on="on">
+              <v-img
+                :src="post.image"
+                width="200"
+                class="ml-5 my-5 rounded-lg pointer"
+                v-bind="attrs"
+                v-on="on"
+              >
                 <template #placeholder>
-                  <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
                     <v-progress-circular indeterminate color="grey lighten-5" />
                   </v-row>
                 </template>
@@ -23,34 +48,46 @@
             <v-list>
               <v-subheader>외부 사이트</v-subheader>
 
-              <v-list-item target="_blank" :href="`https://aladin.co.kr/shop/wproduct.aspx?isbn=${post.isbn}`">
+              <v-list-item
+                target="_blank"
+                :href="`https://aladin.co.kr/shop/wproduct.aspx?isbn=${post.isbn}`"
+              >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
                     <img
                       src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
-                      alt="알라딘" />
+                      alt="알라딘"
+                    />
                   </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-title>알라딘</v-list-item-title>
               </v-list-item>
 
-              <v-list-item target="_blank" :href="`https://www.yes24.com/product/search?query=${post.isbn}&domain=all`">
+              <v-list-item
+                target="_blank"
+                :href="`https://www.yes24.com/product/search?query=${post.isbn}&domain=all`"
+              >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
                     <img
                       src="https://play-lh.googleusercontent.com/ujk5bP2q6hYKSOnPrCRgJx4gW-oLdvFB3EfXQs6jdn11LOVRcPljdBqrgNBTxkFNRxY7"
-                      alt="yes24" />
+                      alt="yes24"
+                    />
                   </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-title>yes24</v-list-item-title>
               </v-list-item>
 
-              <v-list-item target="_blank" :href="`https://www.amazon.com/s?k=${post.isbn}&i=stripbooks&linkCode=qs`">
+              <v-list-item
+                target="_blank"
+                :href="`https://www.amazon.com/s?k=${post.isbn}&i=stripbooks&linkCode=qs`"
+              >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
                     <img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
-                      alt="yes24" />
+                      alt="yes24"
+                    />
                   </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-title>아마존</v-list-item-title>
@@ -73,7 +110,14 @@
           </v-card-subtitle>
 
           <v-card-text>
-            <v-rating dense readonly size="20" color="amber" background-color="white" :value="post.rating" />
+            <v-rating
+              dense
+              readonly
+              size="20"
+              color="amber"
+              background-color="white"
+              :value="post.rating"
+            />
             <div class="my-5" v-html="post.content" />
             <v-chip-group class="my-5" column>
               <v-chip label>
@@ -105,20 +149,39 @@
 
         <v-card class="pa-1">
           <v-card-text class="d-flex">
-            <v-select v-model="school.local" :items="school.list" label="지역 선택" class="mr-2" />
-            <v-text-field v-model="school.name" label="학교 이름" :rules="[
-              v => v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
-            ]" class="mx-2" />
+            <v-select
+              v-model="school.local"
+              :items="school.list"
+              label="지역 선택"
+              class="mr-2"
+            />
+            <v-text-field
+              v-model="school.name"
+              label="학교 이름"
+              :rules="[
+                v => v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
+              ]"
+              class="mx-2"
+            />
             <v-btn text class="ma-auto" @click="schoolBookSearch">
               <v-icon>mdi-magnify</v-icon>
             </v-btn>
           </v-card-text>
 
           <v-list v-if="!school.resultString.endsWith('찾을 수 없습니다.')">
-            <v-list-item v-for="item in school.result" :key="item.callNumber" :style="`
-              border: 1px solid #${item.canRental ? '4caf50' : 'f44336'};
-            `">
-              <img :src="item.previewImage" alt="학교 도서관" width="100" class="rounded-lg ma-2" />
+            <v-list-item
+              v-for="item in school.result"
+              :key="item.callNumber"
+              :style="`
+                border: 1px solid #${item.canRental ? '4caf50' : 'f44336'};
+              `"
+            >
+              <img
+                :src="item.previewImage"
+                alt="학교 도서관"
+                width="100"
+                class="rounded-lg ma-2"
+              />
 
               <div>
                 <v-list-item-title class="primary--text">
@@ -138,7 +201,11 @@
         <v-btn text @click="Iframe">
           <v-icon left> mdi-file-find </v-icon> 미리보기
         </v-btn>
-        <v-dialog v-if="post.categories" transition="dialog-bottom-transition" width="700">
+        <v-dialog
+          v-if="post.categories"
+          transition="dialog-bottom-transition"
+          width="700"
+        >
           <template #activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
               <v-icon left> mdi-shape </v-icon> 카테고리
@@ -148,14 +215,25 @@
           <v-card>
             <v-card-text>
               <br />
-              <v-chip v-for="tag in post.categories" :key="tag" ripple outlined label :to="`/list?search=${tag}`"
-                class="ma-2 d-block">
+              <v-chip
+                v-for="tag in post.categories"
+                :key="tag"
+                ripple
+                outlined
+                label
+                :to="`/list?search=${tag}`"
+                class="ma-2 d-block"
+              >
                 #{{ tag }}
               </v-chip>
             </v-card-text>
           </v-card>
         </v-dialog>
-        <v-dialog v-if="post.isbn" transition="dialog-bottom-transition" width="700">
+        <v-dialog
+          v-if="post.isbn"
+          transition="dialog-bottom-transition"
+          width="700"
+        >
           <template #activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
               <v-icon left> mdi-book-information-variant </v-icon> 정보
@@ -188,7 +266,7 @@
                       <td>ISBN 10</td>
                       <td>
                         {{
-                            otherInfo.volumeInfo.industryIdentifiers[1].identifier
+                          otherInfo.volumeInfo.industryIdentifiers[1].identifier
                         }}
                       </td>
                     </tr>
@@ -217,7 +295,11 @@
       </div>
     </div>
 
-    <LazyCommentComponent :link="`/book/content/${time}`" :dbr="`contents/${time}/comments`" :uid="post.uid" />
+    <LazyCommentComponent
+      :link="`/book/content/${time}`"
+      :dbr="`contents/${time}/comments`"
+      :uid="post.uid"
+    />
 
     <br /><br /><br /><br /><br /><br />
 
@@ -229,8 +311,13 @@
       <h1>이런 책 어때?</h1>
 
       <v-row>
-        <v-card v-for="(item, i) in suggested" :key="i" class="mx-auto my-5 transparent" :href="item.infoLink"
-          :width="$vuetify.breakpoint.width < 1264 ? 150 : 210">
+        <v-card
+          v-for="(item, i) in suggested"
+          :key="i"
+          class="mx-auto my-5 transparent"
+          :href="item.infoLink"
+          :width="$vuetify.breakpoint.width < 1264 ? 150 : 210"
+        >
           <v-img :src="item.thumbnail" class="rounded-lg" />
           <v-card-title class="text-h6">{{ item.title }}</v-card-title>
         </v-card>
@@ -239,8 +326,16 @@
 
     <br /><br /><br />
 
-    <v-speed-dial v-if="userInfo.uid === post.uid" v-model="fab" bottom right open-on-hover direction="top"
-      transition="slide-y-reverse-transition" style="position: fixed">
+    <v-speed-dial
+      v-if="userInfo.uid === post.uid"
+      v-model="fab"
+      bottom
+      right
+      open-on-hover
+      direction="top"
+      transition="slide-y-reverse-transition"
+      style="position: fixed"
+    >
       <template #activator>
         <v-btn v-model="fab" color="blue darken-2" dark fab>
           <v-icon v-if="fab"> mdi-cog-off </v-icon>
@@ -318,12 +413,26 @@ const loading = ref<boolean>(true)
 const sheet = ref<boolean>(false)
 const fab = ref<boolean>(false)
 
-
 const schoolBookSearch = async () => {
+  console.log(
+    `http://152.69.227.191:3000?book=${encodeURIComponent(
+      post.value.title
+    )}=${encodeURIComponent(school.value.name)}&local=${encodeURIComponent(
+      school.value.local
+    )}`
+  )
   await fetch(
-    `http://127.0.0.1:3000/api?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
-    )
-    .then(res => console.log(res))
+    `http://152.69.227.191:3000?book=${encodeURIComponent(
+      post.value.title
+    )}=${encodeURIComponent(school.value.name)}&local=${encodeURIComponent(
+      school.value.local
+    )}`
+  )
+    .then(res => res.json())
+    .then(json => {
+      school.value.result = json.result
+      school.value.resultString = json.result.toString()
+    })
 }
 
 const Content = async () => {
