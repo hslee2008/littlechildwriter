@@ -17,17 +17,6 @@ module.exports = {
     'vue/html-self-closing': 'off',
     'arrow-parens': 'off',
     'no-console': 'off',
-    curly: 'off',
-    'vue/max-attributes-per-line': [
-      'error',
-      {
-        singleline: {
-          max: 10
-        },
-        multiline: {
-          max: 1
-        }
-      }
-    ]
+    curly: 'off'
   }
 }

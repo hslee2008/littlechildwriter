@@ -32,9 +32,6 @@
             알림판
             <v-icon right> mdi-checkbox-blank-badge </v-icon>
           </v-btn>
-          <v-btn to="/debate/home">
-            토론 <v-icon right> mdi-lectern </v-icon>
-          </v-btn>
         </div>
       </div>
     </v-parallax>
