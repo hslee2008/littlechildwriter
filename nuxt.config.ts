@@ -42,6 +42,13 @@ export default defineNuxtConfig({
     // analyze: true
   },
 
+  serverMiddleware: [
+    {
+      path: '/api',
+      handler: '~/server/index.ts'
+    }
+  ],
+
   bridge: {
     meta: true
   },
