@@ -415,7 +415,7 @@ const fab = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
   await fetch(
-    `http://152.69.227.191:3000/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
+    `152.69.227.191:3000/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
   )
     .then(res => res.json())
     .then(json => {
