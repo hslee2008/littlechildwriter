@@ -112,7 +112,7 @@
           </template>
 
           <v-card>
-            <v-list v-if="notif.length > 0">
+            <v-list v-if="notif.length > 0" nav>
               <v-list-item
                 v-for="(d, i) in notif"
                 :key="i"
@@ -163,7 +163,7 @@
             </div>
           </v-card>
 
-          <v-list>
+          <v-list nav>
             <v-list-item to="/account/account">
               <v-list-item-title>
                 <v-icon left>mdi-cog-outline</v-icon> 설정

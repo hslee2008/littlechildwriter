@@ -48,6 +48,12 @@
               <v-icon> mdi-thumb-up </v-icon>
             </v-btn>
             <span class="subheading" v-text="item.likes" />
+
+            <v-spacer />
+
+            <v-btn v-if="item?.comments?.length" disabled icon color="grey">
+              <v-icon>mdi-comment</v-icon>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-card>
@@ -123,7 +129,12 @@ const Like = (item: any) => {
     Libris(item.uid, -0.1)
   } else {
     item.likes++
-    item.liked[userInfo.value.uid] = true
+
+    try {
+      item.liked[userInfo.value.uid] = true
+    } catch (e) {
+      console.log(e)
+    }
 
     db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(true)
     db.ref(`/contents/${item.time}/likes`).set(item.likes)

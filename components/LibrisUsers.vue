@@ -1,59 +1,41 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
-  <v-timeline :dense="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs" clipped>
-    <v-timeline-item
+  <v-list nav class="transparent">
+    <v-list-item
       v-for="(item, i) in lbt"
       v-if="item.displayName"
       :key="lbt[i].uid"
-      :icon="Icon(i)"
+      :to="`/user/${lbt[i].uid}`"
     >
-      <v-card
-        class="mx-auto"
-        max-width="344"
-        :to="`/user/${lbt[i].uid}`"
-        :color="item.uid === userInfo.uid ? 'primary' : ''"
-      >
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-subtitle class="text-overline mb-4">
-              {{ i + 1 }}등 ({{ Math.round(item.libris) }} Libris)
-            </v-list-item-subtitle>
-            <v-list-item-title v-if="item.displayName" class="mb-1">
-              {{ item.displayName }}
-            </v-list-item-title>
-          </v-list-item-content>
+      <v-list-item-action-text class="mr-4">
+        {{ i + 1 }} 등
+      </v-list-item-action-text>
 
-          <v-list-item-avatar v-if="item.status === 'online'">
-            <v-icon>mdi-account-badge</v-icon>
-          </v-list-item-avatar>
+      <v-list-item-avatar size="50" class="mr-2">
+        <v-img v-if="lbt[i].photoURL" :src="lbt[i].photoURL" />
+        <v-icon v-else>mdi-account</v-icon>
+      </v-list-item-avatar>
+      <v-list-item-content>
+        <v-list-item-title>{{ lbt[i].displayName }}</v-list-item-title>
+        <v-list-item-subtitle>
+          {{ Math.round(lbt[i].libris) }} 리브리스
+        </v-list-item-subtitle>
+      </v-list-item-content>
 
-          <v-list-item-avatar
-            v-if="item.photoURL"
-            :size="$vuetify.breakpoint.xs ? 50 : 70"
-          >
-            <v-img
-              :src="item.photoURL"
-              :lazy-src="item.photoURL"
-              class="rounded"
-            >
-              <template #placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-row>
-              </template>
-            </v-img>
-          </v-list-item-avatar>
-        </v-list-item>
-      </v-card>
-    </v-timeline-item>
-  </v-timeline>
+      <v-spacer />
+
+      <v-list-item-action>
+        <v-icon :color="item.status === 'online' ? 'primary' : 'grey'">
+          mdi-account-{{ item.status === 'online' ? 'check' : 'remove' }}
+        </v-icon>
+      </v-list-item-action>
+    </v-list-item>
+  </v-list>
 </template>
 
 <script setup lang="ts">
 import { db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
 
-const userInfo = User()
 const props = defineProps({
   limit: {
     type: Boolean,
@@ -95,22 +77,5 @@ const UnLimited = () => {
         uid: s.key
       })
     })
-}
-
-const Icon = (a: number) => {
-  switch (a) {
-    case 0:
-      return 'mdi-chess-king'
-    case 1:
-      return 'mdi-chess-queen'
-    case 2:
-      return 'mdi-chess-knight'
-    case 3:
-      return 'mdi-chess-bishop'
-    case 4:
-      return 'mdi-chess-rook'
-    default:
-      return 'mdi-chess-pawn'
-  }
 }
 </script>

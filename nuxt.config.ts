@@ -18,21 +18,11 @@ async function getRoutes() {
   const users = (await db.ref('users').once('value')).val()
   const debate = (await db.ref('debate').once('value')).val()
 
-  for (const r in books) {
-    routes.push(`/book/content/${r}`)
-  }
-  for (const r in classes) {
-    routes.push(`/class/${r}`)
-  }
-  for (const r in teams) {
-    routes.push(`/team/about/${r}`)
-  }
-  for (const r in users) {
-    routes.push(`/user/${r}`)
-  }
-  for (const r in debate) {
-    routes.push(`/debate/${r}`)
-  }
+  for (const r in books) routes.push(`/book/content/${r}`)
+  for (const r in classes) routes.push(`/class/${r}`)
+  for (const r in teams) routes.push(`/team/about/${r}`)
+  for (const r in users) routes.push(`/user/${r}`)
+  for (const r in debate) routes.push(`/debate/${r}`)
 
   return routes
 }

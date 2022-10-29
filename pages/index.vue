@@ -12,7 +12,8 @@
         </div>
 
         <v-card
-          class="d-flex justify-center align-center pa-10 rounded-xl my-5"
+          class="d-flex justify-center align-center pa-10 rounded-lg my-5"
+
           height="300"
           max-width="500"
           :elevation="2"
@@ -56,10 +57,10 @@
           <BookCard :items="recent" :simple="true" />
         </v-tab-item>
         <v-tab-item>
-          <BookCard :items="popular" :simple="true" />
+          <LazyBookCard :items="popular" :simple="true" />
         </v-tab-item>
         <v-tab-item>
-          <BookCard :items="views" :simple="true" />
+          <LazyBookCard :items="views" :simple="true" />
         </v-tab-item>
       </v-tabs-items>
     </v-tabs>
@@ -67,7 +68,7 @@
     <v-card class="mx-5 my-10 transparent">
       <v-card-text>
         <h2>명예의 전당</h2>
-        <LazyLibrisUsers :limit="true" />
+        <LibrisUsers :limit="true" />
       </v-card-text>
 
       <v-card-actions>
@@ -80,15 +81,15 @@
 
     <br />
 
-    <BookCard :items="random" :simple="true" />
+    <LazyBookCard :items="random" :simple="true" />
 
     <br />
   </div>
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'
-import { Book, User } from '@/plugins/global'
+import { db } from '@/plugins/firebase'; import { Book, User } from
+  '@/plugins/global'
 
 const userInfo = User()
 const recent = ref<any>([])

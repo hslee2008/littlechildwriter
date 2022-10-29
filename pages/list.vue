@@ -20,15 +20,25 @@
         label="Search"
         outlined
         hide-selected
-        :append-icon="`mdi-toggle-switch${sortDesc ? '-off' : ''}`"
-        class="my-2 mr-2"
-        @click:append="sortDesc = !sortDesc"
+        disable-lookup
+        no-data-text
+        open-on-clear
+        rounded
+        clearable
+        class="my-2 mr-2 rounded-xl"
+      />
+
+      <v-switch
+        v-model="sortDesc"
+        :label="sortDesc ? '최신순' : '오래된순'"
+        hide-details
+        class="my-2"
       />
     </template>
 
     <template #default="props">
       <v-row class="mt-5 g-10">
-        <LazyBookCard :items="props.items" />
+        <BookCard :items="props.items" />
       </v-row>
     </template>
 

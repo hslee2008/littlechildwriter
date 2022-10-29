@@ -25,7 +25,7 @@
     <v-card class="my-3 transparent">
       <div class="cardy">
         <div class="ma-auto">
-          <v-bottom-sheet v-model="sheet">
+          <v-bottom-sheet v-model="sheet" inset>
             <template #activator="{ on, attrs }">
               <v-img
                 :src="post.image"
@@ -45,12 +45,17 @@
                 </template>
               </v-img>
             </template>
-            <v-list>
+            <v-list nav>
               <v-subheader>외부 사이트</v-subheader>
 
               <v-list-item
                 target="_blank"
-                :href="`https://aladin.co.kr/shop/wproduct.aspx?isbn=${post.isbn}`"
+                :href="`https://aladin.co.kr/${
+                  post.isbn
+                    ? 'shop/wproduct.aspx?isbn=' + post.isbn
+                    : 'search/wsearchresult.aspx?SearchTarget=All&SearchWord=' +
+                      post.title
+                }`"
               >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
@@ -65,7 +70,9 @@
 
               <v-list-item
                 target="_blank"
-                :href="`https://www.yes24.com/product/search?query=${post.isbn}&domain=all`"
+                :href="`https://www.yes24.com/product/search?query=${
+                  post.isbn || post.title
+                }&domain=all`"
               >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
@@ -80,7 +87,9 @@
 
               <v-list-item
                 target="_blank"
-                :href="`https://www.amazon.com/s?k=${post.isbn}&i=stripbooks&linkCode=qs`"
+                :href="`https://www.amazon.com/s?k=${
+                  post.isbn || post.title
+                }&i=stripbooks&linkCode=qs`"
               >
                 <v-list-item-avatar>
                   <v-avatar size="32px">
@@ -99,7 +108,10 @@
         <div class="ma-auto">
           <v-card-title class="h1 primary--text title">
             {{ post.title }}
-            <span v-if="post.isbn && otherInfo.volumeInfo?.authors" class="subtitle-2 ml-1">
+            <span
+              v-if="post.isbn && otherInfo.volumeInfo?.authors"
+              class="subtitle-2 ml-1"
+            >
               ({{ (otherInfo.volumeInfo?.authors || []).join(', ') }})
             </span>
           </v-card-title>
@@ -201,102 +213,111 @@
         <v-icon left> mdi-share-variant </v-icon>
         공유
       </v-btn>
-      <div v-if="post.isbn">
-        <v-btn text @click="Iframe">
-          <v-icon left> mdi-file-find </v-icon> 미리보기
-        </v-btn>
-        <v-dialog
-          v-if="post.categories"
-          transition="dialog-bottom-transition"
-          width="700"
-        >
-          <template #activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on">
-              <v-icon left> mdi-shape </v-icon> 카테고리
-            </v-btn>
-          </template>
+      <v-menu v-if="post.isbn" offset-y>
+        <template #activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" cols="1" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
 
-          <v-card>
-            <v-card-text>
-              <br />
-              <v-chip
-                v-for="tag in post.categories"
-                :key="tag"
-                ripple
-                outlined
-                label
-                :to="`/list?search=${tag}`"
-                class="ma-2 d-block"
-              >
-                #{{ tag }}
-              </v-chip>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-        <v-dialog
-          v-if="post.isbn"
-          transition="dialog-bottom-transition"
-          width="700"
-        >
-          <template #activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on">
-              <v-icon left> mdi-book-information-variant </v-icon> 정보
-            </v-btn>
-          </template>
+        <v-card>
+          <v-btn text @click="Iframe">
+            <v-icon left> mdi-file-find </v-icon> 미리보기
+          </v-btn>
+          <v-dialog
+            v-if="post.categories"
+            transition="dialog-bottom-transition"
+            width="700"
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn text v-bind="attrs" v-on="on">
+                <v-icon left> mdi-shape </v-icon> 카테고리
+              </v-btn>
+            </template>
 
-          <v-card>
-            <v-card-title>
-              {{ post.title }}
-            </v-card-title>
-            <v-card-subtitle>
-              {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
-            </v-card-subtitle>
+            <v-card>
+              <v-card-text>
+                <br />
+                <v-chip
+                  v-for="tag in post.categories"
+                  :key="tag"
+                  ripple
+                  outlined
+                  label
+                  :to="`/list?search=${tag}`"
+                  class="ma-2 d-block"
+                >
+                  #{{ tag }}
+                </v-chip>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+          <v-dialog
+            v-if="post.isbn"
+            transition="dialog-bottom-transition"
+            width="700"
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn text v-bind="attrs" v-on="on">
+                <v-icon left> mdi-book-information-variant </v-icon> 정보
+              </v-btn>
+            </template>
 
-            <v-card-text>
-              <v-simple-table>
-                <template #default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">Categories</th>
-                      <th class="text-left">Information</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>ISBN 13</td>
-                      <td>{{ post.isbn }}</td>
-                    </tr>
-                    <tr>
-                      <td>ISBN 10</td>
-                      <td>
-                        {{
-                          otherInfo.volumeInfo.industryIdentifiers[1].identifier
-                        }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>출판된 날짜</td>
-                      <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
-                    </tr>
-                    <tr>
-                      <td>출판사</td>
-                      <td>{{ otherInfo.volumeInfo.publisher }}</td>
-                    </tr>
-                    <tr v-if="otherInfo.GBid">
-                      <td>Google Books ID</td>
-                      <td>{{ otherInfo.GBid }}</td>
-                    </tr>
-                    <tr>
-                      <td>평균 별점 (구글)</td>
-                      <td>{{ otherInfo.volumeInfo.averageRating }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-      </div>
+            <v-card>
+              <v-card-title>
+                {{ post.title }}
+              </v-card-title>
+              <v-card-subtitle>
+                {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
+              </v-card-subtitle>
+
+              <v-card-text>
+                <v-simple-table>
+                  <template #default>
+                    <thead>
+                      <tr>
+                        <th class="text-left">Categories</th>
+                        <th class="text-left">Information</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>ISBN 13</td>
+                        <td>{{ post.isbn }}</td>
+                      </tr>
+                      <tr>
+                        <td>ISBN 10</td>
+                        <td>
+                          {{
+                            otherInfo.volumeInfo.industryIdentifiers[1]
+                              .identifier
+                          }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>출판된 날짜</td>
+                        <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
+                      </tr>
+                      <tr>
+                        <td>출판사</td>
+                        <td>{{ otherInfo.volumeInfo.publisher }}</td>
+                      </tr>
+                      <tr v-if="otherInfo.GBid">
+                        <td>Google Books ID</td>
+                        <td>{{ otherInfo.GBid }}</td>
+                      </tr>
+                      <tr>
+                        <td>평균 별점 (구글)</td>
+                        <td>{{ otherInfo.volumeInfo.averageRating }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </v-card>
+      </v-menu>
     </div>
 
     <LazyCommentComponent

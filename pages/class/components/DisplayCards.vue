@@ -218,7 +218,6 @@
 <script setup>
 import Actions from './Actions.vue'
 import { User } from '@/plugins/global'
-
 const userInfo = User()
 defineProps({
   classInfo: {

@@ -48,7 +48,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <v-list class="transparent">
+          <v-list nav class="transparent">
             <v-list-item
               v-for="(item, UID) in subscription"
               :key="item"
@@ -106,8 +106,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'
-import { formatter, Libris, User } from '@/plugins/global'
+import { db } from '@/plugins/firebase'; import { formatter, Libris, User } from
+  '@/plugins/global'
 
 const userInfo = User()
 const route = useRoute()

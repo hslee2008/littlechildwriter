@@ -46,7 +46,6 @@
 </template>
 
 <script setup lang="ts">
-import draggable from 'vuedraggable'
 import { auth, db } from '@/plugins/firebase'
 import { User } from '@/plugins/global'
 

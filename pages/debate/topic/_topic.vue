@@ -28,9 +28,11 @@
           <v-card-text>
             <v-list nav class="transparent">
               <v-list-item v-for="(item, i) in content.pro" :key="item.time">
-                <v-list-item-avatar>
-                  <v-img :src="item.photoURL" />
-                </v-list-item-avatar>
+                <NLink :to="`/user/${item.uid}`">
+                  <v-list-item-avatar>
+                    <v-img :src="item.photoURL" />
+                  </v-list-item-avatar>
+                </NLink>
 
                 <v-list-item-content>
                   <p>{{ item.topic }}</p>
@@ -83,9 +85,11 @@
           <v-card-text>
             <v-list nav class="transparent">
               <v-list-item v-for="(item, i) in content.con" :key="item.time">
-                <v-list-item-avatar>
-                  <v-img :src="item.photoURL" />
-                </v-list-item-avatar>
+                <NLink :to="`/user/${item.uid}`">
+                  <v-list-item-avatar>
+                    <v-img :src="item.photoURL" />
+                  </v-list-item-avatar>
+                </NLink>
 
                 <v-list-item-content>
                   <p>{{ item.topic }}</p>
@@ -138,7 +142,9 @@
             mdi-information-outline
           </v-icon>
         </template>
-        <span>토론 주제와 관련하여 새롭게 토론하고 싶은 주제를 제안해 주세요</span>
+        <span>
+          토론 주제와 관련하여 새롭게 토론하고 싶은 주제를 제안해 주세요
+        </span>
       </v-tooltip>
     </div>
 
@@ -174,9 +180,11 @@
 
     <v-list nav class="transparent">
       <v-list-item v-for="(item, i) in content.suggestion" :key="item.time">
-        <v-list-item-avatar>
-          <v-img :src="item.photoURL" />
-        </v-list-item-avatar>
+        <NLink :to="`/user/${item.uid}`">
+          <v-list-item-avatar>
+            <v-img :src="item.photoURL" />
+          </v-list-item-avatar>
+        </NLink>
 
         <v-list-item-content>
           <v-card-text>

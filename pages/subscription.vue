@@ -32,7 +32,7 @@ onMounted(() => {
         const data: any = Object.values(await s.val())
 
         for (let i = 0; i < data.length; i++) {
-          if (subscription.value.includes(data[i].uid)) {
+          if (subscription.value?.includes(data[i].uid)) {
             books.value.unshift(data[i])
           }
         }
