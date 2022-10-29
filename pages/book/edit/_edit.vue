@@ -9,7 +9,7 @@
         class="my-10"
       />
 
-      <v-text-field v-model="post.title" label="제목" class="title" />
+      <v-text-field v-model="post.title" label="제목" />
       <v-text-field v-model="post.pageCount" label="페이지" />
       <v-textarea v-model="post.content" label="책 소개" auto-grow counter />
     </v-card-text>
@@ -25,11 +25,7 @@
 
       <v-spacer />
 
-      <v-btn
-        color="primary"
-        class="elevation-0 update"
-        @click="Update"
-      >
+      <v-btn color="primary" class="elevation-0 update" @click="Update">
         업데이트
       </v-btn>
     </v-card-actions>

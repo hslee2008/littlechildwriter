@@ -10,17 +10,22 @@
       <v-list nav expand>
         <v-list-item to="/">
           <v-list-item-title>
-            <v-icon left>mdi-home</v-icon> 홈페이지
+            <v-icon left>mdi-home-variant</v-icon> 홈페이지
           </v-list-item-title>
         </v-list-item>
         <v-list-item to="/class/classes">
           <v-list-item-title>
-            <v-icon left>mdi-clipboard</v-icon> 알림판
+            <v-icon left>mdi-clipboard-multiple</v-icon> 알림판
           </v-list-item-title>
         </v-list-item>
         <v-list-item to="/list">
           <v-list-item-title>
             <v-icon left>mdi-format-list-text</v-icon> 책 목록
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/debate/home">
+          <v-list-item-title>
+            <v-icon left>mdi-lectern</v-icon> 토론 광장
           </v-list-item-title>
         </v-list-item>
 
@@ -29,10 +34,9 @@
 
           <v-list-item to="/bookmark">
             <v-list-item-title>
-              <v-icon left>mdi-bookmark</v-icon> 책갈피
+              <v-icon left>mdi-bookmark-multiple</v-icon> 책갈피
             </v-list-item-title>
           </v-list-item>
-
           <v-list-item to="/subscription">
             <v-list-item-title>
               <v-icon left>mdi-youtube-subscription</v-icon> 구독
@@ -44,7 +48,7 @@
 
         <v-list-item to="/libris">
           <v-list-item-title>
-            <v-icon left>mdi-crown-outline</v-icon> 명예의 전당
+            <v-icon left>mdi-podium</v-icon> 명예의 전당
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -58,7 +62,7 @@
       :collapse="$route.path.startsWith('/class')"
       :color="$vuetify.theme.dark ? '#23262E' : '#f5f5f5'"
     >
-      <v-app-bar-nav-icon v-if="userInfo.uid" @click="bookmark = !bookmark" />
+      <v-app-bar-nav-icon @click.stop="bookmark = !bookmark" />
 
       <NLink to="/" class="ml-2">
         <v-avatar size="30">
@@ -87,19 +91,20 @@
           scrollable
         >
           <template #activator="{ on, attrs }">
-            <v-btn icon class="amber--text" v-bind="attrs" v-on="on">
+            <v-btn icon v-bind="attrs" v-on="on">
               <v-badge
                 overlap
                 left
                 transition
                 :content="notif.length"
                 :value="notif.length"
+                class="amber--text"
               >
                 <v-icon>
                   {{
                     notif.length > 0
-                      ? 'mdi-bell-ring-outline'
-                      : 'mdi-bell-outline'
+                      ? `mdi-bell-ring${notifOverlay ? '' : '-outline'}`
+                      : `mdi-bell${notifOverlay ? '' : '-outline'}`
                   }}
                 </v-icon>
               </v-badge>
@@ -211,11 +216,12 @@
 import { auth, db } from '@/plugins/firebase'
 import { User } from '@/plugins/global'
 
+const nuxt = useNuxtApp()
 const router = useRouter()
 const userInfo = User()
 const notif = ref<any>([])
 const notifOverlay = ref<boolean>(false)
-const bookmark = ref<boolean>(false)
+const bookmark = ref<boolean>(!nuxt.$vuetify.breakpoint.mobile)
 
 onMounted(() => {
   auth.onAuthStateChanged(u => {

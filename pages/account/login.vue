@@ -17,7 +17,6 @@
             <v-text-field
               v-model="email"
               type="email"
-              class="email"
               label="이메일"
               outlined
               required
@@ -29,7 +28,6 @@
             <v-text-field
               v-model="password"
               type="password"
-              class="password"
               label="암호"
               outlined
               required
