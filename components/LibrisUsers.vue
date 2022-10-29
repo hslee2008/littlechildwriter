@@ -1,8 +1,13 @@
+<!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-timeline :dense="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs" clipped>
-    <v-timeline-item v-for="(item, i) in lbt" :key="lbt[i].uid" :icon="Icon(i)">
+    <v-timeline-item
+      v-for="(item, i) in lbt"
+      v-if="item.displayName"
+      :key="lbt[i].uid"
+      :icon="Icon(i)"
+    >
       <v-card
-        v-if="item.photoURL || item.displayName"
         class="mx-auto"
         max-width="344"
         :to="`/user/${lbt[i].uid}`"

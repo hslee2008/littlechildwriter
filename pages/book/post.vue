@@ -177,14 +177,10 @@
 
         <v-list>
           <div
-            v-for="(item) in searched"
+            v-for="item in searched"
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
           >
             <v-list-item
-              v-if="
-                item.volumeInfo.industryIdentifiers &&
-                item.volumeInfo.imageLinks
-              "
               @click="
                 FetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
               "
@@ -223,22 +219,6 @@
 
                 <v-list-item-subtitle v-if="item.volumeInfo.description">
                   {{ item.volumeInfo.description.substring(0, 200) }}...
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item v-else>
-              <v-list-item-content>
-                <v-list-item-title class="primary--text h1">
-                  {{ item.volumeInfo.title }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ item.volumeInfo.subtitle }}
-                </v-list-item-subtitle>
-
-                <v-spacer />
-
-                <v-list-item-subtitle class="red--text">
-                  이 책에 대한 정보가 부족해 선택할 수 없습니다.
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>

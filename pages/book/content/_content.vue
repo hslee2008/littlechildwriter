@@ -197,6 +197,10 @@
           <v-card-text v-else>{{ school.resultString }}</v-card-text>
         </v-card>
       </v-dialog>
+      <v-btn text @click="share">
+        <v-icon left> mdi-share-variant </v-icon>
+        공유
+      </v-btn>
       <div v-if="post.isbn">
         <v-btn text @click="Iframe">
           <v-icon left> mdi-file-find </v-icon> 미리보기
@@ -414,8 +418,19 @@ const sheet = ref<boolean>(false)
 const fab = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
+  console.log(
+    `http://152.69.227.191:3000?book=${encodeURIComponent(
+      post.value.title
+    )}=${encodeURIComponent(school.value.name)}&local=${encodeURIComponent(
+      school.value.local
+    )}`
+  )
   await fetch(
-    `152.69.227.191:3000/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
+    `http://152.69.227.191:3000?book=${encodeURIComponent(
+      post.value.title
+    )}=${encodeURIComponent(school.value.name)}&local=${encodeURIComponent(
+      school.value.local
+    )}`
   )
     .then(res => res.json())
     .then(json => {
@@ -439,6 +454,15 @@ const Content = async () => {
       .then(res => res.json())
       .then(res => (otherInfo.value = res.items[0]))
   }
+}
+
+const share = async () => {
+  const { title, content } = post.value
+  await navigator.share({
+    title,
+    text: content,
+    url: `https://littlechildwriter.app/book/content/${time}`
+  })
 }
 
 const View = () => {

@@ -28,9 +28,12 @@
           <v-btn to="/list" class="mx-3">
             글 <v-icon right> mdi-format-list-bulleted-square </v-icon>
           </v-btn>
-          <v-btn to="/classes" class="mx-3">
+          <v-btn to="/class/classes" class="mx-3">
             알림판
             <v-icon right> mdi-checkbox-blank-badge </v-icon>
+          </v-btn>
+          <v-btn to="/debate/home">
+            토론 <v-icon right> mdi-lectern </v-icon>
           </v-btn>
         </div>
       </div>

@@ -69,7 +69,8 @@ const uiConfig = {
 const ui = new authF.AuthUI(firebase.auth())
 
 const onSubmit = () =>
-  authF
+  firebase
+    .auth()
     .signInWithEmailAndPassword(email.value, password.value)
     .then(() => router.push)
 

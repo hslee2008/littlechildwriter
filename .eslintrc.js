@@ -17,6 +17,23 @@ module.exports = {
     'vue/html-self-closing': 'off',
     'arrow-parens': 'off',
     'no-console': 'off',
-    curly: 'off'
+    curly: 'off',
+    'vue/no-use-v-if-with-v-for': [
+      'error',
+      {
+        allowUsingIterationVar: false
+      }
+    ],
+    'vue/max-attributes-per-line': [
+      'error',
+      {
+        singleline: {
+          max: 10
+        },
+        multiline: {
+          max: 1
+        }
+      }
+    ]
   }
 }
