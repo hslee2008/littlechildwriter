@@ -14,8 +14,8 @@
         class="transparent"
       >
         <v-expansion-panel-header
-          :style="`background-color: #${
-            $vuetify.theme.dark ? '1e1e1e' : 'f5f5f5'
+          :style="`background-color: ${
+            $vuetify.theme.dark ? '#1e1e1e' : 'white'
           } !important`"
         >
           {{ title.toString().replaceAll('_', ' - ') }}
@@ -25,7 +25,7 @@
           v-for="(item, i) in category"
           :key="item.title"
           :style="`background-color: ${
-            $vuetify.theme.dark ? 'transparent' : '#f5f5f5'
+            $vuetify.theme.dark ? 'transparent' : 'white'
           } !important`"
         >
           <v-card

@@ -198,6 +198,12 @@ export default defineNuxtConfig({
           success: '#4CAF50',
           warning: '#FFC107'
         }
+      },
+      options: {
+        themeCache: {
+          get: key => localStorage.getItem(key),
+          set: (key, value) => localStorage.setItem(key, value)
+        }
       }
     }
   },

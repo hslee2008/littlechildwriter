@@ -5,7 +5,7 @@
       fixed
       clipped
       app
-      :color="$vuetify.theme.dark ? '#23262E' : '#f5f5f5'"
+      :color="$vuetify.theme.dark ? '#23262E' : 'white'"
     >
       <v-list nav expand>
         <v-list-item to="/">
@@ -60,7 +60,7 @@
       clipped-left
       class="elevation-0"
       :collapse="$route.path.startsWith('/class')"
-      :color="$vuetify.theme.dark ? '#23262E' : '#f5f5f5'"
+      :color="$vuetify.theme.dark ? '#23262E' : 'white'"
     >
       <v-app-bar-nav-icon @click.stop="bookmark = !bookmark" />
 
@@ -192,6 +192,7 @@
                     ? 'mdi-weather-night'
                     : 'mdi-white-balance-sunny'
                 "
+                @change="saveTheme"
               />
             </v-list-item>
           </v-list>
@@ -242,7 +243,15 @@ onMounted(() => {
       }
     })
   })
+
+  if (localStorage.getItem('dark')) {
+    nuxt.$vuetify.theme.dark = localStorage.getItem('dark') === 'true'
+  }
 })
+
+const saveTheme = () => {
+  localStorage.setItem('dark', nuxt.$vuetify.theme.dark)
+}
 
 const clearEverything = () => {
   db.ref(`/users/${userInfo.value.uid}/notification`).remove()

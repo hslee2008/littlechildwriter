@@ -41,7 +41,7 @@
             </v-btn>
             <v-btn
               icon
-              :disabled="item.liked[userInfo.uid]"
+              :color="item.liked[userInfo.uid] ? 'primary' : 'grey'"
               class="mr-2"
               @click="Like(item)"
             >
@@ -112,14 +112,25 @@ const bookmarked = (i: number) => {
 }
 
 const Like = (item: any) => {
-  item.likes++
-  item.liked[userInfo.value.uid] = true
+  if (item.liked[userInfo.value.uid]) {
+    item.likes--
+    item.liked[userInfo.value.uid] = false
 
-  db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(true)
-  db.ref(`/contents/${item.time}/likes`).set(item.likes)
+    db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(false)
+    db.ref(`/contents/${item.time}/likes`).set(item.likes)
 
-  Libris(userInfo.value.uid, 0.1)
-  Libris(item.uid, 0.1)
+    Libris(userInfo.value.uid, -0.1)
+    Libris(item.uid, -0.1)
+  } else {
+    item.likes++
+    item.liked[userInfo.value.uid] = true
+
+    db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(true)
+    db.ref(`/contents/${item.time}/likes`).set(item.likes)
+
+    Libris(userInfo.value.uid, 0.1)
+    Libris(item.uid, 0.1)
+  }
 }
 
 const Bookmark = (time: string, i: number) => {

@@ -186,7 +186,7 @@
               "
             >
               <v-img
-                :src="item.volumeInfo.imageLinks.thumbnail"
+                :src="item.volumeInfo.imageLinks?.thumbnail"
                 class="mr-4 ma-2 rounded-lg"
                 max-width="100"
               />
@@ -270,6 +270,29 @@
         counter
         class="content"
       />
+
+      <v-combobox
+        v-model="chips"
+        :items="post.categories"
+        chips
+        clearable
+        label="카테고리"
+        multiple
+        solo
+        class="transparent"
+      >
+        <template #selection="{ attrs, item, select, selected }">
+          <v-chip
+            v-bind="attrs"
+            :input-value="selected"
+            close
+            @click="select"
+            @click:close="remove(item)"
+          >
+            <strong>{{ item }}</strong>
+          </v-chip>
+        </template>
+      </v-combobox>
     </v-card-text>
 
     <v-card-actions class="g-10">
@@ -315,7 +338,7 @@
     </div>
 
     <v-snackbar v-model="snackbar">
-      제목, 작가, 페이지, 책 소개를 모두 입력해주세요.
+      제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해주세요.
 
       <template #action="{ attrs }">
         <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
@@ -363,6 +386,11 @@ const typed = ref<string>('')
 const video = ref<any>(null)
 const isbnImageElement = ref<any>(null)
 const snackbar = ref<boolean>(false)
+const chips = ref<string[]>([])
+
+const remove = (item: string) => {
+  chips.value.splice(chips.value.indexOf(item), 1)
+}
 
 const FetchBook = (bookISBN: string) => {
   post.value.isbn = bookISBN
@@ -461,16 +489,19 @@ const fetchi = () => {
           pageCount
         } = res.items[0].volumeInfo
 
+        const categories = await fetch(res.items[0].selfLink)
+          .then(cg => cg.json())
+          .then(cg => cg.volumeInfo.categories)
+
         post.value = {
           ...post.value,
           title,
           image,
           pageCount,
           author,
-          categories: await fetch(res.items[0].selfLink)
-            .then(cg => cg.json())
-            .then(cg => cg.volumeInfo.categories)
+          categories
         }
+        chips.value = categories
       } else {
         const { title, authors: author, pageCount } = res.items[0].volumeInfo
 
@@ -519,7 +550,7 @@ const Post = () => {
 
   const { uid, displayName } = userInfo.value
 
-  if (!title || !content || !pageCount || !author) {
+  if (!title || !content || !pageCount || !author || categories.length === 0) {
     snackbar.value = true
     return
   }

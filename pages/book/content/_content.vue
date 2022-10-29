@@ -99,7 +99,7 @@
         <div class="ma-auto">
           <v-card-title class="h1 primary--text title">
             {{ post.title }}
-            <span v-if="post.isbn" class="white--text subtitle-2 ml-1">
+            <span v-if="post.isbn && otherInfo.volumeInfo?.authors" class="subtitle-2 ml-1">
               ({{ (otherInfo.volumeInfo?.authors || []).join(', ') }})
             </span>
           </v-card-title>
