@@ -42,7 +42,7 @@ const email = ref<string>('')
 const password = ref<string>('')
 const displayName = ref<string>('')
 
-const Make = () => {
+const Make = () =>
   auth.createUserWithEmailAndPassword(email.value, password.value).then(() => {
     db.ref(`/users/${auth.currentUser?.uid}`).set({
       displayName,
@@ -55,8 +55,8 @@ const Make = () => {
     })
 
     router.push('/account/account')
+    useEvent('account_new', {})
   })
-}
 
 useHead({
   title: '만들기 - LCW'

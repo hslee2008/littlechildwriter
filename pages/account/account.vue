@@ -129,6 +129,7 @@ const Update = async () => {
   })
 
   router.push(`/user/${uid}`)
+  useEvent('account_update', {})
 }
 
 const resetPassword = async () => {

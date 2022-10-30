@@ -92,7 +92,7 @@
 
 <script setup lang="ts">
 import { db } from '@/plugins/firebase'
-import { formatter, Libris, User } from '@/plugins/global'
+import { formatter, User } from '@/plugins/global'
 
 const userInfo = User()
 const props = defineProps({

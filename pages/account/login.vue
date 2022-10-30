@@ -47,13 +47,13 @@
 </template>
 
 <script setup script="ts">
-import { auth as authF } from 'firebaseui'
+import { auth } from 'firebaseui'
 import firebase from 'firebase/compat/app'
 import 'firebaseui/dist/firebaseui.css'
 
+const router = useRouter()
 const email = ref('')
 const password = ref('')
-const router = useRouter()
 
 const uiConfig = {
   signInSuccessUrl: '/account/account',
@@ -66,21 +66,17 @@ const uiConfig = {
     firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
   ]
 }
-const ui = new authF.AuthUI(firebase.auth())
+const ui = new auth.AuthUI(firebase.auth())
 
 const onSubmit = () =>
   firebase
     .auth()
     .signInWithEmailAndPassword(email.value, password.value)
+    .then(() => useEvent('account_login', {}))
     .then(() => router.push)
 
-onMounted(() => {
-  ui.start('#firebaseui-auth-container', uiConfig)
-})
-
-onUnmounted(() => {
-  ui.delete()
-})
+onMounted(() => ui.start('#firebaseui-auth-container', uiConfig))
+onUnmounted(() => ui.delete())
 
 useHead({
   title: '로그인 - LCW'

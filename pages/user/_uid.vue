@@ -15,10 +15,15 @@
       </div>
 
       <div class="ml-auto my-auto float-right">
-        <v-btn v-if="userInfo.uid !== uid" color="red" @click="Subscribe">
+        <v-btn
+          v-if="userInfo.uid !== uid"
+          color="red"
+          class="rounded-xl"
+          @click="Subscribe"
+        >
           {{ subscribed ? '구독 취소' : '구독' }}
         </v-btn>
-        <v-btn v-else color="primary" to="/account/account">
+        <v-btn v-else color="primary" to="/account/account" class="rounded-xl">
           편집 <v-icon right> mdi-pencil </v-icon>
         </v-btn>
       </div>
@@ -106,8 +111,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'; import { formatter, Libris, User } from
-  '@/plugins/global'
+import { db } from '@/plugins/firebase'
+import { formatter, User } from '@/plugins/global'
 
 const userInfo = User()
 const route = useRoute()
