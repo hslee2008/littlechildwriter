@@ -119,7 +119,7 @@
                 @click="load(d.link)"
               >
                 <v-list-item-avatar>
-                  <v-img :src="d.photoURL" />
+                  <UserPhoto :src="d.photoURL" />
                 </v-list-item-avatar>
 
                 <v-list-item-content>

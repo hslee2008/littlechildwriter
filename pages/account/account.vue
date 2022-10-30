@@ -36,7 +36,7 @@
 
       <v-card-text>
         <v-avatar size="100">
-          <v-img :src="userInfo.photoURL" />
+          <UserPhoto :src="userInfo.photoURL" />
         </v-avatar>
         <v-text-field
           v-model="userInfo.photoURL"

@@ -9,7 +9,7 @@
         :to="`/debate/topic/${item.time}`"
       >
         <v-list-item-avatar>
-          <v-img :src="item.photoURL" />
+          <UserPhoto :src="item.photoURL" />
         </v-list-item-avatar>
 
         <v-list-item-content>
@@ -70,4 +70,8 @@ const DeleteContent = (i: number) => {
   db.ref(`/debate/${list.value[i].time}`).remove()
   list.value.splice(i, 1)
 }
+
+useHead({
+  title: '토론 광장 - LCW'
+})
 </script>

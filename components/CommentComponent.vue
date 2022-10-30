@@ -30,7 +30,7 @@
         >
           <NLink :to="`/user/${message.uid}`" class="ma-auto">
             <v-avatar size="40" :color="message.badWord ? 'red' : '#23262E'">
-              <v-img :src="message.photoURL" />
+              <UserPhoto :src="message.photoURL" />
             </v-avatar>
           </NLink>
 

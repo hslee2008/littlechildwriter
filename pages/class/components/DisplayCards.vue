@@ -188,7 +188,7 @@
           <v-card v-else class="mt-5">
             <div class="d-flex">
               <v-avatar size="40" class="ml-3 mt-6">
-                <v-img :src="item.photoURL" class="rounded-lg" />
+                <UserPhoto :src="item.photoURL" class="rounded-lg" />
               </v-avatar>
               <div>
                 <v-card-title> {{ item.displayName }}의 공지사항 </v-card-title>

@@ -170,9 +170,7 @@
             <v-text-field
               v-model="school.name"
               label="학교 이름"
-              :rules="[
-                v => v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
-              ]"
+              :rules="[endWithSchool]"
               class="mx-2"
             />
             <v-btn text class="ma-auto" @click="schoolBookSearch">
@@ -439,19 +437,8 @@ const sheet = ref<boolean>(false)
 const fab = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
-  console.log(
-    `http://152.69.227.191:3000?book=${encodeURIComponent(
-      post.value.title
-    )}=${encodeURIComponent(school.value.name)}&local=${encodeURIComponent(
-      school.value.local
-    )}`
-  )
   await fetch(
-    `http://152.69.227.191:3000?book=${encodeURIComponent(
-      post.value.title
-    )}=${encodeURIComponent(school.value.name)}&local=${encodeURIComponent(
-      school.value.local
-    )}`
+    `http://152.69.227.191:3000/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
   )
     .then(res => res.json())
     .then(json => {
@@ -590,6 +577,9 @@ const Del = () => {
   Libris(userInfo.value.uid, -(parseInt(post.value.pageCount) / 100))
   router.push('/list')
 }
+
+const endWithSchool = (v: string) =>
+  v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
 
 useHead({
   title: '컨텐츠 - LCW',

@@ -12,8 +12,7 @@
       </v-list-item-action-text>
 
       <v-list-item-avatar size="50" class="mr-2">
-        <v-img v-if="lbt[i].photoURL" :src="lbt[i].photoURL" />
-        <v-icon v-else>mdi-account</v-icon>
+        <UserPhoto :src="lbt[i].photoURL" />
       </v-list-item-avatar>
       <v-list-item-content>
         <v-list-item-title>{{ lbt[i].displayName }}</v-list-item-title>

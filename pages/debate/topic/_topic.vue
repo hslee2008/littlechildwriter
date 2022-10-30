@@ -3,7 +3,7 @@
     <h1>주제: {{ content.topic }}</h1>
     <v-card class="d-flex transparent" :to="`/user/${content.uid}`">
       <v-avatar class="my-auto">
-        <v-img :src="content.photoURL" />
+        <UserPhoto :src="content.photoURL" />
       </v-avatar>
       <div>
         <v-card-title>{{ content.displayName }}</v-card-title>
@@ -35,7 +35,7 @@
               <v-list-item v-for="(item, i) in content.pro" :key="item.time">
                 <NLink :to="`/user/${item.uid}`">
                   <v-list-item-avatar>
-                    <v-img :src="item.photoURL" />
+                    <UserPhoto :src="item.photoURL" />
                   </v-list-item-avatar>
                 </NLink>
 
@@ -97,7 +97,7 @@
               <v-list-item v-for="(item, i) in content.con" :key="item.time">
                 <NLink :to="`/user/${item.uid}`">
                   <v-list-item-avatar>
-                    <v-img :src="item.photoURL" />
+                    <UserPhoto :src="item.photoURL" />
                   </v-list-item-avatar>
                 </NLink>
 
@@ -192,7 +192,7 @@
       <v-list-item v-for="(item, i) in content.suggestion" :key="item.time">
         <NLink :to="`/user/${item.uid}`">
           <v-list-item-avatar>
-            <v-img :src="item.photoURL" />
+            <UserPhoto :src="item.photoURL" />
           </v-list-item-avatar>
         </NLink>
 

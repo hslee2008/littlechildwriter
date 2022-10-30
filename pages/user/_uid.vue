@@ -2,7 +2,7 @@
   <div>
     <v-row class="mb-5">
       <v-avatar size="80" class="mt-2">
-        <v-img :src="targetUser.photoURL" />
+        <UserPhoto :src="targetUser.photoURL" />
       </v-avatar>
 
       <div class="d-flex align-center">
@@ -44,12 +44,7 @@
             outlined
             prepend-inner-icon="mdi-star"
           />
-          <LazyBookCard
-            :items="
-              books.filter(a => (rating === '모두' ? 1 : a.rating === rating))
-            "
-            :simple="true"
-          />
+          <LazyBookCard :items="books.filter(ratingFilter)" :simple="true" />
         </v-tab-item>
 
         <v-tab-item>
@@ -180,6 +175,8 @@ const Subscribe = () => {
     Libris(uid, 10)
   }
 }
+
+const ratingFilter = (a: any) => (rating.value === '모두' ? 1 : a.rating === rating.value)
 
 useHead({
   title: '유저 - LCW'
