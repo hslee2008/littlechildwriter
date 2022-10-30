@@ -17,6 +17,11 @@
           <v-list-item-subtitle>{{ item.displayName }}</v-list-item-subtitle>
         </v-list-item-content>
 
+        <v-spacer />
+
+        <v-icon left>mdi-comment-flash</v-icon>
+        {{ Object.keys(item.pro).length + Object.keys(item.con).length }}
+
         <v-card-actions v-if="item.uid == userInfo.uid">
           <v-menu offset-y>
             <template #activator="{ on, attrs }">

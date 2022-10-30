@@ -226,9 +226,7 @@ const bookmark = ref<boolean>(!nuxt.$vuetify.breakpoint.mobile)
 
 onMounted(() => {
   auth.onAuthStateChanged(u => {
-    if (!u) {
-      return
-    }
+    if (!u) return
 
     db.ref(`/users/${u.uid}/notification`).on('child_added', async s =>
       notif.value.push(await s.val())
@@ -244,9 +242,10 @@ onMounted(() => {
     })
   })
 
-  if (localStorage.getItem('dark')) {
-    nuxt.$vuetify.theme.dark = localStorage.getItem('dark') === 'true'
-  }
+  if (localStorage.getItem('dark'))
+    nuxt.$vuetify.theme.dark = !!localStorage.getItem('dark')
+
+  window.addEventListener('appinstalled', () => useEvent('app_installed', {}))
 })
 
 const saveTheme = () => {

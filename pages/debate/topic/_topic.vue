@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>주제: {{ content.topic }}</h1>
-    <div class="d-flex">
+    <v-card class="d-flex transparent" :to="`/user/${content.uid}`">
       <v-avatar class="my-auto">
         <v-img :src="content.photoURL" />
       </v-avatar>
@@ -11,7 +11,7 @@
           {{ new Date(content.time).toLocaleDateString() }}
         </v-card-subtitle>
       </div>
-    </div>
+    </v-card>
 
     <v-divider class="my-10" />
 
@@ -19,7 +19,12 @@
       <v-col :cols="$vuetify.breakpoint.mobile ? 12 : 6">
         <v-card>
           <v-card-title class="d-flex justify-space-between">
-            <span>찬성</span>
+            <span>
+              찬성
+              <span class="grey--text">
+                ({{ Object.keys(content.pro || {}).length }})
+              </span>
+            </span>
             <v-btn text small @click=";(side = 'pro'), (write = true)">
               <v-icon>mdi-plus</v-icon>
               글쓰기
@@ -76,7 +81,12 @@
       <v-col :cols="$vuetify.breakpoint.mobile ? 12 : 6">
         <v-card>
           <v-card-title class="d-flex justify-space-between">
-            <span>반대</span>
+            <span>
+              반대
+              <span class="grey--text">
+                ({{ Object.keys(content.con || {}).length }})
+              </span>
+            </span>
             <v-btn text small @click=";(side = 'con'), (write = true)">
               <v-icon>mdi-plus</v-icon>
               글쓰기
