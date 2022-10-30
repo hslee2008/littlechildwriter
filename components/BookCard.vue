@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/html-indent -->
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-lazy>
@@ -51,8 +52,16 @@
 
             <v-spacer />
 
-            <v-btn v-if="item?.comments?.length" disabled icon color="grey">
-              <v-icon>mdi-comment</v-icon>
+            <v-btn
+              v-if="
+                item?.comments?.length ||
+                Object.keys(item?.comments ?? {}).length
+              "
+              disabled
+              icon
+              color="grey"
+            >
+              <v-icon small>mdi-comment</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>

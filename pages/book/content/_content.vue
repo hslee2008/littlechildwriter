@@ -159,7 +159,9 @@
           </v-btn>
         </template>
 
-        <v-card class="pa-1">
+        <v-card>
+          <v-card-title>학교 도서관 책 검색</v-card-title>
+
           <v-card-text class="d-flex">
             <v-select
               v-model="school.local"
@@ -173,35 +175,44 @@
               :rules="[endWithSchool]"
               class="mx-2"
             />
-            <v-btn text class="ma-auto" @click="schoolBookSearch">
+            <v-btn ref="search" icon class="ma-auto" @click="schoolBookSearch">
               <v-icon>mdi-magnify</v-icon>
             </v-btn>
           </v-card-text>
 
-          <v-list v-if="!school.resultString.endsWith('찾을 수 없습니다.')">
+          <div v-if="schoolLoading" class="text-center mb-4">
+            <v-progress-circular indeterminate color="primary" large />
+          </div>
+          <v-list
+            v-else-if="!school.resultString?.endsWith('찾을 수 없습니다.')"
+            nav
+          >
             <v-list-item
               v-for="item in school.result"
               :key="item.callNumber"
               :style="`
-                border: 1px solid #${item.canRental ? '4caf50' : 'f44336'};
+                border: 2px dashed #${item.canRental ? '4caf50' : 'f44336'};
               `"
             >
-              <img
+              <v-img
                 :src="item.previewImage"
                 alt="학교 도서관"
-                width="100"
+                max-width="100"
                 class="rounded-lg ma-2"
-              />
+              >
+                <v-overlay absolute>
+                  {{ item.canRental ? '대출 가능' : '대출 불가능' }}
+                </v-overlay>
+              </v-img>
 
-              <div>
-                <v-list-item-title class="primary--text">
+              <v-card>
+                <v-card-title class="primary--text">
                   {{ item.title }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
+                </v-card-title>
+                <v-card-subtitle>
                   {{ item.writer }}
-                </v-list-item-subtitle>
-                {{ item.canRental ? '대출 가능' : '대출 불가능' }}
-              </div>
+                </v-card-subtitle>
+              </v-card>
             </v-list-item>
           </v-list>
           <v-card-text v-else>{{ school.resultString }}</v-card-text>
@@ -274,8 +285,8 @@
                   <template #default>
                     <thead>
                       <tr>
-                        <th class="text-left">Categories</th>
-                        <th class="text-left">Information</th>
+                        <th class="text-left">카테고리</th>
+                        <th class="text-left">정보</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -283,7 +294,7 @@
                         <td>ISBN 13</td>
                         <td>{{ post.isbn }}</td>
                       </tr>
-                      <tr>
+                      <tr v-if="otherInfo.volumeInfo.industryIdentifiers">
                         <td>ISBN 10</td>
                         <td>
                           {{
@@ -292,11 +303,11 @@
                           }}
                         </td>
                       </tr>
-                      <tr>
+                      <tr v-if="otherInfo.volumeInfo?.publishedDate">
                         <td>출판된 날짜</td>
                         <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
                       </tr>
-                      <tr>
+                      <tr v-if="otherInfo.volumeInfo.publisher">
                         <td>출판사</td>
                         <td>{{ otherInfo.volumeInfo.publisher }}</td>
                       </tr>
@@ -304,7 +315,7 @@
                         <td>Google Books ID</td>
                         <td>{{ otherInfo.GBid }}</td>
                       </tr>
-                      <tr>
+                      <tr v-if="otherInfo.volumeInfo.averageRating">
                         <td>평균 별점 (구글)</td>
                         <td>{{ otherInfo.volumeInfo.averageRating }}</td>
                       </tr>
@@ -433,18 +444,30 @@ const school = ref({
 })
 const GBid = ref<string>('')
 const loading = ref<boolean>(true)
+const schoolLoading = ref<boolean>(false)
 const sheet = ref<boolean>(false)
 const fab = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
+  localStorage.setItem(
+    'school',
+    JSON.stringify({
+      local: school.value.local,
+      name: school.value.name
+    })
+  )
+  schoolLoading.value = true
+
   await fetch(
-    `http://152.69.227.191:3000/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
+    `https://little-child-writer-school-book-search.onrender.com/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
   )
     .then(res => res.json())
     .then(json => {
       school.value.result = json.result
       school.value.resultString = json.result.toString()
     })
+
+  schoolLoading.value = false
 }
 
 const Content = async () => {
@@ -554,12 +577,6 @@ const Suggestion = async () => {
   loading.value = false
 }
 
-onBeforeMount(async () => {
-  await Content()
-  View()
-  Suggestion()
-})
-
 const Iframe = async () => {
   let fetched = ''
 
@@ -580,6 +597,20 @@ const Del = () => {
 
 const endWithSchool = (v: string) =>
   v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
+
+onBeforeMount(async () => {
+  await Content()
+  View()
+  Suggestion()
+})
+
+onMounted(() => {
+  if (localStorage.getItem('school'))
+    school.value = {
+      ...school.value,
+      ...JSON.parse(localStorage.getItem('school')!)
+    }
+})
 
 useHead({
   title: '컨텐츠 - LCW',
