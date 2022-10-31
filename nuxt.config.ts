@@ -29,12 +29,73 @@ async function getRoutes() {
 
 export default defineNuxtConfig({
   alias: {
-    tslib: 'tslib/tslib.es6.js'
+    tslib: 'tslib/tslib.es6.js',
+    plugins: '@/plugins',
+    assets: '@/assets'
+  },
+
+  app: {
+    baseURL: '/',
+    buildAssetsDir: '/_nuxt/',
+    cdnURL: '',
+    keepalive: true,
+    layoutTransition: false,
+    pageTransition: false,
+    head: {
+      titleTemplate: '%s',
+      title: 'Little 작가',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content:
+            'Learn programming through learning, practicing, and building. Our site includes full courses of python, c, c++, and rust for free in both Korean and English language.'
+        },
+        {
+          name: 'author',
+          content: ['Hyunseung', 'Juha Im', 'Jinwon Kim']
+        },
+        {
+          name: 'copyright',
+          content: 'LCW'
+        },
+        {
+          name: 'subtitle',
+          content: '글을 올리고, 새롭게 배우고, 대화하기'
+        },
+        {
+          name: 'subject',
+          content: '글을 올리고, 새롭게 배우고, 대화하기'
+        },
+        {
+          name: 'language',
+          content: 'ES, KO-KR'
+        }
+      ],
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/favicon.ico'
+        },
+        {
+          rel: 'apple-touch-icon',
+          href: '/favicon.ico'
+        }
+      ],
+      noscript: [
+        {
+          children: 'This website requires JavaScript.'
+        }
+      ]
+    }
   },
 
   build: {
     // analyze: true
   },
+  buildDir: '.nuxt',
+  builder: '@nuxt/vite-builder',
 
   bridge: {
     meta: true
@@ -59,52 +120,8 @@ export default defineNuxtConfig({
     background: '#23262E'
   },
 
-  head: {
-    titleTemplate: '%s | LCW',
-    title: 'Little 작가',
-    meta: [
-      {
-        hid: 'description',
-        name: 'description',
-        content:
-          'Learn programming through learning, practicing, and building. Our site includes full courses of python, c, c++, and rust for free in both Korean and English language.'
-      },
-      {
-        name: 'author',
-        content: ['Hyunseung', 'Juha Im', 'Jinwon Kim']
-      },
-      {
-        name: 'copyright',
-        content: 'LCW'
-      },
-      {
-        name: 'subtitle',
-        content: '글을 올리고, 새롭게 배우고, 대화하기'
-      },
-      {
-        name: 'subject',
-        content: '글을 올리고, 새롭게 배우고, 대화하기'
-      },
-      {
-        name: 'language',
-        content: 'ES, KO-KR'
-      }
-    ],
-    link: [
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico'
-      },
-      {
-        rel: 'apple-touch-icon',
-        href: '/favicon.ico'
-      }
-    ]
-  },
-
-  css: ['@/assets/css/global.css'],
-  plugins: ['@/plugins/firebase', '@/plugins/global', '@/plugins/gtag'],
+  css: ['assets/css/global.css'],
+  plugins: ['plugins/firebase', 'plugins/global', 'plugins/gtag'],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
   modules: ['@nuxtjs/pwa'],
@@ -165,7 +182,7 @@ export default defineNuxtConfig({
   },
 
   vuetify: {
-    customVariables: ['~assets/sass/variables.scss'],
+    customVariables: ['assets/sass/variables.scss'],
     treeShake: true,
     theme: {
       dark: true,
@@ -219,5 +236,9 @@ export default defineNuxtConfig({
 
   googleAnalytics: {
     id: 'G-F7Z7BLCQDQyy'
+  },
+
+  webpack: {
+    optimizeCSS: true
   }
 })

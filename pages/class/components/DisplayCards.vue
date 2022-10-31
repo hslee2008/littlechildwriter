@@ -216,8 +216,8 @@
 </template>
 
 <script setup>
-import Actions from './Actions.vue'
-import { User } from '@/plugins/global'
+import { User } from 'plugins/global';
+import Actions from './Actions.vue';
 const userInfo = User()
 defineProps({
   classInfo: {

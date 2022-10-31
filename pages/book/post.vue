@@ -350,8 +350,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { db } from 'plugins/firebase'
+import { User } from 'plugins/global'
 
 const userInfo = User()
 const post = ref<any>({
@@ -364,6 +364,7 @@ const post = ref<any>({
   content: '',
   uid: '',
   displayName: '',
+  isPublic: true,
   author: '',
   views: 0,
   time: Date.now()

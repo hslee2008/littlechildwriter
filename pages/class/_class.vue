@@ -60,10 +60,10 @@
 </template>
 
 <script setup lang="ts">
-import DisplayCards from './components/DisplayCards.vue'
-import UploadCards from './components/UploadCards.vue'
-import { db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { db } from 'plugins/firebase';
+import { User } from 'plugins/global';
+import DisplayCards from './components/DisplayCards.vue';
+import UploadCards from './components/UploadCards.vue';
 
 const userInfo = User()
 const route = useRoute()

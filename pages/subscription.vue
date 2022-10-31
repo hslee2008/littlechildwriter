@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from '@/plugins/firebase'
+import { auth, db } from 'plugins/firebase'
 
 const subscription = ref<any>()
 const books = ref<any>([])
@@ -40,5 +40,9 @@ onMounted(() => {
 
     setTimeout(() => (loading.value = false), 1000)
   })
+})
+
+useHead({
+  title: '구독 - LCW'
 })
 </script>

@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { db, storage } from '@/plugins/firebase'
+import { db, storage } from 'plugins/firebase';
 
 const route = useRoute()
 const props = defineProps<{

@@ -167,8 +167,8 @@
 </template>
 
 <script setup lang="ts">
-import { db, storage } from '@/plugins/firebase'; import { User } from
-  '@/plugins/global'
+import { db, storage } from 'plugins/firebase';
+import { User } from 'plugins/global';
 
 const userInfo = User()
 const route = useRoute()

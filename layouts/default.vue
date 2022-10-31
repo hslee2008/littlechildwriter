@@ -214,8 +214,8 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { auth, db } from 'plugins/firebase';
+import { User } from 'plugins/global';
 
 const nuxt = useNuxtApp()
 const router = useRouter()

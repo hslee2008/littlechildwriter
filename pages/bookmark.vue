@@ -46,8 +46,8 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from '@/plugins/firebase'
-import { User } from '@/plugins/global'
+import { auth, db } from 'plugins/firebase'
+import { User } from 'plugins/global'
 
 const userInfo = User()
 const items = ref<any>([])
@@ -73,4 +73,8 @@ const deleteBookmark = (time: string, i: number) => {
 const onChange = () => {
   db.ref(`/users/${userInfo.value.uid}/bookmarks`).set(items.value)
 }
+
+useHead({
+  title: '책갈피 - LCW'
+})
 </script>

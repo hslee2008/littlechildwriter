@@ -1,5 +1,5 @@
+import { auth, db } from 'plugins/firebase'
 import Vue from 'vue'
-import { auth, db } from '@/plugins/firebase'
 
 Vue.prototype.navigator = navigator
 
@@ -75,3 +75,4 @@ const formatter = new Intl.NumberFormat('ko-kr', {
 })
 
 export { UserInfo, Book, formatter }
+

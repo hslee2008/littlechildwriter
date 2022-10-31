@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from '@/plugins/firebase'
+import { auth, db } from 'plugins/firebase';
 
 const route = useRoute()
 const router = useRouter()
