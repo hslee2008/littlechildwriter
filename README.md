@@ -5,6 +5,5 @@ Source code for the [Little Child Writer](https://littlechildwriter.web.app) pro
 One of 18 projects to enter KOFAC, South Korea Competition.
 
 ## Other Links
-School Book Search Server: https://github.com/HyunseungLee-Travis/SearchBook-API
 
 To-Do: https://github.com/HyunseungLee-Travis/littlechildwriter/discussions/6
