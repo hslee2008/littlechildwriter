@@ -253,7 +253,7 @@
           label="페이지"
           class="page"
           type="number"
-          :rules="[v => !isNaN(parseFloat(v))]"
+          :rules="[isPageCountValid]"
         />
       </v-row>
 
@@ -366,8 +366,7 @@ const post = ref<any>({
   displayName: '',
   author: '',
   views: 0,
-  time: Date.now(),
-  isPublic: true
+  time: Date.now()
 })
 const isbn = ref<any>({
   barcode: false,
@@ -535,6 +534,7 @@ const uploadImg = (f: File) => {
 }
 
 const Post = () => {
+  const { uid, displayName } = userInfo.value
   const {
     title,
     content,
@@ -548,31 +548,45 @@ const Post = () => {
     author
   } = post.value
 
-  const { uid, displayName } = userInfo.value
-
   if (!title || !content || !pageCount || !author || categories.length === 0) {
     snackbar.value = true
     return
   }
 
-  db.ref(`/contents/${time}`).set({
-    title,
-    rating,
-    isbn,
-    time,
-    image,
-    pageCount,
-    categories,
-    isPublic,
-    likes: 1,
-    liked: {
-      [userInfo.value.uid]: true
-    },
-    views: 0,
-    uid,
-    displayName,
-    content: content.replaceAll('\n', '<br>')
-  })
+  if (isPublic)
+    db.ref(`/contents/${time}`).set({
+      title,
+      rating,
+      isbn,
+      time,
+      image,
+      pageCount,
+      categories,
+      likes: 1,
+      liked: {
+        [userInfo.value.uid]: true
+      },
+      views: 0,
+      uid,
+      displayName,
+      content: content.replaceAll('\n', '<br>')
+    })
+  else
+    db.ref(`/private/${uid}/${time}`).set({
+      title,
+      rating,
+      isbn,
+      time,
+      image,
+      pageCount,
+      categories,
+      likes: 0,
+      liked: {},
+      views: 0,
+      uid,
+      displayName,
+      content: content.replaceAll('\n', '<br>')
+    })
 
   Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 100)
   router.push(`/book/content/${time}`)
@@ -601,6 +615,10 @@ const saveAudio = () => {
   post.value.content += typed.value
   typed.value = ''
 }
+
+const isPageCountValid = (v: any) =>
+  (!isNaN(parseFloat(v)) && isFinite(v) && v > 0 && v < 10000 && v % 1 === 0) ||
+  '옳바른 숫자를 넣어 주세요'
 
 useHead({
   title: '포스트 - LCW'

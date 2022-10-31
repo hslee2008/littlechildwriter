@@ -212,6 +212,11 @@
                 <v-card-subtitle>
                   {{ item.writer }}
                 </v-card-subtitle>
+
+                <v-card-text class="mt-2 white--text">
+                  청구 기호: {{ item.callNumber }}<br />
+                  회사: {{ item.company }}
+                </v-card-text>
               </v-card>
             </v-list-item>
           </v-list>

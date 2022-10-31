@@ -70,7 +70,7 @@
       <v-card-title>비공개 글</v-card-title>
       <v-divider />
       <br />
-      <LazyBookCard :items="project" :simple="true" :showprivate="true" />
+      <LazyBookCard :items="project" :simple="true" />
     </div>
 
     <v-row justify="center" class="g-10">

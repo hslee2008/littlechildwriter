@@ -5,7 +5,6 @@
     <v-row class="row">
       <v-card
         v-for="(item, i) in items"
-        v-if="showprivate ? !item.isPublic : item.isPublic"
         :key="i"
         :width="$vuetify.breakpoint.mobile ? 150 : 200"
         class="mx-auto my-5 transparent"
@@ -110,10 +109,6 @@ const props = defineProps({
     required: true
   },
   simple: {
-    type: Boolean,
-    default: false
-  },
-  showprivate: {
     type: Boolean,
     default: false
   }

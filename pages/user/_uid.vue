@@ -96,7 +96,7 @@
         </v-tab-item>
 
         <v-tab-item>
-          <LazyBookCard :items="books" :simple="true" :showprivate="true" />
+          <LazyBookCard :items="books" :simple="true" />
         </v-tab-item>
       </v-tabs-items>
     </v-tabs>
@@ -121,6 +121,7 @@ const targetUser = ref<any>({
   bio: ''
 })
 const books = ref<any>([])
+const privateBooks = ref<any>([])
 const subscription = ref<any>({})
 const subscribed = ref<boolean>(false)
 const subCount = ref<number>(0)
@@ -146,6 +147,13 @@ onBeforeMount(() => {
       subCount.value = Object.keys(subscriber).length
       subscribed.value = Object.keys(subscriber).includes(userInfo.value.uid)
     })
+
+  if (userInfo.value.uid === uid) {
+    db.ref(`/private/${uid}/`).on('child_added', async s => {
+      const data = await s.val()
+      privateBooks.value.unshift(data)
+    })
+  }
 })
 
 const Subscribe = () => {
@@ -176,7 +184,8 @@ const Subscribe = () => {
   }
 }
 
-const ratingFilter = (a: any) => (rating.value === '모두' ? 1 : a.rating === rating.value)
+const ratingFilter = (a: any) =>
+  rating.value === '모두' ? 1 : a.rating === rating.value
 
 useHead({
   title: '유저 - LCW'
