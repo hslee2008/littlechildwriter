@@ -50,6 +50,8 @@ const upload = () => {
     displayName
   })
 
+  Libris(uid, 10)
+
   router.push(`/debate/topic/${time}`)
 }
 </script>

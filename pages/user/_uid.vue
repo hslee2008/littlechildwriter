@@ -9,7 +9,7 @@
         <div>
           <v-card-title>{{ targetUser.displayName }}</v-card-title>
           <v-card-subtitle class="grey--text">
-            구독자 {{ formatter.format(subCount) }}명
+            구독자 {{ formatter(subCount) }}명
           </v-card-subtitle>
         </div>
       </div>
@@ -96,18 +96,19 @@
         </v-tab-item>
 
         <v-tab-item>
-          <LazyBookCard :items="books" :simple="true" />
+          <LazyBookCard v-if="privateBooks" :items="privateBooks" :simple="true" />
+          <v-card v-else>
+            <v-card-text>비공개 글이 없습니다.</v-card-text>
+          </v-card>
         </v-tab-item>
       </v-tabs-items>
     </v-tabs>
-
-    <br /><br />
   </div>
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase';
-import { formatter, User } from 'plugins/global';
+import { db } from 'plugins/firebase'
+import { formatter, User } from 'plugins/global'
 
 const userInfo = User()
 const route = useRoute()
@@ -144,8 +145,10 @@ onBeforeMount(() => {
       }
 
       subscription.value = subscriber ?? []
-      subCount.value = Object.keys(subscriber).length
-      subscribed.value = Object.keys(subscriber).includes(userInfo.value.uid)
+      subCount.value = Object.keys(subscriber ?? {}).length
+      subscribed.value = Object.keys(subscriber ?? {}).includes(
+        userInfo.value.uid
+      )
     })
 
   if (userInfo.value.uid === uid) {

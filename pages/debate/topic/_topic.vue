@@ -2,7 +2,7 @@
   <div>
     <h1>주제: {{ content.topic }}</h1>
     <v-card class="d-flex transparent" :to="`/user/${content.uid}`">
-      <v-avatar class="my-auto">
+      <v-avatar class="my-auto ml-2">
         <UserPhoto :src="content.photoURL" />
       </v-avatar>
       <div>
@@ -22,7 +22,7 @@
             <span>
               찬성
               <span class="grey--text">
-                ({{ Object.keys(content.pro || {}).length }})
+                ({{ Object.keys(content.pro ?? {}).length }})
               </span>
             </span>
             <v-btn text small @click=";(side = 'pro'), (write = true)">
@@ -84,7 +84,7 @@
             <span>
               반대
               <span class="grey--text">
-                ({{ Object.keys(content.con || {}).length }})
+                ({{ Object.keys(content.con ?? {}).length }})
               </span>
             </span>
             <v-btn text small @click=";(side = 'con'), (write = true)">
@@ -272,8 +272,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase';
-import { User } from 'plugins/global';
+import { db } from 'plugins/firebase'
+import { User } from 'plugins/global'
 
 const userInfo = User()
 const route = useRoute()

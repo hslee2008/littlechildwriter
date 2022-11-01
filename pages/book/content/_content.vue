@@ -181,7 +181,7 @@
             <v-chip-group class="my-5" column>
               <v-chip label>
                 <v-icon left> mdi-eye </v-icon>
-                {{ formatter.format(post.views + 1) }}
+                {{ formatter(post.views + 1) }}
               </v-chip>
               <v-chip label>
                 <v-icon left>mdi-sort-clock-descending-outline</v-icon>

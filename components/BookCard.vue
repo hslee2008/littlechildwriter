@@ -26,7 +26,7 @@
 
           <v-card-text>
             <span class="text--disabled">
-              {{ formatter.format(item.views) }} views ·
+              {{ formatter(item.views) }} views ·
               {{ new Date(parseInt(item.time)).toLocaleDateString() }}
             </span>
           </v-card-text>
@@ -41,7 +41,7 @@
             </v-btn>
             <v-btn
               icon
-              :color="(item?.liked || {})[userInfo.uid] ? 'primary' : 'grey'"
+              :color="(item?.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
               class="mr-2"
               @click="Like(item)"
             >

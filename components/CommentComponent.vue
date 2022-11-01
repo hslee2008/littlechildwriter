@@ -145,8 +145,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase';
-import { Notify, User } from 'plugins/global';
+import { db } from 'plugins/firebase'
+import { Notify, User } from 'plugins/global'
 
 const Perspective = require('perspective-api-client')
 const perspective = new Perspective({

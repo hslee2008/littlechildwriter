@@ -72,7 +72,6 @@ const onSubmit = () =>
   firebase
     .auth()
     .signInWithEmailAndPassword(email.value, password.value)
-    .then(() => useEvent('account_login', {}))
     .then(() => router.push)
 
 onMounted(() => ui.start('#firebaseui-auth-container', uiConfig))

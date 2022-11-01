@@ -12,7 +12,8 @@
         <v-combobox
           v-if="classInfo.uid === userInfo.uid"
           v-model="post.category"
-          :items="Object.keys(classInfo.contents || {})"
+:items="Object.keys(classInfo.contents ?? {})"
+
           label="Search"
           outlined
           hide-selected
@@ -22,7 +23,8 @@
         <v-select
           v-else
           v-model="post.category"
-          :items="Object.keys(classInfo.contents || {})"
+:items="Object.keys(classInfo.contents ?? {})"
+
           label="종류 선택"
           outlined
         />

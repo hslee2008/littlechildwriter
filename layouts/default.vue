@@ -248,8 +248,6 @@ onMounted(() => {
 
   if (localStorage.getItem('dark'))
     nuxt.$vuetify.theme.dark = !!localStorage.getItem('dark')
-
-  window.addEventListener('appinstalled', () => useEvent('app_installed', {}))
 })
 
 const saveTheme = () => {

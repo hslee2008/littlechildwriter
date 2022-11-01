@@ -20,7 +20,10 @@
         <v-spacer />
 
         <v-icon left>mdi-comment-flash</v-icon>
-        {{ Object.keys(item.pro).length + Object.keys(item.con).length }}
+        {{
+          Object.keys(item.pro ?? {}).length +
+          Object.keys(item.con ?? {}).length
+        }}
 
         <v-card-actions v-if="item.uid == userInfo.uid">
           <v-menu offset-y>
@@ -60,11 +63,11 @@ import { User } from 'plugins/global'
 const userInfo = User()
 const list = ref<any>([])
 
-onMounted(() => {
-  db.ref('/debate').on('child_added', async s => {
-    list.value.unshift(await s.val())
-  })
-})
+onMounted(() =>
+  db
+    .ref('/debate')
+    .on('child_added', async s => list.value.unshift(await s.val()))
+)
 
 const DeleteContent = (i: number) => {
   db.ref(`/debate/${list.value[i].time}`).remove()

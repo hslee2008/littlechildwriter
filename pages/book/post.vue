@@ -272,7 +272,7 @@
       />
 
       <v-combobox
-        v-model="chips"
+        v-model="post.categories"
         :items="post.categories"
         chips
         clearable
@@ -359,7 +359,7 @@ const post = ref<any>({
   title: '',
   image: '',
   pageCount: '',
-  categories: [] as string[],
+  categories: ['Juvenile Fiction / General'] as string[],
   rating: 5,
   content: '',
   uid: '',
@@ -386,10 +386,9 @@ const typed = ref<string>('')
 const video = ref<any>(null)
 const isbnImageElement = ref<any>(null)
 const snackbar = ref<boolean>(false)
-const chips = ref<string[]>([])
 
 const remove = (item: string) => {
-  chips.value.splice(chips.value.indexOf(item), 1)
+  post.value.categories.splice(post.value.categories.indexOf(item), 1)
 }
 
 const FetchBook = (bookISBN: string) => {
@@ -501,7 +500,7 @@ const fetchi = () => {
           author,
           categories
         }
-        chips.value = categories
+        post.value.categories = categories
       } else {
         const { title, authors: author, pageCount } = res.items[0].volumeInfo
 
@@ -549,7 +548,7 @@ const Post = () => {
     author
   } = post.value
 
-  if (!title || !content || !pageCount || !author || categories.length === 0) {
+  if (!title || !content || !pageCount || !author || categories?.length === 0) {
     snackbar.value = true
     return
   }
