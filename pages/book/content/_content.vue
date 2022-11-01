@@ -25,7 +25,7 @@
     <v-card class="my-3 transparent">
       <div class="cardy">
         <div class="ma-auto">
-          <v-bottom-sheet v-model="sheet" inset>
+          <v-bottom-sheet v-model="sheet" inset scrollable>
             <template #activator="{ on, attrs }">
               <v-img
                 :src="post.image"
@@ -58,10 +58,10 @@
                 }`"
               >
                 <v-list-item-avatar>
-                  <v-avatar size="32px">
+                  <v-avatar size="40">
                     <img
                       src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
-                      alt="알라딘"
+                      alt="aladdin"
                     />
                   </v-avatar>
                 </v-list-item-avatar>
@@ -75,14 +75,14 @@
                 }&domain=all`"
               >
                 <v-list-item-avatar>
-                  <v-avatar size="32px">
+                  <v-avatar size="40">
                     <img
-                      src="https://play-lh.googleusercontent.com/ujk5bP2q6hYKSOnPrCRgJx4gW-oLdvFB3EfXQs6jdn11LOVRcPljdBqrgNBTxkFNRxY7"
+                      src="https://image.yes24.com/sysimage/renew/gnb/yes24.ico"
                       alt="yes24"
                     />
                   </v-avatar>
                 </v-list-item-avatar>
-                <v-list-item-title>yes24</v-list-item-title>
+                <v-list-item-title>YES24</v-list-item-title>
               </v-list-item>
 
               <v-list-item
@@ -92,14 +92,61 @@
                 }&i=stripbooks&linkCode=qs`"
               >
                 <v-list-item-avatar>
-                  <v-avatar size="32px">
+                  <v-avatar size="40">
                     <img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
-                      alt="yes24"
+                      alt="amazon"
                     />
                   </v-avatar>
                 </v-list-item-avatar>
                 <v-list-item-title>아마존</v-list-item-title>
+              </v-list-item>
+
+              <v-list-item
+                target="_blank"
+                :href="`https://search.kyobobook.co.kr/search?keyword=${
+                  post.isbn || post.title
+                }&collection=kyobo_new`"
+              >
+                <v-list-item-avatar>
+                  <v-avatar size="40">
+                    <img
+                      src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/favicon/apple-touch-icon-144x144-precomposed.png"
+                      alt="kyobo"
+                    />
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-title>교보문고</v-list-item-title>
+              </v-list-item>
+
+              <v-list-item
+                target="_blank"
+                :href="`https://books.google.co.kr/books?id=${otherInfo?.id}`"
+              >
+                <v-list-item-avatar>
+                  <v-avatar size="40">
+                    <img
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjzC2JyZDZ_RaWf0qp11K0lcvB6b6kYNMoqtZAQ9hiPZ4cTIOB"
+                      alt="google"
+                    />
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-title>구글</v-list-item-title>
+              </v-list-item>
+
+              <v-list-item
+                target="_blank"
+                :href="`https://play.google.com/store/books/details?id=${otherInfo?.id}`"
+              >
+                <v-list-item-avatar>
+                  <v-avatar size="40">
+                    <img
+                      src="https://www.gstatic.com/android/market_images/web/favicon_v3.ico"
+                      alt="yes24"
+                    />
+                  </v-avatar>
+                </v-list-item-avatar>
+                <v-list-item-title>플레이 스토어</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-bottom-sheet>
@@ -392,8 +439,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase';
-import { formatter, User } from 'plugins/global';
+import { db } from 'plugins/firebase'
+import { formatter, User } from 'plugins/global'
 
 const userInfo = User()
 const router = useRouter()

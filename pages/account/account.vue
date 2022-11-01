@@ -1,56 +1,22 @@
 <template>
-  <v-form v-model="valid" class="my-10">
-    <v-card class="mb-10 transparent">
-      <v-card-title>기본 설정</v-card-title>
-
-      <v-card-text>
-        <div class="d-flex">
-          <v-text-field
-            v-model="userInfo.displayName"
-            placeholder="Name"
-            validate-on-blur
-            prepend-inner-icon="mdi-account"
-            class="mr-2"
-          />
-          <v-text-field
-            v-model="userInfo.email"
-            placeholder="Email"
-            validate-on-blur
-            prepend-inner-icon="mdi-email"
-            class="ml-2"
-          />
-        </div>
-
-        UID: {{ userInfo.uid }}
-      </v-card-text>
-
-      <v-card-actions class="ml-2">
-        <v-btn outlined color="primary" class="mr-2" @click="resetPassword">
-          <v-icon left>mdi-key</v-icon> 암호 재설정
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-
-    <v-card class="mb-10 transparent">
+  <v-form class="my-10">
+    <v-card id="profile" class="mb-10 transparent">
       <v-card-title>프로필 설정</v-card-title>
 
-      <v-card-text>
+      <div class="d-flex ml-5">
         <v-avatar size="100">
           <UserPhoto :src="userInfo.photoURL" />
         </v-avatar>
-        <v-text-field
-          v-model="userInfo.photoURL"
-          label="URL"
-          placeholder="URL"
-          filled
-          required
-          flat
-          dense
-          solo
-          validate-on-blur
-          prepend-inner-icon="mdi-camera"
-        />
+        <div>
+          <v-card-title>{{ userInfo.displayName }}</v-card-title>
+          <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
+          <v-btn text color="primary" @click="imageEdit = true">
+            이미지 편집
+          </v-btn>
+        </div>
+      </div>
 
+      <v-card-text>
         <v-textarea
           v-model="userDB.bio"
           auto-grow
@@ -58,10 +24,9 @@
           flat
           dense
           solo
-          validate-on-blur
           label="Bio"
           placeholder="나의 소개"
-          no-resize
+          class="ma-1"
         />
       </v-card-text>
     </v-card>
@@ -73,6 +38,59 @@
       <LazyBookCard :items="project" :simple="true" />
     </div>
 
+    <v-card id="advanced" class="mb-10 transparent">
+      <v-card-title>고급 설정</v-card-title>
+
+      <v-card-text>
+        <v-text-field
+          v-model="userInfo.uid"
+          label="UID"
+          placeholder="UID"
+          filled
+          required
+          flat
+          dense
+          solo
+          disabled
+          prepend-inner-icon="mdi-account"
+        />
+      </v-card-text>
+    </v-card>
+
+    <v-dialog v-model="imageEdit" width="500">
+      <v-card>
+        <v-card-title> 이미지 편집 </v-card-title>
+
+        <v-card-text>
+          <div class="text-center mb-3">
+            <v-avatar size="100">
+              <v-img :src="userInfo.photoURL" />
+            </v-avatar>
+          </div>
+
+          <v-text-field
+            v-model="userInfo.photoURL"
+            label="URL"
+            placeholder="URL"
+            filled
+            required
+            flat
+            dense
+            solo
+            prepend-inner-icon="mdi-camera"
+          />
+        </v-card-text>
+
+        <v-divider />
+
+        <v-card-actions>
+          <v-btn color="red" text @click="imageEdit = false"> 취소 </v-btn>
+          <v-spacer />
+          <v-btn color="primary" text @click="save"> Save </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-row justify="center" class="g-10">
       <v-btn color="primary" @click="Update">
         <v-icon left> mdi-account </v-icon>
@@ -83,14 +101,14 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from 'plugins/firebase';
-import { User } from 'plugins/global';
+import { auth, db } from 'plugins/firebase'
+import { User } from 'plugins/global'
 
 const userInfo = User()
 const router = useRouter()
-const valid = ref<boolean>(true)
 const project = ref<any>([])
 const userDB = ref<any>({ bio: '' })
+const imageEdit = ref<boolean>(false)
 
 onBeforeMount(() =>
   auth.onAuthStateChanged(() =>
@@ -113,18 +131,13 @@ onMounted(() =>
 )
 
 const Update = async () => {
-  const { displayName, photoURL, uid, email } = userInfo.value
+  const { displayName, uid, email } = userInfo.value
   const { bio } = userDB.value
 
   await auth.currentUser?.updateEmail(email)
-  await auth.currentUser?.updateProfile({
-    displayName,
-    photoURL
-  })
 
   db.ref(`/users/${uid}`).update({
     displayName,
-    photoURL,
     bio
   })
 
@@ -132,9 +145,13 @@ const Update = async () => {
   useEvent('account_update', {})
 }
 
-const resetPassword = async () => {
-  const { email } = userInfo.value
-  await auth.sendPasswordResetEmail(email)
+const save = () => {
+  const { photoURL } = userInfo.value
+
+  auth.currentUser?.updateProfile({ photoURL })
+  db.ref(`/users/${userInfo.value.uid}`).update({ photoURL })
+
+  imageEdit.value = false
 }
 
 useHead({

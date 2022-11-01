@@ -41,13 +41,13 @@
             </v-btn>
             <v-btn
               icon
-              :color="item.liked[userInfo.uid] ? 'primary' : 'grey'"
+              :color="(item?.liked || {})[userInfo.uid] ? 'primary' : 'grey'"
               class="mr-2"
               @click="Like(item)"
             >
               <v-icon> mdi-thumb-up </v-icon>
             </v-btn>
-            <span class="subheading" v-text="item.likes" />
+            <span class="subheading" v-text="item?.likes" />
 
             <v-spacer />
 
@@ -99,8 +99,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase';
-import { formatter, User } from 'plugins/global';
+import { db } from 'plugins/firebase'
+import { formatter, User } from 'plugins/global'
 
 const userInfo = User()
 const props = defineProps({
