@@ -133,21 +133,6 @@
                 </v-list-item-avatar>
                 <v-list-item-title>구글</v-list-item-title>
               </v-list-item>
-
-              <v-list-item
-                target="_blank"
-                :href="`https://play.google.com/store/books/details?id=${otherInfo?.id}`"
-              >
-                <v-list-item-avatar>
-                  <v-avatar size="40">
-                    <img
-                      src="https://www.gstatic.com/android/market_images/web/favicon_v3.ico"
-                      alt="yes24"
-                    />
-                  </v-avatar>
-                </v-list-item-avatar>
-                <v-list-item-title>플레이 스토어</v-list-item-title>
-              </v-list-item>
             </v-list>
           </v-bottom-sheet>
         </div>
@@ -209,26 +194,34 @@
         <v-card>
           <v-card-title>학교 도서관 책 검색</v-card-title>
 
-          <v-card-text class="d-flex">
-            <v-select
-              v-model="school.local"
-              :items="school.list"
-              label="지역 선택"
-              class="mr-2"
-            />
-            <v-text-field
-              v-model="school.name"
-              label="학교 이름"
-              :rules="[endWithSchool]"
-              class="mx-2"
-            />
-            <v-btn ref="search" icon class="ma-auto" @click="schoolBookSearch">
-              <v-icon>mdi-magnify</v-icon>
-            </v-btn>
+          <v-card-text>
+            <div class="d-flex">
+              <v-select
+                v-model="school.local"
+                :items="school.list"
+                label="지역 선택"
+                class="mr-2"
+              />
+              <v-text-field
+                v-model="school.name"
+                label="학교 이름"
+                :rules="[endWithSchool]"
+                class="mx-2"
+              />
+              <v-btn
+                ref="search"
+                icon
+                class="ma-auto"
+                @click="schoolBookSearch"
+              >
+                <v-icon>mdi-magnify</v-icon>
+              </v-btn>
+            </div>
+            <v-text-field v-model="school.title" label="책 제목" />
           </v-card-text>
 
-          <div v-if="schoolLoading" class="text-center mb-4">
-            <v-progress-circular indeterminate color="primary" large />
+          <div v-if="schoolLoading" class="text-center">
+            <v-progress-circular indeterminate color="primary" />
           </div>
           <v-list
             v-else-if="!school.resultString?.endsWith('찾을 수 없습니다.')"
@@ -492,7 +485,8 @@ const school = ref({
   result: [] as any,
   resultString: '',
   local: '',
-  name: ''
+  name: '',
+  title: ''
 })
 const GBid = ref<string>('')
 const loading = ref<boolean>(true)
@@ -511,7 +505,7 @@ const schoolBookSearch = async () => {
   schoolLoading.value = true
 
   await fetch(
-    `https://little-child-writer-school-book-search.onrender.com/?book=${post.value.title}&school=${school.value.name}&local=${school.value.local}`
+    `https://little-child-writer-school-book-search.onrender.com/?book=${school.value.title}&school=${school.value.name}&local=${school.value.local}`
   )
     .then(res => res.json())
     .then(json => {
@@ -537,6 +531,8 @@ const Content = async () => {
       .then(res => res.json())
       .then(res => (otherInfo.value = res.items[0]))
   }
+
+  school.value.title = post.value.title
 }
 
 const share = async () => {

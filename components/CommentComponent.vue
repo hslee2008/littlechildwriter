@@ -25,10 +25,10 @@
         <v-card
           rounded
           width="100%"
-          class="d-flex mr-5"
+          class="d-flex mr-5 rounded-lg"
           :color="message.badWord ? 'red' : '#23262E'"
         >
-          <NLink :to="`/user/${message.uid}`" class="ma-auto">
+          <NLink :to="`/user/${message.uid}`" class="ma-auto ml-2">
             <v-avatar size="40" :color="message.badWord ? 'red' : '#23262E'">
               <UserPhoto :src="message.photoURL" />
             </v-avatar>
@@ -36,7 +36,11 @@
 
           <div v-if="!message.edit">
             <v-card-title>{{ message.displayName }}</v-card-title>
-            <v-card-subtitle>
+            <v-card-subtitle
+              :class="`${
+                message.badWord ? 'text-decoration-line-through grey--text' : ''
+              }`"
+            >
               {{ message.content }}
             </v-card-subtitle>
           </div>
@@ -117,7 +121,7 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-            <template v-if="message.badWord">
+            <div v-if="message.badWord" class="mr-2">
               <v-tooltip bottom>
                 <template #activator="{ on, attrs }">
                   <v-icon v-bind="attrs" v-on="on"> mdi-alert </v-icon>
@@ -127,7 +131,7 @@
                   {{ Math.round(message.score * 1000) / 10 }}%
                 </span>
               </v-tooltip>
-            </template>
+            </div>
           </v-card-actions>
         </v-card>
       </v-list-item>
@@ -141,6 +145,22 @@
         <v-card-text>댓글이 없습니다.</v-card-text>
       </v-card>
     </div>
+
+    <v-snackbar v-model="snackbarBadWord">
+      AI가 긴장감을 {{ Math.round(toxcity * 1000) / 10 }}% 감지했습니다. 댓글을
+      수정해주세요.
+
+      <template #action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbarBadWord = false"
+        >
+          닫기
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -183,6 +203,8 @@ const props = defineProps({
 const comment = ref<string>('')
 const updatedcomment = ref<string>('')
 const comments = ref<any>([])
+const snackbarBadWord = ref(false)
+const toxcity = ref(0)
 
 onBeforeMount(() =>
   db
@@ -236,16 +258,30 @@ const Love = (i: number) => {
 }
 
 const Comment = async () => {
-  const result = await perspective.analyze(comment.value, {
-    attributes: ['TOXICITY']
-  })
-  const score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
-  const mostProbable = Object.keys(result.attributeScores).reduce((a, b) =>
-    result.attributeScores[a].summaryScore.value >
-    result.attributeScores[b].summaryScore.value
-      ? a
-      : b
-  )
+  let result: any = {}
+  let score: number = 0
+  let mostProbable: string = ''
+
+  try {
+    result = await perspective.analyze(comment.value, {
+      attributes: ['TOXICITY']
+    })
+    score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
+    mostProbable = Object.keys(result.attributeScores).reduce((a, b) =>
+      result.attributeScores[a].summaryScore.value >
+      result.attributeScores[b].summaryScore.value
+        ? a
+        : b
+    )
+  } catch (e) {
+    console.log(e)
+  }
+
+  if (score > 0.6) {
+    snackbarBadWord.value = true
+    toxcity.value = score
+    return
+  }
 
   if (comment.value.length > 0) {
     const { displayName, photoURL, uid } = userInfo.value
@@ -282,6 +318,7 @@ const Comment = async () => {
       }
     )
 
+    Notify(props.uid, userInfo.value.photoURL, content, props.link)
     Libris(userInfo.value.uid, 0.1)
 
     props.cb()
