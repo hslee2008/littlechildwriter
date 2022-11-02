@@ -22,7 +22,7 @@ async function getRoutes() {
   for (const r in classes) routes.push(`/class/${r}`)
   for (const r in teams) routes.push(`/team/about/${r}`)
   for (const r in users) routes.push(`/user/${r}`)
-  for (const r in debate) routes.push(`/debate/${r}`)
+  for (const r in debate) routes.push(`/debate/topic/${r}`)
 
   return routes
 }

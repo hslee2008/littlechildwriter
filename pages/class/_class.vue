@@ -60,10 +60,10 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase';
-import { User } from 'plugins/global';
-import DisplayCards from './components/DisplayCards.vue';
-import UploadCards from './components/UploadCards.vue';
+import { db } from 'plugins/firebase'
+import { User } from 'plugins/global'
+import DisplayCards from './components/DisplayCards.vue'
+import UploadCards from './components/UploadCards.vue'
 
 const userInfo = User()
 const route = useRoute()
@@ -103,7 +103,7 @@ const Update = () => {
 
 const DeleteClass = () => {
   db.ref('classes').child(id).remove()
-  router.push('/classes')
+  router.push('/class/classes')
 }
 
 useHead({

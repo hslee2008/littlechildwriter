@@ -31,13 +31,6 @@
       </v-card-text>
     </v-card>
 
-    <div v-if="project.length > 0">
-      <v-card-title>비공개 글</v-card-title>
-      <v-divider />
-      <br />
-      <LazyBookCard :items="project" :simple="true" />
-    </div>
-
     <v-card id="advanced" class="mb-10 transparent">
       <v-card-title>고급 설정</v-card-title>
 
@@ -106,21 +99,8 @@ import { User } from 'plugins/global'
 
 const userInfo = User()
 const router = useRouter()
-const project = ref<any>([])
 const userDB = ref<any>({ bio: '' })
 const imageEdit = ref<boolean>(false)
-
-onBeforeMount(() =>
-  auth.onAuthStateChanged(() =>
-    db
-      .ref('/contents/')
-      .on(
-        'child_added',
-        async (s: any) =>
-          s.uid === userInfo.value.uid && project.value.unshift(await s.val())
-      )
-  )
-)
 
 onMounted(() =>
   auth.onAuthStateChanged(() => {
