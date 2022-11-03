@@ -12,7 +12,8 @@
             v-if="post.image"
             ref="isbnImageElement"
             :src="post.image"
-            class="rounded-lg"
+            class="rounded-lg mb-2"
+            max-width="150"
           />
 
           <v-tabs>
@@ -334,7 +335,23 @@
         :src="post.image"
         class="rounded-lg"
         max-width="200"
-      />
+      >
+        <v-overlay
+          v-if="
+            post.image ===
+            'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif'
+          "
+          absolute
+        >
+          <v-btn @click="isbn.upload = true">
+            <v-icon class="ma-auto" left>
+              mdi-book-open-page-variant
+            </v-icon>
+
+            책 사진 올리기
+          </v-btn>
+        </v-overlay>
+      </v-img>
     </div>
 
     <v-snackbar v-model="snackbar">
