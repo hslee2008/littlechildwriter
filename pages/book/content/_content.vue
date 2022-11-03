@@ -2,22 +2,22 @@
 <template>
   <div>
     <iframe
-      v-if="GBid"
+      v-if="iframe"
       frameborder="0"
       scrolling="no"
       class="zmax frame"
-      :src="`https://books.google.co.kr/books?id=${GBid}&lpg=PP1&pg=PP1&output=embed`"
+      :src="`https://books.google.co.kr/books?id=${otherInfo.id}&lpg=PP1&pg=PP1&output=embed`"
       width="100%"
       height="100%"
     />
     <v-btn
-      v-if="GBid"
+      v-if="iframe"
       bottom
       right
       fixed
       color="primary"
       class="zmax"
-      @click="GBid = ''"
+      @click="iframe = false"
     >
       닫기
     </v-btn>
@@ -176,6 +176,14 @@
                 <v-icon left>mdi-book</v-icon>
                 {{ post.pageCount }}
               </v-chip>
+              <v-chip
+                label
+                :color="(post?.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
+                @click="Like()"
+              >
+                <v-icon left> mdi-thumb-up </v-icon>
+                <span class="subheading" v-text="post?.likes" />
+              </v-chip>
             </v-chip-group>
           </v-card-text>
         </div>
@@ -275,7 +283,7 @@
         </template>
 
         <v-card>
-          <v-btn text @click="Iframe">
+          <v-btn text @click="iframe = true">
             <v-icon left> mdi-file-find </v-icon> 미리보기
           </v-btn>
           <v-dialog
@@ -458,8 +466,7 @@ const otherInfo = ref<any>({
     publisher: '',
     publishedDate: '',
     averageRating: 0
-  },
-  GBid: ''
+  }
 })
 const suggested = ref<any>([])
 const school = ref({
@@ -488,7 +495,7 @@ const school = ref({
   name: '',
   title: ''
 })
-const GBid = ref<string>('')
+const iframe = ref<boolean>(false)
 const loading = ref<boolean>(true)
 const schoolLoading = ref<boolean>(false)
 const sheet = ref<boolean>(false)
@@ -567,13 +574,13 @@ const Suggestion = async () => {
   cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
 
   let done = false
-  let n = 5
+  let n = 15
   let overflow = 0
 
   while (!done) {
     overflow++
 
-    if (overflow > 10) {
+    if (overflow > 5) {
       done = true
       break
     }
@@ -587,9 +594,8 @@ const Suggestion = async () => {
       .then(data => {
         const length = data.items.length
 
-        if (length > 4) {
-          done = true
-        } else {
+        if (length >= n) done = true
+        else {
           cat.shift()
           n -= length
         }
@@ -613,34 +619,53 @@ const Suggestion = async () => {
               title
             })
 
-            if (i === 4) {
-              break
-            }
+            if (i === n) break
           }
         }
       })
       .catch(() => cat.shift())
   }
 
+  suggested.value = [...suggested.value]
+    .sort(() => 0.5 - Math.random())
+    .slice(0, 5)
+
   loading.value = false
-}
-
-const Iframe = async () => {
-  let fetched = ''
-
-  await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=isbn:${post.value.isbn}`
-  )
-    .then(res => res.json())
-    .then(res => (fetched = res.items[0].id))
-
-  GBid.value = fetched
 }
 
 const Del = () => {
   db.ref(`contents/${time}`).remove()
   Libris(userInfo.value.uid, -(parseInt(post.value.pageCount) / 100))
   router.push('/list')
+}
+
+const Like = () => {
+  if (post.value.liked[userInfo.value.uid]) {
+    post.value.likes--
+    post.value.liked[userInfo.value.uid] = false
+
+    db.ref(`/contents/${post.value.time}/liked/${userInfo.value.uid}`).set(
+      false
+    )
+    db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
+
+    Libris(userInfo.value.uid, -0.1)
+    Libris(post.value.uid, -0.1)
+  } else {
+    post.value.likes++
+
+    try {
+      post.value.liked[userInfo.value.uid] = true
+    } catch (e) {
+      console.log(e)
+    }
+
+    db.ref(`/contents/${post.value.time}/liked/${userInfo.value.uid}`).set(true)
+    db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
+
+    Libris(userInfo.value.uid, 0.1)
+    Libris(post.value.uid, 0.1)
+  }
 }
 
 const endWithSchool = (v: string) =>
@@ -661,13 +686,7 @@ onMounted(() => {
 })
 
 useHead({
-  title: '컨텐츠 - LCW',
-  meta: [
-    {
-      'http-equiv': 'Content-Security-Policy',
-      content: 'upgrade-insecure-requests'
-    }
-  ]
+  title: '컨텐츠 - LCW'
 })
 </script>
 
