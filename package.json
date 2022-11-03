@@ -9,7 +9,8 @@
     "analyze": "nuxi build --modern=server --analyze",
     "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn generate",
     "lint": "eslint --ext .ts,.js,.vue .",
-    "lint:fix": "eslint --ext .ts,.js,.vue . --fix"
+    "lint:fix": "eslint --ext .ts,.js,.vue . --fix",
+    "api": "node ./api/index.js"
   },
   "dependencies": {
     "@vueuse/head": "^0.9.8",

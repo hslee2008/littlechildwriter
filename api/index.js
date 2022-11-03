@@ -38,7 +38,11 @@ let cookie = ''
 const NO_IMAGE =
   'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif'
 
-const isEmptyOrNull = str => str === null || str.trim() === ''
+const isEmptyOrNull = str => {
+  if (str == null) return true
+  if (str.trim() === '') return true
+  return false
+}
 
 const getSchoolFromName = async (local, name) => {
   const res = await axios({
@@ -74,6 +78,7 @@ const getSchoolFromName = async (local, name) => {
   let schName = res.data.substring(res.data.indexOf(INDEX) + 25)
   schName = schName.substring(schName.indexOf('>') + 1)
   schName = schName.substring(0, schName.indexOf('</a>'))
+
   return Promise.resolve({ name: schName, code, cookie })
 }
 
@@ -195,8 +200,7 @@ const searchBook = async (local, book, school) => {
 }
 
 app.use(cors())
-app.listen(3000, () => console.log('Server is running on port 3000'))
-app.get('/', async (req, res) => {
-  const { local, book, school } = req.query
-  res.json(await searchBook(local, book, school))
-})
+app.listen(3000)
+app.get('/', async (req, res) =>
+  res.json(await searchBook(req.query.local, req.query.book, req.query.school))
+)
