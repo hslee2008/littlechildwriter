@@ -177,6 +177,7 @@
                 {{ post.pageCount }}
               </v-chip>
               <v-chip
+                v-if="userInfo.uid"
                 label
                 :color="(post?.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
                 @click="Like()"

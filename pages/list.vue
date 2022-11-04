@@ -78,8 +78,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase';
-import { Book } from 'plugins/global';
+import { db } from 'plugins/firebase'
+import { Book } from 'plugins/global'
 
 const route = useRoute()
 const books = ref<Book[]>([])

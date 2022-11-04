@@ -51,7 +51,7 @@
           <v-list nav class="transparent">
             <v-list-item
               v-for="(item, UID) in subscription"
-              :key="item"
+              :key="UID"
               :to="`/user/${UID}`"
             >
               <v-list-item-content>
