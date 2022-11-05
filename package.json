@@ -13,9 +13,11 @@
     "api": "node ./api/index.js"
   },
   "dependencies": {
+    "@nuxtjs/markdownit": "^2.0.0",
     "@vueuse/head": "^0.9.8",
     "firebase": "^9.13.0",
     "firebaseui": "^6.0.1",
+    "marked": "^4.2.2",
     "nuxt-edge": "^2.16.0-27720022.54e852f",
     "perspective-api-client": "^3.1.0",
     "vue-gtag": "^1.16.1",
@@ -29,6 +31,7 @@
     "@nuxtjs/google-gtag": "^1.0.4",
     "@nuxtjs/pwa": "3.3.5",
     "@nuxtjs/vuetify": "1.12.3",
+    "@types/marked": "^4.0.7",
     "eslint": "^8.25.0",
     "eslint-plugin-nuxt": "4.0.0",
     "firebase-admin": "11.2.0",

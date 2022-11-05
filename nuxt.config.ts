@@ -17,12 +17,14 @@ async function getRoutes() {
   const teams = (await db.ref('teams').once('value')).val()
   const users = (await db.ref('users').once('value')).val()
   const debate = (await db.ref('debate').once('value')).val()
+  const blog = (await db.ref('blog').once('value')).val()
 
   for (const r in books) routes.push(`/book/content/${r}`)
   for (const r in classes) routes.push(`/class/${r}`)
   for (const r in teams) routes.push(`/team/about/${r}`)
   for (const r in users) routes.push(`/user/${r}`)
   for (const r in debate) routes.push(`/debate/topic/${r}`)
+  for (const r in blog) routes.push(`/blog/content/${r}`)
 
   return routes
 }
@@ -124,7 +126,7 @@ export default defineNuxtConfig({
   plugins: ['plugins/firebase', 'plugins/global', 'plugins/gtag'],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
-  modules: ['@nuxtjs/pwa'],
+  modules: ['@nuxtjs/pwa', '@nuxtjs/markdownit'],
   target: 'static',
 
   pwa: {

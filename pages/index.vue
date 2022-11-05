@@ -24,7 +24,7 @@
           </div>
         </v-card>
 
-        <div class="d-flex justify-center">
+        <div class="d-flex justify-center mb-3">
           <v-btn to="/list" class="mx-3">
             글 <v-icon right> mdi-format-list-text </v-icon>
           </v-btn>
@@ -32,8 +32,13 @@
             알림판
             <v-icon right> mdi-clipboard-multiple </v-icon>
           </v-btn>
-          <v-btn to="/debate/home">
-            토론 <v-icon right> mdi-lectern </v-icon>
+        </div>
+        <div class="d-flex justify-center">
+          <v-btn to="/debate/home" class="mr-2">
+            토론 코너 <v-icon right> mdi-lectern </v-icon>
+          </v-btn>
+          <v-btn to="/blog/home">
+            창작 코너 <v-icon right> mdi-typewriter </v-icon>
           </v-btn>
         </div>
       </div>

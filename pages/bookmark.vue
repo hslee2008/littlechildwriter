@@ -61,7 +61,7 @@ onMounted(() =>
 )
 
 const deleteBookmark = (time: string, i: number) => {
-  db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
+  db.ref(`/users/${userInfo.value.uid}/bookmarks/${i}`).remove()
   db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
   items.value.splice(i, 1)
 }

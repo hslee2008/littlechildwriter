@@ -391,11 +391,10 @@
 
     <br /><br /><br /><br /><br /><br />
 
-    <div class="text-center">
-      <v-progress-circular v-if="loading" indeterminate color="primary" large />
+    <div v-if="loading" class="text-center">
+      <v-progress-circular indeterminate color="primary" large />
     </div>
-
-    <template v-if="post.categories && !loading">
+    <template v-else>
       <h1>이런 책 어때?</h1>
 
       <v-row>
@@ -563,71 +562,88 @@ const View = () => {
   }
 }
 
+const HandleBookInfo = (data: any) => {
+  for (let i = 0; i < data.items.length; i++) {
+    const book = data.items[i]
+
+    if (
+      book.volumeInfo.imageLinks?.thumbnail &&
+      book.volumeInfo.title !== post.value.title
+    ) {
+      const {
+        imageLinks: { thumbnail },
+        infoLink,
+        title
+      } = book.volumeInfo
+
+      suggested.value.push({
+        thumbnail,
+        infoLink,
+        title
+      })
+    }
+  }
+}
+
 const Suggestion = async () => {
   loading.value = true
 
-  if (!post.value.categories) {
-    loading.value = false
-    return
+  if (otherInfo.value.volumeInfo?.authors.length > 0) {
+    await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=author:${encodeURI(
+        otherInfo.value.volumeInfo?.authors[0]
+      )}&maxResults=${5}`
+    )
+      .then(res => res.json())
+      .then(HandleBookInfo)
   }
 
-  const cat: string[] = [...post.value.categories]
-  cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
+  if (post.value.categories) {
+    const cat: string[] = [...post.value.categories]
+    cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
 
-  let done = false
-  let n = 15
-  let overflow = 0
+    let done = false
+    let n = 15
+    let overflow = 0
 
-  while (!done) {
-    overflow++
+    while (!done) {
+      overflow++
 
-    if (overflow > 5) {
-      done = true
-      break
+      if (overflow > 5) {
+        done = true
+        break
+      }
+
+      await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=subject:${cat.join(
+          ','
+        )}&maxResults=${n}`
+      )
+        .then(res => res.json())
+        .then(data => {
+          const length = data.items.length
+
+          if (length >= n) done = true
+          else {
+            cat.shift()
+            n -= length
+          }
+
+          HandleBookInfo(data)
+        })
+        .catch(() => cat.shift())
     }
-
+  } else {
     await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=subject:${cat.join(
-        ','
-      )}&maxResults=${n}`
+      `https://www.googleapis.com/books/v1/volumes?q=title:${post.value.title}&maxResults=${15}`
     )
       .then(res => res.json())
       .then(data => {
-        const length = data.items.length
-
-        if (length >= n) done = true
-        else {
-          cat.shift()
-          n -= length
-        }
-
-        for (let i = 0; i < length; i++) {
-          const book = data.items[i]
-
-          if (
-            book.volumeInfo.imageLinks.thumbnail &&
-            book.volumeInfo.title !== post.value.title
-          ) {
-            const {
-              imageLinks: { thumbnail },
-              infoLink,
-              title
-            } = book.volumeInfo
-
-            suggested.value.push({
-              thumbnail,
-              infoLink,
-              title
-            })
-
-            if (i === n) break
-          }
-        }
+        HandleBookInfo(data)
       })
-      .catch(() => cat.shift())
   }
 
-  suggested.value = [...suggested.value]
+  suggested.value = [...new Set(suggested.value)]
     .sort(() => 0.5 - Math.random())
     .slice(0, 5)
 

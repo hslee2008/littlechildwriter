@@ -13,14 +13,19 @@
             <v-icon left>mdi-home-variant</v-icon> 홈페이지
           </v-list-item-title>
         </v-list-item>
+        <v-list-item to="/list">
+          <v-list-item-title>
+            <v-icon left>mdi-format-list-text</v-icon> 책 목록
+          </v-list-item-title>
+        </v-list-item>
         <v-list-item to="/class/classes">
           <v-list-item-title>
             <v-icon left>mdi-clipboard-multiple</v-icon> 알림판
           </v-list-item-title>
         </v-list-item>
-        <v-list-item to="/list">
+        <v-list-item to="/blog/home">
           <v-list-item-title>
-            <v-icon left>mdi-format-list-text</v-icon> 책 목록
+            <v-icon left>mdi-typewriter</v-icon> 창작 코너
           </v-list-item-title>
         </v-list-item>
         <v-list-item to="/debate/home">

@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row class="mb-5">
-      <v-avatar size="80" class="mt-2">
+      <v-avatar size="70" class="mt-2">
         <UserPhoto :src="targetUser.photoURL" />
       </v-avatar>
 
@@ -19,6 +19,7 @@
           v-if="userInfo.uid !== uid"
           color="red"
           class="rounded-xl"
+          :small="$vuetify.breakpoint.smAndDown"
           @click="Subscribe"
         >
           {{ subscribed ? '구독 취소' : '구독' }}
@@ -30,12 +31,36 @@
     </v-row>
 
     <v-tabs v-model="tab" show-arrows center-active grow class="transparent">
+      <v-tab> 홈 </v-tab>
       <v-tab> 게시물 </v-tab>
       <v-tab> 구독자 </v-tab>
       <v-tab> 정보 </v-tab>
       <v-tab v-if="userInfo.uid === uid"> 비공개 글 </v-tab>
 
       <v-tabs-items v-model="tab" class="py-5 transparent">
+        <v-tab-item>
+          <v-card
+            :class="`transparent d-${
+              $vuetify.breakpoint.mobile ? 'block' : 'flex'
+            }`"
+          >
+            <v-card-title>최근 포스트</v-card-title>
+
+            <NLink
+              v-for="content in books.slice(0, 4)"
+              :key="content.image"
+              :to="`/book/content/${content.time}`"
+              class="ma-auto"
+            >
+              <v-img
+                :src="content.image"
+                class="rounded-lg ma-2"
+                width="200"
+              />
+            </NLink>
+          </v-card>
+        </v-tab-item>
+
         <v-tab-item>
           <v-select
             v-model="rating"
@@ -132,7 +157,7 @@
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>
-                  권당 평균 읽은 수:
+                  권당 평균 읽힌 수:
                   {{ (readCount / books.length).toFixed(2) }}번
                 </v-list-item-title>
               </v-list-item-content>
