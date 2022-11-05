@@ -12,19 +12,11 @@
     class="mb-10"
   >
     <template #header>
-      <v-combobox
+      <v-text-field
         v-model="search"
-        :items="categories"
-        auto-select-first
-        cache-items
         label="Search"
         outlined
-        hide-selected
-        disable-lookup
-        no-data-text
-        open-on-clear
         rounded
-        clearable
         class="my-2 mr-2 rounded-xl"
       />
 
@@ -54,11 +46,11 @@
 
           <v-list>
             <v-list-item
-              v-for="(number, index) in [10, 50, 150, 200]"
-              :key="index"
-              @click="itemsPerPage = number"
+              v-for="num in [10, 50, 150, 200]"
+              :key="num"
+              @click="itemsPerPage = num"
             >
-              <v-list-item-title>{{ number }}</v-list-item-title>
+              <v-list-item-title>{{ num }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -83,7 +75,6 @@ import { Book } from 'plugins/global'
 
 const route = useRoute()
 const books = ref<Book[]>([])
-const categories = ref<string[]>([])
 const sortBy = ref<string>('time')
 // eslint-disable-next-line func-call-spacing
 const search = ref<string | (string | null)[]>('')
@@ -97,18 +88,9 @@ const numberOfPages = computed(() =>
 
 onBeforeMount(() => {
   route.query.search && (search.value = route.query.search)
-
-  db.ref('/contents/').on('child_added', async s => {
-    const book = await s.val()
-    books.value.unshift(book)
-    categories.value.push(
-      ...(book.categories || ['Juvenile Fiction / General']).map((c: any) => {
-        const category = c.split(' / ')
-        return category[1]
-      })
-    )
-    categories.value = [...new Set(categories.value)]
-  })
+  db.ref('contents').on('child_added', async s =>
+    books.value.unshift(await s.val())
+  )
 })
 
 const Next = () => {

@@ -15,32 +15,26 @@ const subscription = ref<any>()
 const books = ref<any>([])
 const loading = ref<boolean>(true)
 
-onMounted(() => {
+onMounted(() =>
   auth.onAuthStateChanged(u => {
-    if (!u) {
-      return
-    }
-
-    db.ref(`/users/${u.uid}/subscribe`).on('value', async s => {
-      subscription.value = Object.keys(await s.val())
-    })
+    db.ref(`/users/${u?.uid}/subscribe`).on(
+      'value',
+      async s => (subscription.value = Object.keys(await s.val()))
+    )
 
     db.ref('/contents/')
       .orderByChild('time')
       .limitToLast(20)
       .on('value', async s => {
         const data: any = Object.values(await s.val())
-
-        for (let i = 0; i < data.length; i++) {
-          if (subscription.value?.includes(data[i].uid)) {
+        for (let i = 0; i < data.length; i++)
+          if (subscription.value?.includes(data[i].uid))
             books.value.unshift(data[i])
-          }
-        }
       })
 
-    setTimeout(() => (loading.value = false), 1000)
+    loading.value = false
   })
-})
+)
 
 useHead({
   title: '구독 - LCW'

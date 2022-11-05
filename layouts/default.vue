@@ -250,9 +250,7 @@ onMounted(() => {
     nuxt.$vuetify.theme.dark = !!localStorage.getItem('dark')
 })
 
-const saveTheme = () => {
-  localStorage.setItem('dark', nuxt.$vuetify.theme.dark)
-}
+const saveTheme = () => localStorage.setItem('dark', nuxt.$vuetify.theme.dark)
 
 const clearEverything = () => {
   db.ref(`/users/${userInfo.value.uid}/notification`).remove()

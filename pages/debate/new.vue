@@ -6,7 +6,7 @@
       v-model="debate.topic"
       label="주제"
       placeholder="주제 / 질문 입력하기"
-      outlined
+      solo
       clearable
       class="mt-3"
     />

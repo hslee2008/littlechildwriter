@@ -103,11 +103,12 @@ const userDB = ref<any>({ bio: '' })
 const imageEdit = ref<boolean>(false)
 
 onMounted(() =>
-  auth.onAuthStateChanged(() => {
-    db.ref(`/users/${userInfo.value.uid}`)
+  auth.onAuthStateChanged(() =>
+    db
+      .ref(`/users/${userInfo.value.uid}`)
       .once('value')
       .then(s => (userDB.value = s.val()))
-  })
+  )
 )
 
 const Update = async () => {

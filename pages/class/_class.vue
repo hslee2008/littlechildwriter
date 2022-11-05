@@ -60,10 +60,10 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { User } from 'plugins/global'
 import DisplayCards from './components/DisplayCards.vue'
 import UploadCards from './components/UploadCards.vue'
+import { db } from 'plugins/firebase'
+import { User } from 'plugins/global'
 
 const userInfo = User()
 const route = useRoute()
@@ -92,9 +92,7 @@ onBeforeMount(() => {
   })
 })
 
-const updateTab = (num: number) => {
-  tab.value = num
-}
+const updateTab = (num: number) => (tab.value = num)
 
 const Update = () => {
   db.ref(`/classes/${id}`).update(classInfo)

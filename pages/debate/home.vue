@@ -20,10 +20,7 @@
         <v-spacer />
 
         <v-icon left>mdi-comment-flash</v-icon>
-        {{
-          Object.keys(item.pro ?? {}).length +
-          Object.keys(item.con ?? {}).length
-        }}
+        {{ Object.keys({ ...item.pro, ...item.con } ?? {}).length }}
 
         <v-card-actions v-if="item.uid == userInfo.uid">
           <v-menu offset-y>

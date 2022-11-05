@@ -73,7 +73,7 @@
         <v-row class="mt-5 ma-1 g-10">
           <v-card
             v-for="item in props.items"
-            :key="item.creator + item.name"
+            :key="item.name"
             class="my-3 transparent"
           >
             <v-card

@@ -371,9 +371,9 @@ const newSuggestion = () => {
   suggestionContent.value = ''
 }
 
-onMounted(() => {
-  db.ref(`/debate/${time}`).on('value', async s => {
-    content.value = await s.val()
-  })
-})
+onMounted(() =>
+  db
+    .ref(`/debate/${time}`)
+    .on('value', async s => (content.value = await s.val()))
+)
 </script>

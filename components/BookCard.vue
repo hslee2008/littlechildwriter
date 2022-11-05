@@ -60,7 +60,7 @@
               icon
               color="grey"
             >
-              <v-icon small>mdi-comment</v-icon>
+              <v-icon small>mdi-comment-bookmark</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>

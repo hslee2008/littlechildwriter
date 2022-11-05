@@ -176,7 +176,7 @@
           />
         </v-card-text>
 
-        <v-list nav>
+        <v-list v-if="searched" nav>
           <div
             v-for="item in searched"
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
@@ -225,6 +225,9 @@
             </v-list-item>
           </div>
         </v-list>
+        <v-card v-else class="text-center transparent" flat>
+          <v-card-text> 책을 찾을 수 없습니다. ISBN을 직접 입력하거나 바코드를 찍으세요. </v-card-text>
+        </v-card>
 
         <v-card-actions>
           <v-spacer />
@@ -344,9 +347,7 @@
           absolute
         >
           <v-btn @click="isbn.upload = true">
-            <v-icon class="ma-auto" left>
-              mdi-book-open-page-variant
-            </v-icon>
+            <v-icon class="ma-auto" left> mdi-book-open-page-variant </v-icon>
 
             책 사진 올리기
           </v-btn>

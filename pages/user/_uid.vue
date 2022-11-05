@@ -62,9 +62,8 @@
         </v-tab-item>
 
         <v-tab-item>
-          <div v-if="targetUser.bio">
+          <div v-if="targetUser.bio" class="my-10">
             <v-card-title>{{ targetUser.bio }}</v-card-title>
-            <v-divider class="my-10" />
           </div>
 
           <v-list flat class="rounded-lg">
@@ -81,7 +80,6 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-
             <v-list-item>
               <v-list-item-icon>
                 <v-icon> mdi-book </v-icon>
@@ -92,11 +90,73 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
+
+            <v-divider />
+
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon> mdi-read </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  사람들이 책 읽은 수: {{ formatter(readCount) }}번
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon> mdi-thumbs-up-down </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  총 좋아요: {{ formatter(likeCount) }}번
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider />
+
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon> mdi-star </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  평균 평점: {{ (avgRating / books.length).toFixed(2) }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon> mdi-read </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  권당 평균 읽은 수:
+                  {{ (readCount / books.length).toFixed(2) }}번
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-icon>
+                <v-icon> mdi-thumbs-up-down </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  권당 평균 좋아요:
+                  {{ (likeCount / books.length).toFixed(2) }}번
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
           </v-list>
         </v-tab-item>
 
         <v-tab-item>
-          <LazyBookCard v-if="privateBooks" :items="privateBooks" :simple="true" />
+          <LazyBookCard
+            v-if="privateBooks"
+            :items="privateBooks"
+            :simple="true"
+          />
           <v-card v-else>
             <v-card-text>비공개 글이 없습니다.</v-card-text>
           </v-card>
@@ -125,12 +185,22 @@ const books = ref<any>([])
 const privateBooks = ref<any>([])
 const subscription = ref<any>({})
 const subscribed = ref<boolean>(false)
+
 const subCount = ref<number>(0)
+const likeCount = ref<number>(0)
+const readCount = ref<number>(0)
+const avgRating = ref<number>(0)
 
 onBeforeMount(() => {
   db.ref('/contents/').on('child_added', async s => {
     const data = await s.val()
-    data.uid === uid && books.value.unshift(data)
+
+    if (data.uid === uid) {
+      readCount.value += data.views
+      likeCount.value += data.likes
+      avgRating.value += data.rating
+      books.value.unshift(data)
+    }
   })
 
   db.ref(`/users/${uid}/`)

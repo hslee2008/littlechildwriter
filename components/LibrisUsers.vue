@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase';
+import { db } from 'plugins/firebase'
 
 const props = defineProps({
   limit: {

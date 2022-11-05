@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { db, storage } from 'plugins/firebase';
+import { db, storage } from 'plugins/firebase'
 
 const route = useRoute()
 const props = defineProps<{
@@ -31,9 +31,6 @@ const id = route.params.class
 
 const DeleteContent = (title: string, i: string) => {
   db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
-
-  if (props.type === '파일') {
-    storage.ref(`${props.type}`).delete()
-  }
+  props.type === '파일' && storage.ref(`${props.type}`).delete()
 }
 </script>

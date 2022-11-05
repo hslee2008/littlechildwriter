@@ -69,7 +69,7 @@ export function Notify(
 }
 
 const formatter = (number: number) =>
-  new Intl.NumberFormat(navigator.language || 'ko-kr', {
+  new Intl.NumberFormat('ko-kr', {
     notation: 'compact',
     compactDisplay: 'short',
     maximumFractionDigits: 1

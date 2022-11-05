@@ -10,7 +10,7 @@
     >
       <v-list-item
         v-for="(item, i) in items"
-        :key="i"
+        :key="item.time"
         :to="`/book/content/${item.time}`"
         style="background-color: #22262e"
       >
@@ -52,17 +52,13 @@ import { User } from 'plugins/global'
 const userInfo = User()
 const items = ref<any>([])
 
-onMounted(() => {
-  auth.onAuthStateChanged(u => {
-    if (!u) {
-      return
-    }
-
-    db.ref(`/users/${u.uid}/bookmarks`).on('child_added', async s =>
-      items.value.push(await s.val())
-    )
-  })
-})
+onMounted(() =>
+  auth.onAuthStateChanged(u =>
+    db
+      .ref(`/users/${u?.uid}/bookmarks`)
+      .on('child_added', async s => items.value.push(await s.val()))
+  )
+)
 
 const deleteBookmark = (time: string, i: number) => {
   db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
@@ -70,9 +66,8 @@ const deleteBookmark = (time: string, i: number) => {
   items.value.splice(i, 1)
 }
 
-const onChange = () => {
+const onChange = () =>
   db.ref(`/users/${userInfo.value.uid}/bookmarks`).set(items.value)
-}
 
 useHead({
   title: '책갈피 - LCW'

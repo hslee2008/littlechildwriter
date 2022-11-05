@@ -12,8 +12,7 @@
         <v-combobox
           v-if="classInfo.uid === userInfo.uid"
           v-model="post.category"
-:items="Object.keys(classInfo.contents ?? {})"
-
+          :items="Object.keys(classInfo.contents ?? {})"
           label="Search"
           outlined
           hide-selected
@@ -23,8 +22,7 @@
         <v-select
           v-else
           v-model="post.category"
-:items="Object.keys(classInfo.contents ?? {})"
-
+          :items="Object.keys(classInfo.contents ?? {})"
           label="종류 선택"
           outlined
         />
@@ -169,8 +167,8 @@
 </template>
 
 <script setup lang="ts">
-import { db, storage } from 'plugins/firebase';
-import { User } from 'plugins/global';
+import { db, storage } from 'plugins/firebase'
+import { User } from 'plugins/global'
 
 const userInfo = User()
 const route = useRoute()
