@@ -15,7 +15,7 @@
           </v-card-subtitle>
         </div>
       </v-card>
-      <v-card-text v-html="content?.markdown"></v-card-text>
+      <v-card-text v-html="parse(content?.markdown)"></v-card-text>
     </v-card>
 
     <LazyCommentComponent
@@ -27,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import { parse } from 'marked'
 import { db } from 'plugins/firebase'
 
 const route = useRoute()

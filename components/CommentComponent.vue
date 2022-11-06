@@ -22,25 +22,16 @@
         :key="message.time"
         class="my-3 d-inline"
       >
-        <v-card
-          rounded
-          width="100%"
-          class="d-flex mr-5 rounded-lg"
-          :color="message.badWord ? 'red' : '#23262E'"
-        >
+        <v-card rounded width="100%" class="d-flex mr-5 rounded-lg">
           <NLink :to="`/user/${message.uid}`" class="ma-auto ml-2">
-            <v-avatar size="40" :color="message.badWord ? 'red' : '#23262E'">
+            <v-avatar size="40">
               <UserPhoto :src="message.photoURL" />
             </v-avatar>
           </NLink>
 
           <div v-if="!message.edit">
             <v-card-title>{{ message.displayName }}</v-card-title>
-            <v-card-subtitle
-              :class="`${
-                message.badWord ? 'text-decoration-line-through grey--text' : ''
-              }`"
-            >
+            <v-card-subtitle>
               {{ message.content }}
             </v-card-subtitle>
           </div>
@@ -93,7 +84,7 @@
               </template>
               <v-list>
                 <template v-if="userInfo.displayName === message.displayName">
-                  <v-list-item v-if="!message.badWord" @click="Edit(i)">
+                  <v-list-item @click="Edit(i)">
                     <v-list-item-title>
                       <v-icon left> mdi-pencil </v-icon>
                       {{ comments[i].edit ? '취소' : '수정' }}
@@ -121,17 +112,6 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-            <div v-if="message.badWord" class="mr-2">
-              <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-icon v-bind="attrs" v-on="on"> mdi-alert </v-icon>
-                </template>
-                <span>
-                  {{ message.probably }}:
-                  {{ Math.round(message.score * 1000) / 10 }}%
-                </span>
-              </v-tooltip>
-            </div>
           </v-card-actions>
         </v-card>
       </v-list-item>
@@ -280,6 +260,7 @@ const Comment = async () => {
   if (score > 0.6) {
     snackbarBadWord.value = true
     toxcity.value = score
+    Libris(userInfo.value.uid, -score * 10)
     return
   }
 
@@ -295,7 +276,6 @@ const Comment = async () => {
       time: Date.now(),
       probably: badWord ? mostProbable : 'good',
       content,
-      badWord,
       score
     })
 

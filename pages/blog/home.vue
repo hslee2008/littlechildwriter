@@ -38,6 +38,11 @@
                   <v-icon left> mdi-trash-can </v-icon> 삭제
                 </v-list-item-title>
               </v-list-item>
+              <v-list-item :to="`./edit/${item.time}`">
+                <v-list-item-title>
+                  <v-icon left> mdi-pencil </v-icon> 편집
+                </v-list-item-title>
+              </v-list-item>
             </v-list>
           </v-menu>
         </v-card-actions>

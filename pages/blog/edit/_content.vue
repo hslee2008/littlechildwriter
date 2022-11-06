@@ -28,7 +28,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn color="primary" @click="SaveContent">올리기</v-btn>
+        <v-btn color="primary" @click="SaveContent">업데이트</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -46,30 +46,38 @@ import { parse } from 'marked'
 import { db } from 'plugins/firebase'
 import { User } from 'plugins/global'
 
+const route = useRoute()
+const time = route.params.content
 const userInfo = User()
 const router = useRouter()
 const topic = ref('')
 const content = ref('')
 
+onBeforeMount(() => {
+  db.ref(`blog/${time}`)
+    .once('value')
+    .then((snapshot) => {
+      const data = snapshot.val()
+      topic.value = data.topic
+      content.value = data.markdown
+    })
+})
+
 const SaveContent = () => {
-  const time = Date.now()
   const { uid, displayName, photoURL } = userInfo.value
 
-  db.ref(`/blog/${time}`).set({
+  db.ref(`/blog/${time}`).update({
     topic: topic.value,
-    markdown: content.value,
+    markdown: parse(content.value),
     uid,
     displayName,
-    photoURL,
-    time
+    photoURL
   })
-
-  Libris(userInfo.value.uid, 50)
 
   router.push(`/blog/content/${time}`)
 }
 
 useHead({
-  title: '창작 코너 글쓰기 - Little Child Writer'
+  title: '창작 코너 업데이트 - Little Child Writer'
 })
 </script>
