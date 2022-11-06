@@ -123,7 +123,12 @@ export default defineNuxtConfig({
   },
 
   css: ['assets/css/global.css'],
-  plugins: ['plugins/firebase', 'plugins/global', 'plugins/gtag'],
+  plugins: [
+    'plugins/firebase',
+    'plugins/global',
+    'plugins/gtag',
+    { src: 'plugins/chart', mode: 'client' }
+  ],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
   modules: ['@nuxtjs/pwa', '@nuxtjs/markdownit'],

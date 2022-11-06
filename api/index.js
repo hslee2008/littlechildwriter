@@ -33,37 +33,38 @@ const area = {
   경남: 'https://reading.gne.go.kr/',
   제주: 'https://reading.jje.go.kr/'
 }
-const INDEX = "javascript:selectSchool('"
-let cookie = ''
 const NO_IMAGE =
   'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif'
 
-const isEmptyOrNull = str => {
-  if (str == null) return true
-  if (str.trim() === '') return true
+isEmptyOrNull = str => {
+  if (str === null || str.trim() === '') return true
   return false
 }
 
-const getSchoolFromName = async (local, name) => {
-  const res = await axios({
+getSchoolFromName = async (local, name) => {
+  const option = {
     method: 'POST',
     data: qs.stringify({
       currentPage: 1,
       returnUrl: '',
       kind: 1,
-      txtSearchWord: encodeURIComponent('도서검색'),
+      txtSearchWord: '%EB%8F%84%EC%84%9C%EA%B2%80%EC%83%89',
       searchGbn: '',
       selEducation: 'all',
       selSchool: 'all',
       schoolSearch: encodeURI(name)
     }),
     url: `${area[local]}r/newReading/search/schoolListData.jsp`
-  })
+  }
+  const res = await axios(option)
 
   const cookies = res.headers['set-cookie']
   if (!cookies) throw new Error('쿠키가 없습니다.')
 
-  cookies.forEach(c => (cookie += c.split(';')[0] + '; '))
+  let cookie = ''
+  cookies.forEach(c => {
+    cookie += c.split(';')[0] + '; '
+  })
   cookie = cookie.substring(0, cookie.length - 2)
 
   if (res.data.includes('>0</span>개의'))
@@ -72,17 +73,20 @@ const getSchoolFromName = async (local, name) => {
   const hasTest = res.data.indexOf('테스트')
   if (hasTest !== -1) res.data = res.data.substring(hasTest)
 
-  let code = res.data.substring(res.data.indexOf(INDEX) + 25)
+  let code = res.data.substring(
+    res.data.indexOf("javascript:selectSchool('") + 25
+  )
   code = code.substring(0, code.indexOf("'"))
 
-  let schName = res.data.substring(res.data.indexOf(INDEX) + 25)
+  let schName = res.data.substring(
+    res.data.indexOf("javascript:selectSchool('") + 25
+  )
   schName = schName.substring(schName.indexOf('>') + 1)
   schName = schName.substring(0, schName.indexOf('</a>'))
-
   return Promise.resolve({ name: schName, code, cookie })
 }
 
-const setSchoolCodeSetting = async (local, code, cookie) => {
+setSchoolCodeSetting = async (local, code, cookie) => {
   const option = {
     method: 'POST',
     url: `${area[local]}r/newReading/search/schoolCodeSetting.jsp`,
@@ -100,7 +104,7 @@ const setSchoolCodeSetting = async (local, code, cookie) => {
   await axios(option)
 }
 
-const searchBook = async (local, book, school) => {
+searchBookFromSchoolName = async (local, book, school) => {
   const result = {}
   try {
     if (isEmptyOrNull(school))
@@ -200,7 +204,16 @@ const searchBook = async (local, book, school) => {
 }
 
 app.use(cors())
-app.listen(3000)
-app.get('/', async (req, res) =>
-  res.json(await searchBook(req.query.local, req.query.book, req.query.school))
-)
+
+app.listen(3000, () => {
+  console.log('서버 열림')
+})
+
+app.get('/', async (req, res) => {
+  const bookName = req.query.book
+  const schoolName = req.query.school
+  const localName = req.query.local
+
+  const data = await searchBookFromSchoolName(localName, bookName, schoolName)
+  res.json(data)
+})

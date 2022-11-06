@@ -116,9 +116,7 @@
                 <v-icon> mdi-card-account-details </v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>
-                  UID: {{ uid }}
-                </v-list-item-title>
+                <v-list-item-title> UID: {{ uid }} </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
@@ -182,6 +180,12 @@
               </v-list-item>
             </template>
           </v-list>
+
+          <line-chart
+            :chart-options="chartOptions"
+            :chart-data="chartData"
+            chart-id="myCustomId"
+          />
         </v-tab-item>
 
         <v-tab-item>
@@ -224,17 +228,63 @@ const likeCount = ref<number>(0)
 const readCount = ref<number>(0)
 const avgRating = ref<number>(0)
 
+const byMonth = ref<any>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
+const chartOptions = ref<any>({
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    yAxes: [
+      {
+        ticks: {
+          beginAtZero: true
+        }
+      }
+    ]
+  }
+})
+
+const chartData = ref<any>({
+  labels: [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월'
+  ],
+  datasets: [
+    {
+      label: '책 올린 수',
+      data: byMonth.value,
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 1
+    }
+  ]
+})
+
 onBeforeMount(() => {
   db.ref('/contents/').on('child_added', async s => {
     const data = await s.val()
 
     if (data.uid === uid) {
+      byMonth.value[new Date(data.time).getMonth()]++
       readCount.value += data.views
       likeCount.value += data.likes
       avgRating.value += data.rating
+
       books.value.unshift(data)
     }
   })
+
+  console.log(byMonth.value)
 
   db.ref(`/users/${uid}/`)
     .once('value')
@@ -289,7 +339,12 @@ const Subscribe = () => {
 
     Libris(uid, 15)
     Libris(userInfo.value.uid, -15)
-    Notify(uid, userInfo.value.photoURL, `${userInfo.value.displayName}님이 구독했습니다`, `/user/${uid}`)
+    Notify(
+      uid,
+      userInfo.value.photoURL,
+      `${userInfo.value.displayName}님이 구독했습니다`,
+      `/user/${uid}`
+    )
   }
 }
 
