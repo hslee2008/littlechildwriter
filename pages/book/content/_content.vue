@@ -549,6 +549,7 @@ const share = async () => {
     text: content,
     url: `https://littlechildwriter.app/book/content/${time}`
   })
+  Libris(userInfo.value.uid, 1)
 }
 
 const View = () => {

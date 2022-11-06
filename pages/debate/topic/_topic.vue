@@ -304,7 +304,7 @@ const post = () => {
   write.value = false
   claim.value = ''
 
-  Libris(userInfo.value.uid, 1.5)
+  Libris(userInfo.value.uid, 5)
 }
 
 const update = () => {
@@ -369,7 +369,7 @@ const newSuggestion = () => {
   suggestion.value = ''
   suggestionContent.value = ''
 
-  Libris(userInfo.value.uid, 1)
+  Libris(userInfo.value.uid, 5)
 }
 
 onMounted(() =>

@@ -66,7 +66,7 @@ const SaveContent = () => {
     con: {}
   })
 
-  Libris(userInfo.value.uid, 1)
+  Libris(userInfo.value.uid, 50)
 
   router.push(`/blog/content/${time}`)
 }

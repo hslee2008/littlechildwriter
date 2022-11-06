@@ -35,7 +35,7 @@
         </div>
         <div class="d-flex justify-center">
           <v-btn to="/debate/home" class="mr-2">
-            토론 코너 <v-icon right> mdi-lectern </v-icon>
+            토론 광장 <v-icon right> mdi-lectern </v-icon>
           </v-btn>
           <v-btn to="/blog/home">
             창작 코너 <v-icon right> mdi-typewriter </v-icon>
@@ -77,7 +77,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn text to="/libris" color="primary" class="mx-3">
+        <v-btn text to="/libris/libris" color="primary" class="mx-3">
           명예의 전당 더보기
         </v-btn>
       </v-card-actions>

@@ -606,7 +606,7 @@ const Post = () => {
       content: content.replaceAll('\n', '<br>')
     })
 
-  Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 100)
+  Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 20)
   router.push(`/book/content/${time}`)
 }
 

@@ -51,9 +51,14 @@
 
         <v-divider class="my-1" />
 
-        <v-list-item to="/libris">
+        <v-list-item to="/libris/libris">
           <v-list-item-title>
             <v-icon left>mdi-podium</v-icon> 명예의 전당
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item to="/libris/table">
+          <v-list-item-title>
+            <v-icon left>mdi-table-large</v-icon> 포인트제
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -250,6 +255,8 @@ onMounted(() => {
       }
     })
   })
+
+  Libris(userInfo.value.uid, 0.1)
 
   if (localStorage.getItem('dark'))
     nuxt.$vuetify.theme.dark = !!localStorage.getItem('dark')

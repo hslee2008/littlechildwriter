@@ -262,9 +262,10 @@ const Subscribe = () => {
     delete subscription[userInfo.value.uid]
     subscribed.value = false
     subCount.value--
-    targetUser.value.libris -= 10
+    targetUser.value.libris -= 15
 
-    Libris(uid, -10)
+    Libris(uid, -15)
+    Libris(userInfo.value.uid, 15)
   } else {
     db.ref(`/users/${userInfo.value.uid}/subscribe/${uid}`).set(
       targetUser.value.displayName
@@ -276,9 +277,10 @@ const Subscribe = () => {
     subscription[userInfo.value.uid] = userInfo.value.displayName
     subscribed.value = true
     subCount.value++
-    targetUser.value.libris += 10
+    targetUser.value.libris += 15
 
-    Libris(uid, 10)
+    Libris(uid, 15)
+    Libris(userInfo.value.uid, -15)
   }
 }
 

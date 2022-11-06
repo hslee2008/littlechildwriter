@@ -319,7 +319,7 @@ const Comment = async () => {
     )
 
     Notify(props.uid, userInfo.value.photoURL, content, props.link)
-    Libris(userInfo.value.uid, 0.1)
+    Libris(userInfo.value.uid, 5)
 
     props.cb()
     comment.value = ''
