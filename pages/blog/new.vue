@@ -65,6 +65,9 @@ const SaveContent = () => {
     pro: {},
     con: {}
   })
+
+  Libris(userInfo.value.uid, 1)
+
   router.push(`/blog/content/${time}`)
 }
 

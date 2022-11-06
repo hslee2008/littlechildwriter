@@ -303,6 +303,8 @@ const post = () => {
 
   write.value = false
   claim.value = ''
+
+  Libris(userInfo.value.uid, 1.5)
 }
 
 const update = () => {
@@ -326,11 +328,8 @@ const update = () => {
 }
 
 const DeleteContent = (side: string, i: number) => {
-  if (side === 'suggestion') {
-    db.ref(`/debate/${time}/suggestion/${i}`).remove()
-  } else {
-    db.ref(`/debate/${time}/${side}/${i}`).remove()
-  }
+  if (side === 'suggestion') db.ref(`/debate/${time}/suggestion/${i}`).remove()
+  else db.ref(`/debate/${time}/${side}/${i}`).remove()
 }
 
 const UpdateOnCon = (topic: string, index: number) => {
@@ -369,6 +368,8 @@ const newSuggestion = () => {
   suggestionCard.value = false
   suggestion.value = ''
   suggestionContent.value = ''
+
+  Libris(userInfo.value.uid, 1)
 }
 
 onMounted(() =>
