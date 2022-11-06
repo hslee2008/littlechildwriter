@@ -309,6 +309,13 @@ const Post = () => {
     link: ''
   }
   props.updateTab(0)
+
+  Notify(
+    post.value.uid,
+    userInfo.value.photoURL,
+    `${userInfo.value.displayName}님이 새로운 자료를 올렸습니다`,
+    `/class/${id}`
+  )
 }
 </script>
 

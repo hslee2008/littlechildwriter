@@ -226,7 +226,9 @@
           </div>
         </v-list>
         <v-card v-else class="text-center transparent" flat>
-          <v-card-text> 책을 찾을 수 없습니다. ISBN을 직접 입력하거나 바코드를 찍으세요. </v-card-text>
+          <v-card-text>
+            책을 찾을 수 없습니다. ISBN을 직접 입력하거나 바코드를 찍으세요.
+          </v-card-text>
         </v-card>
 
         <v-card-actions>
@@ -606,7 +608,24 @@ const Post = () => {
       content: content.replaceAll('\n', '<br>')
     })
 
+  // get all user subscribers
+  db.ref(`/user/${uid}/subscriber`).once('value', (snapshot: any) => {
+    const subscribers = snapshot.val()
+
+    console.log(subscribers)
+
+    for (const subscriber in subscribers) {
+      Notify(
+        subscribers[subscriber],
+        userInfo.value.photoURL,
+        `${userInfo.value.displayName}님이 ${post.title} 새로운 글을 올렸습니다`,
+        `/book/content/${post.time}`
+      )
+    }
+  })
+
   Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 20)
+
   router.push(`/book/content/${time}`)
 }
 

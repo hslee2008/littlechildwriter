@@ -22,7 +22,7 @@
         :key="message.time"
         class="my-3 d-inline"
       >
-        <v-card rounded width="100%" class="d-flex mr-5 rounded-lg">
+        <v-card rounded width="100%" class="d-flex mr-5 rounded-lg transparent">
           <NLink :to="`/user/${message.uid}`" class="ma-auto ml-2">
             <v-avatar size="40">
               <UserPhoto :src="message.photoURL" />
@@ -146,7 +146,7 @@
 
 <script setup lang="ts">
 import { db } from 'plugins/firebase'
-import { Notify, User } from 'plugins/global'
+import { User } from 'plugins/global'
 
 const Perspective = require('perspective-api-client')
 const perspective = new Perspective({
@@ -226,7 +226,7 @@ const Love = (i: number) => {
       Notify(
         comments.value[i].uid,
         userInfo.value.photoURL,
-        '좋아요 ❤️',
+        `${userInfo.value.displayName}님이 좋아요를 눌렀습니다`,
         props.link
       )
     }

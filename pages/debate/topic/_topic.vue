@@ -305,6 +305,12 @@ const post = () => {
   claim.value = ''
 
   Libris(userInfo.value.uid, 5)
+  Notify(
+    content.value.uid,
+    userInfo.value.photoURL,
+    `${userInfo.value.displayName}님이 새로운 의견을 냈습니다`,
+    `/debate/topic/${time}`
+  )
 }
 
 const update = () => {
@@ -370,6 +376,12 @@ const newSuggestion = () => {
   suggestionContent.value = ''
 
   Libris(userInfo.value.uid, 5)
+  Notify(
+    content.value.uid,
+    userInfo.value.photoURL,
+    `${userInfo.value.displayName}님이 새로운 제언을 했습니다`,
+    `/debate/topic/${time}`
+  )
 }
 
 onMounted(() =>

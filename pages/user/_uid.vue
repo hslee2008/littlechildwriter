@@ -52,11 +52,7 @@
               :to="`/book/content/${content.time}`"
               class="ma-auto"
             >
-              <v-img
-                :src="content.image"
-                class="rounded-lg ma-2"
-                width="200"
-              />
+              <v-img :src="content.image" class="rounded-lg ma-2" width="200" />
             </NLink>
           </v-card>
         </v-tab-item>
@@ -115,64 +111,76 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-
-            <v-divider />
-
             <v-list-item>
               <v-list-item-icon>
-                <v-icon> mdi-read </v-icon>
+                <v-icon> mdi-card-account-details </v-icon>
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>
-                  사람들이 책 읽은 수: {{ formatter(readCount) }}번
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon> mdi-thumbs-up-down </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>
-                  총 좋아요: {{ formatter(likeCount) }}번
+                  UID: {{ uid }}
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
-            <v-divider />
+            <template v-if="books.length > 0">
+              <v-divider />
 
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon> mdi-star </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>
-                  평균 평점: {{ (avgRating / books.length).toFixed(2) }}
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon> mdi-read </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>
-                  권당 평균 읽힌 수:
-                  {{ (readCount / books.length).toFixed(2) }}번
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon> mdi-thumbs-up-down </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>
-                  권당 평균 좋아요:
-                  {{ (likeCount / books.length).toFixed(2) }}번
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon> mdi-read </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    사람들이 책 읽은 수: {{ formatter(readCount) }}번
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon> mdi-thumbs-up-down </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    총 좋아요: {{ formatter(likeCount) }}번
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+
+              <v-divider />
+
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon> mdi-star </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    평균 평점: {{ (avgRating / books.length).toFixed(2) }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon> mdi-read </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    권당 평균 읽힌 수:
+                    {{ (readCount / books.length).toFixed(2) }}번
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon> mdi-thumbs-up-down </v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    권당 평균 좋아요:
+                    {{ (likeCount / books.length).toFixed(2) }}번
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
           </v-list>
         </v-tab-item>
 
@@ -281,6 +289,7 @@ const Subscribe = () => {
 
     Libris(uid, 15)
     Libris(userInfo.value.uid, -15)
+    Notify(uid, userInfo.value.photoURL, `${userInfo.value.displayName}님이 구독했습니다`, `/user/${uid}`)
   }
 }
 
