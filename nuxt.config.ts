@@ -131,7 +131,7 @@ export default defineNuxtConfig({
   ],
   components: true,
   buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
-  modules: ['@nuxtjs/pwa', '@nuxtjs/markdownit'],
+  modules: ['@nuxtjs/pwa'],
   target: 'static',
 
   pwa: {

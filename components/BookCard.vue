@@ -5,6 +5,7 @@
     <v-row class="row">
       <v-card
         v-for="(item, i) in items"
+        v-if="item.image"
         :key="i"
         :width="$vuetify.breakpoint.mobile ? 150 : 200"
         class="mx-auto my-5 transparent"
@@ -67,7 +68,7 @@
       </v-card>
 
       <v-snackbar v-model="bookmarkSnackbar">
-        북마크가 추가되었습니다.
+        책갈피가 추가되었습니다.
 
         <template #action="{ attrs }">
           <v-btn
@@ -81,7 +82,7 @@
         </template>
       </v-snackbar>
       <v-snackbar v-model="bookmarkSnackbarDel">
-        북마크가 삭제되었습니다.
+        책갈피가 삭제되었습니다.
 
         <template #action="{ attrs }">
           <v-btn
@@ -99,8 +100,8 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { formatter, User } from 'plugins/global'
+import { db } from 'plugins/firebase';
+import { formatter, User } from 'plugins/global';
 
 const userInfo = User()
 const props = defineProps({

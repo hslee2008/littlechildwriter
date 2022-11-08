@@ -54,18 +54,6 @@ import 'firebaseui/dist/firebaseui.css'
 const router = useRouter()
 const email = ref('')
 const password = ref('')
-
-const uiConfig = {
-  signInSuccessUrl: '/account/account',
-  signInOptions: [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.EmailAuthProvider.PROVIDER_ID,
-    firebase.auth.GithubAuthProvider.PROVIDER_ID,
-    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-    firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-    firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-  ]
-}
 const ui = new auth.AuthUI(firebase.auth())
 
 const onSubmit = () =>
@@ -74,7 +62,19 @@ const onSubmit = () =>
     .signInWithEmailAndPassword(email.value, password.value)
     .then(() => router.push)
 
-onMounted(() => ui.start('#firebaseui-auth-container', uiConfig))
+onMounted(() =>
+  ui.start('#firebaseui-auth-container', {
+    signInSuccessUrl: '/account/account',
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      firebase.auth.GithubAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+    ]
+  })
+)
 onUnmounted(() => ui.delete())
 
 useHead({

@@ -4,6 +4,6 @@
 
 <script setup>
 useHead({
-  title: '리브리스 - LCW'
+  title: '명예의 전당 - LCW'
 })
 </script>

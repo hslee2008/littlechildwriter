@@ -13,7 +13,6 @@
     "api": "node ./api/index.js"
   },
   "dependencies": {
-    "@nuxtjs/markdownit": "^2.0.0",
     "@vueuse/head": "^0.9.8",
     "chart.js": "^3.9.1",
     "firebase": "^9.13.0",

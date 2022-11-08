@@ -40,14 +40,14 @@
       </v-list-item>
     </v-list>
     <v-card v-else class="transparent">
-      <v-card-text> 북마크가 없습니다. </v-card-text>
+      <v-card-text> 책갈피가 없습니다. </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { auth, db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+import { auth, db } from 'plugins/firebase';
+import { User } from 'plugins/global';
 
 const userInfo = User()
 const items = ref<any>([])

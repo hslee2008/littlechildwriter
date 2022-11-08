@@ -608,11 +608,8 @@ const Post = () => {
       content: content.replaceAll('\n', '<br>')
     })
 
-  // get all user subscribers
   db.ref(`/user/${uid}/subscriber`).once('value', (snapshot: any) => {
     const subscribers = snapshot.val()
-
-    console.log(subscribers)
 
     for (const subscriber in subscribers) {
       Notify(
@@ -658,6 +655,6 @@ const isPageCountValid = (v: any) =>
   '옳바른 숫자를 넣어 주세요'
 
 useHead({
-  title: '포스트 - LCW'
+  title: '업로드 - LCW'
 })
 </script>

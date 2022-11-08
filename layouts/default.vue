@@ -7,7 +7,7 @@
       app
       :color="$vuetify.theme.dark ? '#23262E' : 'white'"
     >
-      <v-list v-if="$route.path !== '/account/account'" nav expand>
+      <v-list nav expand>
         <v-list-item to="/">
           <v-list-item-title>
             <v-icon left>mdi-home-variant</v-icon> 홈페이지
@@ -61,10 +61,6 @@
             <v-icon left>mdi-table-large</v-icon> 포인트제
           </v-list-item-title>
         </v-list-item>
-      </v-list>
-      <v-list v-else nav expand>
-        <v-list-item to="#profile">계정</v-list-item>
-        <v-list-item to="#advanced">고급 설정</v-list-item>
       </v-list>
     </v-navigation-drawer>
 

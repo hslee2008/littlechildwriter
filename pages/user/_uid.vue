@@ -43,17 +43,27 @@
             :class="`transparent d-${
               $vuetify.breakpoint.mobile ? 'block' : 'flex'
             }`"
+            :to="`/book/content/${(chosenBookData || books[0]).time}`"
           >
-            <v-card-title>최근 포스트</v-card-title>
+            <img
+              :src="(chosenBookData || books[0]).image"
+              class="rounded-lg ma-2"
+              width="250px"
+            />
 
-            <NLink
-              v-for="content in books.slice(0, 4)"
-              :key="content.image"
-              :to="`/book/content/${content.time}`"
-              class="ma-auto"
-            >
-              <v-img :src="content.image" class="rounded-lg ma-2" width="200" />
-            </NLink>
+            <v-card-text>
+              <v-card-title class="white--text">
+                {{ (chosenBookData || books[0]).title }}
+              </v-card-title>
+              <v-card-subtitle class="white--text">
+                {{ targetUser.displayName }}님의 책
+              </v-card-subtitle>
+
+              <v-card-text>
+
+              {{ (chosenBookData || books[0]).content }}
+              </v-card-text>
+            </v-card-text>
           </v-card>
         </v-tab-item>
 
@@ -228,6 +238,9 @@ const likeCount = ref<number>(0)
 const readCount = ref<number>(0)
 const avgRating = ref<number>(0)
 
+const chosenBook = ref<any>(0)
+const chosenBookData = ref<any>({})
+
 const byMonth = ref<any>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
 const chartOptions = ref<any>({
@@ -284,12 +297,10 @@ onBeforeMount(() => {
     }
   })
 
-  console.log(byMonth.value)
-
   db.ref(`/users/${uid}/`)
     .once('value')
     .then(res => res.val())
-    .then(({ libris, displayName, photoURL, bio, subscriber }) => {
+    .then(({ libris, displayName, photoURL, bio, subscriber, featured }) => {
       targetUser.value = {
         libris,
         displayName,
@@ -297,12 +308,18 @@ onBeforeMount(() => {
         bio
       }
 
+      chosenBook.value = featured
+
       subscription.value = subscriber ?? []
       subCount.value = Object.keys(subscriber ?? {}).length
       subscribed.value = Object.keys(subscriber ?? {}).includes(
         userInfo.value.uid
       )
     })
+
+  db.ref(`/contents/${chosenBook.value}`).on('value', async s => {
+    chosenBookData.value = await s.val()
+  })
 
   if (userInfo.value.uid === uid) {
     db.ref(`/private/${uid}/`).on('child_added', async s => {
@@ -352,7 +369,7 @@ const ratingFilter = (a: any) =>
   rating.value === '모두' ? 1 : a.rating === rating.value
 
 useHead({
-  title: '유저 - LCW'
+  title: `사용자 - LCW`
 })
 </script>
 

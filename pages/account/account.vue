@@ -31,6 +31,22 @@
       </v-card-text>
     </v-card>
 
+    <v-card id="book" class="mb-10 transparent">
+      <v-card-title>책 추천</v-card-title>
+
+      <v-radio-group v-model="featured">
+        <v-list>
+          <v-list-item v-for="book in books" :key="book.time">
+            <v-radio :key="book.time" :value="book.time" />
+
+            <v-list-item-content>
+              <v-list-item-title>{{ book.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-radio-group>
+    </v-card>
+
     <v-card id="advanced" class="mb-10 transparent">
       <v-card-title>고급 설정</v-card-title>
 
@@ -99,16 +115,26 @@ import { User } from 'plugins/global'
 
 const userInfo = User()
 const router = useRouter()
-const userDB = ref<any>({ bio: '' })
+const userDB = ref<any>({ bio: '', featured: 0 })
+const books = ref<any[]>([])
 const imageEdit = ref<boolean>(false)
+const featured = ref<number>(0)
 
 onMounted(() =>
-  auth.onAuthStateChanged(() =>
-    db
-      .ref(`/users/${userInfo.value.uid}`)
+  auth.onAuthStateChanged(() => {
+    db.ref(`/users/${userInfo.value.uid}`)
       .once('value')
-      .then(s => (userDB.value = s.val()))
-  )
+      .then(async s => (userDB.value = await s.val()))
+
+    featured.value = userDB.value.featured
+
+    db.ref(`/contents/`).on('value', async s => {
+      const data = await s.val()
+
+      for (const key in data)
+        if (data[key].uid === userInfo.value.uid) books.value.push(data[key])
+    })
+  })
 )
 
 const Update = async () => {
@@ -119,7 +145,8 @@ const Update = async () => {
 
   db.ref(`/users/${uid}`).update({
     displayName,
-    bio
+    bio,
+    featured: featured.value
   })
 
   router.push(`/user/${uid}`)

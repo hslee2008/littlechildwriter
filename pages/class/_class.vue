@@ -14,7 +14,6 @@
 
     <v-tabs-items v-model="tab" class="transparent">
       <DisplayCards :class-info="classInfo" />
-
       <UploadCards :update-tab="updateTab" />
 
       <v-tab-item v-if="classInfo.uid === userInfo.uid" class="pt-5">

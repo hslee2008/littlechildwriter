@@ -77,3 +77,9 @@
     </v-simple-table>
   </div>
 </template>
+
+<script setup>
+useHead({
+  title: '리브리스 포인트제 - LCW'
+})
+</script>

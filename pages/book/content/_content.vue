@@ -230,7 +230,7 @@
           </v-card-text>
 
           <div v-if="schoolLoading" class="text-center">
-            <v-progress-circular indeterminate color="primary" />
+            <v-progress-circular indeterminate color="primary" class="mb-5" />
           </div>
           <v-list
             v-else-if="!school.resultString?.endsWith('찾을 수 없습니다.')"
@@ -636,7 +636,9 @@ const Suggestion = async () => {
     }
   } else {
     await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=title:${post.value.title}&maxResults=${15}`
+      `https://www.googleapis.com/books/v1/volumes?q=title:${
+        post.value.title
+      }&maxResults=${15}`
     )
       .then(res => res.json())
       .then(data => {
@@ -644,7 +646,14 @@ const Suggestion = async () => {
       })
   }
 
-  suggested.value = [...new Set(suggested.value)]
+  suggested.value = [
+    ...new Set(
+      suggested.value.filter(
+        (v: any, i: number, a: any) =>
+          a.findIndex((t: any) => t.title === v.title) === i
+      )
+    )
+  ]
     .sort(() => 0.5 - Math.random())
     .slice(0, 5)
 
