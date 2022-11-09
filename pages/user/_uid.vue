@@ -52,17 +52,14 @@
             />
 
             <v-card-text>
-              <v-card-title class="white--text">
+              <v-card-title>
                 {{ (chosenBookData || books[0]).title }}
               </v-card-title>
-              <v-card-subtitle class="white--text">
+              <v-card-subtitle>
                 {{ targetUser.displayName }}님의 책
               </v-card-subtitle>
 
-              <v-card-text>
-
-              {{ (chosenBookData || books[0]).content }}
-              </v-card-text>
+              <v-card-text v-html="(chosenBookData || books[0]).content" />
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -200,7 +197,7 @@
 
         <v-tab-item>
           <LazyBookCard
-            v-if="privateBooks"
+            v-if="privateBooks.length > 0"
             :items="privateBooks"
             :simple="true"
           />
@@ -238,7 +235,6 @@ const likeCount = ref<number>(0)
 const readCount = ref<number>(0)
 const avgRating = ref<number>(0)
 
-const chosenBook = ref<any>(0)
 const chosenBookData = ref<any>({})
 
 const byMonth = ref<any>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -308,7 +304,10 @@ onBeforeMount(() => {
         bio
       }
 
-      chosenBook.value = featured
+      db.ref(`/contents/${featured}`).on(
+        'value',
+        async s => (chosenBookData.value = await s.val())
+      )
 
       subscription.value = subscriber ?? []
       subCount.value = Object.keys(subscriber ?? {}).length
@@ -316,10 +315,6 @@ onBeforeMount(() => {
         userInfo.value.uid
       )
     })
-
-  db.ref(`/contents/${chosenBook.value}`).on('value', async s => {
-    chosenBookData.value = await s.val()
-  })
 
   if (userInfo.value.uid === uid) {
     db.ref(`/private/${uid}/`).on('child_added', async s => {

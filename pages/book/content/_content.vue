@@ -447,6 +447,7 @@ const userInfo = User()
 const router = useRouter()
 const route = useRoute()
 const time = route.params.content
+
 const post = ref<any>({
   isbn: '',
   title: '',
@@ -510,12 +511,11 @@ const schoolBookSearch = async () => {
     })
   )
   schoolLoading.value = true
-
   await fetch(
     `https://little-child-writer-school-book-search.onrender.com/?book=${school.value.title}&school=${school.value.name}&local=${school.value.local}`
   )
-    .then(res => res.json())
-    .then(json => {
+    .then((res) => res.json())
+    .then((json) => {
       school.value.result = json.result
       school.value.resultString = json.result.toString()
     })
@@ -527,17 +527,16 @@ const Content = async () => {
   const data = await db
     .ref(`/contents/${time}`)
     .once('value')
-    .then(r => r.val())
+    .then((r) => r.val())
 
   data !== null && Object.keys(data).length !== 1 && (post.value = data)
 
-  if (data.isbn) {
+  if (data.isbn)
     await fetch(
       `https://www.googleapis.com/books/v1/volumes?q=isbn:${data.isbn}`
     )
-      .then(res => res.json())
-      .then(res => (otherInfo.value = res.items[0]))
-  }
+      .then((res) => res.json())
+      .then((res) => (otherInfo.value = res.items[0]))
 
   school.value.title = post.value.title
 }
@@ -553,12 +552,12 @@ const share = async () => {
 }
 
 const View = () => {
-  db.ref(`contents/${time}/views`).transaction(view => view + 1)
+  db.ref(`contents/${time}/views`).transaction((view) => view + 1)
   Libris(post.value.uid, 0.1)
   Libris(userInfo.value.uid, 0.1)
 
   if (userInfo.value.uid === post.value.uid) {
-    db.ref(`contents/${time}/views`).transaction(view => view - 1)
+    db.ref(`contents/${time}/views`).transaction((view) => view - 1)
     post.value.views--
   }
 }
@@ -593,9 +592,9 @@ const Suggestion = async () => {
     await fetch(
       `https://www.googleapis.com/books/v1/volumes?q=author:${encodeURI(
         otherInfo.value.volumeInfo?.authors[0]
-      )}&maxResults=${5}`
+      )}&maxResults=${20}`
     )
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(HandleBookInfo)
   }
 
@@ -604,7 +603,7 @@ const Suggestion = async () => {
     cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
 
     let done = false
-    let n = 15
+    let n = 5
     let overflow = 0
 
     while (!done) {
@@ -620,8 +619,8 @@ const Suggestion = async () => {
           ','
         )}&maxResults=${n}`
       )
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           const length = data.items.length
 
           if (length >= n) done = true
@@ -634,17 +633,14 @@ const Suggestion = async () => {
         })
         .catch(() => cat.shift())
     }
-  } else {
-    await fetch(
+  } else
+    fetch(
       `https://www.googleapis.com/books/v1/volumes?q=title:${
         post.value.title
       }&maxResults=${15}`
     )
-      .then(res => res.json())
-      .then(data => {
-        HandleBookInfo(data)
-      })
-  }
+      .then((res) => res.json())
+      .then((data) => HandleBookInfo(data))
 
   suggested.value = [
     ...new Set(
