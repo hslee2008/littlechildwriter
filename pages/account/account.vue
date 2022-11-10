@@ -33,9 +33,8 @@
 
     <v-card id="book" class="mb-10 transparent">
       <v-card-title>책 추천</v-card-title>
-
-      <v-radio-group v-model="featured">
-        <v-list>
+      <v-radio-group v-model="featured" class="ma-3">
+        <v-list class="rounded-lg">
           <v-list-item v-for="book in books" :key="book.time">
             <v-radio :key="book.time" :value="book.time" />
 
@@ -115,7 +114,7 @@ import { User } from 'plugins/global'
 
 const userInfo = User()
 const router = useRouter()
-const userDB = ref<any>({ bio: '', featured: 0 })
+const userDB = ref<any>({ bio: '' })
 const books = ref<any[]>([])
 const imageEdit = ref<boolean>(false)
 const featured = ref<number>(0)
@@ -126,7 +125,9 @@ onMounted(() =>
       .once('value')
       .then(async s => (userDB.value = await s.val()))
 
-    featured.value = userDB.value.featured
+    db.ref(`/users/${userInfo.value.uid}`)
+      .once('value')
+      .then(async s => (featured.value = await s.val().featured))
 
     db.ref(`/contents/`).on('value', async s => {
       const data = await s.val()

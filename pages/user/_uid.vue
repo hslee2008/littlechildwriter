@@ -201,7 +201,7 @@
             :items="privateBooks"
             :simple="true"
           />
-          <v-card v-else>
+          <v-card v-else class="transparent">
             <v-card-text>비공개 글이 없습니다.</v-card-text>
           </v-card>
         </v-tab-item>
