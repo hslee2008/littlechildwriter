@@ -335,7 +335,7 @@ const Subscribe = () => {
     targetUser.value.libris -= 15
 
     Libris(uid, -15)
-    Libris(userInfo.value.uid, 15)
+    Libris(userInfo.value.uid, -15)
   } else {
     db.ref(`/users/${userInfo.value.uid}/subscribe/${uid}`).set(
       targetUser.value.displayName
@@ -350,7 +350,7 @@ const Subscribe = () => {
     targetUser.value.libris += 15
 
     Libris(uid, 15)
-    Libris(userInfo.value.uid, -15)
+    Libris(userInfo.value.uid, 15)
     Notify(
       uid,
       userInfo.value.photoURL,

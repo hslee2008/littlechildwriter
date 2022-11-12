@@ -46,7 +46,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-card-actions v-if="item.uid == userInfo.uid">
+                <v-card-actions>
                   <v-menu offset-y>
                     <template #activator="{ on, attrs }">
                       <v-btn
@@ -60,14 +60,19 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-item @click="DeleteContent('pro', i)">
+                      <v-list-item v-if="item.uid == userInfo.uid" @click="DeleteContent('pro', i)">
                         <v-list-item-title>
                           <v-icon left> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
                       </v-list-item>
-                      <v-list-item @click="UpdateOnPro(item.topic, i)">
+                      <v-list-item v-if="item.uid == userInfo.uid" @click="UpdateOnPro(item.topic, i)">
                         <v-list-item-title>
                           <v-icon left> mdi-pencil </v-icon> 수정
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item :to="`/debate/thread/${time}+pro+${i}`">
+                        <v-list-item-title>
+                          <v-icon left> mdi-fencing </v-icon> 반박
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>
@@ -108,7 +113,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-card-actions v-if="item.uid == userInfo.uid">
+                <v-card-actions>
                   <v-menu offset-y>
                     <template #activator="{ on, attrs }">
                       <v-btn
@@ -122,14 +127,19 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-item @click="DeleteContent('con', i)">
+                      <v-list-item v-if="item.uid == userInfo.uid" @click="DeleteContent('con', i)">
                         <v-list-item-title>
                           <v-icon left> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
                       </v-list-item>
-                      <v-list-item @click="UpdateOnCon(item.topic, i)">
+                      <v-list-item v-if="item.uid == userInfo.uid" @click="UpdateOnCon(item.topic, i)">
                         <v-list-item-title>
                           <v-icon left> mdi-pencil </v-icon> 수정
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item :to="`/debate/thread/${time}+con+${i}`">
+                        <v-list-item-title>
+                          <v-icon left> mdi-fencing </v-icon> 반박
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>

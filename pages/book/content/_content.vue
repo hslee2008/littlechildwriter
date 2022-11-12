@@ -503,6 +503,8 @@ const sheet = ref<boolean>(false)
 const fab = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
+  schoolLoading.value = true
+
   localStorage.setItem(
     'school',
     JSON.stringify({

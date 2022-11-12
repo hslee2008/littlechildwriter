@@ -175,7 +175,7 @@ export default defineNuxtConfig({
       ],
       start_url: '/',
       background_color: '#1B1B1D',
-      display: 'standalone',
+      display: 'browser',
       display_override: ['fullscreen', 'minimal-ui'],
       scope: '/',
       theme_color: '#1B1B1D',
