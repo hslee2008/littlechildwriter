@@ -81,3 +81,11 @@ useHead({
   title: '창작 코너 업데이트 - Little Child Writer'
 })
 </script>
+
+<script lang="ts">
+export default {
+  name: 'ContentEdit',
+  inheritAttrs: false,
+  customOptions: {}
+}
+</script>

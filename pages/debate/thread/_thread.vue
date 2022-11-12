@@ -36,3 +36,11 @@ onMounted(() => {
   })
 })
 </script>
+
+<script lang="ts">
+export default {
+  name: 'Thread',
+  inheritAttrs: false,
+  customOptions: {}
+}
+</script>

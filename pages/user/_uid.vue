@@ -375,3 +375,11 @@ useHead({
   left: 0;
 }
 </style>
+
+<script lang="ts">
+export default {
+  name: 'User',
+  inheritAttrs: false,
+  customOptions: {}
+}
+</script>

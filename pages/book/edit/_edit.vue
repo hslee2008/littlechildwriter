@@ -76,3 +76,11 @@ useHead({
   title: '편집 - LCW'
 })
 </script>
+
+<script lang="ts">
+export default {
+  name: 'Edit',
+  inheritAttrs: false,
+  customOptions: {}
+}
+</script>

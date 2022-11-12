@@ -107,3 +107,11 @@ useHead({
   title: '알림판 (자세히) - LCW'
 })
 </script>
+
+<script lang="ts">
+export default {
+  name: 'Class',
+  inheritAttrs: false,
+  customOptions: {}
+}
+</script>

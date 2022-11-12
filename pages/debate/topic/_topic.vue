@@ -60,12 +60,18 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-item v-if="item.uid == userInfo.uid" @click="DeleteContent('pro', i)">
+                      <v-list-item
+                        v-if="item.uid == userInfo.uid"
+                        @click="DeleteContent('pro', i)"
+                      >
                         <v-list-item-title>
                           <v-icon left> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
                       </v-list-item>
-                      <v-list-item v-if="item.uid == userInfo.uid" @click="UpdateOnPro(item.topic, i)">
+                      <v-list-item
+                        v-if="item.uid == userInfo.uid"
+                        @click="UpdateOnPro(item.topic, i)"
+                      >
                         <v-list-item-title>
                           <v-icon left> mdi-pencil </v-icon> 수정
                         </v-list-item-title>
@@ -127,12 +133,18 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-item v-if="item.uid == userInfo.uid" @click="DeleteContent('con', i)">
+                      <v-list-item
+                        v-if="item.uid == userInfo.uid"
+                        @click="DeleteContent('con', i)"
+                      >
                         <v-list-item-title>
                           <v-icon left> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
                       </v-list-item>
-                      <v-list-item v-if="item.uid == userInfo.uid" @click="UpdateOnCon(item.topic, i)">
+                      <v-list-item
+                        v-if="item.uid == userInfo.uid"
+                        @click="UpdateOnCon(item.topic, i)"
+                      >
                         <v-list-item-title>
                           <v-icon left> mdi-pencil </v-icon> 수정
                         </v-list-item-title>
@@ -399,4 +411,12 @@ onMounted(() =>
     .ref(`/debate/${time}`)
     .on('value', async s => (content.value = await s.val()))
 )
+</script>
+
+<script lang="ts">
+export default {
+  name: 'Topic',
+  inheritAttrs: false,
+  customOptions: {}
+}
 </script>

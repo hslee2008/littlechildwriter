@@ -739,3 +739,11 @@ useHead({
   }
 }
 </style>
+
+<script lang="ts">
+export default {
+  name: 'Content',
+  inheritAttrs: false,
+  customOptions: {}
+}
+</script>
