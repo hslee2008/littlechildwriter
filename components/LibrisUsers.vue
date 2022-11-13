@@ -17,7 +17,7 @@
       <v-list-item-content>
         <v-list-item-title>{{ lbt[i].displayName }}</v-list-item-title>
         <v-list-item-subtitle>
-          {{ Math.round(lbt[i].libris) }} 리브리스
+          {{ formatter(lbt[i].libris) }} 리브리스
         </v-list-item-subtitle>
       </v-list-item-content>
 
@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { db } from 'plugins/firebase'
+import { formatter } from 'plugins/global'
 
 const props = defineProps({
   limit: {

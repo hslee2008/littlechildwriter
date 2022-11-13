@@ -403,9 +403,14 @@ const title = ref<string>('')
 const searched = ref<any>({})
 const barcodes = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
 const typed = ref<string>('')
-const video = ref<any>(null)
 const isbnImageElement = ref<any>(null)
 const snackbar = ref<boolean>(false)
+const video = ref<any>(null)
+
+onBeforeUnmount(() => {
+  if (video.value)
+    video.value.srcObject.getTracks().forEach((track: any) => track.stop())
+})
 
 const remove = (item: string) => {
   post.value.categories.splice(post.value.categories.indexOf(item), 1)

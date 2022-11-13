@@ -49,10 +49,6 @@
         </thead>
         <tbody>
           <tr>
-            <td>접속</td>
-            <td>1점</td>
-          </tr>
-          <tr>
             <td>창작 코너 새로운 글 올리기</td>
             <td>50점</td>
           </tr>

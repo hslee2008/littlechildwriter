@@ -252,13 +252,12 @@ onMounted(() => {
     })
   })
 
-  Libris(userInfo.value.uid, 0.1)
-
   if (localStorage.getItem('dark'))
-    nuxt.$vuetify.theme.dark = !!localStorage.getItem('dark')
+    nuxt.$vuetify.theme.dark = localStorage.getItem('dark') == 'true'
 })
 
-const saveTheme = () => localStorage.setItem('dark', nuxt.$vuetify.theme.dark)
+const saveTheme = () =>
+  localStorage.setItem('dark', nuxt.$vuetify.theme.dark.toString())
 
 const clearEverything = () => {
   db.ref(`/users/${userInfo.value.uid}/notification`).remove()

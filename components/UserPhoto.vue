@@ -5,6 +5,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  src: string | undefined;
+  src: string | undefined | null
 }>()
 </script>

@@ -57,6 +57,6 @@ const formatter = (number: number) =>
     notation: 'compact',
     compactDisplay: 'short',
     maximumFractionDigits: 1
-  }).format(number)
+  }).format(Math.round(number))
 
 export { UserInfo, Book, formatter }
