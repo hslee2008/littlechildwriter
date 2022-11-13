@@ -191,7 +191,7 @@
           <line-chart
             :chart-options="chartOptions"
             :chart-data="chartData"
-            chart-id="myCustomId"
+            class="mt-5"
           />
         </v-tab-item>
 
@@ -240,16 +240,14 @@ const chosenBookData = ref<any>({})
 const byMonth = ref<any>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
 const chartOptions = ref<any>({
+  type: 'line',
   responsive: true,
   maintainAspectRatio: false,
-  scales: {
-    yAxes: [
-      {
-        ticks: {
-          beginAtZero: true
-        }
-      }
-    ]
+  plugins: {
+    title: {
+      display: true,
+      text: '월별 업로드 수'
+    }
   }
 })
 
@@ -274,7 +272,9 @@ const chartData = ref<any>({
       data: byMonth.value,
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
-      borderWidth: 1
+      borderWidth: 1,
+      tension: 0.1,
+      fill: false
     }
   ]
 })
