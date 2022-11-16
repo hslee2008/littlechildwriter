@@ -3,11 +3,11 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 async function getRoutes() {
   const routes = [] as string[]
   const admin = require('firebase-admin')
-  const serviceAccount = require('./firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json')
+  const serviceAccount = require('./firebase/littlechildwriter-database-firebase-adminsdk-zs0z7-0edd1506e7.json')
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://littlechildwriter-default-rtdb.firebaseio.com'
+    databaseURL: 'https://littlechildwriter-database-default-rtdb.asia-southeast1.firebasedatabase.app/'
   })
 
   const db = admin.database()
