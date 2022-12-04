@@ -1,4 +1,4 @@
-import { defineNuxtConfig } from '@nuxt/bridge'
+import vuetify from 'vite-plugin-vuetify'
 
 async function getRoutes() {
   const routes = [] as string[]
@@ -37,12 +37,7 @@ export default defineNuxtConfig({
   },
 
   app: {
-    baseURL: '/',
-    buildAssetsDir: '/_nuxt/',
-    cdnURL: '',
     keepalive: true,
-    layoutTransition: false,
-    pageTransition: false,
     head: {
       titleTemplate: '%s',
       title: 'Little 작가',
@@ -51,7 +46,7 @@ export default defineNuxtConfig({
           hid: 'description',
           name: 'description',
           content:
-            'Learn programming through learning, practicing, and building. Our site includes full courses of python, c, c++, and rust for free in both Korean and English language.'
+            'Learn to write with Little 작가. Little 작가 is a writing platform for kids to learn to write.'
         },
         {
           name: 'author',
@@ -93,25 +88,9 @@ export default defineNuxtConfig({
     }
   },
 
-  build: {
-    // analyze: true
-  },
-  buildDir: '.nuxt',
-  builder: '@nuxt/vite-builder',
-
-  bridge: {
-    meta: true
-  },
-
   typescript: {
     strict: true,
     shim: false
-  },
-
-  loading: {
-    color: 'skyblue',
-    height: '2px',
-    continuous: true
   },
 
   ssr: false,
@@ -122,17 +101,26 @@ export default defineNuxtConfig({
     background: '#23262E'
   },
 
-  css: ['assets/css/global.css'],
-  plugins: [
-    'plugins/firebase',
-    'plugins/global',
-    'plugins/gtag',
-    { src: 'plugins/chart', mode: 'client' }
+  css: [
+    'assets/css/global.css',
+    'vuetify/styles/main.sass',
+    '@mdi/font/css/materialdesignicons.min.css'
   ],
-  components: true,
-  buildModules: ['@nuxtjs/vuetify', '@nuxtjs/google-analytics'],
-  modules: ['@nuxtjs/pwa'],
+  plugins: ['plugins/firebase', 'plugins/gtag'],
+  modules: [
+    async (options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', config =>
+        config.plugins.push(vuetify())
+      )
+    }
+  ],
   target: 'static',
+
+  vite: {
+    define: {
+      'process.env.DEBUG': false
+    }
+  },
 
   pwa: {
     manifest: {
@@ -186,6 +174,10 @@ export default defineNuxtConfig({
       dir: 'ltr',
       lang: 'en-US'
     }
+  },
+
+  build: {
+    transpile: ['vuetify']
   },
 
   vuetify: {
@@ -243,9 +235,5 @@ export default defineNuxtConfig({
 
   googleAnalytics: {
     id: 'G-F7Z7BLCQDQyy'
-  },
-
-  webpack: {
-    optimizeCSS: true
   }
 })

@@ -1,6 +1,6 @@
 <template>
   <v-form class="my-10">
-    <v-card id="profile" class="mb-10 transparent">
+    <v-card id="profile" class="mb-10 elevation-0" color="#23262e">
       <v-card-title>프로필 설정</v-card-title>
 
       <div class="d-flex ml-5">
@@ -10,62 +10,68 @@
         <div>
           <v-card-title>{{ userInfo.displayName }}</v-card-title>
           <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
-          <v-btn text color="primary" @click="imageEdit = true">
-            이미지 편집
-          </v-btn>
+          <v-card-action>
+            <v-btn
+              text
+              color="primary"
+              class="ml-3 mt-3"
+              @click="imageEdit = true"
+            >
+              이미지 편집
+            </v-btn>
+          </v-card-action>
         </div>
       </div>
 
       <v-card-text>
         <v-textarea
-          v-model="userDB.bio"
+          :model-value="userDB.bio"
           auto-grow
           required
           flat
           dense
-          solo
+          variant="solo"
           label="Bio"
           placeholder="나의 소개"
-          class="ma-1"
+          class="ma-1 elevation-0"
         />
       </v-card-text>
     </v-card>
 
-    <v-card id="book" class="mb-10 transparent">
+    <v-card id="book" class="mb-10 elevation-0" color="#23262e">
       <v-card-title>책 추천</v-card-title>
       <v-radio-group v-model="featured" class="ma-3">
         <v-list class="rounded-lg">
           <v-list-item v-for="book in books" :key="book.time">
-            <v-radio :key="book.time" :value="book.time" />
+            <template #prepend>
+              <v-radio :key="book.time + '-radio'" :value="book.time" />
+            </template>
 
-            <v-list-item-content>
-              <v-list-item-title>{{ book.title }}</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title>{{ book.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-radio-group>
     </v-card>
 
-    <v-card id="advanced" class="mb-10 transparent">
+    <v-card id="advanced" class="mb-10 elevation-0" color="#23262e">
       <v-card-title>고급 설정</v-card-title>
 
       <v-card-text>
         <v-text-field
-          v-model="userInfo.uid"
+          :model-value="userInfo.uid"
           label="UID"
           placeholder="UID"
-          filled
           required
           flat
           dense
-          solo
+          variant="solo"
           disabled
           prepend-inner-icon="mdi-account"
         />
       </v-card-text>
     </v-card>
 
-    <v-dialog v-model="imageEdit" width="500">
+    <v-dialog :model-value="imageEdit" width="500">
       <v-card>
         <v-card-title> 이미지 편집 </v-card-title>
 
@@ -77,14 +83,14 @@
           </div>
 
           <v-text-field
-            v-model="userInfo.photoURL"
+            :model-value="userInfo.photoURL"
             label="URL"
             placeholder="URL"
-            filled
+            varaint="filled"
             required
             flat
             dense
-            solo
+            variant="solo"
             prepend-inner-icon="mdi-camera"
           />
         </v-card-text>
@@ -109,8 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+const { $db, $auth } = useNuxtApp()
 
 const userInfo = User()
 const router = useRouter()
@@ -120,16 +125,18 @@ const imageEdit = ref<boolean>(false)
 const featured = ref<number>(0)
 
 onMounted(() =>
-  auth.onAuthStateChanged(() => {
-    db.ref(`/users/${userInfo.value.uid}`)
+  $auth.onAuthStateChanged(() => {
+    $db
+      .ref(`/users/${userInfo.value.uid}`)
       .once('value')
-      .then(async s => (userDB.value = await s.val()))
+      .then(async (s: any) => (userDB.value = await s.val()))
 
-    db.ref(`/users/${userInfo.value.uid}`)
+    $db
+      .ref(`/users/${userInfo.value.uid}`)
       .once('value')
-      .then(async s => (featured.value = await s.val().featured))
+      .then(async (s: any) => (featured.value = await s.val().featured))
 
-    db.ref(`/contents/`).on('value', async s => {
+    $db.ref(`/contents/`).on('value', async (s: any) => {
       const data = await s.val()
 
       for (const key in data)
@@ -142,9 +149,9 @@ const Update = async () => {
   const { displayName, uid, email } = userInfo.value
   const { bio } = userDB.value
 
-  await auth.currentUser?.updateEmail(email)
+  await $auth.currentUser?.updateEmail(email)
 
-  db.ref(`/users/${uid}`).update({
+  $db.ref(`/users/${uid}`).update({
     displayName,
     bio,
     featured: featured.value
@@ -156,8 +163,8 @@ const Update = async () => {
 const save = () => {
   const { photoURL } = userInfo.value
 
-  auth.currentUser?.updateProfile({ photoURL })
-  db.ref(`/users/${userInfo.value.uid}`).update({ photoURL })
+  $auth.currentUser?.updateProfile({ photoURL })
+  $db.ref(`/users/${userInfo.value.uid}`).update({ photoURL })
 
   imageEdit.value = false
 }

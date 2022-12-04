@@ -1,53 +1,58 @@
 <template>
   <div>
     <h1><v-icon left>mdi-bookmark</v-icon> 책갈피</h1>
-    <v-list v-if="items.length > 0" v-model="items" class="transparent" nav>
+
+    <br />
+
+    <v-list
+      v-if="items.length > 0"
+      :model-value="items"
+      bg-color="#23262e"
+      nav
+    >
       <v-list-item
         v-for="(item, i) in items"
         :key="item.time"
         :to="`/book/content/${item.time}`"
-        :color="$vuetify.theme.dark ? '#23262E' : 'white'"
+        bg-color="#23262E"
       >
-        <v-list-item-content>
-          <v-list-item-title> {{ item.title }} </v-list-item-title>
-        </v-list-item-content>
-
-        <v-list-item-action>
-          <v-spacer />
+        <template #append>
           <v-btn
-            icon
-            color="red"
+            icon="mdi-delete"
+            color="#23262e"
+            flat
             @click.prevent.stop="deleteBookmark(item.time, i)"
-          >
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
-        </v-list-item-action>
+          />
+        </template>
+
+        <v-list-item-title> {{ item.title }} </v-list-item-title>
       </v-list-item>
     </v-list>
-    <v-card v-else class="transparent">
+    <v-card v-else color="#23262e" class="elevation-0">
       <v-card-text> 책갈피가 없습니다. </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { auth, db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+import { useTheme } from 'vuetify';
+const { $db, $auth } = useNuxtApp()
 
+const theme = useTheme()
 const userInfo = User()
 const items = ref<any>([])
 
 onMounted(() =>
-  auth.onAuthStateChanged(u =>
-    db
+  $auth.onAuthStateChanged((u: any) =>
+    $db
       .ref(`/users/${u?.uid}/bookmarks`)
-      .on('child_added', async s => items.value.push(await s.val()))
+      .on('child_added', async (s: any) => items.value.push(await s.val()))
   )
 )
 
 const deleteBookmark = (time: string, i: number) => {
-  db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
-  db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
+  $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
+  $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
   items.value.splice(i, 1)
 }
 

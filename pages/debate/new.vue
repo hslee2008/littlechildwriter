@@ -3,16 +3,16 @@
     <h1>새로운 주제</h1>
 
     <v-text-field
-      v-model="debate.topic"
+      :model-value="debate.topic"
       label="주제"
       placeholder="주제 / 질문 입력하기"
-      solo
+      variant="solo"
       clearable
       class="mt-3"
     />
 
     <v-col class="d-flex" cols="12" sm="6">
-      <v-select v-model="debate.lang" :items="lang" width="300" />
+      <v-select :model-value="debate.lang" :items="lang" width="300" />
     </v-col>
 
     <v-btn text primary @click="upload">
@@ -23,8 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+const { $db } = useNuxtApp();
 
 const userInfo = User()
 const router = useRouter()
@@ -42,7 +41,7 @@ const upload = () => {
   const { topic } = debate.value
   const time = Date.now()
 
-  db.ref(`/debate/${time}`).set({
+  $db.ref(`/debate/${time}`).set({
     topic,
     time,
     uid,

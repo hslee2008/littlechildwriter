@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-model="dialog" transition="dialog-bottom-transition" width="500">
-    <template #activator="{ on, attrs }">
+  <v-dialog :model-value="dialog" width="500">
+    <template #activator="{ props }">
       <v-btn
         color="red lighten-2"
-        v-bind="attrs"
+        v-bind="props"
         class="delete"
         @click="dialog = true"
-        v-on="on"
+
       >
         <v-icon left> mdi-{{ icon }} </v-icon>
         {{ btnTitle }}

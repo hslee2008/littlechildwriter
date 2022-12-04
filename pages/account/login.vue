@@ -4,51 +4,51 @@
       class="d-flex justify-center align-center text-center login"
       style="height: calc(100vh - 100px)"
     >
+      <section id="firebaseui-auth-container" />
+
       <div>
         <h1>로그인</h1>
-        <p>계정이 없으면 <NLink to="/account/create"> 계정 만들기 </NLink></p>
+        <p>
+          계정이 없으면 <NuxtLink to="/account/create"> 계정 만들기 </NuxtLink>
+        </p>
 
         <v-divider class="my-5" />
 
-        <div :class="`d-${$vuetify.breakpoint.xs ? '' : 'flex'}`">
-          <section id="firebaseui-auth-container" />
+        <v-form class="mt-4">
+          <v-text-field
+            :model-value="email"
+            type="email"
+            label="이메일"
+            outlined
+            required
+            clearable
+            prepend-inner-icon="mdi-email"
+            @keyup.enter="onSubmit"
+          />
 
-          <v-form class="mt-4">
-            <v-text-field
-              v-model="email"
-              type="email"
-              label="이메일"
-              outlined
-              required
-              clearable
-              prepend-inner-icon="mdi-email"
-              @keyup.enter="onSubmit"
-            />
+          <v-text-field
+            :model-value="password"
+            type="password"
+            label="암호"
+            outlined
+            required
+            clearable
+            prepend-inner-icon="mdi-key"
+            @keyup.enter="onSubmit"
+          />
 
-            <v-text-field
-              v-model="password"
-              type="password"
-              label="암호"
-              outlined
-              required
-              clearable
-              prepend-inner-icon="mdi-key"
-              @keyup.enter="onSubmit"
-            />
-
-            <v-btn color="primary" @click="onSubmit">
-              <v-icon left> mdi-account </v-icon>로그인
-            </v-btn>
-          </v-form>
-        </div>
+          <v-btn color="primary" block @click="onSubmit">
+            <v-icon left> mdi-account </v-icon>로그인
+          </v-btn>
+        </v-form>
       </div>
     </div>
   </div>
 </template>
 
 <script setup script="ts">
-import { auth } from 'firebaseui'
 import firebase from 'firebase/compat/app'
+import { auth } from 'firebaseui'
 import 'firebaseui/dist/firebaseui.css'
 
 const router = useRouter()

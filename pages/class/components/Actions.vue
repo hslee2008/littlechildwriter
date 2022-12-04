@@ -1,8 +1,8 @@
 <template>
   <v-card-actions>
     <v-menu offset-y>
-      <template #activator="{ on, attrs }">
-        <v-btn icon v-bind="attrs" cols="1" v-on="on" @click.stop.prevent="">
+      <template #activator="{ props }">
+        <v-btn icon v-bind="props" cols="1" @click.stop.prevent="">
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </template>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { db, storage } from 'plugins/firebase'
+const { $db, $storage } = useNuxtApp();
 
 const route = useRoute()
 const props = defineProps<{
@@ -30,7 +30,7 @@ const props = defineProps<{
 const id = route.params.class
 
 const DeleteContent = (title: string, i: string) => {
-  db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
-  props.type === '파일' && storage.ref(`${props.type}`).delete()
+  $db.ref(`/classes/${id}/contents/${title}/${i}`).remove()
+  props.type === '파일' && $storage.ref(`${props.type}`).delete()
 }
 </script>

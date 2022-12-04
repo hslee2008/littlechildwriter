@@ -22,17 +22,16 @@
       닫기
     </v-btn>
 
-    <v-card class="my-3 transparent">
+    <v-card class="my-3 elevation-0" color="#23262e">
       <div class="cardy">
         <div class="ma-auto">
-          <v-bottom-sheet v-model="sheet" inset scrollable>
-            <template #activator="{ on, attrs }">
+          <v-dialog :model-value="sheet" inset scrollable>
+            <template #activator="{ props }">
               <v-img
                 :src="post.image"
                 width="200"
                 class="ml-5 my-5 rounded-lg pointer"
-                v-bind="attrs"
-                v-on="on"
+                v-bind="props"
               >
                 <template #placeholder>
                   <v-row
@@ -46,8 +45,6 @@
               </v-img>
             </template>
             <v-list nav>
-              <v-subheader>외부 사이트</v-subheader>
-
               <v-list-item
                 target="_blank"
                 :href="`https://aladin.co.kr/${
@@ -57,14 +54,14 @@
                       post.title
                 }`"
               >
-                <v-list-item-avatar>
+                <template #prepend>
                   <v-avatar size="40">
-                    <img
+                    <v-img
                       src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
                       alt="aladdin"
                     />
                   </v-avatar>
-                </v-list-item-avatar>
+                </template>
                 <v-list-item-title>알라딘</v-list-item-title>
               </v-list-item>
 
@@ -74,14 +71,14 @@
                   post.isbn || post.title
                 }&domain=all`"
               >
-                <v-list-item-avatar>
+                <template #prepend>
                   <v-avatar size="40">
-                    <img
+                    <v-img
                       src="https://image.yes24.com/sysimage/renew/gnb/yes24.ico"
                       alt="yes24"
                     />
                   </v-avatar>
-                </v-list-item-avatar>
+                </template>
                 <v-list-item-title>YES24</v-list-item-title>
               </v-list-item>
 
@@ -91,14 +88,14 @@
                   post.isbn || post.title
                 }&i=stripbooks&linkCode=qs`"
               >
-                <v-list-item-avatar>
+                <template #prepend>
                   <v-avatar size="40">
-                    <img
+                    <v-img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
                       alt="amazon"
                     />
                   </v-avatar>
-                </v-list-item-avatar>
+                </template>
                 <v-list-item-title>아마존</v-list-item-title>
               </v-list-item>
 
@@ -108,14 +105,14 @@
                   post.isbn || post.title
                 }&collection=kyobo_new`"
               >
-                <v-list-item-avatar>
+                <template #prepend>
                   <v-avatar size="40">
-                    <img
+                    <v-img
                       src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/favicon/apple-touch-icon-144x144-precomposed.png"
                       alt="kyobo"
                     />
                   </v-avatar>
-                </v-list-item-avatar>
+                </template>
                 <v-list-item-title>교보문고</v-list-item-title>
               </v-list-item>
 
@@ -123,22 +120,22 @@
                 target="_blank"
                 :href="`https://books.google.co.kr/books?id=${otherInfo?.id}`"
               >
-                <v-list-item-avatar>
+                <template #prepend>
                   <v-avatar size="40">
-                    <img
+                    <v-img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjzC2JyZDZ_RaWf0qp11K0lcvB6b6kYNMoqtZAQ9hiPZ4cTIOB"
                       alt="google"
                     />
                   </v-avatar>
-                </v-list-item-avatar>
+                </template>
                 <v-list-item-title>구글</v-list-item-title>
               </v-list-item>
             </v-list>
-          </v-bottom-sheet>
+          </v-dialog>
         </div>
 
         <div class="ma-auto">
-          <v-card-title class="h1 primary--text title">
+          <v-card-title class="h1 text-primary title">
             {{ post.title }}
             <span
               v-if="post.isbn && otherInfo.volumeInfo?.authors"
@@ -150,7 +147,9 @@
 
           <v-card-subtitle>
             by
-            <NLink :to="`/user/${post.uid}`">{{ post.displayName }}</NLink>
+            <NuxtLink :to="`/user/${post.uid}`">{{
+              post.displayName
+            }}</NuxtLink>
           </v-card-subtitle>
 
           <v-card-text>
@@ -160,7 +159,7 @@
               size="20"
               color="amber"
               background-color="white"
-              :value="post.rating"
+              :model-value="post.rating"
             />
             <div class="my-5" v-html="post.content" />
             <v-chip-group class="my-5" column>
@@ -192,9 +191,9 @@
     </v-card>
 
     <div class="text-center my-10">
-      <v-dialog transition="dialog-bottom-transition" width="700">
-        <template #activator="{ on, attrs }">
-          <v-btn text v-bind="attrs" v-on="on">
+      <v-dialog width="700">
+        <template #activator="{ props }">
+          <v-btn text v-bind="props" class="mx-1">
             <v-icon left> mdi-town-hall </v-icon>
             학교 도서관
           </v-btn>
@@ -206,27 +205,25 @@
           <v-card-text>
             <div class="d-flex">
               <v-select
-                v-model="school.local"
+                :model-value="school.local"
                 :items="school.list"
                 label="지역 선택"
                 class="mr-2"
               />
               <v-text-field
-                v-model="school.name"
+                :model-value="school.name"
                 label="학교 이름"
                 :rules="[endWithSchool]"
                 class="mx-2"
               />
               <v-btn
                 ref="search"
-                icon
-                class="ma-auto"
+                icon="mdi-magnify"
+                class="ma-auto elevation-0"
                 @click="schoolBookSearch"
-              >
-                <v-icon>mdi-magnify</v-icon>
-              </v-btn>
+              />
             </div>
-            <v-text-field v-model="school.title" label="책 제목" />
+            <v-text-field :model-value="school.title" label="책 제목" />
           </v-card-text>
 
           <div v-if="schoolLoading" class="text-center">
@@ -255,14 +252,14 @@
               </v-img>
 
               <v-card>
-                <v-card-title class="primary--text">
+                <v-card-title class="text-primary">
                   {{ item.title }}
                 </v-card-title>
                 <v-card-subtitle>
                   {{ item.writer }}
                 </v-card-subtitle>
 
-                <v-card-text class="mt-2 white--text">
+                <v-card-text class="mt-2 text-white">
                   청구 기호: {{ item.callNumber }}<br />
                   회사: {{ item.company }}
                 </v-card-text>
@@ -272,28 +269,27 @@
           <v-card-text v-else>{{ school.resultString }}</v-card-text>
         </v-card>
       </v-dialog>
-      <v-btn text @click="share">
+      <v-btn text @click="share" class="mx-1">
         <v-icon left> mdi-share-variant </v-icon>
         공유
       </v-btn>
       <v-menu v-if="post.isbn" offset-y>
-        <template #activator="{ on, attrs }">
-          <v-btn icon v-bind="attrs" cols="1" v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
+        <template #activator="{ props }">
+          <v-btn
+            icon="mdi-dots-vertical"
+            v-bind="props"
+            cols="1"
+            class="mx-1"
+          />
         </template>
 
         <v-card>
           <v-btn text @click="iframe = true">
             <v-icon left> mdi-file-find </v-icon> 미리보기
           </v-btn>
-          <v-dialog
-            v-if="post.categories"
-            transition="dialog-bottom-transition"
-            width="700"
-          >
-            <template #activator="{ on, attrs }">
-              <v-btn text v-bind="attrs" v-on="on">
+          <v-dialog v-if="post.categories" width="700">
+            <template #activator="{ props }">
+              <v-btn text v-bind="props">
                 <v-icon left> mdi-shape </v-icon> 카테고리
               </v-btn>
             </template>
@@ -315,13 +311,9 @@
               </v-card-text>
             </v-card>
           </v-dialog>
-          <v-dialog
-            v-if="post.isbn"
-            transition="dialog-bottom-transition"
-            width="700"
-          >
-            <template #activator="{ on, attrs }">
-              <v-btn text v-bind="attrs" v-on="on">
+          <v-dialog v-if="post.isbn" width="700">
+            <template #activator="{ props }">
+              <v-btn text v-bind="props">
                 <v-icon left> mdi-book-information-variant </v-icon> 정보
               </v-btn>
             </template>
@@ -335,7 +327,7 @@
               </v-card-subtitle>
 
               <v-card-text>
-                <v-simple-table>
+                <v-table>
                   <template #default>
                     <thead>
                       <tr>
@@ -375,7 +367,7 @@
                       </tr>
                     </tbody>
                   </template>
-                </v-simple-table>
+                </v-table>
               </v-card-text>
             </v-card>
           </v-dialog>
@@ -392,7 +384,7 @@
     <br /><br /><br /><br /><br /><br />
 
     <div v-if="loading" class="text-center">
-      <v-progress-circular indeterminate color="primary" large />
+      <v-progress-circular indeterminate color="primary" size="large" />
     </div>
     <template v-else>
       <h1>이런 책 어때?</h1>
@@ -401,9 +393,10 @@
         <v-card
           v-for="(item, i) in suggested"
           :key="i"
-          class="mx-auto my-5 transparent"
+          class="mx-auto my-5 elevation-0"
+          color="#23262e"
           :href="item.infoLink"
-          :width="$vuetify.breakpoint.width < 1264 ? 150 : 210"
+          :width="width < 1264 ? 150 : 210"
         >
           <v-img :src="item.thumbnail" class="rounded-lg" />
           <v-card-title class="text-h6">{{ item.title }}</v-card-title>
@@ -415,7 +408,7 @@
 
     <v-speed-dial
       v-if="userInfo.uid === post.uid"
-      v-model="fab"
+      :model-value="fab"
       bottom
       right
       open-on-hover
@@ -424,15 +417,15 @@
       style="position: fixed"
     >
       <template #activator>
-        <v-btn v-model="fab" color="blue darken-2" dark fab>
+        <v-btn :model-value="fab" color="blue darken-2" dark fab>
           <v-icon v-if="fab"> mdi-cog-off </v-icon>
           <v-icon v-else> mdi-cog </v-icon>
         </v-btn>
       </template>
-      <v-btn fab dark small color="green" :to="`/book/edit/${time}`">
+      <v-btn fab dark size="small" color="green" :to="`/book/edit/${time}`">
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
-      <v-btn fab dark small color="red" @click="Del">
+      <v-btn fab dark size="small" color="red" @click="Del">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </v-speed-dial>
@@ -440,9 +433,10 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { formatter, User } from 'plugins/global'
+import { useDisplay } from 'vuetify'
+const { $db } = useNuxtApp()
 
+const { width } = useDisplay()
 const userInfo = User()
 const router = useRouter()
 const route = useRoute()
@@ -526,10 +520,10 @@ const schoolBookSearch = async () => {
 }
 
 const Content = async () => {
-  const data = await db
+  const data = await $db
     .ref(`/contents/${time}`)
     .once('value')
-    .then(r => r.val())
+    .then((r: any) => r.val())
 
   data !== null && Object.keys(data).length !== 1 && (post.value = data)
 
@@ -554,12 +548,12 @@ const share = async () => {
 }
 
 const View = () => {
-  db.ref(`contents/${time}/views`).transaction(view => view + 1)
+  $db.ref(`contents/${time}/views`).transaction((view: any) => view + 1)
   Libris(post.value.uid, 0.1)
   Libris(userInfo.value.uid, 0.1)
 
   if (userInfo.value.uid === post.value.uid) {
-    db.ref(`contents/${time}/views`).transaction(view => view - 1)
+    $db.ref(`contents/${time}/views`).transaction((view: any) => view - 1)
     post.value.views--
   }
 }
@@ -660,7 +654,7 @@ const Suggestion = async () => {
 }
 
 const Del = () => {
-  db.ref(`contents/${time}`).remove()
+  $db.ref(`contents/${time}`).remove()
   Libris(userInfo.value.uid, -(parseInt(post.value.pageCount) / 100))
   router.push('/list')
 }
@@ -670,10 +664,10 @@ const Like = () => {
     post.value.likes--
     post.value.liked[userInfo.value.uid] = false
 
-    db.ref(`/contents/${post.value.time}/liked/${userInfo.value.uid}`).set(
-      false
-    )
-    db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
+    $db
+      .ref(`/contents/${post.value.time}/liked/${userInfo.value.uid}`)
+      .set(false)
+    $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
 
     Libris(userInfo.value.uid, -0.1)
     Libris(post.value.uid, -0.1)
@@ -686,8 +680,10 @@ const Like = () => {
       console.log(e)
     }
 
-    db.ref(`/contents/${post.value.time}/liked/${userInfo.value.uid}`).set(true)
-    db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
+    $db
+      .ref(`/contents/${post.value.time}/liked/${userInfo.value.uid}`)
+      .set(true)
+    $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
 
     Libris(userInfo.value.uid, 0.1)
     Libris(post.value.uid, 0.1)

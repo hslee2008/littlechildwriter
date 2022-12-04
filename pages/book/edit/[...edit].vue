@@ -1,17 +1,17 @@
 <template>
-  <v-card class="transparent">
+  <v-card color="#23262e">
     <v-card-text>
       <v-rating
-        v-model="post.rating"
+        :model-value="post.rating"
         half-increments
         color="blue"
         size="30"
         class="my-10"
       />
 
-      <v-text-field v-model="post.title" label="제목" />
-      <v-text-field v-model="post.pageCount" label="페이지" />
-      <v-textarea v-model="post.content" label="책 소개" auto-grow counter />
+      <v-text-field :model-value="post.title" label="제목" />
+      <v-text-field :model-value="post.pageCount" label="페이지" />
+      <v-textarea :model-value="post.content" label="책 소개" auto-grow counter />
     </v-card-text>
 
     <v-card-actions>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { auth, db } from 'plugins/firebase'
+const { $db, $auth } = useNuxtApp();
 
 const route = useRoute()
 const router = useRouter()
@@ -52,15 +52,15 @@ const post = ref<any>({
   time: Date.now()
 })
 
-onMounted(() => auth.onAuthStateChanged(u => u && Post()))
+onMounted(() => $auth.onAuthStateChanged((u: any) => u && Post()))
 
 const Post = async () =>
-  (post.value = (await db.ref(`/contents/${time}`).once('value')).val())
+  (post.value = (await $db.ref(`/contents/${time}`).once('value')).val())
 
 const Update = () => {
   const { title, content, image, time, rating, pageCount, isbn } = post.value
 
-  db.ref(`/contents/${time}`).update({
+  $db.ref(`/contents/${time}`).update({
     title,
     content,
     rating,

@@ -17,15 +17,6 @@
   background-color: #23262e !important;
 }
 
-/* Theme */
-.theme--dark.v-application {
-  background-color: #23262e !important;
-}
-
-.theme--light.v-application {
-  background-color: #f5f5f5 !important;
-}
-
 /* Transition */
 html {
   scroll-behavior: smooth;

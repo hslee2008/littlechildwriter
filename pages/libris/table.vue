@@ -2,8 +2,10 @@
   <div>
     <h1>리브리스 포인트제</h1>
 
-    <v-simple-table>
-      <template v-slot:default>
+    <br />
+
+    <v-table class="rounded-lg">
+      <template #default>
         <thead>
           <tr>
             <th class="text-left">책 관련 활동</th>
@@ -35,12 +37,12 @@
           </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-table>
 
     <br />
 
-    <v-simple-table>
-      <template v-slot:default>
+    <v-table class="rounded-lg">
+      <template #default>
         <thead>
           <tr>
             <th class="text-left">기타 활동</th>
@@ -70,7 +72,7 @@
           </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-table>
   </div>
 </template>
 

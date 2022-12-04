@@ -13,7 +13,7 @@
   >
     <template #header>
       <v-text-field
-        v-model="search"
+        :model-value="search"
         label="Search"
         outlined
         rounded
@@ -21,7 +21,7 @@
       />
 
       <v-switch
-        v-model="sortDesc"
+        :model-value="sortDesc"
         :label="sortDesc ? '최신순' : '오래된순'"
         hide-details
         class="my-2"
@@ -37,8 +37,8 @@
     <template #footer>
       <v-row class="mt-10" align="center" justify="center">
         <v-menu top>
-          <template #activator="{ on, attrs }">
-            <v-btn text color="primary" class="ml-2" v-bind="attrs" v-on="on">
+          <template #activator="{ props }">
+            <v-btn text color="primary" class="ml-2" v-bind="props">
               {{ itemsPerPage }}
               <v-icon right> mdi-chevron-down </v-icon>
             </v-btn>
@@ -57,7 +57,7 @@
 
         <v-spacer />
 
-        <span class="mr-4 grey--text"> {{ page }} / {{ numberOfPages }} </span>
+        <span class="mr-4 text-grey"> {{ page }} / {{ numberOfPages }} </span>
         <v-btn icon color="blue darken-3" @click="Before">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
@@ -70,11 +70,10 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { Book } from 'plugins/global'
+const { $db } = useNuxtApp();
 
 const route = useRoute()
-const books = ref<Book[]>([])
+const books = ref<any[]>([])
 const sortBy = ref<string>('time')
 // eslint-disable-next-line func-call-spacing
 const search = ref<string | (string | null)[]>('')
@@ -88,7 +87,7 @@ const numberOfPages = computed(() =>
 
 onBeforeMount(() => {
   route.query.search && (search.value = route.query.search)
-  db.ref('contents').on('child_added', async s =>
+  $db.ref('contents').on('child_added', async (s: any) =>
     books.value.unshift(await s.val())
   )
 })
