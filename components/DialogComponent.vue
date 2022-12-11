@@ -8,7 +8,7 @@
         @click="dialog = true"
 
       >
-        <v-icon left> mdi-{{ icon }} </v-icon>
+        <v-icon start> mdi-{{ icon }} </v-icon>
         {{ btnTitle }}
       </v-btn>
     </template>

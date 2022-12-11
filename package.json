@@ -30,7 +30,6 @@
     "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/google-gtag": "^1.0.4",
     "@nuxtjs/pwa": "3.3.5",
-    "@nuxtjs/vuetify": "1.12.3",
     "@types/marked": "^4.0.7",
     "eslint": "^8.25.0",
     "eslint-plugin-nuxt": "4.0.0",

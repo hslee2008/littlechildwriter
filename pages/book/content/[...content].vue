@@ -164,24 +164,24 @@
             <div class="my-5" v-html="post.content" />
             <v-chip-group class="my-5" column>
               <v-chip label>
-                <v-icon left> mdi-eye </v-icon>
+                <v-icon start> mdi-eye </v-icon>
                 {{ formatter(post.views + 1) }}
               </v-chip>
               <v-chip label>
-                <v-icon left>mdi-sort-clock-descending-outline</v-icon>
+                <v-icon start>mdi-sort-clock-descending-outline</v-icon>
                 {{ new Date(post.time).toLocaleDateString() }}
               </v-chip>
               <v-chip label>
-                <v-icon left>mdi-book</v-icon>
+                <v-icon start>mdi-book</v-icon>
                 {{ post.pageCount }}
               </v-chip>
               <v-chip
                 v-if="userInfo.uid"
                 label
-                :color="(post?.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
+                :color="(post?.liked ?? {})[userInfo.uid] ? 'blue' : 'grey'"
                 @click="Like()"
               >
-                <v-icon left> mdi-thumb-up </v-icon>
+                <v-icon start> mdi-thumb-up </v-icon>
                 <span class="subheading" v-text="post?.likes" />
               </v-chip>
             </v-chip-group>
@@ -194,7 +194,7 @@
       <v-dialog width="700">
         <template #activator="{ props }">
           <v-btn text v-bind="props" class="mx-1">
-            <v-icon left> mdi-town-hall </v-icon>
+            <v-icon start> mdi-town-hall </v-icon>
             학교 도서관
           </v-btn>
         </template>
@@ -270,7 +270,7 @@
         </v-card>
       </v-dialog>
       <v-btn text @click="share" class="mx-1">
-        <v-icon left> mdi-share-variant </v-icon>
+        <v-icon start> mdi-share-variant </v-icon>
         공유
       </v-btn>
       <v-menu v-if="post.isbn" offset-y>
@@ -285,12 +285,12 @@
 
         <v-card>
           <v-btn text @click="iframe = true">
-            <v-icon left> mdi-file-find </v-icon> 미리보기
+            <v-icon start> mdi-file-find </v-icon> 미리보기
           </v-btn>
           <v-dialog v-if="post.categories" width="700">
             <template #activator="{ props }">
               <v-btn text v-bind="props">
-                <v-icon left> mdi-shape </v-icon> 카테고리
+                <v-icon start> mdi-shape </v-icon> 카테고리
               </v-btn>
             </template>
 
@@ -314,7 +314,7 @@
           <v-dialog v-if="post.isbn" width="700">
             <template #activator="{ props }">
               <v-btn text v-bind="props">
-                <v-icon left> mdi-book-information-variant </v-icon> 정보
+                <v-icon start> mdi-book-information-variant </v-icon> 정보
               </v-btn>
             </template>
 

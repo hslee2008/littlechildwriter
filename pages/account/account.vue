@@ -107,7 +107,7 @@
 
     <v-row justify="center" class="g-10">
       <v-btn color="primary" @click="Update">
-        <v-icon left> mdi-account </v-icon>
+        <v-icon start> mdi-account </v-icon>
         업데이트
       </v-btn>
     </v-row>

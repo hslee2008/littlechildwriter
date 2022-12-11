@@ -91,13 +91,13 @@
                 <template v-if="userInfo.displayName === message.displayName">
                   <v-list-item @click="Edit(i)">
                     <v-list-item-title>
-                      <v-icon left> mdi-pencil </v-icon>
+                      <v-icon start> mdi-pencil </v-icon>
                       {{ comments[i].edit ? '취소' : '수정' }}
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="Delete(i)">
                     <v-list-item-title>
-                      <v-icon left> mdi-trash-can </v-icon> 삭제
+                      <v-icon start> mdi-trash-can </v-icon> 삭제
                     </v-list-item-title>
                   </v-list-item>
                 </template>
@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from 'perspective-api-client'
+import Perspective from 'perspective-api-client';
 
 const { $db } = useNuxtApp()
 

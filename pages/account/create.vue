@@ -28,7 +28,7 @@
       />
 
       <v-btn color="primary" @click="Make">
-        <v-icon left> mdi-account </v-icon> 계정 만들기
+        <v-icon start> mdi-account </v-icon> 계정 만들기
       </v-btn>
     </v-form>
   </div>

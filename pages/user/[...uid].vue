@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row class="mb-5">
-      <v-avatar size="70" class="mt-2">
+      <v-avatar size="70" class="mt-4 ml-5">
         <UserPhoto :src="targetUser.photoURL" />
       </v-avatar>
 
@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="ml-auto my-auto float-right">
+      <div class="ml-auto my-auto float-right mr-5">
         <v-btn
           v-if="userInfo.uid !== uid"
           color="red"

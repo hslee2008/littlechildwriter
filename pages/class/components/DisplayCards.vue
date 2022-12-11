@@ -105,7 +105,7 @@
               />
             </v-card>
             <v-card v-else class="d-flex">
-              <v-icon left color="green" class="ml-3">mdi-check</v-icon>
+              <v-icon start color="green" class="ml-3">mdi-check</v-icon>
               <v-card-text>
                 {{ item.displayName }}님이 숙제를 비공개로 제출함
               </v-card-text>
@@ -225,8 +225,8 @@
 </template>
 
 <script setup>
-import { useTheme } from 'vuetify'
-import Actions from './Actions.vue'
+import { useTheme } from 'vuetify';
+import Actions from './Actions.vue';
 
 const theme = useTheme()
 const userInfo = User()

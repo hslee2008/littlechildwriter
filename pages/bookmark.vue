@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1><v-icon left>mdi-bookmark</v-icon> 책갈피</h1>
+    <h1><v-icon start>mdi-bookmark</v-icon> 책갈피</h1>
 
     <br />
 

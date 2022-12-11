@@ -9,7 +9,7 @@
       <v-list>
         <v-list-item @click="DeleteContent(title, i)">
           <v-list-item-title>
-            <v-icon left> mdi-trash-can </v-icon> 삭제
+            <v-icon start> mdi-trash-can </v-icon> 삭제
           </v-list-item-title>
         </v-list-item>
       </v-list>

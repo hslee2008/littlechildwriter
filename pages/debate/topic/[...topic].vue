@@ -68,7 +68,7 @@
                         @click="DeleteContent('pro', i)"
                       >
                         <v-list-item-title>
-                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                          <v-icon start> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item
@@ -76,12 +76,12 @@
                         @click="UpdateOnPro(item.topic, i)"
                       >
                         <v-list-item-title>
-                          <v-icon left> mdi-pencil </v-icon> 수정
+                          <v-icon start> mdi-pencil </v-icon> 수정
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item :to="`/debate/thread/${time}+pro+${i}`">
                         <v-list-item-title>
-                          <v-icon left> mdi-fencing </v-icon> 반박
+                          <v-icon start> mdi-fencing </v-icon> 반박
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>
@@ -140,7 +140,7 @@
                         @click="DeleteContent('con', i)"
                       >
                         <v-list-item-title>
-                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                          <v-icon start> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item
@@ -148,12 +148,12 @@
                         @click="UpdateOnCon(item.topic, i)"
                       >
                         <v-list-item-title>
-                          <v-icon left> mdi-pencil </v-icon> 수정
+                          <v-icon start> mdi-pencil </v-icon> 수정
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item :to="`/debate/thread/${time}+con+${i}`">
                         <v-list-item-title>
-                          <v-icon left> mdi-fencing </v-icon> 반박
+                          <v-icon start> mdi-fencing </v-icon> 반박
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>
@@ -237,12 +237,12 @@
             <v-list>
               <v-list-item @click="DeleteContent('suggestion', i)">
                 <v-list-item-title>
-                  <v-icon left> mdi-trash-can </v-icon> 삭제
+                  <v-icon start> mdi-trash-can </v-icon> 삭제
                 </v-list-item-title>
               </v-list-item>
               <v-list-item @click="UpdateOnSuggestion(item.topic, i)">
                 <v-list-item-title>
-                  <v-icon left> mdi-pencil </v-icon> 수정
+                  <v-icon start> mdi-pencil </v-icon> 수정
                 </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -288,7 +288,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()

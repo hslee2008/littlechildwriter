@@ -21,7 +21,7 @@
         <v-spacer />
 
         <template #append>
-          <v-icon left class="mr-2">mdi-comment-flash</v-icon>
+          <v-icon start class="mr-2">mdi-comment-flash</v-icon>
           {{ Object.keys({ ...item.pro, ...item.con } ?? {}).length }}
 
           <v-list-item-action v-if="item.uid == userInfo.uid">
@@ -40,7 +40,7 @@
               <v-list>
                 <v-list-item @click="DeleteContent(i)">
                   <v-list-item-title>
-                    <v-icon left> mdi-trash-can </v-icon> 삭제
+                    <v-icon start> mdi-trash-can </v-icon> 삭제
                   </v-list-item-title>
                 </v-list-item>
               </v-list>

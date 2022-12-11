@@ -329,19 +329,19 @@
 
         <v-list>
           <v-list-item @click="isbn.upload = true">
-            <v-icon left> mdi-upload </v-icon> 책 사진 업로드
+            <v-icon start> mdi-upload </v-icon> 책 사진 업로드
           </v-list-item>
           <v-list-item v-if="mobile" @click="isbn.barcode = true">
-            <v-icon left> mdi-barcode-scan </v-icon> ISBN 촬영
+            <v-icon start> mdi-barcode-scan </v-icon> ISBN 촬영
           </v-list-item>
           <v-list-item class="isbnDialog" @click="isbn.input = true">
-            <v-icon left> mdi-form-textbox </v-icon> ISBN 입력
+            <v-icon start> mdi-form-textbox </v-icon> ISBN 입력
           </v-list-item>
           <v-list-item class="bookDialog" @click="isbn.find = true">
-            <v-icon left> mdi-book-search </v-icon> 책 찾기
+            <v-icon start> mdi-book-search </v-icon> 책 찾기
           </v-list-item>
           <v-list-item @click="isbn.audio = true">
-            <v-icon left> mdi-microphone </v-icon> 보이스 타이핑
+            <v-icon start> mdi-microphone </v-icon> 보이스 타이핑
           </v-list-item>
         </v-list>
       </v-menu>
@@ -391,7 +391,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const userInfo = User()

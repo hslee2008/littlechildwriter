@@ -69,7 +69,7 @@
             <v-card-actions>
               <v-spacer />
               <v-btn text @click="Make">
-                <v-icon left> mdi-check </v-icon> 만들기
+                <v-icon start> mdi-check </v-icon> 만들기
               </v-btn>
             </v-card-actions>
           </v-stepper-content>

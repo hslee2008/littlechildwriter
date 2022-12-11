@@ -46,7 +46,7 @@
           <template #activator="{ props }">
             <div class="text-center">
               <v-btn color="primary" v-bind="props">
-                <v-icon left>mdi-bookshelf</v-icon> 책 선택
+                <v-icon start>mdi-bookshelf</v-icon> 책 선택
               </v-btn>
             </div>
           </template>

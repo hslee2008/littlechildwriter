@@ -10,7 +10,7 @@
               color="primary"
               min-width="300"
             >
-              <v-icon left> mdi-pencil </v-icon> 작성하기
+              <v-icon start> mdi-pencil </v-icon> 작성하기
             </v-btn>
             <v-btn v-else to="/account/login" color="primary" min-width="300">
               로그인 <v-icon right> mdi-account </v-icon>

@@ -38,7 +38,7 @@
           />
 
           <v-btn color="primary" block @click="onSubmit">
-            <v-icon left> mdi-account </v-icon>로그인
+            <v-icon start> mdi-account </v-icon>로그인
           </v-btn>
         </v-form>
       </div>
@@ -47,9 +47,9 @@
 </template>
 
 <script setup script="ts">
-import firebase from 'firebase/compat/app'
-import { auth } from 'firebaseui'
-import 'firebaseui/dist/firebaseui.css'
+import firebase from 'firebase/compat/app';
+import { auth } from 'firebaseui';
+import 'firebaseui/dist/firebaseui.css';
 
 const router = useRouter()
 const email = ref('')
