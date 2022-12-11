@@ -15,7 +15,7 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@types/node", "@nuxt/types", "@nuxtjs/vuetify", "@nuxtjs/pwa"]
+    "types": ["@types/node", "@nuxt/types", "@nuxtjs/pwa"]
   },
   "vueCompilerOptions": {
     "target": 3
