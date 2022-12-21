@@ -81,7 +81,9 @@
         :collapse="$route.path.startsWith('/class')"
         color="#23262E"
       >
-        <v-app-bar-nav-icon @click.stop="drawer = !drawer" color="#23262E" />
+        <template v-slot:prepend>
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer" color="#23262E" />
+        </template>
 
         <NuxtLink to="/" class="ml-2">
           <v-avatar size="30" density="compact" image="/icon.png" />
@@ -130,13 +132,12 @@
               </v-btn>
             </template>
 
-            <v-card bg-color="#23262E" >
+            <v-card bg-color="#23262E">
               <v-list v-if="notif.length > 0" nav>
                 <v-list-item
                   v-for="(d, i) in notif"
                   :key="i"
                   @click="load(d.link)"
-
                 >
                   <template #prepend>
                     <UserPhoto :src="d.photoURL" />
@@ -216,6 +217,8 @@
 
       <v-main>
         <NuxtPage />
+
+        <br />
       </v-main>
     </NuxtLayout>
   </v-app>
