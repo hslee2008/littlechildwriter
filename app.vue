@@ -39,7 +39,7 @@
             prepend-icon="mdi-typewriter"
           />
           <v-list-item
-            to="/debtate/home"
+            to="/debate/home"
             title="토론 광장"
             prepend-icon="mdi-lectern"
           />
@@ -97,7 +97,6 @@
               v-if="$route.path !== '/book/post' && userInfo.uid"
               icon
               to="/book/post"
-              color="#23262E"
             >
               <v-icon>mdi-plus-circle-outline</v-icon>
             </v-btn>
@@ -214,7 +213,7 @@
         </div>
       </v-app-bar>
 
-      <v-main>
+      <v-main style="margin-right: 10px;">
         <NuxtPage />
 
         <br />

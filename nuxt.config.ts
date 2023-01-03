@@ -103,7 +103,6 @@ export default defineNuxtConfig({
 
   css: [
     'assets/css/global.css',
-    'assets/sass/variables.scss',
     'assets/sass/global.scss',
     'vuetify/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
@@ -114,7 +113,8 @@ export default defineNuxtConfig({
       nuxt.hooks.hook('vite:extendConfig', config =>
         config.plugins.push(vuetify())
       )
-    }
+    },
+    '@kevinmarrec/nuxt-pwa'
   ],
   target: 'static',
 
@@ -183,7 +183,6 @@ export default defineNuxtConfig({
   },
 
   vuetify: {
-    customVariables: ['assets/sass/variables.scss'],
     treeShake: true,
     theme: {
       dark: true,

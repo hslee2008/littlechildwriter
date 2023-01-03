@@ -45,3 +45,7 @@ html {
 .v-overlay__scrim {
   background-color: #3d4754 !important;
 }
+
+.v-card-subtitle > a {
+  color: #159ECB !important;
+}
