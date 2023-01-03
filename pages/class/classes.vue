@@ -1,14 +1,23 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
   <div>
-    <v-dialog v-model="dialog" width="500">
-      <template #activator="{ on, attrs }">
-        <v-btn bottom right fixed fab color="primary" class="zmax" v-bind="attrs" v-on="on">
+    <v-dialog :model-value="dialog" width="500">
+      <template #activator="{ props }">
+        <v-btn
+          bottom
+          right
+          fixed
+          fab
+          color="primary"
+          class="zmax"
+          v-bind="props"
+
+        >
           <v-icon> mdi-plus </v-icon>
         </v-btn>
       </template>
 
-      <v-stepper v-model="steps" flat rounded>
+      <v-stepper :model-value="steps" flat rounded>
         <v-stepper-header>
           <v-stepper-step :complete="steps > 0" step="1">
             기본 정보
@@ -23,18 +32,18 @@
 
             <v-card-text>
               <v-text-field
-                v-model="classInfo.name"
+                :model-value="classInfo.name"
                 label="알림판 이름"
                 required
               />
 
               <v-text-field
-                v-model="classInfo.description"
+                :model-value="classInfo.description"
                 label="알림판 설명"
                 required
               />
 
-              <v-checkbox v-model="classInfo.public" label="공개" />
+              <v-checkbox :model-value="classInfo.public" label="공개" />
             </v-card-text>
 
             <v-card-actions>
@@ -54,13 +63,13 @@
             <v-card-title> 알림판 고급 정보 </v-card-title>
 
             <v-card-text>
-              <v-text-field v-model="classInfo.image" label="알림판 사진 URL" />
+              <v-text-field :model-value="classInfo.image" label="알림판 사진 URL" />
             </v-card-text>
 
             <v-card-actions>
               <v-spacer />
               <v-btn text @click="Make">
-                <v-icon left> mdi-check </v-icon> 만들기
+                <v-icon start> mdi-check </v-icon> 만들기
               </v-btn>
             </v-card-actions>
           </v-stepper-content>
@@ -68,45 +77,41 @@
       </v-stepper>
     </v-dialog>
 
-    <v-data-iterator :items="classes" hide-default-footer>
-      <template #default="props">
-        <v-row class="mt-5 ma-1 g-10">
-          <v-card
-            v-for="item in props.items"
-            :key="item.name"
-            class="my-3 transparent"
-          >
-            <v-card
-              v-if="
-                item.public ||
-                item.uid === userInfo.uid ||
-                Object.values(item.users).filter(filterUsers).length > 0
-              "
-              class="transparent"
-              :to="`/class/${item.id}`"
-            >
-              <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">
-                <v-avatar class="ma-3">
-                  <UserPhoto :src="item.photoURL" />
-                </v-avatar>
-              </v-img>
+    <v-row class="mt-5 ma-1 g-10">
+      <v-card
+        v-for="item in classes"
+        :key="item.name"
+        class="my-3 elevation-0"
+        color="#23262e"
+      >
+        <v-card
+          v-if="
+            item.public ||
+            item.uid === userInfo.uid ||
+            Object.values(item.users).filter(filterUsers).length > 0
+          "
+          color="#23262e"
+          :to="`/class/${item.id}`"
+        >
+          <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">
+            <v-avatar class="ma-3">
+              <UserPhoto :src="item.photoURL" />
+            </v-avatar>
+          </v-img>
 
-              <v-card-title class="primary--text">
-                {{ item.name }} ({{ item.public ? '공개' : '비공개' }})
-              </v-card-title>
-              <v-card-subtitle>{{ item.creator }}</v-card-subtitle>
-              <v-card-text>{{ item.description }}</v-card-text>
-            </v-card>
-          </v-card>
-        </v-row>
-      </template>
-    </v-data-iterator>
+          <v-card-title class="text-primary">
+            {{ item.name }} ({{ item.public ? '공개' : '비공개' }})
+          </v-card-title>
+          <v-card-subtitle>{{ item.creator }}</v-card-subtitle>
+          <v-card-text>{{ item.description }}</v-card-text>
+        </v-card>
+      </v-card>
+    </v-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+const { $db } = useNuxtApp()
 
 const userInfo = User()
 const classes = ref<any>([])
@@ -125,9 +130,9 @@ const dialog = ref<boolean>(false)
 const steps = ref<number>(1)
 
 onBeforeMount(() =>
-  db
+  $db
     .ref('classes')
-    .on('child_added', async s => classes.value.push(await s.val()))
+    .on('child_added', async (s: any) => classes.value.push(await s.val()))
 )
 
 const filterUsers = (e: any) => e.uid === userInfo.value.uid
@@ -146,7 +151,8 @@ const Make = () => {
     photoURL
   }
 
-  db.ref('classes')
+  $db
+    .ref('classes')
     .child(uid + name)
     .set(classInfo.value)
 

@@ -3,14 +3,14 @@
 <template>
   <div>
     <v-card>
-      <NLink to="./markdown" class="text-decoration-none">
+      <NuxtLink to="./markdown" class="text-decoration-none">
         <v-card-subtitle>
-          Markdown을 지원합니다 <v-icon small>mdi-information</v-icon>
+          Markdown을 지원합니다 <v-icon size="small">mdi-information</v-icon>
         </v-card-subtitle>
-      </NLink>
+      </NuxtLink>
       <v-card-title>
         <v-text-field
-          v-model="topic"
+          :model-value="topic"
           label="Topic"
           placeholder="Topic"
           required
@@ -18,7 +18,7 @@
       </v-card-title>
       <v-card-text>
         <v-textarea
-          v-model="content"
+          :model-value="content"
           label="Content"
           placeholder="Content"
           hint="Markdown을 사용할 수 있습니다."
@@ -42,9 +42,8 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from 'marked'
-import { db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+import { parse } from 'marked';
+const { $db } = useNuxtApp();
 
 const userInfo = User()
 const router = useRouter()
@@ -55,7 +54,7 @@ const SaveContent = () => {
   const time = Date.now()
   const { uid, displayName, photoURL } = userInfo.value
 
-  db.ref(`/blog/${time}`).set({
+  $db.ref(`/blog/${time}`).set({
     topic: topic.value,
     markdown: content.value,
     uid,

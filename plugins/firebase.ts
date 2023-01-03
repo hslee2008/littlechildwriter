@@ -17,6 +17,8 @@ if (!firebase.apps.length) {
     measurementId: 'G-F7Z7BLCQDQ'
   })
   getPerformance(app)
+} else {
+  app = firebase.app()
 }
 
 const db = firebase.database()
@@ -24,4 +26,11 @@ const auth = firebase.auth()
 const storage = firebase.storage()
 const login = firebase.auth
 
-export { db, auth, login, storage }
+export default defineNuxtPlugin(nuxtApp => {
+  nuxtApp.$auth = auth
+  nuxtApp.$db = db
+  nuxtApp.$storage = storage
+  nuxtApp.$login = login
+})
+
+export { db, auth, storage, login }

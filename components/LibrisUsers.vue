@@ -1,40 +1,32 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
-  <v-list nav class="transparent">
+  <v-list nav bg-color="#23262e" lines="two">
     <v-list-item
       v-for="(item, i) in lbt"
-      v-if="item.displayName"
+      v-show="lbt[i].displayName"
       :key="lbt[i].uid"
       :to="`/user/${lbt[i].uid}`"
+      :title="lbt[i]?.displayName"
+      :subtitle="`${formatter(lbt[i].libris)} 리브리스`"
     >
-      <v-list-item-action-text class="mr-4">
-        {{ i + 1 }} 등
-      </v-list-item-action-text>
+      <template #prepend>
+        {{ i + 1 }}등
+        <v-avatar color="grey-lighten-1" class="ml-3">
+          <UserPhoto :src="lbt[i].photoURL" />
+        </v-avatar>
+      </template>
 
-      <v-list-item-avatar size="50" class="mr-2">
-        <UserPhoto :src="lbt[i].photoURL" />
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title>{{ lbt[i].displayName }}</v-list-item-title>
-        <v-list-item-subtitle>
-          {{ formatter(lbt[i].libris) }} 리브리스
-        </v-list-item-subtitle>
-      </v-list-item-content>
-
-      <v-spacer />
-
-      <v-list-item-action>
+      <template #append>
         <v-icon :color="item.status === 'online' ? 'primary' : 'grey'">
           mdi-account-{{ item.status === 'online' ? 'check' : 'remove' }}
         </v-icon>
-      </v-list-item-action>
+      </template>
     </v-list-item>
   </v-list>
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { formatter } from 'plugins/global'
+const { $db } = useNuxtApp()
 
 const props = defineProps({
   limit: {
@@ -47,10 +39,11 @@ const lbt = ref<any>([])
 onBeforeMount(() => (props.limit ? Limited() : UnLimited()))
 
 const Limited = () => {
-  db.ref('/users')
+  $db
+    .ref('/users')
     .orderByChild('libris')
     .limitToLast(5)
-    .on('child_added', async s => {
+    .on('child_added', async (s: any) => {
       const { displayName, libris, photoURL, status } = await s.val()
 
       lbt.value.unshift({
@@ -64,9 +57,10 @@ const Limited = () => {
 }
 
 const UnLimited = () => {
-  db.ref('/users')
+  $db
+    .ref('/users')
     .orderByChild('libris')
-    .on('child_added', async s => {
+    .on('child_added', async (s: any) => {
       const { displayName, libris, photoURL, status } = await s.val()
 
       lbt.value.unshift({

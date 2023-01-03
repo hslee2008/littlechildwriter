@@ -2,15 +2,19 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-lazy>
-    <v-row class="row">
+    <v-row class="row" style="margin: 15px;">
       <v-card
         v-for="(item, i) in items"
-        v-if="item.image"
         :key="i"
-        :width="$vuetify.breakpoint.mobile ? 150 : 200"
-        class="mx-auto my-5 transparent"
+        :width="mobile ? 150 : 200"
+        class="mx-auto my-5 elevation-0"
+        color="#23262e"
       >
-        <v-card :to="`/book/content/${item.time}`" class="transparent">
+        <v-card
+          :to="`/book/content/${item.time}`"
+          color="#23262e"
+          class="elevation-0"
+        >
           <v-img :src="item.image" :lazy-src="item.image" class="rounded-lg">
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -19,21 +23,23 @@
             </template>
           </v-img>
 
-          <v-card-title class="primary--text">{{ item.title }}</v-card-title>
+          <v-card-title class="text-primary">{{ item.title }}</v-card-title>
 
           <v-card-subtitle>
-            <NLink :to="`/user/${item.uid}`">{{ item.displayName }}</NLink>
+            <NuxtLink :to="`/user/${item.uid}`">{{
+              item.displayName
+            }}</NuxtLink>
           </v-card-subtitle>
 
           <v-card-text>
             <span class="text--disabled">
               {{ formatter(item.views) }} views ·
-              {{ new Date(parseInt(item.time)).toLocaleDateString() }}
+              {{ DateFormatter(new Date(parseInt(item.time)).getTime()) }}
             </span>
           </v-card-text>
         </v-card>
 
-        <v-card v-show="!simple" class="transparent">
+        <v-card v-show="!simple" color="#23262e" class="elevation-0">
           <v-card-actions v-if="userInfo.uid">
             <v-btn icon color="primary" @click="Bookmark(item.time, i)">
               <v-icon>
@@ -61,34 +67,34 @@
               icon
               color="grey"
             >
-              <v-icon small>mdi-comment-bookmark</v-icon>
+              <v-icon size="small">mdi-comment-bookmark</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-card>
 
-      <v-snackbar v-model="bookmarkSnackbar">
+      <v-snackbar :model-value="bookmarkSnackbar">
         책갈피가 추가되었습니다.
 
         <template #action="{ attrs }">
           <v-btn
             color="pink"
             text
-            v-bind="attrs"
+            v-bind="props"
             @click="bookmarkSnackbar = false"
           >
             닫기
           </v-btn>
         </template>
       </v-snackbar>
-      <v-snackbar v-model="bookmarkSnackbarDel">
+      <v-snackbar :model-value="bookmarkSnackbarDel">
         책갈피가 삭제되었습니다.
 
         <template #action="{ attrs }">
           <v-btn
             color="pink"
             text
-            v-bind="attrs"
+            v-bind="props"
             @click="bookmarkSnackbarDel = false"
           >
             닫기
@@ -100,8 +106,10 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { formatter, User } from 'plugins/global'
+import { useDisplay } from 'vuetify';
+
+const { $db } = useNuxtApp()
+const { mobile } = useDisplay()
 
 const userInfo = User()
 const props = defineProps({
@@ -127,8 +135,8 @@ const Like = (item: any) => {
     item.likes--
     item.liked[userInfo.value.uid] = false
 
-    db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(false)
-    db.ref(`/contents/${item.time}/likes`).set(item.likes)
+    $db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(false)
+    $db.ref(`/contents/${item.time}/likes`).set(item.likes)
 
     Libris(userInfo.value.uid, -0.1)
     Libris(item.uid, -0.1)
@@ -141,8 +149,8 @@ const Like = (item: any) => {
       console.log(e)
     }
 
-    db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(true)
-    db.ref(`/contents/${item.time}/likes`).set(item.likes)
+    $db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(true)
+    $db.ref(`/contents/${item.time}/likes`).set(item.likes)
 
     Libris(userInfo.value.uid, 0.1)
     Libris(item.uid, 0.1)
@@ -154,8 +162,8 @@ const Bookmark = (time: string, i: number) => {
     bookmarkSnackbar.value = false
     bookmarkSnackbarDel.value = true
 
-    db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
-    db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
+    $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
+    $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
 
     // eslint-disable-next-line vue/no-mutating-props
     props.items[i].bookmarks = Object.fromEntries(
@@ -169,12 +177,12 @@ const Bookmark = (time: string, i: number) => {
     bookmarkSnackbarDel.value = false
     bookmarkSnackbar.value = true
 
-    db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).set({
+    $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).set({
       title,
       image,
       time
     })
-    db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
+    $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
 
     // eslint-disable-next-line vue/no-mutating-props
     props.items[i] = {

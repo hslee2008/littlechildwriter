@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <v-tab-item class="pt-5">
+  <div>
     <h4 class="mb-3">{{ classInfo.description }} ({{ classInfo.creator }})</h4>
-    <h1 class="primary--text text-h4 mb-8">
+    <h1 class="text-primary text-h4 mb-8">
       {{ classInfo.name }}
     </h1>
 
@@ -11,21 +11,21 @@
       <v-expansion-panel
         v-for="(category, title) in classInfo.contents"
         :key="title"
-        class="transparent"
+        bg-color="#23262e"
       >
-        <v-expansion-panel-header
+        <v-expansion-panel-title
           :style="`background-color: ${
-            $vuetify.theme.dark ? '#1e1e1e' : 'white'
+            theme.global.name.value === 'dark' ? '#1e1e1e' : 'white'
           } !important`"
         >
           {{ title.toString().replaceAll('_', ' - ') }}
-        </v-expansion-panel-header>
+        </v-expansion-panel-title>
 
-        <v-expansion-panel-content
+        <v-expansion-panel-text
           v-for="(item, i) in category"
           :key="item.title"
           :style="`background-color: ${
-            $vuetify.theme.dark ? 'transparent' : 'white'
+            theme.global.name.value ? '#23262e' : 'white'
           } !important`"
         >
           <v-card
@@ -33,7 +33,10 @@
             class="d-flex mt-5"
             :to="`/book/content/${item.time}`"
           >
-            <v-icon color="orange" class="ml-4" size="40"> mdi-book </v-icon>
+            <template #prepend>
+              <v-icon color="orange" class="ml-4" size="40"> mdi-book </v-icon>
+            </template>
+
             <div>
               <v-card-title>{{ item.displayName }}</v-card-title>
               <v-card-subtitle>{{ item.title }}</v-card-subtitle>
@@ -57,7 +60,9 @@
             :href="item.url"
             class="d-flex mt-5"
           >
-            <v-icon class="ml-4"> mdi-link-variant </v-icon>
+            <template #prepend>
+              <v-icon class="ml-4"> mdi-link-variant </v-icon>
+            </template>
 
             <div>
               <v-card-title>{{ item.file }}</v-card-title>
@@ -80,7 +85,9 @@
               :href="item.url"
               class="d-flex rounded-0"
             >
-              <v-icon class="ml-4"> mdi-link-variant </v-icon>
+              <template #prepend>
+                <v-icon class="ml-4"> mdi-link-variant </v-icon>
+              </template>
 
               <div>
                 <v-card-title>{{ item.file }}</v-card-title>
@@ -98,14 +105,16 @@
               />
             </v-card>
             <v-card v-else class="d-flex">
-              <v-icon left color="green" class="ml-3">mdi-check</v-icon>
+              <v-icon start color="green" class="ml-3">mdi-check</v-icon>
               <v-card-text>
                 {{ item.displayName }}님이 숙제를 비공개로 제출함
               </v-card-text>
             </v-card>
           </div>
-          <v-card v-else-if="item.type === '링크'" class="d-flex mt-5">
-            <v-icon class="ml-4"> mdi-link </v-icon>
+          <v-card v-else-if="item.type === '링크'" class="d-flex mt-5 rounded-lg pa-2">
+            <template #prepend>
+              <v-icon class="ml-4"> mdi-link </v-icon>
+            </template>
 
             <div>
               <v-card-title>{{ item.name }} 링크</v-card-title>
@@ -188,7 +197,7 @@
           <v-card v-else class="mt-5">
             <div class="d-flex">
               <v-avatar size="40" class="ml-3 mt-6">
-                <UserPhoto :src="item.photoURL" class="rounded-lg" />
+                <UserPhoto :src="item.photoURL" />
               </v-avatar>
               <div>
                 <v-card-title> {{ item.displayName }}의 공지사항 </v-card-title>
@@ -209,16 +218,17 @@
             </div>
             <v-card-text>{{ item.content }}</v-card-text>
           </v-card>
-        </v-expansion-panel-content>
+        </v-expansion-panel-text>
       </v-expansion-panel>
     </v-expansion-panels>
-  </v-tab-item>
+  </div>
 </template>
 
 <script setup>
-import Actions from './Actions.vue'
-import { User } from 'plugins/global'
+import { useTheme } from 'vuetify';
+import Actions from './Actions.vue';
 
+const theme = useTheme()
 const userInfo = User()
 
 defineProps({

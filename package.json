@@ -13,29 +13,30 @@
     "api": "node ./api/index.js"
   },
   "dependencies": {
-    "@vueuse/head": "^0.9.8",
-    "chart.js": "^3.9.1",
+    "@mdi/font": "^7.0.96",
     "firebase": "^9.13.0",
     "firebaseui": "^6.0.1",
     "marked": "^4.2.2",
-    "nuxt-edge": "^2.16.0-27720022.54e852f",
     "perspective-api-client": "^3.1.0",
-    "vue-chartjs": "^4.1.2",
-    "vue-gtag": "^1.16.1",
-    "vuetify": "^2.6.12"
+    "vite-plugin-vuetify": "^1.0.0",
+    "vue": "^3.2.45",
+    "vue-gtag": "^2.0.1",
+    "vuetify": "^3.0.2"
   },
   "devDependencies": {
-    "@nuxt/bridge": "npm:@nuxt/bridge-edge",
+    "@kevinmarrec/nuxt-pwa": "^0.13.0",
     "@nuxt/types": "2.15.8",
     "@nuxtjs/eslint-config-typescript": "11.0.0",
     "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/google-gtag": "^1.0.4",
     "@nuxtjs/pwa": "3.3.5",
-    "@nuxtjs/vuetify": "1.12.3",
     "@types/marked": "^4.0.7",
     "eslint": "^8.25.0",
     "eslint-plugin-nuxt": "4.0.0",
     "firebase-admin": "11.2.0",
+    "nuxt": "^3.0.0",
+    "sass": "^1.57.1",
+    "sass-loader": "^13.2.0",
     "typescript": "^4.8.4"
   }
 }

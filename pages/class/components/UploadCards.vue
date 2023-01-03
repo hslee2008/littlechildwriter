@@ -29,10 +29,10 @@
       </div>
     </v-row>
 
-    <v-card v-if="post.type === '책'" class="transparent">
+    <v-card v-if="post.type === '책'" color="#23262e">
       <v-card-title>책 업로드</v-card-title>
       <v-card-text>
-        <v-text-field v-model="post.title" label="제목" />
+        <v-text-field :model-value="post.title" label="제목" />
 
         <div v-if="post.time">
           <h2>선택됨</h2>
@@ -42,11 +42,11 @@
       </v-card-text>
 
       <v-card-actions class="ma-2 gap20">
-        <v-dialog v-model="dialog" width="700">
-          <template #activator="{ on, attrs }">
+        <v-dialog :model-value="dialog" width="700">
+          <template #activator="{ props }">
             <div class="text-center">
-              <v-btn color="primary" v-bind="attrs" v-on="on">
-                <v-icon left>mdi-bookshelf</v-icon> 책 선택
+              <v-btn color="primary" v-bind="props">
+                <v-icon start>mdi-bookshelf</v-icon> 책 선택
               </v-btn>
             </div>
           </template>
@@ -57,11 +57,7 @@
                 v-for="i in listev.filter(i => i.uid == userInfo.uid)"
                 :key="i.title"
                 class="elevation-0"
-                @click="
-                  post.time = i.time
-                  post.image = i.image
-                  dialog = false
-                "
+                @click="selectBook(i)"
               >
                 <v-img :src="i.image" class="rounded-lg ma-3" max-width="100" />
               </v-card>
@@ -81,11 +77,11 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card v-else-if="post.type === '링크'" class="transparent">
+    <v-card v-else-if="post.type === '링크'" color="#23262e">
       <v-card-title>링크 업로드</v-card-title>
       <v-card-text>
-        <v-text-field v-model="post.title" label="제목" />
-        <v-text-field v-model="post.link" label="링크" />
+        <v-text-field :model-value="post.title" label="제목" />
+        <v-text-field :model-value="post.link" label="링크" />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
         <v-btn
@@ -98,7 +94,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card v-else-if="post.type.startsWith('파일')" class="transparent">
+    <v-card v-else-if="post.type.startsWith('파일')" color="#23262e">
       <v-radio-group v-model="post.type">
         <v-radio key="숙제" label="파일 (숙제로)" value="파일 (숙제로)" />
         <v-radio key="파일" label="파일" value="파일" />
@@ -106,13 +102,13 @@
         <v-radio key="비디오" label="비디오" value="파일 비디오" />
       </v-radio-group>
 
-      <v-overlay :value="progress">
+      <v-overlay :model-value="progress">
         <v-progress-circular indeterminate size="64" />
       </v-overlay>
 
       <v-file-input
         ref="file"
-        v-model="post.file"
+        :model-value="post.file"
         color="deep-purple accent-4"
         counter
         label="File input"
@@ -129,7 +125,7 @@
             color="deep-purple accent-4"
             dark
             label
-            small
+            size="small"
           >
             {{ text }}
           </v-chip>
@@ -138,11 +134,11 @@
 
       <v-btn text @click="Upload"> 파일 게시 </v-btn>
     </v-card>
-    <v-card v-else-if="post.type === '글 제출 (학생)'" class="transparent">
+    <v-card v-else-if="post.type === '글 제출 (학생)'" color="#23262e">
       <v-card-title>숙제 업로드</v-card-title>
       <v-card-text>
-        <v-text-field v-model="post.title" label="제목" />
-        <v-textarea v-model="post.content" label="내용" />
+        <v-text-field :model-value="post.title" label="제목" />
+        <v-textarea :model-value="post.content" label="내용" />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
         <v-btn
@@ -167,8 +163,7 @@
 </template>
 
 <script setup lang="ts">
-import { db, storage } from 'plugins/firebase'
-import { User } from 'plugins/global'
+const { $db, $storage } = useNuxtApp()
 
 const userInfo = User()
 const route = useRoute()
@@ -205,12 +200,12 @@ const props = defineProps({
 })
 
 onBeforeMount(() => {
-  db.ref(`/classes/${id}`).on(
+  $db.ref(`/classes/${id}`).on(
     'value',
-    async s => (classInfo.value = await s.val())
+    async (s: any) => (classInfo.value = await s.val())
   )
 
-  db.ref('/contents/').on('child_added', s => {
+  $db.ref('/contents/').on('child_added', (s: any) => {
     const { title, time, uid, displayName, image } = s.val()
 
     listev.value.push({
@@ -227,7 +222,7 @@ const Upload = () => {
   let storageRef: any
 
   for (let i = 0; i < post.value.file.length; i++) {
-    storageRef = storage
+    storageRef = $storage
       .ref(`${post.value.file[i].name}`)
       .put(post.value.file[i])
   }
@@ -243,7 +238,7 @@ const Upload = () => {
           const { type, file, category } = post.value
           const { uid, displayName } = userInfo.value
 
-          db.ref(`classes/${id}/contents/${category}`).push({
+          $db.ref(`classes/${id}/contents/${category}`).push({
             type,
             uid,
             displayName,
@@ -270,7 +265,7 @@ const Post = () => {
   const { uid, displayName } = userInfo.value
 
   if (type === '글 제출 (학생)') {
-    db.ref(`classes/${id}/contents/${category}/${time}`).set({
+    $db.ref(`classes/${id}/contents/${category}/${time}`).set({
       title,
       time,
       uid,
@@ -279,7 +274,7 @@ const Post = () => {
       content
     })
   } else {
-    db.ref(`/classes/${id}/contents/${category}`).push({
+    $db.ref(`/classes/${id}/contents/${category}`).push({
       title,
       uid,
       time,
@@ -316,6 +311,12 @@ const Post = () => {
     `${userInfo.value.displayName}님이 새로운 자료를 올렸습니다`,
     `/class/${id}`
   )
+}
+
+const selectBook = (b: any) => {
+  post.value.time = b.time
+  post.value.image = b.image
+  dialog.value = false
 }
 </script>
 

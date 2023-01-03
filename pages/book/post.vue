@@ -186,14 +186,18 @@
                 FetchBook(item.volumeInfo.industryIdentifiers[0].identifier)
               "
             >
-              <v-img
-                :src="item.volumeInfo.imageLinks?.thumbnail"
-                class="mr-4 ma-2 rounded-lg"
-                max-width="100"
-              />
+              <template #prepend>
+                <v-avatar size="100" rounded="0">
+                  <v-img
+                    :src="item.volumeInfo.imageLinks?.thumbnail"
+                    class="mr-4 ma-2 rounded-lg"
+                    max-width="100"
+                  />
+                </v-avatar>
+              </template>
 
               <v-list-item-content>
-                <v-list-item-title class="primary--text h1">
+                <v-list-item-title class="text-primary h1">
                   {{ item.volumeInfo.title }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
@@ -225,7 +229,7 @@
             </v-list-item>
           </div>
         </v-list>
-        <v-card v-else class="text-center transparent" flat>
+        <v-card v-else class="text-center #23262e" flat>
           <v-card-text>
             책을 찾을 수 없습니다. ISBN을 직접 입력하거나 바코드를 찍으세요.
           </v-card-text>
@@ -250,15 +254,26 @@
         />
       </v-row>
 
-      <v-text-field v-model="post.title" label="제목" class="title" />
+      <v-text-field
+        v-model="post.title"
+        label="제목"
+        class="title"
+        variant="underlined"
+      />
 
       <v-row class="g-10" style="margin: 0.5px 0">
-        <v-text-field v-model="post.author" label="작가" class="author" />
+        <v-text-field
+          v-model="post.author"
+          label="작가"
+          class="author"
+          variant="underlined"
+        />
         <v-text-field
           v-model="post.pageCount"
           label="페이지"
           class="page"
           type="number"
+          variant="underlined"
           :rules="[isPageCountValid]"
         />
       </v-row>
@@ -274,6 +289,7 @@
         label="책 소개"
         clearable
         counter
+        variant="underlined"
         class="content"
       />
 
@@ -284,13 +300,13 @@
         clearable
         label="카테고리"
         multiple
-        solo
-        class="transparent"
+        variant="solo"
+        color="#23262e"
       >
         <template #selection="{ attrs, item, select, selected }">
           <v-chip
             v-bind="attrs"
-            :input-value="selected"
+            :input-v-model="selected"
             close
             @click="select"
             @click:close="remove(item)"
@@ -305,42 +321,36 @@
       <v-btn color="primary" class="upload" @click="Post"> 업로드 </v-btn>
 
       <v-menu bottom>
-        <template #activator="{ on, attrs }">
-          <v-btn elevation="0" class="book" v-bind="attrs" v-on="on">
+        <template #activator="{ props }">
+          <v-btn elevation="0" class="book" v-bind="props">
             책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
 
         <v-list>
           <v-list-item @click="isbn.upload = true">
-            <v-icon left> mdi-upload </v-icon> 책 사진 업로드
+            <v-icon start> mdi-upload </v-icon> 책 사진 업로드
           </v-list-item>
-          <v-list-item
-            v-if="$vuetify.breakpoint.mobile"
-            @click="isbn.barcode = true"
-          >
-            <v-icon left> mdi-barcode-scan </v-icon> ISBN 촬영
+          <v-list-item v-if="mobile" @click="isbn.barcode = true">
+            <v-icon start> mdi-barcode-scan </v-icon> ISBN 촬영
           </v-list-item>
           <v-list-item class="isbnDialog" @click="isbn.input = true">
-            <v-icon left> mdi-form-textbox </v-icon> ISBN 입력
+            <v-icon start> mdi-form-textbox </v-icon> ISBN 입력
           </v-list-item>
           <v-list-item class="bookDialog" @click="isbn.find = true">
-            <v-icon left> mdi-book-search </v-icon> 책 찾기
+            <v-icon start> mdi-book-search </v-icon> 책 찾기
           </v-list-item>
           <v-list-item @click="isbn.audio = true">
-            <v-icon left> mdi-microphone </v-icon> 보이스 타이핑
+            <v-icon start> mdi-microphone </v-icon> 보이스 타이핑
           </v-list-item>
         </v-list>
       </v-menu>
     </v-card-actions>
 
-    <div class="ma-auto mt-10">
-      <v-img
-        v-if="post.image"
-        :src="post.image"
-        class="rounded-lg"
-        max-width="200"
-      >
+    <br />
+
+    <div class="d-flex justify-center">
+      <v-img :src="post.image" class="rounded-lg" max-width="200">
         <v-overlay
           v-if="
             post.image ===
@@ -357,6 +367,8 @@
       </v-img>
     </div>
 
+    <br />
+
     <v-snackbar v-model="snackbar">
       제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해주세요.
 
@@ -366,14 +378,24 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-snackbar v-model="notfound">
+      찾을 수 없었습니다.
+
+      <template #action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="notfound = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+import { useDisplay } from 'vuetify';
+const { $db } = useNuxtApp()
 
 const userInfo = User()
+const { mobile } = useDisplay()
 const post = ref<any>({
   isbn: '',
   title: '',
@@ -405,6 +427,7 @@ const barcodes = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
 const typed = ref<string>('')
 const isbnImageElement = ref<any>(null)
 const snackbar = ref<boolean>(false)
+const notfound = ref<boolean>(false)
 const video = ref<any>(null)
 
 onBeforeUnmount(() => {
@@ -541,6 +564,8 @@ const fetchi = () => {
       }
 
       isbn.value.input = false
+    }).catch(() => {
+      notfound.value = true
     })
 
   loading.value = false
@@ -579,7 +604,7 @@ const Post = () => {
   }
 
   if (isPublic)
-    db.ref(`/contents/${time}`).set({
+    $db.ref(`/contents/${time}`).set({
       title,
       rating,
       isbn,
@@ -597,7 +622,7 @@ const Post = () => {
       content: content.replaceAll('\n', '<br>')
     })
   else
-    db.ref(`/private/${uid}/${time}`).set({
+    $db.ref(`/private/${uid}/${time}`).set({
       title,
       rating,
       isbn,
@@ -613,7 +638,7 @@ const Post = () => {
       content: content.replaceAll('\n', '<br>')
     })
 
-  db.ref(`/user/${uid}/subscriber`).once('value', (snapshot: any) => {
+  $db.ref(`/user/${uid}/subscriber`).once('value', (snapshot: any) => {
     const subscribers = snapshot.val()
 
     for (const subscriber in subscribers) {

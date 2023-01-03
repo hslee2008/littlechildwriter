@@ -4,30 +4,33 @@
       v-if="userInfo && !nofield"
       v-model="comment"
       flat
-      solo
+      variant="solo"
+      single-line
       hide-details
       label="댓글 달기"
       @keydown.enter="Comment"
-    >
-      <template #append>
-        <v-btn icon depressed @click="Comment">
-          <v-icon>mdi-send</v-icon>
-        </v-btn>
-      </template>
-    </v-text-field>
+      append-inner-icon="mdi-send"
+      @click:append-inner="Comment"
+    />
 
-    <v-list v-if="comments.length > 0" dense clipped nav class="transparent">
+    <v-list v-if="comments.length > 0" dense clipped nav bg-color="#23262e">
       <v-list-item
         v-for="(message, i) in comments"
         :key="message.time"
         class="my-3 d-inline"
+        bg-color="#23262e"
       >
-        <v-card rounded width="100%" class="d-flex mr-5 rounded-lg transparent">
-          <NLink :to="`/user/${message.uid}`" class="ma-auto ml-2">
+        <v-card
+          rounded
+          width="100%"
+          class="d-flex mr-5 rounded-lg"
+          color="#23262e"
+        >
+          <NuxtLink :to="`/user/${message.uid}`" class="ma-auto ml-2">
             <v-avatar size="40">
               <UserPhoto :src="message.photoURL" />
             </v-avatar>
-          </NLink>
+          </NuxtLink>
 
           <div v-if="!message.edit">
             <v-card-title>{{ message.displayName }}</v-card-title>
@@ -37,9 +40,11 @@
           </div>
           <v-text-field
             v-else
-            v-model="updatedcomment"
+            :model-value="updatedcomment"
             flat
-            class="ml-2"
+            single-line
+            variant="solo"
+            class="ml-2 mt-3"
             @keydown.enter="Update(i)"
           >
             <template #append>
@@ -47,6 +52,7 @@
                 color="error"
                 text
                 depressed
+                class="mr-3"
                 @click=";(message.edit = false), (comments = [...comments])"
               >
                 취소
@@ -54,7 +60,6 @@
               <v-btn
                 color="primary"
                 text
-                :disabled="message.content === updatedcomment"
                 @click="Update(i)"
               >
                 저장
@@ -77,8 +82,8 @@
               <span v-text="message.love?.length" />
             </v-btn>
             <v-menu offset-y>
-              <template #activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" cols="1" v-on="on">
+              <template #activator="{ props }">
+                <v-btn icon v-bind="props" cols="1">
                   <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
               </template>
@@ -86,13 +91,13 @@
                 <template v-if="userInfo.displayName === message.displayName">
                   <v-list-item @click="Edit(i)">
                     <v-list-item-title>
-                      <v-icon left> mdi-pencil </v-icon>
+                      <v-icon start> mdi-pencil </v-icon>
                       {{ comments[i].edit ? '취소' : '수정' }}
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="Delete(i)">
                     <v-list-item-title>
-                      <v-icon left> mdi-trash-can </v-icon> 삭제
+                      <v-icon start> mdi-trash-can </v-icon> 삭제
                     </v-list-item-title>
                   </v-list-item>
                 </template>
@@ -119,22 +124,23 @@
     <div v-else>
       <v-card
         v-if="comments.length === 0 && !parent"
-        class="text-center transparent"
+        class="text-center"
+        color="#23262e"
         flat
       >
         <v-card-text>댓글이 없습니다.</v-card-text>
       </v-card>
     </div>
 
-    <v-snackbar v-model="snackbarBadWord">
+    <v-snackbar :model-value="snackbarBadWord">
       AI가 긴장감을 {{ Math.round(toxcity * 1000) / 10 }}% 감지했습니다. 댓글을
       수정해주세요.
 
-      <template #action="{ attrs }">
+      <template #action="{ props }">
         <v-btn
           color="pink"
           text
-          v-bind="attrs"
+          v-bind="props"
           @click="snackbarBadWord = false"
         >
           닫기
@@ -145,10 +151,10 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+import Perspective from 'perspective-api-client';
 
-const Perspective = require('perspective-api-client')
+const { $db } = useNuxtApp()
+
 const perspective = new Perspective({
   apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
 })
@@ -187,9 +193,9 @@ const snackbarBadWord = ref(false)
 const toxcity = ref(0)
 
 onBeforeMount(() =>
-  db
+  $db
     .ref(props.dbr)
-    .on('child_added', async s =>
+    .on('child_added', async (s: any) =>
       comments.value.push({ ...(await s.val()), id: s.key })
     )
 )
@@ -202,7 +208,7 @@ const Edit = (i: number) => {
 
 const Update = (i: number) => {
   comments.value[i].edit = false
-  db.ref(`${props.dbr}/${Object.keys(comments.value)[i]}`).update({
+  $db.ref(`${props.dbr}/${Object.keys(comments.value)[i]}`).update({
     ...comments.value[i],
     content: updatedcomment.value
   })
@@ -210,12 +216,12 @@ const Update = (i: number) => {
 }
 
 const Delete = (i: number) => {
-  db.ref(props.dbr).child(comments.value[i].id).remove()
+  $db.ref(props.dbr).child(comments.value[i].id).remove()
   comments.value.splice(i, 1)
 }
 
 const Love = (i: number) => {
-  const cmt = db.ref(props.dbr)
+  const cmt = $db.ref(props.dbr)
   const love = comments.value[i].love
   if (love) {
     if (love.includes(userInfo.value.uid)) {
@@ -269,7 +275,7 @@ const Comment = async () => {
     const badWord = score > 0.6
     const content = comment.value
 
-    db.ref(props.dbr).push({
+    $db.ref(props.dbr).push({
       uid,
       photoURL,
       displayName,
@@ -279,24 +285,23 @@ const Comment = async () => {
       score
     })
 
-    db.ref(`${props.dbr.replace('/comments', '')}/joined`).update({
+    $db.ref(`${props.dbr.replace('/comments', '')}/joined`).update({
       [uid]: {
         displayName,
         photoURL
       }
     })
 
-    db.ref(`${props.dbr.replace('/comments', '')}/joined`).once(
-      'value',
-      async s => {
+    $db
+      .ref(`${props.dbr.replace('/comments', '')}/joined`)
+      .once('value', async (s: any) => {
         const joined = Object.keys(await s.val())
 
         for (const user in joined) {
           if (joined[user] === userInfo.value.uid) continue
           Notify(joined[user], userInfo.value.photoURL, content, props.link)
         }
-      }
-    )
+      })
 
     Notify(props.uid, userInfo.value.photoURL, content, props.link)
     Libris(userInfo.value.uid, 5)

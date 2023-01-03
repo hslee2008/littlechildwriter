@@ -3,14 +3,14 @@
 <template>
   <div>
     <v-card>
-      <NLink to="./markdown" class="text-decoration-none">
+      <NuxtLink to="./markdown" class="text-decoration-none">
         <v-card-subtitle>
-          Markdown을 지원합니다 <v-icon small>mdi-information</v-icon>
+          Markdown을 지원합니다 <v-icon size="small">mdi-information</v-icon>
         </v-card-subtitle>
-      </NLink>
+      </NuxtLink>
       <v-card-title>
         <v-text-field
-          v-model="topic"
+          :model-value="topic"
           label="Topic"
           placeholder="Topic"
           required
@@ -18,7 +18,7 @@
       </v-card-title>
       <v-card-text>
         <v-textarea
-          v-model="content"
+          :model-value="content"
           label="Content"
           placeholder="Content"
           hint="Markdown을 사용할 수 있습니다."
@@ -42,9 +42,8 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from 'marked'
-import { db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+import { parse } from 'marked';
+const { $db } = useNuxtApp();
 
 const route = useRoute()
 const time = route.params.content
@@ -54,10 +53,10 @@ const topic = ref('')
 const content = ref('')
 
 onBeforeMount(() => {
-  db.ref(`blog/${time}`)
+  $db.ref(`blog/${time}`)
     .once('value')
-    .then((snapshot) => {
-      const data = snapshot.val()
+    .then((s: any) => {
+      const data = s.val()
       topic.value = data.topic
       content.value = data.markdown
     })
@@ -66,7 +65,7 @@ onBeforeMount(() => {
 const SaveContent = () => {
   const { uid, displayName, photoURL } = userInfo.value
 
-  db.ref(`/blog/${time}`).update({
+  $db.ref(`/blog/${time}`).update({
     topic: topic.value,
     markdown: parse(content.value),
     uid,

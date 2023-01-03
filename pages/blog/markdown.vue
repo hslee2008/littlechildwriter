@@ -46,9 +46,9 @@
 
       <br /><br />
 
-      <NLink to="./new" class="text-decoration-none">
+      <NuxtLink to="./new" class="text-decoration-none">
         <v-btn color="primary">글쓰기</v-btn>
-      </NLink>
+      </NuxtLink>
     </v-card-text>
   </div>
 </template>

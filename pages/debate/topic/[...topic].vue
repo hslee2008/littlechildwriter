@@ -1,13 +1,17 @@
 <template>
   <div>
     <h1>주제: {{ content.topic }}</h1>
-    <v-card class="d-flex transparent" :to="`/user/${content.uid}`">
+    <v-card
+      class="d-flex elevation-0"
+      color="#23262e"
+      :to="`/user/${content.uid}`"
+    >
       <v-avatar class="my-auto ml-2">
         <UserPhoto :src="content.photoURL" />
       </v-avatar>
       <div>
         <v-card-title>{{ content.displayName }}</v-card-title>
-        <v-card-subtitle class="grey--text">
+        <v-card-subtitle class="text-grey">
           {{ new Date(content.time).toLocaleDateString() }}
         </v-card-subtitle>
       </div>
@@ -16,44 +20,43 @@
     <v-divider class="my-10" />
 
     <v-row>
-      <v-col :cols="$vuetify.breakpoint.mobile ? 12 : 6">
+      <v-col :cols="mobile ? 12 : 6">
         <v-card>
           <v-card-title class="d-flex justify-space-between">
             <span>
               찬성
-              <span class="grey--text">
+              <span class="text-grey">
                 ({{ Object.keys(content.pro ?? {}).length }})
               </span>
             </span>
-            <v-btn text small @click=";(side = 'pro'), (write = true)">
+            <v-btn text size="small" @click=";(side = 'pro'), (write = true)">
               <v-icon>mdi-plus</v-icon>
               글쓰기
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <v-list nav class="transparent">
+            <v-list nav color="#23262e">
               <v-list-item v-for="(item, i) in content.pro" :key="item.time">
-                <NLink :to="`/user/${item.uid}`">
-                  <v-list-item-avatar>
+                <template #prepend>
+                  <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
                     <UserPhoto :src="item.photoURL" />
-                  </v-list-item-avatar>
-                </NLink>
+                  </NuxtLink>
+                </template>
 
-                <v-list-item-content>
+                <v-list-item-content class="ml-1 mt-3">
                   <p>{{ item.topic }}</p>
                   <v-list-item-subtitle>
                     {{ item.displayName }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-card-actions>
+                <template #append>
                   <v-menu offset-y>
-                    <template #activator="{ on, attrs }">
+                    <template #activator="{ props }">
                       <v-btn
                         icon
-                        v-bind="attrs"
+                        v-bind="props"
                         cols="1"
-                        v-on="on"
                         @click.stop.prevent=""
                       >
                         <v-icon>mdi-dots-vertical</v-icon>
@@ -65,7 +68,7 @@
                         @click="DeleteContent('pro', i)"
                       >
                         <v-list-item-title>
-                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                          <v-icon start> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item
@@ -73,60 +76,59 @@
                         @click="UpdateOnPro(item.topic, i)"
                       >
                         <v-list-item-title>
-                          <v-icon left> mdi-pencil </v-icon> 수정
+                          <v-icon start> mdi-pencil </v-icon> 수정
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item :to="`/debate/thread/${time}+pro+${i}`">
                         <v-list-item-title>
-                          <v-icon left> mdi-fencing </v-icon> 반박
+                          <v-icon start> mdi-fencing </v-icon> 반박
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
-                </v-card-actions>
+                </template>
               </v-list-item>
             </v-list>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col :cols="$vuetify.breakpoint.mobile ? 12 : 6">
+      <v-col :cols="mobile ? 12 : 6">
         <v-card>
           <v-card-title class="d-flex justify-space-between">
             <span>
               반대
-              <span class="grey--text">
+              <span class="text-grey">
                 ({{ Object.keys(content.con ?? {}).length }})
               </span>
             </span>
-            <v-btn text small @click=";(side = 'con'), (write = true)">
+            <v-btn text size="small" @click=";(side = 'con'), (write = true)">
               <v-icon>mdi-plus</v-icon>
               글쓰기
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <v-list nav class="transparent">
+            <v-list nav color="#23262e">
               <v-list-item v-for="(item, i) in content.con" :key="item.time">
-                <NLink :to="`/user/${item.uid}`">
-                  <v-list-item-avatar>
+                <template #prepend>
+                  <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
                     <UserPhoto :src="item.photoURL" />
-                  </v-list-item-avatar>
-                </NLink>
+                  </NuxtLink>
+                </template>
 
-                <v-list-item-content>
+                <v-list-item-content class="ml-1 mt-3">
                   <p>{{ item.topic }}</p>
                   <v-list-item-subtitle>
                     {{ item.displayName }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
-                <v-card-actions>
+                <template #append>
                   <v-menu offset-y>
-                    <template #activator="{ on, attrs }">
+                    <template #activator="{ props }">
                       <v-btn
                         icon
-                        v-bind="attrs"
+                        v-bind="props"
                         cols="1"
-                        v-on="on"
                         @click.stop.prevent=""
                       >
                         <v-icon>mdi-dots-vertical</v-icon>
@@ -138,7 +140,7 @@
                         @click="DeleteContent('con', i)"
                       >
                         <v-list-item-title>
-                          <v-icon left> mdi-trash-can </v-icon> 삭제
+                          <v-icon start> mdi-trash-can </v-icon> 삭제
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item
@@ -146,17 +148,17 @@
                         @click="UpdateOnCon(item.topic, i)"
                       >
                         <v-list-item-title>
-                          <v-icon left> mdi-pencil </v-icon> 수정
+                          <v-icon start> mdi-pencil </v-icon> 수정
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item :to="`/debate/thread/${time}+con+${i}`">
                         <v-list-item-title>
-                          <v-icon left> mdi-fencing </v-icon> 반박
+                          <v-icon start> mdi-fencing </v-icon> 반박
                         </v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
-                </v-card-actions>
+                </template>
               </v-list-item>
             </v-list>
           </v-card-text>
@@ -169,8 +171,8 @@
     <div class="d-flex">
       <v-card-title>제언</v-card-title>
       <v-tooltip right>
-        <template #activator="{ on, attrs }">
-          <v-icon color="grey" small v-bind="attrs" v-on="on">
+        <template #activator="{ props }">
+          <v-icon color="grey" size="small" v-bind="props" class="mt-3">
             mdi-information-outline
           </v-icon>
         </template>
@@ -185,10 +187,10 @@
       제언하기
     </v-btn>
 
-    <v-card v-if="suggestionCard">
+    <v-card v-if="suggestionCard" class="mt-2" color="#23262e">
       <v-card-title>
         <v-text-field
-          v-model="suggestion"
+          :model-value="suggestion"
           label="주제"
           outlined
           dense
@@ -197,7 +199,7 @@
       </v-card-title>
       <v-card-text>
         <v-textarea
-          v-model="suggestionContent"
+          :model-value="suggestionContent"
           label="내용"
           outlined
           dense
@@ -210,59 +212,51 @@
       </v-card-actions>
     </v-card>
 
-    <v-list nav class="transparent">
+    <v-list nav bg-color="#23262e">
       <v-list-item v-for="(item, i) in content.suggestion" :key="item.time">
-        <NLink :to="`/user/${item.uid}`">
-          <v-list-item-avatar>
+        <template #prepend>
+          <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
             <UserPhoto :src="item.photoURL" />
-          </v-list-item-avatar>
-        </NLink>
+          </NuxtLink>
+        </template>
 
-        <v-list-item-content>
-          <v-card-text>
-            {{ item.topic }}
-          </v-card-text>
+        <v-list-item-content class="ml-1 mt-3">
+          <p>{{ item.topic }}</p>
           <v-list-item-subtitle>
             {{ item.displayName }}
           </v-list-item-subtitle>
         </v-list-item-content>
 
-        <v-card-actions v-if="item.uid == userInfo.uid">
+        <template #append>
           <v-menu offset-y>
-            <template #activator="{ on, attrs }">
-              <v-btn
-                icon
-                v-bind="attrs"
-                cols="1"
-                v-on="on"
-                @click.stop.prevent=""
-              >
+            <template #activator="{ props }">
+              <v-btn icon v-bind="props" cols="1" @click.stop.prevent="">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
             <v-list>
               <v-list-item @click="DeleteContent('suggestion', i)">
                 <v-list-item-title>
-                  <v-icon left> mdi-trash-can </v-icon> 삭제
+                  <v-icon start> mdi-trash-can </v-icon> 삭제
                 </v-list-item-title>
               </v-list-item>
               <v-list-item @click="UpdateOnSuggestion(item.topic, i)">
                 <v-list-item-title>
-                  <v-icon left> mdi-pencil </v-icon> 수정
+                  <v-icon start> mdi-pencil </v-icon> 수정
                 </v-list-item-title>
               </v-list-item>
             </v-list>
           </v-menu>
-        </v-card-actions>
+        </template>
       </v-list-item>
     </v-list>
 
-    <v-dialog v-model="write" width="500">
+    <v-dialog :model-value="write" width="500">
       <v-card>
         <v-card-title>글쓰기</v-card-title>
         <v-card-text>
           <v-textarea
-            v-model="claim"
+            :model-value="claim"
             label="내용"
             placeholder="내용을 입력해주세요."
             outlined
@@ -277,11 +271,11 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="edit" width="500">
+    <v-dialog :model-value="edit" width="500">
       <v-card>
         <v-card-title>글쓰기</v-card-title>
         <v-card-text>
-          <v-textarea v-model="editContent" outlined rows="10" />
+          <v-textarea :model-value="editContent" outlined rows="10" />
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -294,9 +288,10 @@
 </template>
 
 <script setup lang="ts">
-import { db } from 'plugins/firebase'
-import { User } from 'plugins/global'
+import { useDisplay } from 'vuetify';
+const { $db } = useNuxtApp()
 
+const { mobile } = useDisplay()
 const userInfo = User()
 const route = useRoute()
 const time = route.params.topic
@@ -315,7 +310,7 @@ const suggestionContent = ref('')
 const post = () => {
   const { uid, displayName, photoURL } = userInfo.value
 
-  db.ref(`/debate/${time}/${side.value}`).push({
+  $db.ref(`/debate/${time}/${side.value}`).push({
     displayName,
     uid,
     photoURL,
@@ -337,7 +332,7 @@ const post = () => {
 
 const update = () => {
   if (side.value === 'suggestion') {
-    db.ref(`/debate/${time}/suggestion/${editIndex.value}`).update({
+    $db.ref(`/debate/${time}/suggestion/${editIndex.value}`).update({
       topic: editContent.value
     })
 
@@ -345,7 +340,7 @@ const update = () => {
     suggestion.value = ''
     suggestionContent.value = ''
   } else {
-    db.ref(`/debate/${time}/${side.value}/${editIndex.value}`).update({
+    $db.ref(`/debate/${time}/${side.value}/${editIndex.value}`).update({
       topic: editContent.value
     })
 
@@ -356,8 +351,8 @@ const update = () => {
 }
 
 const DeleteContent = (side: string, i: number) => {
-  if (side === 'suggestion') db.ref(`/debate/${time}/suggestion/${i}`).remove()
-  else db.ref(`/debate/${time}/${side}/${i}`).remove()
+  if (side === 'suggestion') $db.ref(`/debate/${time}/suggestion/${i}`).remove()
+  else $db.ref(`/debate/${time}/${side}/${i}`).remove()
 }
 
 const UpdateOnCon = (topic: string, index: number) => {
@@ -384,7 +379,7 @@ const UpdateOnSuggestion = (topic: string, index: number) => {
 const newSuggestion = () => {
   const { uid, displayName, photoURL } = userInfo.value
 
-  db.ref(`/debate/${time}/suggestion`).push({
+  $db.ref(`/debate/${time}/suggestion`).push({
     displayName,
     uid,
     photoURL,
@@ -407,9 +402,9 @@ const newSuggestion = () => {
 }
 
 onMounted(() =>
-  db
+  $db
     .ref(`/debate/${time}`)
-    .on('value', async s => (content.value = await s.val()))
+    .on('value', async (s: any) => (content.value = await s.val()))
 )
 </script>
 
