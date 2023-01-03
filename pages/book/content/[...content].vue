@@ -178,7 +178,9 @@
               <v-chip
                 v-if="userInfo.uid"
                 label
-                :color="(post?.liked ?? {})[userInfo.uid] ? 'blue' : 'grey'"
+                :style="`background-color: ${
+                  (post?.liked ?? {})[userInfo.uid] ? '#159ECB' : 'grey'
+                }`"
                 @click="Like()"
               >
                 <v-icon start> mdi-thumb-up </v-icon>
@@ -413,7 +415,6 @@
       right
       open-on-hover
       direction="top"
-      transition="slide-y-reverse-transition"
       style="position: fixed"
     >
       <template #activator>

@@ -1,76 +1,22 @@
 <template>
-  <v-data-iterator
-    :items="books"
-    :items-per-page.sync="itemsPerPage"
-    :page.sync="page"
-    :search="search"
-    :sort-by="sortBy.toLowerCase()"
-    :sort-desc="sortDesc"
-    hide-default-footer
-    loading-text="로딩중..."
-    no-data-text="로딩중..."
-    class="mb-10"
-  >
-    <template #header>
-      <v-text-field
-        :model-value="search"
-        label="Search"
-        outlined
-        rounded
-        class="my-2 mr-2 rounded-xl"
+  <div>
+    <v-row class="mt-5 g-10">
+      <BookCard
+        :items="books.slice((page - 1) * itemsPerPage, page * itemsPerPage)"
       />
+    </v-row>
 
-      <v-switch
-        :model-value="sortDesc"
-        :label="sortDesc ? '최신순' : '오래된순'"
-        hide-details
-        class="my-2"
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        :length="Math.ceil(books.length / itemsPerPage)"
       />
-    </template>
-
-    <template #default="props">
-      <v-row class="mt-5 g-10">
-        <BookCard :items="props.items" />
-      </v-row>
-    </template>
-
-    <template #footer>
-      <v-row class="mt-10" align="center" justify="center">
-        <v-menu top>
-          <template #activator="{ props }">
-            <v-btn text color="primary" class="ml-2" v-bind="props">
-              {{ itemsPerPage }}
-              <v-icon right> mdi-chevron-down </v-icon>
-            </v-btn>
-          </template>
-
-          <v-list>
-            <v-list-item
-              v-for="num in [10, 50, 150, 200]"
-              :key="num"
-              @click="itemsPerPage = num"
-            >
-              <v-list-item-title>{{ num }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-
-        <v-spacer />
-
-        <span class="mr-4 text-grey"> {{ page }} / {{ numberOfPages }} </span>
-        <v-btn icon color="blue darken-3" @click="Before">
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-        <v-btn icon color="blue darken-3" @click="Next">
-          <v-icon>mdi-chevron-right</v-icon>
-        </v-btn>
-      </v-row>
-    </template>
-  </v-data-iterator>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
 const route = useRoute()
 const books = ref<any[]>([])
@@ -78,8 +24,7 @@ const sortBy = ref<string>('time')
 // eslint-disable-next-line func-call-spacing
 const search = ref<string | (string | null)[]>('')
 const page = ref<number>(1)
-const itemsPerPage = ref<number>(10)
-const sortDesc = ref<boolean>(true)
+const itemsPerPage = ref<number>(15)
 
 const numberOfPages = computed(() =>
   Math.ceil(books.value.length / itemsPerPage.value)
@@ -87,9 +32,9 @@ const numberOfPages = computed(() =>
 
 onBeforeMount(() => {
   route.query.search && (search.value = route.query.search)
-  $db.ref('contents').on('child_added', async (s: any) =>
-    books.value.unshift(await s.val())
-  )
+  $db
+    .ref('contents')
+    .on('child_added', async (s: any) => books.value.unshift(await s.val()))
 })
 
 const Next = () => {

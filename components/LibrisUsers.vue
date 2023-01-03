@@ -1,11 +1,13 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
-  <v-list nav bg-color="#23262e">
+  <v-list nav bg-color="#23262e" lines="two">
     <v-list-item
       v-for="(item, i) in lbt"
       v-show="lbt[i].displayName"
       :key="lbt[i].uid"
       :to="`/user/${lbt[i].uid}`"
+      :title="lbt[i]?.displayName"
+      :subtitle="`${formatter(lbt[i].libris)} 리브리스`"
     >
       <template #prepend>
         {{ i + 1 }}등
@@ -13,11 +15,6 @@
           <UserPhoto :src="lbt[i].photoURL" />
         </v-avatar>
       </template>
-
-      <v-list-item-title>{{ lbt[i]?.displayName }}</v-list-item-title>
-      <v-list-item-subtitle>
-        {{ formatter(lbt[i].libris) }} 리브리스
-      </v-list-item-subtitle>
 
       <template #append>
         <v-icon :color="item.status === 'online' ? 'primary' : 'grey'">

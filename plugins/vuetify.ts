@@ -10,21 +10,24 @@ export default defineNuxtPlugin(nuxtApp => {
     directives,
     blueprints: md3,
     styles: {
-      configFile: 'assets/sass/vuetify.scss',
+      configFile: 'assets/sass/vuetify.scss'
     },
     theme: {
       defaultTheme: 'dark',
       themes: {
-        colors: {
-          primary: '#159ECB',
-          secondary: '#b0bec5',
-          info: '#2196F3',
-          accent: '#293540',
-          success: '#4CAF50',
-          warning: '#FFC107',
-          error: '#b71c1c'
-        },
-      },
+        dark: {
+          dark: true,
+          colors: {
+            primary: '#159ECB',
+            secondary: '#b0bec5',
+            info: '#2196F3',
+            accent: '#293540',
+            success: '#4CAF50',
+            warning: '#FFC107',
+            error: '#b71c1c'
+          }
+        }
+      }
     }
   })
 

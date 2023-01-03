@@ -104,6 +104,7 @@ export default defineNuxtConfig({
   css: [
     'assets/css/global.css',
     'assets/sass/variables.scss',
+    'assets/sass/global.scss',
     'vuetify/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
   ],

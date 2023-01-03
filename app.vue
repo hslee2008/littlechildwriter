@@ -18,59 +18,59 @@
         color="#23262E"
       >
         <v-list nav expand>
-          <v-list-item to="/">
-            <v-list-item-title>
-              <v-icon start>mdi-home-variant</v-icon> 홈페이지
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/list">
-            <v-list-item-title>
-              <v-icon start>mdi-format-list-text</v-icon> 책 목록
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/class/classes">
-            <v-list-item-title>
-              <v-icon start>mdi-clipboard-multiple</v-icon> 알림판
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/blog/home">
-            <v-list-item-title>
-              <v-icon start>mdi-typewriter</v-icon> 창작 코너
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/debate/home">
-            <v-list-item-title>
-              <v-icon start>mdi-lectern</v-icon> 토론 광장
-            </v-list-item-title>
-          </v-list-item>
+          <v-list-item
+            to="/"
+            title="홈페이지"
+            prepend-icon="mdi-home-variant"
+          />
+          <v-list-item
+            to="/list"
+            title="책 목록"
+            prepend-icon="mdi-format-list-text"
+          />
+          <v-list-item
+            to="/class/classes"
+            title="알림판"
+            prepend-icon="mdi-clipboard-multiple"
+          />
+          <v-list-item
+            to="/blog/home"
+            title="창작 코너"
+            prepend-icon="mdi-typewriter"
+          />
+          <v-list-item
+            to="/debtate/home"
+            title="토론 광장"
+            prepend-icon="mdi-lectern"
+          />
 
           <template v-if="userInfo.uid">
             <v-divider class="my-1" />
 
-            <v-list-item to="/bookmark">
-              <v-list-item-title>
-                <v-icon start>mdi-bookmark-multiple</v-icon> 책갈피
-              </v-list-item-title>
-            </v-list-item>
-            <v-list-item to="/account/account">
-              <v-list-item-title>
-                <v-icon start>mdi-cog</v-icon> 설정
-              </v-list-item-title>
-            </v-list-item>
+            <v-list-item
+              to="/bookmark"
+              title="책갈피"
+              prepend-icon="mdi-bookmark-multiple"
+            />
+            <v-list-item
+              to="/account/account"
+              title="설정"
+              prepend-icon="mdi-cog"
+            />
           </template>
 
           <v-divider class="my-1" />
 
-          <v-list-item to="/libris/libris">
-            <v-list-item-title>
-              <v-icon start>mdi-podium</v-icon> 명예의 전당
-            </v-list-item-title>
-          </v-list-item>
-          <v-list-item to="/libris/table">
-            <v-list-item-title>
-              <v-icon start>mdi-table-large</v-icon> 포인트제
-            </v-list-item-title>
-          </v-list-item>
+          <v-list-item
+            to="/libris/libris"
+            title="명예의 전당"
+            prepend-icon="mdi-podium"
+          />
+          <v-list-item
+            to="/libris/table"
+            title="포인트제"
+            prepend-icon="mdi-table-large"
+          />
         </v-list>
       </v-navigation-drawer>
 
@@ -82,7 +82,7 @@
         color="#23262E"
       >
         <template v-slot:prepend>
-          <v-app-bar-nav-icon @click.stop="drawer = !drawer" color="#23262E" />
+          <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
         </template>
 
         <NuxtLink to="/" class="ml-2">
@@ -108,17 +108,16 @@
             :model-value="notifOverlay"
             width="700"
             activator="#notif"
-            transition="dialog-bottom-transition"
             scrollable
           >
-            <template #activator="{ attrs, on }">
-              <v-btn icon v-bind="attrs" v-on="on" id="notif" color="#23262E">
+            <template #activator="{ props }">
+              <v-btn icon v-bind="props" color="#23262E">
                 <v-badge
                   overlap
                   left
-                  transition
+                  id="notif"
                   :content="notif.length"
-                  :model-value="notif.length"
+                  :value="notif.length"
                   class="text-amber"
                 >
                   <v-icon>

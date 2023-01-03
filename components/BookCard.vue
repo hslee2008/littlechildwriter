@@ -2,7 +2,7 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-lazy>
-    <v-row class="row">
+    <v-row class="row" style="margin: 15px;">
       <v-card
         v-for="(item, i) in items"
         :key="i"
@@ -34,7 +34,7 @@
           <v-card-text>
             <span class="text--disabled">
               {{ formatter(item.views) }} views ·
-              {{ new Date(parseInt(item.time)).toLocaleDateString() }}
+              {{ DateFormatter(new Date(parseInt(item.time)).getTime()) }}
             </span>
           </v-card-text>
         </v-card>
