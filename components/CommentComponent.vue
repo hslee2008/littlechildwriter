@@ -8,8 +8,8 @@
       single-line
       hide-details
       label="댓글 달기"
-      @keydown.enter="Comment"
       append-inner-icon="mdi-send"
+      @keydown.enter="Comment"
       @click:append-inner="Comment"
     />
 
@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from 'perspective-api-client';
+import Perspective from 'perspective-api-client'
 
 const { $db } = useNuxtApp()
 

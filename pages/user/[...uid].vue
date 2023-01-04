@@ -219,7 +219,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()
@@ -333,8 +333,16 @@ const ratingFilter = (a: any) =>
   rating.value === '모두' ? 1 : a.rating === rating.value
 
 useHead({
-  title: `사용자 - LCW`
+  title: '사용자 - LCW'
 })
+</script>
+
+<script lang="ts">
+export default {
+  name: 'User',
+  inheritAttrs: false,
+  customOptions: {}
+}
 </script>
 
 <style scoped>
@@ -344,11 +352,3 @@ useHead({
   left: 0;
 }
 </style>
-
-<script lang="ts">
-export default {
-  name: 'User',
-  inheritAttrs: false,
-  customOptions: {}
-}
-</script>

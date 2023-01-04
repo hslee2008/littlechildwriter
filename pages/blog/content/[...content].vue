@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from 'marked';
+import { parse } from 'marked'
 const { $db } = useNuxtApp()
 
 const route = useRoute()

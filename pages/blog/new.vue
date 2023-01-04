@@ -42,8 +42,8 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from 'marked';
-const { $db } = useNuxtApp();
+import { parse } from 'marked'
+const { $db } = useNuxtApp()
 
 const userInfo = User()
 const router = useRouter()

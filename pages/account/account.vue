@@ -136,7 +136,7 @@ onMounted(() =>
       .once('value')
       .then(async (s: any) => (featured.value = await s.val().featured))
 
-    $db.ref(`/contents/`).on('value', async (s: any) => {
+    $db.ref('/contents/').on('value', async (s: any) => {
       const data = await s.val()
 
       for (const key in data)

@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
 const userInfo = User()
 const router = useRouter()

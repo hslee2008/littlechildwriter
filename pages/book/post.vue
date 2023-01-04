@@ -391,7 +391,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const userInfo = User()

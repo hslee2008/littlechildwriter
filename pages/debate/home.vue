@@ -26,12 +26,12 @@
 
           <v-list-item-action v-if="item.uid == userInfo.uid">
             <v-btn
+              id="btn"
               icon
               cols="1"
               flat
               color="#23262e"
               @click.stop.prevent=""
-              id="btn"
             >
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>

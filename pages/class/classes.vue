@@ -11,8 +11,7 @@
           color="primary"
           class="zmax"
           v-bind="props"
-
-        >
+>
           <v-icon> mdi-plus </v-icon>
         </v-btn>
       </template>

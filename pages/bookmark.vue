@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from 'vuetify';
+import { useTheme } from 'vuetify'
 const { $db, $auth } = useNuxtApp()
 
 const theme = useTheme()

@@ -15,8 +15,8 @@
     </v-window-item>
 
     <v-window-item
-      :value="2"
       v-if="classInfo.uid === userInfo.uid"
+      :value="2"
       class="pt-5"
     >
       <v-card class="mt-5">

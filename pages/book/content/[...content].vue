@@ -147,9 +147,11 @@
 
           <v-card-subtitle>
             by
-            <NuxtLink :to="`/user/${post.uid}`">{{
-              post.displayName
-            }}</NuxtLink>
+            <NuxtLink :to="`/user/${post.uid}`">
+              {{
+                post.displayName
+              }}
+            </NuxtLink>
           </v-card-subtitle>
 
           <v-card-text>
@@ -271,7 +273,7 @@
           <v-card-text v-else>{{ school.resultString }}</v-card-text>
         </v-card>
       </v-dialog>
-      <v-btn text @click="share" class="mx-1">
+      <v-btn text class="mx-1" @click="share">
         <v-icon start> mdi-share-variant </v-icon>
         공유
       </v-btn>
@@ -713,6 +715,14 @@ useHead({
 })
 </script>
 
+<script lang="ts">
+export default {
+  name: 'Content',
+  inheritAttrs: false,
+  customOptions: {}
+}
+</script>
+
 <style scoped>
 .frame {
   position: absolute;
@@ -736,11 +746,3 @@ useHead({
   }
 }
 </style>
-
-<script lang="ts">
-export default {
-  name: 'Content',
-  inheritAttrs: false,
-  customOptions: {}
-}
-</script>

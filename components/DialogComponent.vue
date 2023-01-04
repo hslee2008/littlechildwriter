@@ -6,7 +6,6 @@
         v-bind="props"
         class="delete"
         @click="dialog = true"
-
       >
         <v-icon start> mdi-{{ icon }} </v-icon>
         {{ btnTitle }}

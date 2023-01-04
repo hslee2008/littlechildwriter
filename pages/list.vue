@@ -20,15 +20,10 @@ const { $db } = useNuxtApp()
 
 const route = useRoute()
 const books = ref<any[]>([])
-const sortBy = ref<string>('time')
 // eslint-disable-next-line func-call-spacing
 const search = ref<string | (string | null)[]>('')
 const page = ref<number>(1)
 const itemsPerPage = ref<number>(15)
-
-const numberOfPages = computed(() =>
-  Math.ceil(books.value.length / itemsPerPage.value)
-)
 
 onBeforeMount(() => {
   route.query.search && (search.value = route.query.search)
@@ -36,16 +31,6 @@ onBeforeMount(() => {
     .ref('contents')
     .on('child_added', async (s: any) => books.value.unshift(await s.val()))
 })
-
-const Next = () => {
-  page.value + 1 <= numberOfPages.value && (page.value += 1)
-  window.scrollTo({ top: 0 })
-}
-
-const Before = () => {
-  page.value - 1 >= 1 && (page.value -= 1)
-  window.scrollTo({ top: 0 })
-}
 
 useHead({
   title: '리스트 - LCW'

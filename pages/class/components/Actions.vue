@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-const { $db, $storage } = useNuxtApp();
+const { $db, $storage } = useNuxtApp()
 
 const route = useRoute()
 const props = defineProps<{

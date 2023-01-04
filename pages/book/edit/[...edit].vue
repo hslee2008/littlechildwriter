@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-const { $db, $auth } = useNuxtApp();
+const { $db, $auth } = useNuxtApp()
 
 const route = useRoute()
 const router = useRouter()

@@ -9,7 +9,6 @@
         </template>
       </NuxtErrorBoundary>
 
-
       <v-app-bar
         fixed
         clipped-left
@@ -17,7 +16,7 @@
         :collapse="$route.path.startsWith('/class')"
         color="#23262E"
       >
-        <template v-slot:prepend>
+        <template #prepend>
           <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
         </template>
 
@@ -48,9 +47,9 @@
             <template #activator="{ props }">
               <v-btn icon v-bind="props" color="#23262E">
                 <v-badge
+                  id="notif"
                   overlap
                   left
-                  id="notif"
                   :content="notif.length"
                   :value="notif.length"
                   class="text-amber"
@@ -103,8 +102,8 @@
               <v-btn icon>
                 <v-avatar size="35">
                   <v-img
-                    alt="User Avatar"
                     id="image"
+                    alt="User Avatar"
                     :src="userInfo.photoURL"
                   />
                 </v-avatar>
@@ -214,11 +213,28 @@
         </v-list>
       </v-navigation-drawer>
 
-
-      <v-main :style="$route.path !== '/' ? 'margin-right: 10px; margin-left: 10px;' : ''">
+      <v-main
+        :style="
+          $route.path !== '/' ? 'margin-right: 10px; margin-left: 10px;' : ''
+        "
+      >
         <NuxtPage />
 
         <br />
+
+        <v-banner
+          v-if="userInfo.uid && (!userInfo.displayName || !userInfo.photoURL)"
+          :sticky="true"
+          lines="one"
+        >
+          <template #text> 설정에서 이름과 사진을 변경하세요 </template>
+
+          <template #actions>
+            <v-btn to="/account/account">
+              <v-icon>mdi-open-in-new</v-icon>
+            </v-btn>
+          </template>
+        </v-banner>
       </v-main>
     </NuxtLayout>
   </v-app>

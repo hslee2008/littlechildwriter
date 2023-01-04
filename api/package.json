@@ -4,8 +4,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "netlify-lambda build src"
   },
+  "main": "index.js",
   "dependencies": {
     "axios": "^1.0.0",
     "cheerio": "^1.0.0-rc.12",
@@ -14,7 +16,9 @@
     "https": "^1.0.0",
     "qs": "^6.11.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "netlify-lambda": "^1.6.3"
+  },
   "engines": {
     "node": ">15",
     "npm": ">7"

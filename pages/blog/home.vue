@@ -29,7 +29,7 @@
 
         <v-spacer />
 
-        <template #append v-if="item.uid == userInfo.uid">
+        <template v-if="item.uid == userInfo.uid" #append>
           <v-menu offset-y>
             <template #activator="{ props }">
               <v-btn icon v-bind="props" cols="1" @click.stop.prevent="">
