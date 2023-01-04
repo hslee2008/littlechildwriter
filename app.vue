@@ -9,70 +9,6 @@
         </template>
       </NuxtErrorBoundary>
 
-      <v-navigation-drawer
-        :model-value="drawer"
-        floating
-        rounded
-        permanent
-        :temporary="mobile"
-        color="#23262E"
-      >
-        <v-list nav expand>
-          <v-list-item
-            to="/"
-            title="홈페이지"
-            prepend-icon="mdi-home-variant"
-          />
-          <v-list-item
-            to="/list"
-            title="책 목록"
-            prepend-icon="mdi-format-list-text"
-          />
-          <v-list-item
-            to="/class/classes"
-            title="알림판"
-            prepend-icon="mdi-clipboard-multiple"
-          />
-          <v-list-item
-            to="/blog/home"
-            title="창작 코너"
-            prepend-icon="mdi-typewriter"
-          />
-          <v-list-item
-            to="/debate/home"
-            title="토론 광장"
-            prepend-icon="mdi-lectern"
-          />
-
-          <template v-if="userInfo.uid">
-            <v-divider class="my-1" />
-
-            <v-list-item
-              to="/bookmark"
-              title="책갈피"
-              prepend-icon="mdi-bookmark-multiple"
-            />
-            <v-list-item
-              to="/account/account"
-              title="설정"
-              prepend-icon="mdi-cog"
-            />
-          </template>
-
-          <v-divider class="my-1" />
-
-          <v-list-item
-            to="/libris/libris"
-            title="명예의 전당"
-            prepend-icon="mdi-podium"
-          />
-          <v-list-item
-            to="/libris/table"
-            title="포인트제"
-            prepend-icon="mdi-table-large"
-          />
-        </v-list>
-      </v-navigation-drawer>
 
       <v-app-bar
         fixed
@@ -213,7 +149,73 @@
         </div>
       </v-app-bar>
 
-      <v-main style="margin-right: 10px;">
+      <v-navigation-drawer
+        :model-value="drawer"
+        floating
+        rounded
+        permanent
+        :temporary="mobile"
+        color="#23262E"
+      >
+        <v-list nav expand>
+          <v-list-item
+            to="/"
+            title="홈페이지"
+            prepend-icon="mdi-home-variant"
+          />
+          <v-list-item
+            to="/list"
+            title="책 목록"
+            prepend-icon="mdi-format-list-text"
+          />
+          <v-list-item
+            to="/class/classes"
+            title="알림판"
+            prepend-icon="mdi-clipboard-multiple"
+          />
+          <v-list-item
+            to="/blog/home"
+            title="창작 코너"
+            prepend-icon="mdi-typewriter"
+          />
+          <v-list-item
+            to="/debate/home"
+            title="토론 광장"
+            prepend-icon="mdi-lectern"
+          />
+
+          <template v-if="userInfo.uid">
+            <v-divider class="my-1" />
+
+            <v-list-item
+              to="/bookmark"
+              title="책갈피"
+              prepend-icon="mdi-bookmark-multiple"
+            />
+            <v-list-item
+              to="/account/account"
+              title="설정"
+              prepend-icon="mdi-cog"
+            />
+          </template>
+
+          <v-divider class="my-1" />
+
+          <v-list-item
+            to="/libris/libris"
+            title="명예의 전당"
+            prepend-icon="mdi-podium"
+          />
+          <v-list-item
+            to="/libris/table"
+            title="포인트제"
+            prepend-icon="mdi-table-large"
+          />
+        </v-list>
+      </v-navigation-drawer>
+
+
+      <v-main style="margin-right: 10px">
         <NuxtPage />
 
         <br />

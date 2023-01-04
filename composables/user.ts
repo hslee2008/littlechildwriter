@@ -1,4 +1,4 @@
-import { auth, db } from 'plugins/firebase'
+import { auth, db } from '/plugins/firebase'
 
 export const User = () => {
   const userInfo = ref<UserInfo>({

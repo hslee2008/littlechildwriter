@@ -31,9 +31,7 @@ async function getRoutes() {
 
 export default defineNuxtConfig({
   alias: {
-    tslib: 'tslib/tslib.es6.js',
-    plugins: '@/plugins',
-    assets: '@/assets'
+    tslib: 'tslib/tslib.es6.js'
   },
 
   app: {
@@ -102,19 +100,18 @@ export default defineNuxtConfig({
   },
 
   css: [
-    'assets/css/global.css',
-    'assets/sass/global.scss',
+    '/assets/css/global.css',
+    '/assets/sass/global.scss',
     'vuetify/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
   ],
-  plugins: ['plugins/firebase', 'plugins/gtag'],
+  plugins: ['/plugins/firebase', 'plugins/gtag'],
   modules: [
     async (options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', config =>
         config.plugins.push(vuetify())
       )
-    },
-    '@kevinmarrec/nuxt-pwa'
+    }
   ],
   target: 'static',
 
