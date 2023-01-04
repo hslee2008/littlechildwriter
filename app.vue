@@ -215,7 +215,7 @@
       </v-navigation-drawer>
 
 
-      <v-main style="margin-right: 10px">
+      <v-main :style="$route.path !== '/' ? 'margin-right: 10px; margin-left: 10px;' : ''">
         <NuxtPage />
 
         <br />
