@@ -2,7 +2,7 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-lazy>
-    <v-row class="row" style="margin: 15px;">
+    <v-row class="row" style="margin: 15px">
       <v-card
         v-for="(item, i) in items"
         :key="i"
@@ -27,10 +27,8 @@
 
           <v-card-subtitle>
             <NuxtLink :to="`/user/${item.uid}`">
-{{
-              item.displayName
-            }}
-</NuxtLink>
+              {{ item.displayName }}
+            </NuxtLink>
           </v-card-subtitle>
 
           <v-card-text>

@@ -4,12 +4,7 @@
 
     <br />
 
-    <v-list
-      v-if="items.length > 0"
-      :model-value="items"
-      bg-color="#23262e"
-      nav
-    >
+    <v-list v-if="items.length > 0" :model-value="items" bg-color="#23262e" nav>
       <v-list-item
         v-for="(item, i) in items"
         :key="item.time"
@@ -35,20 +30,16 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from 'vuetify'
-const { $db, $auth } = useNuxtApp()
+const { $db } = useNuxtApp()
 
-const theme = useTheme()
 const userInfo = User()
 const items = ref<any>([])
 
-onMounted(() =>
-  $auth.onAuthStateChanged((u: any) =>
-    $db
-      .ref(`/users/${u?.uid}/bookmarks`)
-      .on('child_added', async (s: any) => items.value.push(await s.val()))
-  )
-)
+useAuth((u: any) => {
+  $db
+    .ref(`/users/${u?.uid}/bookmarks`)
+    .on('child_added', async (s: any) => items.value.push(await s.val()))
+})
 
 const deleteBookmark = (time: string, i: number) => {
   $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()

@@ -1,6 +1,26 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
   <div>
+    <br />
+
+    <div class="d-flex justify-center">
+      <v-img :src="post.image" class="rounded-lg" max-width="200">
+        <v-overlay
+          v-if="
+            post.image ===
+            'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif'
+          "
+          absolute
+        >
+          <v-btn @click="isbn.upload = true">
+            <v-icon class="ma-auto" left> mdi-book-open-page-variant </v-icon>
+
+            책 사진 올리기
+          </v-btn>
+        </v-overlay>
+      </v-img>
+    </div>
+
     <v-dialog v-model="isbn.upload" width="500">
       <v-card>
         <v-card-title> 책 사진 업로드 </v-card-title>
@@ -16,11 +36,13 @@
             max-width="150"
           />
 
-          <v-tabs>
+          <v-tabs v-model="tab">
             <v-tab> 기기에서 업로드 </v-tab>
             <v-tab> URL로 업로드 </v-tab>
+          </v-tabs>
 
-            <v-tab-item class="pt-3">
+          <v-window v-model="tab">
+            <v-window-item class="pt-3">
               <v-file-input
                 accept="image/*"
                 outlined
@@ -28,16 +50,16 @@
                 label="책 사진을 선택하세요"
                 @change="uploadImg($event)"
               />
-            </v-tab-item>
+            </v-window-item>
 
-            <v-tab-item class="pt-3">
+            <v-window-item class="pt-3">
               <v-text-field
                 v-model="post.image"
                 label="책 사진의 URL을 입력하세요"
                 prepend-icon="mdi-link"
               />
-            </v-tab-item>
-          </v-tabs>
+            </v-window-item>
+          </v-window>
         </v-card-text>
 
         <v-card-actions>
@@ -349,26 +371,6 @@
 
     <br />
 
-    <div class="d-flex justify-center">
-      <v-img :src="post.image" class="rounded-lg" max-width="200">
-        <v-overlay
-          v-if="
-            post.image ===
-            'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif'
-          "
-          absolute
-        >
-          <v-btn @click="isbn.upload = true">
-            <v-icon class="ma-auto" left> mdi-book-open-page-variant </v-icon>
-
-            책 사진 올리기
-          </v-btn>
-        </v-overlay>
-      </v-img>
-    </div>
-
-    <br />
-
     <v-snackbar v-model="snackbar">
       제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해주세요.
 
@@ -429,6 +431,7 @@ const isbnImageElement = ref<any>(null)
 const snackbar = ref<boolean>(false)
 const notfound = ref<boolean>(false)
 const video = ref<any>(null)
+const tab = ref<any>(0)
 
 onBeforeUnmount(() => {
   if (video.value)
@@ -564,7 +567,8 @@ const fetchi = () => {
       }
 
       isbn.value.input = false
-    }).catch(() => {
+    })
+    .catch(() => {
       notfound.value = true
     })
 

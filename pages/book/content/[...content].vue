@@ -148,9 +148,7 @@
           <v-card-subtitle>
             by
             <NuxtLink :to="`/user/${post.uid}`">
-              {{
-                post.displayName
-              }}
+              {{ post.displayName }}
             </NuxtLink>
           </v-card-subtitle>
 
@@ -195,6 +193,15 @@
     </v-card>
 
     <div class="text-center my-10">
+      <div v-if="userInfo.uid === post.uid">
+        <v-btn fab dark size="small" color="green" :to="`/book/edit/${time}`" class="ma-2">
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn fab dark size="small" color="red" @click="Del" class="ma-2">
+          <v-icon>mdi-delete</v-icon>
+        </v-btn>
+      </div>
+
       <v-dialog width="700">
         <template #activator="{ props }">
           <v-btn text v-bind="props" class="mx-1">
@@ -409,29 +416,6 @@
     </template>
 
     <br /><br /><br />
-
-    <v-speed-dial
-      v-if="userInfo.uid === post.uid"
-      :model-value="fab"
-      bottom
-      right
-      open-on-hover
-      direction="top"
-      style="position: fixed"
-    >
-      <template #activator>
-        <v-btn :model-value="fab" color="blue darken-2" dark fab>
-          <v-icon v-if="fab"> mdi-cog-off </v-icon>
-          <v-icon v-else> mdi-cog </v-icon>
-        </v-btn>
-      </template>
-      <v-btn fab dark size="small" color="green" :to="`/book/edit/${time}`">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-      <v-btn fab dark size="small" color="red" @click="Del">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </v-speed-dial>
   </div>
 </template>
 

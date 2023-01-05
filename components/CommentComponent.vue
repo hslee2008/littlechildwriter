@@ -57,13 +57,7 @@
               >
                 취소
               </v-btn>
-              <v-btn
-                color="primary"
-                text
-                @click="Update(i)"
-              >
-                저장
-              </v-btn>
+              <v-btn color="primary" text @click="Update(i)"> 저장 </v-btn>
             </template>
           </v-text-field>
 

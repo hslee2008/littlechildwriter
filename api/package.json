@@ -4,8 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node index.js",
-    "build": "netlify-lambda build src"
+    "start": "node index.js"
   },
   "main": "index.js",
   "dependencies": {

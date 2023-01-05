@@ -31,21 +31,3 @@ html {
 .page-leave-to {
   opacity: 0;
 }
-
-/* Custom */
-.zmax {
-  z-index: 999;
-}
-
-.g-10 {
-  gap: 10px;
-}
-
-/* Customize */
-.v-overlay__scrim {
-  background-color: #3d4754 !important;
-}
-
-.v-card-subtitle > a {
-  color: #159ECB !important;
-}

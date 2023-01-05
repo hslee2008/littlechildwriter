@@ -52,10 +52,11 @@ const post = ref<any>({
   time: Date.now()
 })
 
-onMounted(() => $auth.onAuthStateChanged((u: any) => u && Post()))
 
 const Post = async () =>
   (post.value = (await $db.ref(`/contents/${time}`).once('value')).val())
+
+useAuth(Post)
 
 const Update = () => {
   const { title, content, image, time, rating, pageCount, isbn } = post.value

@@ -252,23 +252,19 @@ const notif = ref<any>([])
 const notifOverlay = ref<boolean>(false)
 const drawer = ref<boolean>(!mobile.value)
 
-onMounted(() => {
-  $auth.onAuthStateChanged((u: any) => {
-    if (!u) return
+useAuth((u: any) => {
+  $db
+    .ref(`/users/${u.uid}/notification`)
+    .on('child_added', async (s: any) => notif.value.push(await s.val()))
 
-    $db
-      .ref(`/users/${u.uid}/notification`)
-      .on('child_added', async (s: any) => notif.value.push(await s.val()))
-
-    $db.ref('.info/connected').on('value', (s: any) => {
-      if (s.val()) {
-        $db
-          .ref(`/users/${userInfo.value.uid}/status`)
-          .onDisconnect()
-          .set('offline')
-        $db.ref(`/users/${userInfo.value.uid}/status`).set('online')
-      }
-    })
+  $db.ref('.info/connected').on('value', (s: any) => {
+    if (s.val()) {
+      $db
+        .ref(`/users/${userInfo.value.uid}/status`)
+        .onDisconnect()
+        .set('offline')
+      $db.ref(`/users/${userInfo.value.uid}/status`).set('online')
+    }
   })
 })
 

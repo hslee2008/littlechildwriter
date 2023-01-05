@@ -124,26 +124,24 @@ const books = ref<any[]>([])
 const imageEdit = ref<boolean>(false)
 const featured = ref<number>(0)
 
-onMounted(() =>
-  $auth.onAuthStateChanged(() => {
-    $db
-      .ref(`/users/${userInfo.value.uid}`)
-      .once('value')
-      .then(async (s: any) => (userDB.value = await s.val()))
+useAuth(() => {
+  $db
+    .ref(`/users/${userInfo.value.uid}`)
+    .once('value')
+    .then(async (s: any) => (userDB.value = await s.val()))
 
-    $db
-      .ref(`/users/${userInfo.value.uid}`)
-      .once('value')
-      .then(async (s: any) => (featured.value = await s.val().featured))
+  $db
+    .ref(`/users/${userInfo.value.uid}`)
+    .once('value')
+    .then(async (s: any) => (featured.value = await s.val().featured))
 
-    $db.ref('/contents/').on('value', async (s: any) => {
-      const data = await s.val()
+  $db.ref('/contents/').on('value', async (s: any) => {
+    const data = await s.val()
 
-      for (const key in data)
-        if (data[key].uid === userInfo.value.uid) books.value.push(data[key])
-    })
+    for (const key in data)
+      if (data[key].uid === userInfo.value.uid) books.value.push(data[key])
   })
-)
+})
 
 const Update = async () => {
   const { displayName, uid, email } = userInfo.value
