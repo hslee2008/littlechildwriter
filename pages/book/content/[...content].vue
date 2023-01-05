@@ -175,17 +175,6 @@
                 <v-icon start>mdi-book</v-icon>
                 {{ post.pageCount }}
               </v-chip>
-              <v-chip
-                v-if="userInfo.uid"
-                label
-                :style="`background-color: ${
-                  (post?.liked ?? {})[userInfo.uid] ? '#159ECB' : 'grey'
-                }`"
-                @click="Like()"
-              >
-                <v-icon start> mdi-thumb-up </v-icon>
-                <span class="subheading" v-text="post?.likes" />
-              </v-chip>
             </v-chip-group>
           </v-card-text>
         </div>
@@ -194,13 +183,33 @@
 
     <div class="text-center my-10">
       <div v-if="userInfo.uid === post.uid">
-        <v-btn fab dark size="small" color="green" :to="`/book/edit/${time}`" class="ma-2">
+        <v-btn
+          fab
+          dark
+          size="small"
+          color="green"
+          :to="`/book/edit/${time}`"
+          class="ma-2"
+        >
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
         <v-btn fab dark size="small" color="red" @click="Del" class="ma-2">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </div>
+
+      <v-chip
+        v-if="userInfo.uid"
+        label
+        :style="`background-color: ${
+          (post?.liked ?? {})[userInfo.uid] ? '#159ECB' : 'grey'
+        }`"
+        @click="Like()"
+        class="mr-3"
+      >
+        <v-icon start> mdi-thumb-up </v-icon>
+        <span class="subheading" v-text="post?.likes" />
+      </v-chip>
 
       <v-dialog width="700">
         <template #activator="{ props }">
@@ -307,14 +316,10 @@
 
             <v-card>
               <v-card-text>
-                <br />
                 <v-chip
                   v-for="tag in post.categories"
                   :key="tag"
-                  ripple
-                  outlined
                   label
-                  :to="`/list?search=${tag}`"
                   class="ma-2 d-block"
                 >
                   #{{ tag }}

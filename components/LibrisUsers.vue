@@ -17,9 +17,11 @@
       </template>
 
       <template #append>
-        <v-icon :color="item.status === 'online' ? 'primary' : 'grey'">
-          mdi-account-{{ item.status === 'online' ? 'check' : 'remove' }}
-        </v-icon>
+        <v-avatar>
+          <v-icon :color="item.status === 'online' ? 'primary' : 'grey'">
+            mdi-account-{{ item.status === 'online' ? 'check' : 'remove' }}
+          </v-icon>
+        </v-avatar>
       </template>
     </v-list-item>
   </v-list>
@@ -38,38 +40,27 @@ const lbt = ref<any>([])
 
 onBeforeMount(() => (props.limit ? Limited() : UnLimited()))
 
+const Handler = async (s: any) => {
+  const { displayName, libris, photoURL, status } = await s.val()
+
+  lbt.value.unshift({
+    displayName,
+    libris,
+    photoURL,
+    status,
+    uid: s.key
+  })
+}
+
 const Limited = () => {
   $db
     .ref('/users')
     .orderByChild('libris')
     .limitToLast(5)
-    .on('child_added', async (s: any) => {
-      const { displayName, libris, photoURL, status } = await s.val()
-
-      lbt.value.unshift({
-        displayName,
-        libris,
-        photoURL,
-        status,
-        uid: s.key
-      })
-    })
+    .on('child_added', Handler)
 }
 
 const UnLimited = () => {
-  $db
-    .ref('/users')
-    .orderByChild('libris')
-    .on('child_added', async (s: any) => {
-      const { displayName, libris, photoURL, status } = await s.val()
-
-      lbt.value.unshift({
-        displayName,
-        libris,
-        photoURL,
-        status,
-        uid: s.key
-      })
-    })
+  $db.ref('/users').orderByChild('libris').on('child_added', Handler)
 }
 </script>
