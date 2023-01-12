@@ -153,7 +153,7 @@
         floating
         rounded
         permanent
-        :temporary="mobile"
+        temporary
         color="#23262E"
       >
         <v-list nav expand>
