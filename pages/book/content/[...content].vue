@@ -12,6 +12,7 @@
     />
     <v-btn
       v-if="iframe"
+      variant="tonal"
       bottom
       right
       fixed
@@ -184,6 +185,7 @@
     <div class="text-center my-10">
       <div v-if="userInfo.uid === post.uid">
         <v-btn
+          variant="tonal"
           fab
           dark
           size="small"
@@ -193,7 +195,7 @@
         >
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn fab dark size="small" color="red" @click="Del" class="ma-2">
+        <v-btn variant="tonal" fab dark size="small" color="red" class="ma-2" @click="Del">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </div>
@@ -204,8 +206,8 @@
         :style="`background-color: ${
           (post?.liked ?? {})[userInfo.uid] ? '#159ECB' : 'grey'
         }`"
-        @click="Like()"
         class="mr-3"
+        @click="Like()"
       >
         <v-icon start> mdi-thumb-up </v-icon>
         <span class="subheading" v-text="post?.likes" />
@@ -213,7 +215,7 @@
 
       <v-dialog width="700">
         <template #activator="{ props }">
-          <v-btn text v-bind="props" class="mx-1">
+          <v-btn variant="tonal" text v-bind="props" class="mx-1">
             <v-icon start> mdi-town-hall </v-icon>
             학교 도서관
           </v-btn>
@@ -238,6 +240,7 @@
               />
               <v-btn
                 ref="search"
+                variant="tonal"
                 icon="mdi-magnify"
                 class="ma-auto elevation-0"
                 @click="schoolBookSearch"
@@ -289,27 +292,29 @@
           <v-card-text v-else>{{ school.resultString }}</v-card-text>
         </v-card>
       </v-dialog>
-      <v-btn text class="mx-1" @click="share">
+      <v-btn variant="tonal" text class="mx-1" @click="share">
         <v-icon start> mdi-share-variant </v-icon>
         공유
       </v-btn>
       <v-menu v-if="post.isbn" offset-y>
         <template #activator="{ props }">
           <v-btn
+            variant="flat"
             icon="mdi-dots-vertical"
             v-bind="props"
             cols="1"
             class="mx-1"
+            color="#23262E"
           />
         </template>
 
         <v-card>
-          <v-btn text @click="iframe = true">
+          <v-btn variant="tonal" text @click="iframe = true">
             <v-icon start> mdi-file-find </v-icon> 미리보기
           </v-btn>
           <v-dialog v-if="post.categories" width="700">
             <template #activator="{ props }">
-              <v-btn text v-bind="props">
+              <v-btn variant="tonal" text v-bind="props">
                 <v-icon start> mdi-shape </v-icon> 카테고리
               </v-btn>
             </template>
@@ -329,7 +334,7 @@
           </v-dialog>
           <v-dialog v-if="post.isbn" width="700">
             <template #activator="{ props }">
-              <v-btn text v-bind="props">
+              <v-btn variant="tonal" text v-bind="props">
                 <v-icon start> mdi-book-information-variant </v-icon> 정보
               </v-btn>
             </template>
@@ -486,7 +491,6 @@ const iframe = ref<boolean>(false)
 const loading = ref<boolean>(true)
 const schoolLoading = ref<boolean>(false)
 const sheet = ref<boolean>(false)
-const fab = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
   schoolLoading.value = true

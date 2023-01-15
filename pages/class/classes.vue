@@ -4,6 +4,7 @@
     <v-dialog :model-value="dialog" width="500">
       <template #activator="{ props }">
         <v-btn
+          variant="tonal"
           bottom
           right
           fixed
@@ -11,69 +12,59 @@
           color="primary"
           class="zmax"
           v-bind="props"
->
+        >
           <v-icon> mdi-plus </v-icon>
         </v-btn>
       </template>
 
-      <v-stepper :model-value="steps" flat rounded>
-        <v-stepper-header>
-          <v-stepper-step :complete="steps > 0" step="1">
-            기본 정보
-          </v-stepper-step>
+      <v-card>
+        <v-card-title> 알림판 기본 정보 </v-card-title>
 
-          <v-stepper-step step="2"> 이미지 업로드 </v-stepper-step>
-        </v-stepper-header>
+        <v-card-text>
+          <v-text-field
+            :model-value="classInfo.name"
+            label="알림판 이름"
+            required
+          />
 
-        <v-stepper-items>
-          <v-stepper-content step="1">
-            <v-card-title> 알림판 기본 정보 </v-card-title>
+          <v-text-field
+            :model-value="classInfo.description"
+            label="알림판 설명"
+            required
+          />
 
-            <v-card-text>
-              <v-text-field
-                :model-value="classInfo.name"
-                label="알림판 이름"
-                required
-              />
+          <v-checkbox :model-value="classInfo.public" label="공개" />
+        </v-card-text>
 
-              <v-text-field
-                :model-value="classInfo.description"
-                label="알림판 설명"
-                required
-              />
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            variant="tonal"
+            :disabled="!classInfo.name"
+            color="primary"
+            text
+            @click="steps = 2"
+          >
+            👌 OK
+          </v-btn>
+        </v-card-actions>
 
-              <v-checkbox :model-value="classInfo.public" label="공개" />
-            </v-card-text>
+        <v-card-title> 알림판 고급 정보 </v-card-title>
 
-            <v-card-actions>
-              <v-spacer />
-              <v-btn
-                :disabled="!classInfo.name"
-                color="primary"
-                text
-                @click="steps = 2"
-              >
-                👌 OK
-              </v-btn>
-            </v-card-actions>
-          </v-stepper-content>
+        <v-card-text>
+          <v-text-field
+            :model-value="classInfo.image"
+            label="알림판 사진 URL"
+          />
+        </v-card-text>
 
-          <v-stepper-content step="2">
-            <v-card-title> 알림판 고급 정보 </v-card-title>
-
-            <v-card-text>
-              <v-text-field :model-value="classInfo.image" label="알림판 사진 URL" />
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer />
-              <v-btn text @click="Make">
-                <v-icon start> mdi-check </v-icon> 만들기
-              </v-btn>
-            </v-card-actions>
-          </v-stepper-content>
-        </v-stepper-items>
-      </v-stepper>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn variant="tonal" text @click="Make">
+            <v-icon start> mdi-check </v-icon> 만들기
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
 
     <v-row class="mt-5 ma-1 g-10">

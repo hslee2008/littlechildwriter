@@ -2,6 +2,7 @@
   <v-dialog :model-value="dialog" width="500">
     <template #activator="{ props }">
       <v-btn
+        variant="tonal"
         color="red lighten-2"
         v-bind="props"
         class="delete"
@@ -18,7 +19,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn color="primary" class="ma-3 ok" @click="cb"> 확인 </v-btn>
+        <v-btn variant="tonal" color="primary" class="ma-3 ok" @click="cb"> 확인 </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

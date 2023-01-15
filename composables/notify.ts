@@ -1,4 +1,4 @@
-import { db } from '/plugins/firebase'
+import { db } from '../plugins/firebase'
 
 export const Notify = (
   uid: string | string[],

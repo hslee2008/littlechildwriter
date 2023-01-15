@@ -25,7 +25,7 @@
 
       <v-spacer />
 
-      <v-btn color="primary" class="elevation-0 update" @click="Update">
+      <v-btn variant="tonal" color="primary" class="elevation-0 update" @click="Update">
         업데이트
       </v-btn>
     </v-card-actions>
@@ -51,7 +51,6 @@ const post = ref<any>({
   views: 0,
   time: Date.now()
 })
-
 
 const Post = async () =>
   (post.value = (await $db.ref(`/contents/${time}`).once('value')).val())

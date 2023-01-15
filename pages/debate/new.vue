@@ -6,7 +6,7 @@
       :model-value="debate.topic"
       label="주제"
       placeholder="주제 / 질문 입력하기"
-      variant="solo"
+      variant="outlined"
       clearable
       class="mt-3"
     />
@@ -15,7 +15,7 @@
       <v-select :model-value="debate.lang" :items="lang" width="300" />
     </v-col>
 
-    <v-btn text primary @click="upload">
+    <v-btn variant="tonal" text primary @click="upload">
       <v-icon>mdi-plus</v-icon>
       게시
     </v-btn>

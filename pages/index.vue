@@ -79,14 +79,11 @@
       <v-card-text>
         <h2>명예의 전당</h2>
         <LibrisUsers :limit="true" />
-      </v-card-text>
 
-      <v-card-actions>
-        <v-spacer />
-        <v-btn text to="/libris/libris" color="primary" class="mx-3">
-          명예의 전당 더보기
-        </v-btn>
-      </v-card-actions>
+        <div class="text-center">
+          <v-btn variant="tonal" to="/libris/libris"> 더보기 </v-btn>
+        </div>
+      </v-card-text>
     </v-card>
 
     <br />

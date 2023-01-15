@@ -12,7 +12,7 @@
       <v-app-bar
         fixed
         clipped-left
-        class="elevation-0"
+        class="elevation-0 pl-3 pr-3"
         :collapse="$route.path.startsWith('/class')"
         color="#23262E"
       >
@@ -76,10 +76,8 @@
                     <UserPhoto :src="d.photoURL" />
                   </template>
 
-                  <v-list-item-content>
-                    <v-list-item-title>{{ d.title }}</v-list-item-title>
-                    <v-list-item-subtitle>{{ d.time }}</v-list-item-subtitle>
-                  </v-list-item-content>
+                  <v-list-item-title>{{ d.title }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ d.time }}</v-list-item-subtitle>
                 </v-list-item>
               </v-list>
               <div v-else>
@@ -90,7 +88,7 @@
 
               <v-card-actions>
                 <v-spacer />
-                <v-btn text @click="clearEverything">
+                <v-btn variant="tonal" text @click="clearEverything">
                   비우기 <v-icon right> mdi-notification-clear-all </v-icon>
                 </v-btn>
               </v-card-actions>
@@ -142,7 +140,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
-          <v-btn v-else to="/account/login" icon>
+          <v-btn variant="tonal" v-else to="/account/login" icon>
             <v-icon>mdi-account-circle</v-icon>
           </v-btn>
         </div>
@@ -152,8 +150,7 @@
         :model-value="drawer"
         floating
         rounded
-        permanent
-        temporary
+        mobile-breakpoint="400"
         color="#23262E"
       >
         <v-list nav expand>
@@ -230,7 +227,7 @@
           <template #text> 설정에서 이름과 사진을 변경하세요 </template>
 
           <template #actions>
-            <v-btn to="/account/account">
+            <v-btn variant="tonal" to="/account/account">
               <v-icon>mdi-open-in-new</v-icon>
             </v-btn>
           </template>

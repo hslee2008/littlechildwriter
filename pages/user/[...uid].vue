@@ -17,13 +17,14 @@
       <div class="ml-auto my-auto float-right mr-5">
         <v-btn
           v-if="userInfo.uid !== uid"
+          variant="tonal"
           color="red"
           class="rounded-xl"
           @click="Subscribe"
         >
           {{ subscribed ? '구독 취소' : '구독' }}
         </v-btn>
-        <v-btn v-else color="primary" to="/account/account" class="rounded-xl">
+        <v-btn v-else variant="tonal" color="primary" to="/account/account" class="rounded-xl">
           편집 <v-icon right> mdi-pencil </v-icon>
         </v-btn>
       </div>
@@ -71,7 +72,7 @@
           v-model="rating"
           :items="['모두', 5, 4, 3, 2, 1]"
           label="평점 선택"
-          variant="solo"
+          variant="outlined"
           flat
           prepend-inner-icon="mdi-star"
         />
@@ -86,9 +87,7 @@
             :key="UID"
             :to="`/user/${UID}`"
           >
-            <v-list-item-content>
-              <v-list-item-title>{{ item }}</v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title>{{ item }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-window-item>
@@ -104,12 +103,10 @@
               <v-icon> mdi-crown-circle </v-icon>
             </template>
 
-            <v-list-item-content>
-              <v-list-item-title>
-                리브리스:
-                {{ Math.round(targetUser.libris) }}
-              </v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title>
+              리브리스:
+              {{ Math.round(targetUser.libris) }}
+            </v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -117,11 +114,9 @@
               <v-icon> mdi-book </v-icon>
             </template>
 
-            <v-list-item-content>
-              <v-list-item-title>
-                총 책 업로드: {{ books.length }}
-              </v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title>
+              총 책 업로드: {{ books.length }}
+            </v-list-item-title>
           </v-list-item>
 
           <v-list-item>
@@ -129,9 +124,7 @@
               <v-icon> mdi-card-account-details </v-icon>
             </template>
 
-            <v-list-item-content>
-              <v-list-item-title> UID: {{ uid }} </v-list-item-title>
-            </v-list-item-content>
+            <v-list-item-title> UID: {{ uid }} </v-list-item-title>
           </v-list-item>
 
           <template v-if="books.length > 0">
@@ -142,11 +135,9 @@
                 <v-icon> mdi-read </v-icon>
               </template>
 
-              <v-list-item-content>
-                <v-list-item-title>
-                  사람들이 책 읽은 수: {{ formatter(readCount) }}번
-                </v-list-item-title>
-              </v-list-item-content>
+              <v-list-item-title>
+                사람들이 책 읽은 수: {{ formatter(readCount) }}번
+              </v-list-item-title>
             </v-list-item>
 
             <v-list-item>
@@ -154,11 +145,9 @@
                 <v-icon> mdi-thumbs-up-down </v-icon>
               </template>
 
-              <v-list-item-content>
-                <v-list-item-title>
-                  총 좋아요: {{ formatter(likeCount) }}번
-                </v-list-item-title>
-              </v-list-item-content>
+              <v-list-item-title>
+                총 좋아요: {{ formatter(likeCount) }}번
+              </v-list-item-title>
             </v-list-item>
 
             <v-divider />
@@ -168,11 +157,9 @@
                 <v-icon> mdi-star </v-icon>
               </template>
 
-              <v-list-item-content>
-                <v-list-item-title>
-                  평균 평점: {{ (avgRating / books.length).toFixed(2) }}
-                </v-list-item-title>
-              </v-list-item-content>
+              <v-list-item-title>
+                평균 평점: {{ (avgRating / books.length).toFixed(2) }}
+              </v-list-item-title>
             </v-list-item>
 
             <v-list-item>
@@ -180,12 +167,10 @@
                 <v-icon> mdi-read </v-icon>
               </template>
 
-              <v-list-item-content>
-                <v-list-item-title>
-                  권당 평균 읽힌 수:
-                  {{ (readCount / books.length).toFixed(2) }}번
-                </v-list-item-title>
-              </v-list-item-content>
+              <v-list-item-title>
+                권당 평균 읽힌 수:
+                {{ (readCount / books.length).toFixed(2) }}번
+              </v-list-item-title>
             </v-list-item>
 
             <v-list-item>
@@ -193,12 +178,10 @@
                 <v-icon> mdi-thumbs-up-down </v-icon>
               </template>
 
-              <v-list-item-content>
-                <v-list-item-title>
-                  권당 평균 좋아요:
-                  {{ (likeCount / books.length).toFixed(2) }}번
-                </v-list-item-title>
-              </v-list-item-content>
+              <v-list-item-title>
+                권당 평균 좋아요:
+                {{ (likeCount / books.length).toFixed(2) }}번
+              </v-list-item-title>
             </v-list-item>
           </template>
         </v-list>

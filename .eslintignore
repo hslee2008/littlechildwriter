@@ -2,7 +2,7 @@
 dist
 node_modules
 yarn-error.log
-static/sw.js
+public/sw.js
 .firebase
 .output
 *.log*

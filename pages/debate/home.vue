@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex">
       <h1>토론 광장</h1>
-      <v-btn icon="mdi-plus" size="small" color="primary" class="ml-3" rounded to="./new" />
+      <v-btn variant="tonal" icon="mdi-plus" size="small" color="primary" class="ml-3" rounded to="./new" />
     </div>
 
     <v-list nav bg-color="#23262e">
@@ -27,6 +27,7 @@
           <v-list-item-action v-if="item.uid == userInfo.uid">
             <v-btn
               id="btn"
+              variant="tonal"
               icon
               cols="1"
               flat

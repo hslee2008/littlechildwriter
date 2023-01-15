@@ -12,6 +12,7 @@
           <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
           <v-card-action>
             <v-btn
+              variant="tonal"
               text
               color="primary"
               class="ml-3 mt-3"
@@ -30,7 +31,7 @@
           required
           flat
           dense
-          variant="solo"
+          variant="outlined"
           label="Bio"
           placeholder="나의 소개"
           class="ma-1 elevation-0"
@@ -64,7 +65,7 @@
           required
           flat
           dense
-          variant="solo"
+          variant="outlined"
           disabled
           prepend-inner-icon="mdi-account"
         />
@@ -90,7 +91,7 @@
             required
             flat
             dense
-            variant="solo"
+            variant="outlined"
             prepend-inner-icon="mdi-camera"
           />
         </v-card-text>
@@ -98,15 +99,15 @@
         <v-divider />
 
         <v-card-actions>
-          <v-btn color="red" text @click="imageEdit = false"> 취소 </v-btn>
+          <v-btn variant="tonal" color="red" text @click="imageEdit = false"> 취소 </v-btn>
           <v-spacer />
-          <v-btn color="primary" text @click="save"> Save </v-btn>
+          <v-btn variant="tonal" color="primary" text @click="save"> Save </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
     <v-row justify="center" class="g-10">
-      <v-btn color="primary" @click="Update">
+      <v-btn variant="tonal" color="primary" @click="Update">
         <v-icon start> mdi-account </v-icon>
         업데이트
       </v-btn>

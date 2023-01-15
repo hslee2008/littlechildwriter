@@ -27,7 +27,7 @@
         prepend-inner-icon="mdi-key"
       />
 
-      <v-btn color="primary" @click="Make">
+      <v-btn variant="tonal" color="primary" @click="Make">
         <v-icon start> mdi-account </v-icon> 계정 만들기
       </v-btn>
     </v-form>

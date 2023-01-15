@@ -4,6 +4,7 @@
       <h1>창작 코너</h1>
 
       <v-btn
+        variant="tonal"
         icon="mdi-plus"
         color="primary"
         size="small"
@@ -22,17 +23,15 @@
           <UserPhoto :src="item.photoURL" />
         </template>
 
-        <v-list-item-content>
-          <v-list-item-title>{{ item.topic }}</v-list-item-title>
-          <v-list-item-subtitle>{{ item.displayName }}</v-list-item-subtitle>
-        </v-list-item-content>
+        <v-list-item-title>{{ item.topic }}</v-list-item-title>
+        <v-list-item-subtitle>{{ item.displayName }}</v-list-item-subtitle>
 
         <v-spacer />
 
         <template v-if="item.uid == userInfo.uid" #append>
           <v-menu offset-y>
             <template #activator="{ props }">
-              <v-btn icon v-bind="props" cols="1" @click.stop.prevent="">
+              <v-btn variant="tonal" icon v-bind="props" cols="1" @click.stop.prevent="">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>

@@ -47,7 +47,7 @@
       <br /><br />
 
       <NuxtLink to="./new" class="text-decoration-none">
-        <v-btn color="primary">글쓰기</v-btn>
+        <v-btn variant="tonal" color="primary">글쓰기</v-btn>
       </NuxtLink>
     </v-card-text>
   </div>
