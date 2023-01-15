@@ -38,6 +38,7 @@
             required
           />
           <v-btn
+            variant="tonal"
             color="primary"
             class="mt-5"
             :disabled="!classInfo.name || !classInfo.description"

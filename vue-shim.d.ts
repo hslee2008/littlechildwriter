@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+declare module 'ger'
 declare module '*.vue' {
   export default Vue
 }

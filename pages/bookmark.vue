@@ -13,6 +13,7 @@
       >
         <template #append>
           <v-btn
+            variant="tonal"
             icon="mdi-delete"
             color="#23262e"
             flat

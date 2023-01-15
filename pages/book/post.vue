@@ -12,7 +12,7 @@
           "
           absolute
         >
-          <v-btn @click="isbn.upload = true">
+          <v-btn variant="tonal" @click="isbn.upload = true">
             <v-icon class="ma-auto" left> mdi-book-open-page-variant </v-icon>
 
             책 사진 올리기
@@ -63,9 +63,9 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn text @click="isbn.upload = false"> 확인 </v-btn>
+          <v-btn variant="tonal" text @click="isbn.upload = false"> 확인 </v-btn>
           <v-spacer />
-          <v-btn text @click=";(isbn.upload = false), (post.image = '')">
+          <v-btn variant="tonal" text @click=";(isbn.upload = false), (post.image = '')">
             취소
           </v-btn>
         </v-card-actions>
@@ -79,11 +79,13 @@
         <br />
 
         <v-card-text>
-          <v-tabs>
+          <v-tabs v-model="tab">
             <v-tab> 이미지로 </v-tab>
             <v-tab> 카메라로 </v-tab>
+          </v-tabs>
 
-            <v-tab-item class="pt-3">
+          <v-window v-model="tab">
+            <v-window-item class="pt-3">
               <v-file-input
                 type="file"
                 accept="image/*"
@@ -93,9 +95,9 @@
                 dense
                 @change="uploadFile($event)"
               />
-            </v-tab-item>
+            </v-window-item>
 
-            <v-tab-item class="pt-3">
+            <v-window-item class="pt-3">
               <div id="container">
                 <video
                   id="videoElement"
@@ -105,16 +107,16 @@
                 />
               </div>
               <v-card-actions>
-                <v-btn @click="showCamera">시작</v-btn>
-                <v-btn @click="takeISBNVideo"> ISBN 바코드 찍기 </v-btn>
+                <v-btn variant="tonal" @click="showCamera">시작</v-btn>
+                <v-btn variant="tonal" @click="takeISBNVideo"> ISBN 바코드 찍기 </v-btn>
               </v-card-actions>
-            </v-tab-item>
-          </v-tabs>
+            </v-window-item>
+          </v-window>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer />
-          <v-btn text @click="isbn.barcode = false"> 취소 </v-btn>
+          <v-btn variant="tonal" text @click="isbn.barcode = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -135,10 +137,10 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn text @click="voiceType">시작</v-btn>
+          <v-btn variant="tonal" text @click="voiceType">시작</v-btn>
           <v-spacer />
-          <v-btn text color="red" @click="isbn.barcode = false"> 취소 </v-btn>
-          <v-btn text color="primary" @click="saveAudio"> 확인 </v-btn>
+          <v-btn variant="tonal" text color="red" @click="isbn.barcode = false"> 취소 </v-btn>
+          <v-btn variant="tonal" text color="primary" @click="saveAudio"> 확인 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -169,7 +171,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn text @click="isbn.input = false"> 취소 </v-btn>
+          <v-btn variant="tonal" text @click="isbn.input = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -218,36 +220,34 @@
                 </v-avatar>
               </template>
 
-              <v-list-item-content>
-                <v-list-item-title class="text-primary h1">
-                  {{ item.volumeInfo.title }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  {{ item.volumeInfo.subtitle }}
-                </v-list-item-subtitle>
+              <v-list-item-title class="text-primary h1">
+                {{ item.volumeInfo.title }}
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                {{ item.volumeInfo.subtitle }}
+              </v-list-item-subtitle>
 
-                <v-spacer />
+              <v-spacer />
 
-                <v-list-item-subtitle>
-                  {{
-                    item.volumeInfo.authors
-                      ? item.volumeInfo.authors[0]
-                      : 'unkown'
-                  }}
-                  -
-                  {{
-                    item.volumeInfo.pageCount
-                      ? item.volumeInfo.pageCount
-                      : 'unkown'
-                  }}
-                </v-list-item-subtitle>
+              <v-list-item-subtitle>
+                {{
+                  item.volumeInfo.authors
+                    ? item.volumeInfo.authors[0]
+                    : 'unkown'
+                }}
+                -
+                {{
+                  item.volumeInfo.pageCount
+                    ? item.volumeInfo.pageCount
+                    : 'unkown'
+                }}
+              </v-list-item-subtitle>
 
-                <br />
+              <br />
 
-                <v-list-item-subtitle v-if="item.volumeInfo.description">
-                  {{ item.volumeInfo.description.substring(0, 200) }}...
-                </v-list-item-subtitle>
-              </v-list-item-content>
+              <v-list-item-subtitle v-if="item.volumeInfo.description">
+                {{ item.volumeInfo.description.substring(0, 200) }}...
+              </v-list-item-subtitle>
             </v-list-item>
           </div>
         </v-list>
@@ -259,7 +259,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn text @click="isbn.find = false"> 취소 </v-btn>
+          <v-btn variant="tonal" text @click="isbn.find = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -322,7 +322,7 @@
         clearable
         label="카테고리"
         multiple
-        variant="solo"
+        variant="outlined"
         color="#23262e"
       >
         <template #selection="{ attrs, item, select, selected }">
@@ -340,11 +340,11 @@
     </v-card-text>
 
     <v-card-actions class="g-10">
-      <v-btn color="primary" class="upload" @click="Post"> 업로드 </v-btn>
+      <v-btn variant="tonal" color="primary" class="upload" @click="Post"> 업로드 </v-btn>
 
       <v-menu bottom>
         <template #activator="{ props }">
-          <v-btn elevation="0" class="book" v-bind="props">
+          <v-btn variant="tonal" elevation="0" class="book" v-bind="props">
             책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
@@ -375,7 +375,7 @@
       제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해주세요.
 
       <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+        <v-btn variant="tonal" color="pink" text v-bind="attrs" @click="snackbar = false">
           Close
         </v-btn>
       </template>
@@ -384,7 +384,7 @@
       찾을 수 없었습니다.
 
       <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="notfound = false">
+        <v-btn variant="tonal" color="pink" text v-bind="attrs" @click="notfound = false">
           Close
         </v-btn>
       </template>

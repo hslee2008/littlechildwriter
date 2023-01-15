@@ -28,7 +28,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn color="primary" @click="SaveContent">올리기</v-btn>
+        <v-btn variant="tonal" color="primary" @click="SaveContent">올리기</v-btn>
       </v-card-actions>
     </v-card>
 

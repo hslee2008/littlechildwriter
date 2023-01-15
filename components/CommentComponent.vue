@@ -4,7 +4,7 @@
       v-if="userInfo && !nofield"
       v-model="comment"
       flat
-      variant="solo"
+      variant="outlined"
       single-line
       hide-details
       label="댓글 달기"
@@ -43,12 +43,13 @@
             :model-value="updatedcomment"
             flat
             single-line
-            variant="solo"
+            variant="outlined"
             class="ml-2 mt-3"
             @keydown.enter="Update(i)"
           >
             <template #append>
               <v-btn
+                variant="tonal"
                 color="error"
                 text
                 depressed
@@ -57,7 +58,7 @@
               >
                 취소
               </v-btn>
-              <v-btn color="primary" text @click="Update(i)"> 저장 </v-btn>
+              <v-btn variant="tonal" color="primary" text @click="Update(i)"> 저장 </v-btn>
             </template>
           </v-text-field>
 
@@ -66,6 +67,7 @@
           <v-card-actions v-if="!message.edit">
             <v-btn
               v-if="(message.love || []).length > 0"
+              variant="tonal"
               icon
               depressed
               disabled
@@ -77,7 +79,7 @@
             </v-btn>
             <v-menu offset-y>
               <template #activator="{ props }">
-                <v-btn icon v-bind="props" cols="1">
+                <v-btn variant="tonal" icon v-bind="props" cols="1">
                   <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
               </template>
@@ -99,6 +101,7 @@
                 <v-list-item v-if="message.uid !== userInfo.uid">
                   <v-col cols="2">
                     <v-btn
+                      variant="tonal"
                       icon
                       :color="
                         message.love?.includes(userInfo.uid) ? 'red' : 'grey'
@@ -132,6 +135,7 @@
 
       <template #action="{ props }">
         <v-btn
+          variant="tonal"
           color="pink"
           text
           v-bind="props"

@@ -1,5 +1,5 @@
 <template>
-  <v-tab-item class="pt-5">
+  <div class="pt-5">
     <v-row style="gap: 5px" class="ma-3">
       <v-select
         v-model="post.type"
@@ -45,7 +45,7 @@
         <v-dialog :model-value="dialog" width="700">
           <template #activator="{ props }">
             <div class="text-center">
-              <v-btn color="primary" v-bind="props">
+              <v-btn variant="tonal" color="primary" v-bind="props">
                 <v-icon start>mdi-bookshelf</v-icon> 책 선택
               </v-btn>
             </div>
@@ -68,6 +68,7 @@
         <v-spacer />
 
         <v-btn
+          variant="tonal"
           :disabled="post.title === ''"
           color="primary"
           class="elevation-0"
@@ -85,6 +86,7 @@
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
         <v-btn
+          variant="tonal"
           :disabled="post.title === ''"
           color="primary"
           class="elevation-0"
@@ -132,7 +134,7 @@
         </template>
       </v-file-input>
 
-      <v-btn text @click="Upload"> 파일 게시 </v-btn>
+      <v-btn variant="tonal" text @click="Upload"> 파일 게시 </v-btn>
     </v-card>
     <v-card v-else-if="post.type === '글 제출 (학생)'" color="#23262e">
       <v-card-title>숙제 업로드</v-card-title>
@@ -142,6 +144,7 @@
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
         <v-btn
+          variant="tonal"
           :disabled="post.title === ''"
           color="primary"
           class="elevation-0"
@@ -159,7 +162,7 @@
       :cb="() => updateTab(0)"
       :uid="userInfo.uid"
     />
-  </v-tab-item>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -200,10 +203,9 @@ const props = defineProps({
 })
 
 onBeforeMount(() => {
-  $db.ref(`/classes/${id}`).on(
-    'value',
-    async (s: any) => (classInfo.value = await s.val())
-  )
+  $db
+    .ref(`/classes/${id}`)
+    .on('value', async (s: any) => (classInfo.value = await s.val()))
 
   $db.ref('/contents/').on('child_added', (s: any) => {
     const { title, time, uid, displayName, image } = s.val()
