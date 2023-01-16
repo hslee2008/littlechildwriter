@@ -29,9 +29,9 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn variant="tonal" color="primary" @click="SaveContent"
-          >업데이트</v-btn
-        >
+        <v-btn variant="tonal" color="primary" @click="SaveContent">
+          업데이트
+        </v-btn>
       </v-card-actions>
     </v-card>
 
@@ -45,50 +45,50 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from "marked";
-const { $db } = useNuxtApp();
+import { parse } from 'marked'
+const { $db } = useNuxtApp()
 
-const route = useRoute();
-const time = route.params.content;
-const userInfo = User();
-const router = useRouter();
-const topic = ref("");
-const content = ref("");
+const route = useRoute()
+const time = route.params.content
+const userInfo = User()
+const router = useRouter()
+const topic = ref('')
+const content = ref('')
 
 onBeforeMount(() => {
   $db
     .ref(`blog/${time}`)
-    .once("value")
+    .once('value')
     .then((s: any) => {
-      const data = s.val();
-      topic.value = data.topic;
-      content.value = data.markdown;
-    });
-});
+      const data = s.val()
+      topic.value = data.topic
+      content.value = data.markdown
+    })
+})
 
 const SaveContent = () => {
-  const { uid, displayName, photoURL } = userInfo.value;
+  const { uid, displayName, photoURL } = userInfo.value
 
   $db.ref(`/blog/${time}`).update({
     topic: topic.value,
     markdown: parse(content.value),
     uid,
     displayName,
-    photoURL,
-  });
+    photoURL
+  })
 
-  router.push(`/blog/content/${time}`);
-};
+  router.push(`/blog/content/${time}`)
+}
 
 useHead({
-  title: "창작 코너 업데이트 - Little Child Writer",
-});
+  title: '창작 코너 업데이트 - Little Child Writer'
+})
 </script>
 
 <script lang="ts">
 export default {
-  name: "ContentEdit",
+  name: 'ContentEdit',
   inheritAttrs: false,
-  customOptions: {},
-};
+  customOptions: {}
+}
 </script>

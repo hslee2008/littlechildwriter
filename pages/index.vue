@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-parallax src="/background.avif" height="500">
+    <v-parallax :src="image" height="500" class="parallax">
       <v-col class="d-flex justify-center align-center">
         <div>
           <div class="text-center mb-5 mt-3 button">
@@ -95,46 +95,67 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const userInfo = User();
-const recent = ref<any>([]);
-const random = ref<any>([]);
-const popular = ref<any[]>([]);
-const views = ref<any[]>([]);
-const tab = ref<number>(0);
+const userInfo = User()
+const recent = ref<any>([])
+const random = ref<any>([])
+const popular = ref<any[]>([])
+const views = ref<any[]>([])
+const tab = ref<number>(0)
+
+const list = [
+  'https://static01.nyt.com/images/2015/10/24/opinion/24manguel/24manguel-superJumbo.jpg',
+  'https://i.pinimg.com/originals/1b/01/27/1b01274ac5ed6f2a117ba4754c0f8755.jpg',
+  './background.avif'
+]
+const image = ref<string>(list[Math.floor(Math.random() * list.length)])
 
 onBeforeMount(async () => {
   $db
-    .ref("/contents")
+    .ref('/contents')
     .limitToLast(5)
-    .on("child_added", async (s: any) => recent.value.unshift(await s.val()));
+    .on('child_added', async (s: any) => recent.value.unshift(await s.val()))
 
   $db
-    .ref("/contents")
-    .orderByChild("likes")
+    .ref('/contents')
+    .orderByChild('likes')
     .limitToLast(5)
-    .on("child_added", async (s: any) => popular.value.unshift(await s.val()));
+    .on('child_added', async (s: any) => popular.value.unshift(await s.val()))
 
   $db
-    .ref("/contents")
-    .orderByChild("views")
+    .ref('/contents')
+    .orderByChild('views')
     .limitToLast(5)
-    .on("child_added", async (s: any) => views.value.unshift(await s.val()));
+    .on('child_added', async (s: any) => views.value.unshift(await s.val()))
 
   const all = await $db
-    .ref("/contents")
-    .once("value")
-    .then((s: any) => s.val());
+    .ref('/contents')
+    .once('value')
+    .then((s: any) => s.val())
 
   random.value = Object.values(all)
     .sort(() => 0.5 - Math.random())
-    .slice(0, 5);
-});
+    .slice(0, 5)
+
+  setInterval(
+    () => (image.value = list[Math.floor(Math.random() * list.length)]),
+    10000
+  )
+})
 </script>
 
 <style scoped>
 .button {
   margin-top: 100px;
+}
+
+.parallax {
+  opacity: 0.9;
+  transition: 0.5s;
+}
+
+.parallax:hover {
+  opacity: 1;
 }
 </style>

@@ -79,7 +79,6 @@
           variant="outlined"
           :items="['모두', 5, 4, 3, 2, 1]"
           label="평점 선택"
-          variant="outlined"
           flat
           prepend-inner-icon="mdi-star"
         />

@@ -21,13 +21,3 @@
 html {
   scroll-behavior: smooth;
 }
-
-.page-enter-active,
-.page-leave-active {
-  transition-property: opacity, left;
-  transition-duration: 0.5s, 0.5s;
-}
-.page-enter,
-.page-leave-to {
-  opacity: 0;
-}
