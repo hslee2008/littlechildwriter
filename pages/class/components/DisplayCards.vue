@@ -18,7 +18,7 @@
             theme.global.name.value === 'dark' ? '#1e1e1e' : 'white'
           } !important`"
         >
-          {{ title.toString().replaceAll('_', ' - ') }}
+          {{ title.toString().replaceAll("_", " - ") }}
         </v-expansion-panel-title>
 
         <v-expansion-panel-text
@@ -37,13 +37,13 @@
               <v-icon color="orange" class="ml-4" size="40"> mdi-book </v-icon>
             </template>
 
-            <div>
+            <v-card-item>
               <v-card-title>{{ item.displayName }}</v-card-title>
               <v-card-subtitle>{{ item.title }}</v-card-subtitle>
               <v-card-text>
                 {{ new Date(item.time).toLocaleDateString() }}
               </v-card-text>
-            </div>
+            </v-card-item>
 
             <v-spacer />
 
@@ -64,10 +64,10 @@
               <v-icon class="ml-4"> mdi-link-variant </v-icon>
             </template>
 
-            <div>
+            <v-card-item>
               <v-card-title>{{ item.file }}</v-card-title>
               <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-            </div>
+            </v-card-item>
 
             <v-spacer />
 
@@ -89,10 +89,10 @@
                 <v-icon class="ml-4"> mdi-link-variant </v-icon>
               </template>
 
-              <div>
+              <v-card-item>
                 <v-card-title>{{ item.file }}</v-card-title>
                 <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-              </div>
+              </v-card-item>
 
               <v-spacer />
 
@@ -111,17 +111,20 @@
               </v-card-text>
             </v-card>
           </div>
-          <v-card v-else-if="item.type === '링크'" class="d-flex mt-5 rounded-lg pa-2">
+          <v-card
+            v-else-if="item.type === '링크'"
+            class="d-flex mt-5 rounded-lg pa-2"
+          >
             <template #prepend>
               <v-icon class="ml-4"> mdi-link </v-icon>
             </template>
 
-            <div>
+            <v-card-item>
               <v-card-title>{{ item.name }} 링크</v-card-title>
               <v-card-subtitle>
                 <a :href="item.link" target="_blank" v-text="item.title" />
               </v-card-subtitle>
-            </div>
+            </v-card-item>
 
             <v-spacer />
 
@@ -135,10 +138,10 @@
           </v-card>
           <v-card v-else-if="item.type === '파일 사진'" class="mt-5">
             <div class="d-flex">
-              <div>
+              <v-carditem>
                 <v-card-title>{{ item.file }}</v-card-title>
                 <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-              </div>
+              </v-carditem>
 
               <Actions
                 v-if="item.uid === userInfo.uid"
@@ -153,10 +156,10 @@
           </v-card>
           <v-card v-else-if="item.type === '파일 비디오'" class="mt-5">
             <div class="d-flex">
-              <div>
+              <v-card-item>
                 <v-card-title>{{ item.file }}</v-card-title>
                 <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-              </div>
+              </v-card-item>
 
               <Actions
                 v-if="item.uid === userInfo.uid"
@@ -176,12 +179,12 @@
           <div v-else-if="item.type === '숙제 제출 (학생)'">
             <v-card class="d-flex mt-5">
               <v-icon color="orange" class="ml-4"> mdi-school </v-icon>
-              <div>
+              <v-card-item>
                 <v-card-title>{{ item.title }}</v-card-title>
                 <v-card-text>
                   {{ item.content }}
                 </v-card-text>
-              </div>
+              </v-card-item>
 
               <v-spacer />
 
@@ -199,12 +202,12 @@
               <v-avatar size="40" class="ml-3 mt-6">
                 <UserPhoto :src="item.photoURL" />
               </v-avatar>
-              <div>
+              <v-card-item>
                 <v-card-title> {{ item.displayName }}의 공지사항 </v-card-title>
                 <v-card-subtitle>
                   {{ new Date(item.time).toLocaleDateString() }}
                 </v-card-subtitle>
-              </div>
+              </v-card-item>
 
               <v-spacer />
 
@@ -225,16 +228,16 @@
 </template>
 
 <script setup>
-import { useTheme } from 'vuetify'
-import Actions from './Actions.vue'
+import { useTheme } from "vuetify";
+import Actions from "./Actions.vue";
 
-const theme = useTheme()
-const userInfo = User()
+const theme = useTheme();
+const userInfo = User();
 
 defineProps({
   classInfo: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 </script>

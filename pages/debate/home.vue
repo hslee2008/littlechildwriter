@@ -2,7 +2,15 @@
   <div>
     <div class="d-flex">
       <h1>토론 광장</h1>
-      <v-btn variant="tonal" icon="mdi-plus" size="small" color="primary" class="ml-3" rounded to="./new" />
+      <v-btn
+        variant="tonal"
+        icon="mdi-plus"
+        size="small"
+        color="primary"
+        class="ml-3"
+        rounded
+        to="./new"
+      />
     </div>
 
     <v-list nav bg-color="#23262e">
@@ -54,23 +62,23 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp()
+const { $db } = useNuxtApp();
 
-const userInfo = User()
-const list = ref<any>([])
+const userInfo = User();
+const list = ref<any>([]);
 
 onMounted(() =>
   $db
-    .ref('/debate')
-    .on('child_added', async (s: any) => list.value.unshift(await s.val()))
-)
+    .ref("/debate")
+    .on("child_added", async (s: any) => list.value.unshift(await s.val()))
+);
 
 const DeleteContent = (i: number) => {
-  $db.ref(`/debate/${list.value[i].time}`).remove()
-  list.value.splice(i, 1)
-}
+  $db.ref(`/debate/${list.value[i].time}`).remove();
+  list.value.splice(i, 1);
+};
 
 useHead({
-  title: '토론 광장 - LCW'
-})
+  title: "토론 광장 - LCW",
+});
 </script>

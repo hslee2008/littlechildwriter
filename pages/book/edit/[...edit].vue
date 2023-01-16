@@ -9,9 +9,18 @@
         class="my-10"
       />
 
-      <v-text-field :model-value="post.title" label="제목" />
-      <v-text-field :model-value="post.pageCount" label="페이지" />
-      <v-textarea :model-value="post.content" label="책 소개" auto-grow counter />
+      <v-text-field variant="outlined" :model-value="post.title" label="제목" />
+      <v-text-field
+        variant="outlined"
+        :model-value="post.pageCount"
+        label="페이지"
+      />
+      <v-textarea
+        :model-value="post.content"
+        label="책 소개"
+        auto-grow
+        counter
+      />
     </v-card-text>
 
     <v-card-actions>
@@ -25,7 +34,12 @@
 
       <v-spacer />
 
-      <v-btn variant="tonal" color="primary" class="elevation-0 update" @click="Update">
+      <v-btn
+        variant="tonal"
+        color="primary"
+        class="elevation-0 update"
+        @click="Update"
+      >
         업데이트
       </v-btn>
     </v-card-actions>
@@ -33,32 +47,32 @@
 </template>
 
 <script setup lang="ts">
-const { $db, $auth } = useNuxtApp()
+const { $db, $auth } = useNuxtApp();
 
-const route = useRoute()
-const router = useRouter()
-const time = route.params.edit
+const route = useRoute();
+const router = useRouter();
+const time = route.params.edit;
 const post = ref<any>({
-  isbn: '',
-  title: '',
-  image: '',
-  pageCount: '',
+  isbn: "",
+  title: "",
+  image: "",
+  pageCount: "",
   categories: [] as string[],
   rating: 5,
-  content: '',
-  uid: '',
-  displayName: '',
+  content: "",
+  uid: "",
+  displayName: "",
   views: 0,
-  time: Date.now()
-})
+  time: Date.now(),
+});
 
 const Post = async () =>
-  (post.value = (await $db.ref(`/contents/${time}`).once('value')).val())
+  (post.value = (await $db.ref(`/contents/${time}`).once("value")).val());
 
-useAuth(Post)
+useAuth(Post);
 
 const Update = () => {
-  const { title, content, image, time, rating, pageCount, isbn } = post.value
+  const { title, content, image, time, rating, pageCount, isbn } = post.value;
 
   $db.ref(`/contents/${time}`).update({
     title,
@@ -66,21 +80,21 @@ const Update = () => {
     rating,
     isbn,
     image,
-    pageCount
-  })
+    pageCount,
+  });
 
-  router.push(`/book/content/${time}`)
-}
+  router.push(`/book/content/${time}`);
+};
 
 useHead({
-  title: '편집 - LCW'
-})
+  title: "편집 - LCW",
+});
 </script>
 
 <script lang="ts">
 export default {
-  name: 'Edit',
+  name: "Edit",
   inheritAttrs: false,
-  customOptions: {}
-}
+  customOptions: {},
+};
 </script>

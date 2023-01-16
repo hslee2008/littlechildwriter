@@ -22,9 +22,15 @@
           class="rounded-xl"
           @click="Subscribe"
         >
-          {{ subscribed ? '구독 취소' : '구독' }}
+          {{ subscribed ? "구독 취소" : "구독" }}
         </v-btn>
-        <v-btn v-else variant="tonal" color="primary" to="/account/account" class="rounded-xl">
+        <v-btn
+          v-else
+          variant="tonal"
+          color="primary"
+          to="/account/account"
+          class="rounded-xl"
+        >
           편집 <v-icon right> mdi-pencil </v-icon>
         </v-btn>
       </div>
@@ -70,6 +76,7 @@
       <v-window-item :value="1">
         <v-select
           v-model="rating"
+          variant="outlined"
           :items="['모두', 5, 4, 3, 2, 1]"
           label="평점 선택"
           variant="outlined"
@@ -202,50 +209,50 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
-const { $db } = useNuxtApp()
+import { useDisplay } from "vuetify";
+const { $db } = useNuxtApp();
 
-const { mobile } = useDisplay()
-const userInfo = User()
-const route = useRoute()
+const { mobile } = useDisplay();
+const userInfo = User();
+const route = useRoute();
 
-const rating = ref<string>('모두')
-const tab = ref<string>('홈')
-const uid = route.params.uid[0]
+const rating = ref<string>("모두");
+const tab = ref<string>("홈");
+const uid = route.params.uid[0];
 const targetUser = ref<any>({
   libris: 0,
-  displayName: '',
-  photoURL: '',
-  bio: ''
-})
-const books = ref<any>([])
-const privateBooks = ref<any>([])
-const subscription = ref<any>({})
-const subscribed = ref<boolean>(false)
+  displayName: "",
+  photoURL: "",
+  bio: "",
+});
+const books = ref<any>([]);
+const privateBooks = ref<any>([]);
+const subscription = ref<any>({});
+const subscribed = ref<boolean>(false);
 
-const subCount = ref<number>(0)
-const likeCount = ref<number>(0)
-const readCount = ref<number>(0)
-const avgRating = ref<number>(0)
+const subCount = ref<number>(0);
+const likeCount = ref<number>(0);
+const readCount = ref<number>(0);
+const avgRating = ref<number>(0);
 
-const chosenBookData = ref<any>({})
+const chosenBookData = ref<any>({});
 
 onBeforeMount(() => {
-  $db.ref('/contents/').on('child_added', async (s: any) => {
-    const data = await s.val()
+  $db.ref("/contents/").on("child_added", async (s: any) => {
+    const data = await s.val();
 
     if (data.uid === uid) {
-      readCount.value += data.views
-      likeCount.value += data.likes
-      avgRating.value += data.rating
+      readCount.value += data.views;
+      likeCount.value += data.likes;
+      avgRating.value += data.rating;
 
-      books.value.unshift(data)
+      books.value.unshift(data);
     }
-  })
+  });
 
   $db
     .ref(`/users/${uid}/`)
-    .once('value')
+    .once("value")
     .then((res: any) => res.val())
     .then(
       ({ libris, displayName, photoURL, bio, subscriber, featured }: any) => {
@@ -253,79 +260,82 @@ onBeforeMount(() => {
           libris,
           displayName,
           photoURL,
-          bio
-        }
+          bio,
+        };
 
         $db
           .ref(`/contents/${featured}`)
-          .on('value', async (s: any) => (chosenBookData.value = await s.val()))
+          .on(
+            "value",
+            async (s: any) => (chosenBookData.value = await s.val())
+          );
 
-        subscription.value = subscriber ?? []
-        subCount.value = Object.keys(subscriber ?? {}).length
+        subscription.value = subscriber ?? [];
+        subCount.value = Object.keys(subscriber ?? {}).length;
         subscribed.value = Object.keys(subscriber ?? {}).includes(
           userInfo.value.uid
-        )
+        );
       }
-    )
+    );
 
   if (userInfo.value.uid === uid) {
-    $db.ref(`/private/${uid}/`).on('child_added', async (s: any) => {
-      const data = await s.val()
-      privateBooks.value.unshift(data)
-    })
+    $db.ref(`/private/${uid}/`).on("child_added", async (s: any) => {
+      const data = await s.val();
+      privateBooks.value.unshift(data);
+    });
   }
-})
+});
 
 const Subscribe = () => {
   if (subscribed.value) {
-    $db.ref(`/users/${userInfo.value.uid}/subscribe/${uid}`).remove()
-    $db.ref(`/users/${uid}/subscriber/${userInfo.value.uid}`).remove()
+    $db.ref(`/users/${userInfo.value.uid}/subscribe/${uid}`).remove();
+    $db.ref(`/users/${uid}/subscriber/${userInfo.value.uid}`).remove();
 
-    delete subscription[userInfo.value.uid]
-    subscribed.value = false
-    subCount.value--
-    targetUser.value.libris -= 15
+    delete subscription[userInfo.value.uid];
+    subscribed.value = false;
+    subCount.value--;
+    targetUser.value.libris -= 15;
 
-    Libris(uid, -15)
-    Libris(userInfo.value.uid, -15)
+    Libris(uid, -15);
+    Libris(userInfo.value.uid, -15);
   } else {
     $db
       .ref(`/users/${userInfo.value.uid}/subscribe/${uid}`)
-      .set(targetUser.value.displayName)
+      .set(targetUser.value.displayName);
     $db
       .ref(`/users/${uid}/subscriber/${userInfo.value.uid}`)
-      .set(userInfo.value.displayName)
+      .set(userInfo.value.displayName);
 
-    subscription[userInfo.value.uid] = userInfo.value.displayName
-    subscribed.value = true
-    subCount.value++
-    targetUser.value.libris += 15
+    subscription[userInfo.value.uid] = userInfo.value.displayName;
+    subscribed.value = true;
+    subCount.value++;
+    targetUser.value.libris += 15;
 
-    Libris(uid, 15)
-    Libris(userInfo.value.uid, 15)
+    Libris(uid, 15);
+    Libris(userInfo.value.uid, 15);
     Notify(
       uid,
       userInfo.value.photoURL,
       `${userInfo.value.displayName}님이 구독했습니다`,
       `/user/${uid}`
-    )
+    );
   }
-}
+};
 
 const ratingFilter = (a: any) =>
-  rating.value === '모두' ? 1 : a.rating === rating.value
+  rating.value === "모두" ? 1 : a.rating === rating.value;
 
 useHead({
-  title: '사용자 - LCW'
-})
+  title: "사용자 - LCW",
+});
 </script>
 
 <script lang="ts">
 export default {
-  name: 'User',
+  name: "User",
   inheritAttrs: false,
-  customOptions: {}
-}
+  customOptions: {},
+};
 </script>
 
 <style scoped>

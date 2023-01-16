@@ -19,34 +19,36 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn variant="tonal" color="primary" class="ma-3 ok" @click="cb"> 확인 </v-btn>
+        <v-btn variant="tonal" color="primary" class="ma-3 ok" @click="cb">
+          확인
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
-const dialog = ref<boolean>(false)
+const dialog = ref<boolean>(false);
 defineProps({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   text: {
     type: String,
-    required: true
+    required: true,
   },
   cb: {
     type: Function,
-    required: true
+    required: true,
   },
   btnTitle: {
     type: String,
-    required: true
+    required: true,
   },
   icon: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 </script>

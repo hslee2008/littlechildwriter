@@ -3,6 +3,7 @@
     <v-row style="gap: 5px" class="ma-3">
       <v-select
         v-model="post.type"
+        variant="outlined"
         :items="['책', '공지사항', '파일', '링크', '글 제출 (학생)']"
         label="종류 선택"
         outlined
@@ -22,6 +23,7 @@
         <v-select
           v-else
           v-model="post.category"
+          variant="outlined"
           :items="Object.keys(classInfo.contents ?? {})"
           label="종류 선택"
           outlined
@@ -32,7 +34,11 @@
     <v-card v-if="post.type === '책'" color="#23262e">
       <v-card-title>책 업로드</v-card-title>
       <v-card-text>
-        <v-text-field :model-value="post.title" label="제목" />
+        <v-text-field
+          variant="outlined"
+          :model-value="post.title"
+          label="제목"
+        />
 
         <div v-if="post.time">
           <h2>선택됨</h2>
@@ -54,7 +60,7 @@
           <v-card>
             <v-row no-gutters>
               <v-card
-                v-for="i in listev.filter(i => i.uid == userInfo.uid)"
+                v-for="i in listev.filter((i) => i.uid == userInfo.uid)"
                 :key="i.title"
                 class="elevation-0"
                 @click="selectBook(i)"
@@ -81,8 +87,16 @@
     <v-card v-else-if="post.type === '링크'" color="#23262e">
       <v-card-title>링크 업로드</v-card-title>
       <v-card-text>
-        <v-text-field :model-value="post.title" label="제목" />
-        <v-text-field :model-value="post.link" label="링크" />
+        <v-text-field
+          variant="outlined"
+          :model-value="post.title"
+          label="제목"
+        />
+        <v-text-field
+          variant="outlined"
+          :model-value="post.link"
+          label="링크"
+        />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
         <v-btn
@@ -115,11 +129,12 @@
         counter
         label="File input"
         multiple
+        variant="underlined"
         placeholder="Select your files"
         prepend-icon="mdi-paperclip"
         outlined
         :show-size="1000"
-        @change="UploadFile"
+        @update:modelValue="UploadFile($event)"
       >
         <template #selection="{ index, text }">
           <v-chip
@@ -139,7 +154,11 @@
     <v-card v-else-if="post.type === '글 제출 (학생)'" color="#23262e">
       <v-card-title>숙제 업로드</v-card-title>
       <v-card-text>
-        <v-text-field :model-value="post.title" label="제목" />
+        <v-text-field
+          variant="outlined"
+          :model-value="post.title"
+          label="제목"
+        />
         <v-textarea :model-value="post.content" label="내용" />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
@@ -166,115 +185,115 @@
 </template>
 
 <script setup lang="ts">
-const { $db, $storage } = useNuxtApp()
+const { $db, $storage } = useNuxtApp();
 
-const userInfo = User()
-const route = useRoute()
-const id = route.params.class
-const classInfo = ref<any>({})
-const listev = ref<any[]>([])
+const userInfo = User();
+const route = useRoute();
+const id = route.params.class;
+const classInfo = ref<any>({});
+const listev = ref<any[]>([]);
 const post = ref<any>({
-  isbn: '',
-  title: '',
-  image: '',
-  pageCount: '',
+  isbn: "",
+  title: "",
+  image: "",
+  pageCount: "",
   categories: [] as string[],
   rating: 5,
-  content: '',
-  uid: '',
-  displayName: '',
-  author: '',
+  content: "",
+  uid: "",
+  displayName: "",
+  author: "",
   views: 0,
   time: Date.now(),
   file: [] as File[],
-  type: '책',
-  category: '기타',
+  type: "책",
+  category: "기타",
   book: true,
-  link: ''
-})
-const dialog = ref<boolean>(false)
-const progress = ref<boolean>(false)
+  link: "",
+});
+const dialog = ref<boolean>(false);
+const progress = ref<boolean>(false);
 
 const props = defineProps({
   updateTab: {
     type: Function,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
 onBeforeMount(() => {
   $db
     .ref(`/classes/${id}`)
-    .on('value', async (s: any) => (classInfo.value = await s.val()))
+    .on("value", async (s: any) => (classInfo.value = await s.val()));
 
-  $db.ref('/contents/').on('child_added', (s: any) => {
-    const { title, time, uid, displayName, image } = s.val()
+  $db.ref("/contents/").on("child_added", (s: any) => {
+    const { title, time, uid, displayName, image } = s.val();
 
     listev.value.push({
       title,
       time,
       uid,
       displayName,
-      image
-    })
-  })
-})
+      image,
+    });
+  });
+});
 
 const Upload = () => {
-  let storageRef: any
+  let storageRef: any;
 
   for (let i = 0; i < post.value.file.length; i++) {
     storageRef = $storage
       .ref(`${post.value.file[i].name}`)
-      .put(post.value.file[i])
+      .put(post.value.file[i]);
   }
 
   storageRef.on(
-    'state_changed',
+    "state_changed",
     (s: any) => (progress.value = s.bytesTransferred >= s.totalBytes),
     (e: Error) => Error(e.message),
     () =>
       storageRef.snapshot.ref
         .getDownloadURL()
         .then((url: any) => {
-          const { type, file, category } = post.value
-          const { uid, displayName } = userInfo.value
+          const { type, file, category } = post.value;
+          const { uid, displayName } = userInfo.value;
 
           $db.ref(`classes/${id}/contents/${category}`).push({
             type,
             uid,
             displayName,
             url,
-            file: file[0].name
-          })
+            file: file[0].name,
+          });
         })
         .then(() => {
-          props.updateTab(0)
-          post.value.title = ''
-          post.value.time = 0
-          post.value.file = []
-          post.value.book = true
-          post.value.type = '책'
-          progress.value = false
+          props.updateTab(0);
+          post.value.title = "";
+          post.value.time = 0;
+          post.value.file = [];
+          post.value.book = true;
+          post.value.type = "책";
+          progress.value = false;
         })
-  )
-}
+  );
+};
 
-const UploadFile = (f: File[]) => (post.value.file = f)
+const UploadFile = (f: File[]) => (post.value.file = f);
 
 const Post = () => {
-  const { title, time, category, type, content } = post.value
-  const { uid, displayName } = userInfo.value
+  const { title, time, category, type, content } = post.value;
+  const { uid, displayName } = userInfo.value;
 
-  if (type === '글 제출 (학생)') {
+  if (type === "글 제출 (학생)") {
     $db.ref(`classes/${id}/contents/${category}/${time}`).set({
       title,
       time,
       uid,
       displayName,
       type,
-      content
-    })
+      content,
+    });
   } else {
     $db.ref(`/classes/${id}/contents/${category}`).push({
       title,
@@ -282,44 +301,44 @@ const Post = () => {
       time,
       displayName,
       type,
-      content
-    })
+      content,
+    });
   }
 
   post.value = {
-    isbn: '',
-    title: '',
-    image: '',
-    pageCount: '',
+    isbn: "",
+    title: "",
+    image: "",
+    pageCount: "",
     categories: [] as string[],
     rating: 5,
-    content: '',
-    uid: '',
-    displayName: '',
-    author: '',
+    content: "",
+    uid: "",
+    displayName: "",
+    author: "",
     views: 0,
     time: Date.now(),
     file: [] as File[],
-    type: '포스트',
-    category: '기타',
+    type: "포스트",
+    category: "기타",
     book: true,
-    link: ''
-  }
-  props.updateTab(0)
+    link: "",
+  };
+  props.updateTab(0);
 
   Notify(
     post.value.uid,
     userInfo.value.photoURL,
     `${userInfo.value.displayName}님이 새로운 자료를 올렸습니다`,
     `/class/${id}`
-  )
-}
+  );
+};
 
 const selectBook = (b: any) => {
-  post.value.time = b.time
-  post.value.image = b.image
-  dialog.value = false
-}
+  post.value.time = b.time;
+  post.value.image = b.image;
+  dialog.value = false;
+};
 </script>
 
 <style scoped>

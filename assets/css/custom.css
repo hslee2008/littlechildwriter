@@ -1,4 +1,3 @@
-
 /* Custom */
 .zmax {
   z-index: 999;
@@ -14,5 +13,5 @@
 }
 
 .v-card-subtitle > a {
-  color: #159ECB !important;
+  color: #159ecb !important;
 }

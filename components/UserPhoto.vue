@@ -12,6 +12,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  src: string | undefined | null
-}>()
+  src: string | null;
+}>();
 </script>

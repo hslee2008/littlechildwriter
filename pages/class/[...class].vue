@@ -23,6 +23,7 @@
         <v-card-title>수업 세부정보</v-card-title>
         <v-card-text>
           <v-text-field
+            variant="outlined"
             :model-value="classInfo.name"
             label="수업 이름"
             required
@@ -65,58 +66,58 @@
 </template>
 
 <script setup lang="ts">
-import DisplayCards from './components/DisplayCards.vue'
-import UploadCards from './components/UploadCards.vue'
+import DisplayCards from "./components/DisplayCards.vue";
+import UploadCards from "./components/UploadCards.vue";
 
-const { $db } = useNuxtApp()
+const { $db } = useNuxtApp();
 
-const userInfo = User()
-const route = useRoute()
-const router = useRouter()
-const id = route.params.class
-const classInfo = ref<any>({})
-const listev = ref<any[]>([])
-const tab = ref<number>(0)
+const userInfo = User();
+const route = useRoute();
+const router = useRouter();
+const id = route.params.class;
+const classInfo = ref<any>({});
+const listev = ref<any[]>([]);
+const tab = ref<number>(0);
 
 onBeforeMount(() => {
   $db
     .ref(`/classes/${id}`)
-    .on('value', async (s: any) => (classInfo.value = await s.val()))
+    .on("value", async (s: any) => (classInfo.value = await s.val()));
 
-  $db.ref('/contents/').on('child_added', (s: any) => {
-    const { title, time, uid, displayName, image } = s.val()
+  $db.ref("/contents/").on("child_added", (s: any) => {
+    const { title, time, uid, displayName, image } = s.val();
 
     listev.value.push({
       title,
       time,
       uid,
       displayName,
-      image
-    })
-  })
-})
+      image,
+    });
+  });
+});
 
-const updateTab = (num: number) => (tab.value = num)
+const updateTab = (num: number) => (tab.value = num);
 
 const Update = () => {
-  $db.ref(`/classes/${id}`).update(classInfo)
-  tab.value = 0
-}
+  $db.ref(`/classes/${id}`).update(classInfo);
+  tab.value = 0;
+};
 
 const DeleteClass = () => {
-  $db.ref('classes').child(id).remove()
-  router.push('/class/classes')
-}
+  $db.ref("classes").child(id).remove();
+  router.push("/class/classes");
+};
 
 useHead({
-  title: '알림판 (자세히) - LCW'
-})
+  title: "알림판 (자세히) - LCW",
+});
 </script>
 
 <script lang="ts">
 export default {
-  name: 'Class',
+  name: "Class",
   inheritAttrs: false,
-  customOptions: {}
-}
+  customOptions: {},
+};
 </script>

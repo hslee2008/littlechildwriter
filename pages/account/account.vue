@@ -59,13 +59,13 @@
 
       <v-card-text>
         <v-text-field
+          variant="outlined"
           :model-value="userInfo.uid"
           label="UID"
           placeholder="UID"
           required
           flat
           dense
-          variant="outlined"
           disabled
           prepend-inner-icon="mdi-account"
         />
@@ -84,6 +84,7 @@
           </div>
 
           <v-text-field
+            variant="outlined"
             :model-value="userInfo.photoURL"
             label="URL"
             placeholder="URL"
@@ -91,7 +92,6 @@
             required
             flat
             dense
-            variant="outlined"
             prepend-inner-icon="mdi-camera"
           />
         </v-card-text>
@@ -99,9 +99,13 @@
         <v-divider />
 
         <v-card-actions>
-          <v-btn variant="tonal" color="red" text @click="imageEdit = false"> 취소 </v-btn>
+          <v-btn variant="tonal" color="red" text @click="imageEdit = false">
+            취소
+          </v-btn>
           <v-spacer />
-          <v-btn variant="tonal" color="primary" text @click="save"> Save </v-btn>
+          <v-btn variant="tonal" color="primary" text @click="save">
+            Save
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -116,59 +120,59 @@
 </template>
 
 <script setup lang="ts">
-const { $db, $auth } = useNuxtApp()
+const { $db, $auth } = useNuxtApp();
 
-const userInfo = User()
-const router = useRouter()
-const userDB = ref<any>({ bio: '' })
-const books = ref<any[]>([])
-const imageEdit = ref<boolean>(false)
-const featured = ref<number>(0)
+const userInfo = User();
+const router = useRouter();
+const userDB = ref<any>({ bio: "" });
+const books = ref<any[]>([]);
+const imageEdit = ref<boolean>(false);
+const featured = ref<number>(0);
 
 useAuth(() => {
   $db
     .ref(`/users/${userInfo.value.uid}`)
-    .once('value')
-    .then(async (s: any) => (userDB.value = await s.val()))
+    .once("value")
+    .then(async (s: any) => (userDB.value = await s.val()));
 
   $db
     .ref(`/users/${userInfo.value.uid}`)
-    .once('value')
-    .then(async (s: any) => (featured.value = await s.val().featured))
+    .once("value")
+    .then(async (s: any) => (featured.value = await s.val().featured));
 
-  $db.ref('/contents/').on('value', async (s: any) => {
-    const data = await s.val()
+  $db.ref("/contents/").on("value", async (s: any) => {
+    const data = await s.val();
 
     for (const key in data)
-      if (data[key].uid === userInfo.value.uid) books.value.push(data[key])
-  })
-})
+      if (data[key].uid === userInfo.value.uid) books.value.push(data[key]);
+  });
+});
 
 const Update = async () => {
-  const { displayName, uid, email } = userInfo.value
-  const { bio } = userDB.value
+  const { displayName, uid, email } = userInfo.value;
+  const { bio } = userDB.value;
 
-  await $auth.currentUser?.updateEmail(email)
+  await $auth.currentUser?.updateEmail(email);
 
   $db.ref(`/users/${uid}`).update({
     displayName,
     bio,
-    featured: featured.value
-  })
+    featured: featured.value,
+  });
 
-  router.push(`/user/${uid}`)
-}
+  router.push(`/user/${uid}`);
+};
 
 const save = () => {
-  const { photoURL } = userInfo.value
+  const { photoURL } = userInfo.value;
 
-  $auth.currentUser?.updateProfile({ photoURL })
-  $db.ref(`/users/${userInfo.value.uid}`).update({ photoURL })
+  $auth.currentUser?.updateProfile({ photoURL });
+  $db.ref(`/users/${userInfo.value.uid}`).update({ photoURL });
 
-  imageEdit.value = false
-}
+  imageEdit.value = false;
+};
 
 useHead({
-  title: '계정 - LCW'
-})
+  title: "계정 - LCW",
+});
 </script>

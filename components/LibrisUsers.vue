@@ -19,7 +19,7 @@
       <template #append>
         <v-avatar>
           <v-icon :color="item.status === 'online' ? 'primary' : 'grey'">
-            mdi-account-{{ item.status === 'online' ? 'check' : 'remove' }}
+            mdi-account-{{ item.status === "online" ? "check" : "remove" }}
           </v-icon>
         </v-avatar>
       </template>
@@ -28,39 +28,39 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp()
+const { $db } = useNuxtApp();
 
 const props = defineProps({
   limit: {
     type: Boolean,
-    required: true
-  }
-})
-const lbt = ref<any>([])
+    required: true,
+  },
+});
+const lbt = ref<any>([]);
 
-onBeforeMount(() => (props.limit ? Limited() : UnLimited()))
+onBeforeMount(() => (props.limit ? Limited() : UnLimited()));
 
 const Handler = async (s: any) => {
-  const { displayName, libris, photoURL, status } = await s.val()
+  const { displayName, libris, photoURL, status } = await s.val();
 
   lbt.value.unshift({
     displayName,
     libris,
     photoURL,
     status,
-    uid: s.key
-  })
-}
+    uid: s.key,
+  });
+};
 
 const Limited = () => {
   $db
-    .ref('/users')
-    .orderByChild('libris')
+    .ref("/users")
+    .orderByChild("libris")
     .limitToLast(5)
-    .on('child_added', Handler)
-}
+    .on("child_added", Handler);
+};
 
 const UnLimited = () => {
-  $db.ref('/users').orderByChild('libris').on('child_added', Handler)
-}
+  $db.ref("/users").orderByChild("libris").on("child_added", Handler);
+};
 </script>

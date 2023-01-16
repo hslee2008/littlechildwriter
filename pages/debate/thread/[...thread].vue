@@ -25,23 +25,23 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp()
+const { $db } = useNuxtApp();
 
-const route = useRoute()
-const [time, side, thread] = (route.params.thread as string).split('+')
-const threadData = ref<any>({})
+const route = useRoute();
+const [time, side, thread] = (route.params.thread as string).split("+");
+const threadData = ref<any>({});
 
 onMounted(() => {
-  $db.ref(`debate/${time}/${side}/${thread}`).on('value', async (s: any) => {
-    threadData.value = await s.val()
-  })
-})
+  $db.ref(`debate/${time}/${side}/${thread}`).on("value", async (s: any) => {
+    threadData.value = await s.val();
+  });
+});
 </script>
 
 <script lang="ts">
 export default {
-  name: 'Thread',
+  name: "Thread",
   inheritAttrs: false,
-  customOptions: {}
-}
+  customOptions: {},
+};
 </script>

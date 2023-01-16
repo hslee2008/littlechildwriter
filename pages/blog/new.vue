@@ -10,6 +10,7 @@
       </NuxtLink>
       <v-card-title>
         <v-text-field
+          variant="outlined"
           :model-value="topic"
           label="Topic"
           placeholder="Topic"
@@ -28,7 +29,9 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn variant="tonal" color="primary" @click="SaveContent">올리기</v-btn>
+        <v-btn variant="tonal" color="primary" @click="SaveContent">
+          올리기
+        </v-btn>
       </v-card-actions>
     </v-card>
 
@@ -42,17 +45,17 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from 'marked'
-const { $db } = useNuxtApp()
+import { parse } from "marked";
+const { $db } = useNuxtApp();
 
-const userInfo = User()
-const router = useRouter()
-const topic = ref('')
-const content = ref('')
+const userInfo = User();
+const router = useRouter();
+const topic = ref("");
+const content = ref("");
 
 const SaveContent = () => {
-  const time = Date.now()
-  const { uid, displayName, photoURL } = userInfo.value
+  const time = Date.now();
+  const { uid, displayName, photoURL } = userInfo.value;
 
   $db.ref(`/blog/${time}`).set({
     topic: topic.value,
@@ -60,15 +63,15 @@ const SaveContent = () => {
     uid,
     displayName,
     photoURL,
-    time
-  })
+    time,
+  });
 
-  Libris(userInfo.value.uid, 50)
+  Libris(userInfo.value.uid, 50);
 
-  router.push(`/blog/content/${time}`)
-}
+  router.push(`/blog/content/${time}`);
+};
 
 useHead({
-  title: '창작 코너 글쓰기 - Little Child Writer'
-})
+  title: "창작 코너 글쓰기 - Little Child Writer",
+});
 </script>

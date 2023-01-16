@@ -47,14 +47,16 @@
                 accept="image/*"
                 outlined
                 dense
+                variant="underlined"
                 label="책 사진을 선택하세요"
-                @change="uploadImg($event)"
+                @update:modelValue="uploadImg($event)"
               />
             </v-window-item>
 
             <v-window-item class="pt-3">
               <v-text-field
                 v-model="post.image"
+                variant="outlined"
                 label="책 사진의 URL을 입력하세요"
                 prepend-icon="mdi-link"
               />
@@ -63,9 +65,15 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn variant="tonal" text @click="isbn.upload = false"> 확인 </v-btn>
+          <v-btn variant="tonal" text @click="isbn.upload = false">
+            확인
+          </v-btn>
           <v-spacer />
-          <v-btn variant="tonal" text @click=";(isbn.upload = false), (post.image = '')">
+          <v-btn
+            variant="tonal"
+            text
+            @click="(isbn.upload = false), (post.image = '');"
+          >
             취소
           </v-btn>
         </v-card-actions>
@@ -93,7 +101,7 @@
                 color="grey"
                 outlined
                 dense
-                @change="uploadFile($event)"
+                @update:modelValue="uploadFile($event)"
               />
             </v-window-item>
 
@@ -108,7 +116,9 @@
               </div>
               <v-card-actions>
                 <v-btn variant="tonal" @click="showCamera">시작</v-btn>
-                <v-btn variant="tonal" @click="takeISBNVideo"> ISBN 바코드 찍기 </v-btn>
+                <v-btn variant="tonal" @click="takeISBNVideo">
+                  ISBN 바코드 찍기
+                </v-btn>
               </v-card-actions>
             </v-window-item>
           </v-window>
@@ -116,7 +126,9 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="tonal" text @click="isbn.barcode = false"> 취소 </v-btn>
+          <v-btn variant="tonal" text @click="isbn.barcode = false">
+            취소
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -130,6 +142,7 @@
         <v-card-text>
           <v-select
             v-model="isbn.audioType"
+            variant="outlined"
             :items="['en-US', 'ko-KR']"
             label="보이스 타이핑 언어"
           />
@@ -139,8 +152,12 @@
         <v-card-actions>
           <v-btn variant="tonal" text @click="voiceType">시작</v-btn>
           <v-spacer />
-          <v-btn variant="tonal" text color="red" @click="isbn.barcode = false"> 취소 </v-btn>
-          <v-btn variant="tonal" text color="primary" @click="saveAudio"> 확인 </v-btn>
+          <v-btn variant="tonal" text color="red" @click="isbn.barcode = false">
+            취소
+          </v-btn>
+          <v-btn variant="tonal" text color="primary" @click="saveAudio">
+            확인
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -162,6 +179,7 @@
           <v-text-field
             v-if="isbn.input"
             v-model="post.isbn"
+            variant="outlined"
             autofocus
             label="ISBN"
             class="isbn"
@@ -193,6 +211,7 @@
           <v-text-field
             v-if="isbn.find"
             v-model="title"
+            variant="outlined"
             autofocus
             label="책 제목"
             class="bookTitle"
@@ -233,13 +252,13 @@
                 {{
                   item.volumeInfo.authors
                     ? item.volumeInfo.authors[0]
-                    : 'unkown'
+                    : "unkown"
                 }}
                 -
                 {{
                   item.volumeInfo.pageCount
                     ? item.volumeInfo.pageCount
-                    : 'unkown'
+                    : "unkown"
                 }}
               </v-list-item-subtitle>
 
@@ -271,32 +290,33 @@
           color="blue"
           required
           ripple
-          size="30"
+          hover
+          half-increments
           class="mx-auto"
         />
       </v-row>
 
       <v-text-field
         v-model="post.title"
+        variant="outlined"
         label="제목"
         class="title"
-        variant="underlined"
       />
 
       <v-row class="g-10" style="margin: 0.5px 0">
         <v-text-field
-          v-model="post.author"
-          label="작가"
-          class="author"
-          variant="underlined"
-        />
-        <v-text-field
           v-model="post.pageCount"
+          variant="outlined"
           label="페이지"
           class="page"
           type="number"
-          variant="underlined"
           :rules="[isPageCountValid]"
+        />
+        <v-text-field
+          v-model="post.author"
+          variant="outlined"
+          label="작가"
+          class="author"
         />
       </v-row>
 
@@ -340,7 +360,9 @@
     </v-card-text>
 
     <v-card-actions class="g-10">
-      <v-btn variant="tonal" color="primary" class="upload" @click="Post"> 업로드 </v-btn>
+      <v-btn variant="tonal" color="primary" class="upload" @click="Post">
+        업로드
+      </v-btn>
 
       <v-menu bottom>
         <template #activator="{ props }">
@@ -375,7 +397,13 @@
       제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해주세요.
 
       <template #action="{ attrs }">
-        <v-btn variant="tonal" color="pink" text v-bind="attrs" @click="snackbar = false">
+        <v-btn
+          variant="tonal"
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
           Close
         </v-btn>
       </template>
@@ -384,7 +412,13 @@
       찾을 수 없었습니다.
 
       <template #action="{ attrs }">
-        <v-btn variant="tonal" color="pink" text v-bind="attrs" @click="notfound = false">
+        <v-btn
+          variant="tonal"
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="notfound = false"
+        >
           Close
         </v-btn>
       </template>
@@ -393,155 +427,155 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
-const { $db } = useNuxtApp()
+import { useDisplay } from "vuetify";
+const { $db } = useNuxtApp();
 
-const userInfo = User()
-const { mobile } = useDisplay()
+const userInfo = User();
+const { mobile } = useDisplay();
 const post = ref<any>({
-  isbn: '',
-  title: '',
-  image: '',
-  pageCount: '',
-  categories: ['Juvenile Fiction / General'] as string[],
+  isbn: "",
+  title: "",
+  image: "",
+  pageCount: "",
+  categories: ["Juvenile Fiction / General"] as string[],
   rating: 5,
-  content: '',
-  uid: '',
-  displayName: '',
+  content: "",
+  uid: "",
+  displayName: "",
   isPublic: true,
-  author: '',
+  author: "",
   views: 0,
-  time: Date.now()
-})
+  time: Date.now(),
+});
 const isbn = ref<any>({
   barcode: false,
   input: false,
   find: false,
   audio: false,
   upload: false,
-  audioType: ''
-})
-const router = useRouter()
-const loading = ref<boolean>(false)
-const title = ref<string>('')
-const searched = ref<any>({})
-const barcodes = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
-const typed = ref<string>('')
-const isbnImageElement = ref<any>(null)
-const snackbar = ref<boolean>(false)
-const notfound = ref<boolean>(false)
-const video = ref<any>(null)
-const tab = ref<any>(0)
+  audioType: "",
+});
+const router = useRouter();
+const loading = ref<boolean>(false);
+const title = ref<string>("");
+const searched = ref<any>({});
+const barcodes = ["code_39", "codabar", "ean_13", "ean_8", "upc_a"];
+const typed = ref<string>("");
+const isbnImageElement = ref<any>(null);
+const snackbar = ref<boolean>(false);
+const notfound = ref<boolean>(false);
+const video = ref<any>(null);
+const tab = ref<any>(0);
 
 onBeforeUnmount(() => {
   if (video.value)
-    video.value.srcObject.getTracks().forEach((track: any) => track.stop())
-})
+    video.value.srcObject.getTracks().forEach((track: any) => track.stop());
+});
 
 const remove = (item: string) => {
-  post.value.categories.splice(post.value.categories.indexOf(item), 1)
-}
+  post.value.categories.splice(post.value.categories.indexOf(item), 1);
+};
 
 const FetchBook = (bookISBN: string) => {
-  post.value.isbn = bookISBN
-  fetchi()
-  isbn.value.find = false
-}
+  post.value.isbn = bookISBN;
+  fetchi();
+  isbn.value.find = false;
+};
 
 const FetchWithTitle = async () => {
-  loading.value = true
+  loading.value = true;
 
   await fetch(
     `https://www.googleapis.com/books/v1/volumes?q=intitle:${title.value}`
   )
-    .then(res => res.json())
-    .then(books => (searched.value = books.items))
+    .then((res) => res.json())
+    .then((books) => (searched.value = books.items));
 
-  loading.value = false
-}
+  loading.value = false;
+};
 
 const showCamera = () =>
   navigator.mediaDevices
     .getUserMedia({
       video: {
-        facingMode: 'environment',
+        facingMode: "environment",
         width: { ideal: 4096 },
-        height: { ideal: 2160 }
-      }
+        height: { ideal: 2160 },
+      },
     })
-    .then(s => (video.value.srcObject = s))
+    .then((s) => (video.value.srcObject = s));
 
 const takeISBNVideo = () => {
-  if ('BarcodeDetector' in window) {
-    const BarcodeDetector = window.BarcodeDetector
+  if ("BarcodeDetector" in window) {
+    const BarcodeDetector = window.BarcodeDetector;
 
     new BarcodeDetector({
-      barcodes
+      barcodes,
     })
       .detect(video.value)
       .then((res: any) => res[0].rawValue)
       .then((a: any) => {
-        post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-        isbn.value.barcode = false
-        fetchi()
-      })
+        post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, "");
+        isbn.value.barcode = false;
+        fetchi();
+      });
   } else {
-    Error('BarcodeDetector is not supported')
+    Error("BarcodeDetector is not supported");
   }
-}
+};
 
-const uploadFile = (file: File) => {
-  const reader = new FileReader()
+const uploadFile = (file: File[]) => {
+  const reader = new FileReader();
 
   reader.addEventListener(
-    'load',
+    "load",
     () => {
-      isbnImageElement.value.src = reader.result || ''
+      isbnImageElement.value.src = reader.result || "";
 
-      const tempImage: any = new Image()
-      tempImage.src = reader.result
+      const tempImage: any = new Image();
+      tempImage.src = reader.result;
       tempImage.onload = () => {
-        if ('BarcodeDetector' in window) {
-          const BarcodeDetector = window.BarcodeDetector
+        if ("BarcodeDetector" in window) {
+          const BarcodeDetector = window.BarcodeDetector;
 
           new BarcodeDetector({
-            barcodes
+            barcodes,
           })
             .detect(isbnImageElement)
             .then((res: any) => res[0].rawValue)
             .then((a: any) => {
-              post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-              isbn.value.barcode = false
-              fetchi()
-            })
+              post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, "");
+              isbn.value.barcode = false;
+              fetchi();
+            });
         } else {
-          Error('BarcodeDetector is not supported')
+          Error("BarcodeDetector is not supported");
         }
-      }
+      };
     },
     false
-  )
+  );
 
-  reader.readAsDataURL(file)
-}
+  reader.readAsDataURL(file[0]);
+};
 
 const fetchi = () => {
-  loading.value = true
+  loading.value = true;
 
   fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${post.value.isbn}`)
-    .then(res => res.json())
-    .then(async res => {
+    .then((res) => res.json())
+    .then(async (res) => {
       if (res.items[0].volumeInfo.imageLinks) {
         const {
           title,
           imageLinks: { thumbnail: image },
           authors: author,
-          pageCount
-        } = res.items[0].volumeInfo
+          pageCount,
+        } = res.items[0].volumeInfo;
 
         const categories = await fetch(res.items[0].selfLink)
-          .then(cg => cg.json())
-          .then(cg => cg.volumeInfo.categories)
+          .then((cg) => cg.json())
+          .then((cg) => cg.volumeInfo.categories);
 
         post.value = {
           ...post.value,
@@ -549,11 +583,11 @@ const fetchi = () => {
           image,
           pageCount,
           author,
-          categories
-        }
-        post.value.categories = categories
+          categories,
+        };
+        post.value.categories = categories;
       } else {
-        const { title, authors: author, pageCount } = res.items[0].volumeInfo
+        const { title, authors: author, pageCount } = res.items[0].volumeInfo;
 
         post.value = {
           ...post.value,
@@ -561,34 +595,36 @@ const fetchi = () => {
           pageCount,
           author,
           image:
-            'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif',
-          categories: ['Juvenile Fiction / General']
-        }
+            "https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif",
+          categories: ["Juvenile Fiction / General"],
+        };
       }
 
-      isbn.value.input = false
+      isbn.value.input = false;
     })
     .catch(() => {
-      notfound.value = true
-    })
+      notfound.value = true;
+    });
 
-  loading.value = false
-}
+  loading.value = false;
+};
 
-const uploadImg = (f: File) => {
-  const reader = new FileReader()
+const uploadImg = (f: File[]) => {
+  const reader = new FileReader();
 
   reader.addEventListener(
-    'load',
-    () => (post.value.image = reader.result as string),
+    "load",
+    () => {
+      post.value.image = reader.result || "";
+    },
     false
-  )
+  );
 
-  f && reader.readAsDataURL(f)
-}
+  reader.readAsDataURL(f[0]);
+};
 
 const Post = () => {
-  const { uid, displayName } = userInfo.value
+  const { uid, displayName } = userInfo.value;
   const {
     title,
     content,
@@ -599,12 +635,12 @@ const Post = () => {
     pageCount,
     categories,
     isPublic,
-    author
-  } = post.value
+    author,
+  } = post.value;
 
   if (!title || !content || !pageCount || !author || categories?.length === 0) {
-    snackbar.value = true
-    return
+    snackbar.value = true;
+    return;
   }
 
   if (isPublic)
@@ -618,13 +654,13 @@ const Post = () => {
       categories,
       likes: 1,
       liked: {
-        [userInfo.value.uid]: true
+        [userInfo.value.uid]: true,
       },
       views: 0,
       uid,
       displayName,
-      content: content.replaceAll('\n', '<br>')
-    })
+      content: content.replaceAll("\n", "<br>"),
+    });
   else
     $db.ref(`/private/${uid}/${time}`).set({
       title,
@@ -639,11 +675,11 @@ const Post = () => {
       views: 0,
       uid,
       displayName,
-      content: content.replaceAll('\n', '<br>')
-    })
+      content: content.replaceAll("\n", "<br>"),
+    });
 
-  $db.ref(`/user/${uid}/subscriber`).once('value', (snapshot: any) => {
-    const subscribers = snapshot.val()
+  $db.ref(`/user/${uid}/subscriber`).once("value", (snapshot: any) => {
+    const subscribers = snapshot.val();
 
     for (const subscriber in subscribers) {
       Notify(
@@ -651,44 +687,44 @@ const Post = () => {
         userInfo.value.photoURL,
         `${userInfo.value.displayName}님이 ${post.title} 새로운 글을 올렸습니다`,
         `/book/content/${post.time}`
-      )
+      );
     }
-  })
+  });
 
-  Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 20)
+  Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 20);
 
-  router.push(`/book/content/${time}`)
-}
+  router.push(`/book/content/${time}`);
+};
 
 const voiceType = () => {
-  const webkitSpeechRecognition = window.webkitSpeechRecognition
+  const webkitSpeechRecognition = window.webkitSpeechRecognition;
   // eslint-disable-next-line new-cap
-  const recognition = new webkitSpeechRecognition()
-  recognition.lang = isbn.value.audioType
-  recognition.start()
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = isbn.value.audioType;
+  recognition.start();
 
   recognition.onresult = (e: any) => {
-    typed.value += e.results[0][0].transcript + '. '
-  }
+    typed.value += e.results[0][0].transcript + ". ";
+  };
 
   recognition.onspeechend = () => {
-    recognition.stop()
-  }
+    recognition.stop();
+  };
 
-  recognition.onerror = (e: Error) => console.log(e)
-}
+  recognition.onerror = (e: Error) => console.log(e);
+};
 
 const saveAudio = () => {
-  isbn.value.audio = false
-  post.value.content += typed.value
-  typed.value = ''
-}
+  isbn.value.audio = false;
+  post.value.content += typed.value;
+  typed.value = "";
+};
 
 const isPageCountValid = (v: any) =>
   (!isNaN(parseFloat(v)) && isFinite(v) && v > 0 && v < 10000 && v % 1 === 0) ||
-  '옳바른 숫자를 넣어 주세요'
+  "옳바른 숫자를 넣어 주세요";
 
 useHead({
-  title: '업로드 - LCW'
-})
+  title: "업로드 - LCW",
+});
 </script>

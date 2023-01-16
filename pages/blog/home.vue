@@ -31,7 +31,13 @@
         <template v-if="item.uid == userInfo.uid" #append>
           <v-menu offset-y>
             <template #activator="{ props }">
-              <v-btn variant="tonal" icon v-bind="props" cols="1" @click.stop.prevent="">
+              <v-btn
+                variant="tonal"
+                icon
+                v-bind="props"
+                cols="1"
+                @click.stop.prevent=""
+              >
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
@@ -55,23 +61,23 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp()
+const { $db } = useNuxtApp();
 
-const userInfo = User()
-const list = ref<any>([])
+const userInfo = User();
+const list = ref<any>([]);
 
 onMounted(() =>
   $db
-    .ref('/blog')
-    .on('child_added', async (s: any) => list.value.unshift(await s.val()))
-)
+    .ref("/blog")
+    .on("child_added", async (s: any) => list.value.unshift(await s.val()))
+);
 
 const DeleteContent = (i: number) => {
-  $db.ref(`/blog/${list.value[i].time}`).remove()
-  list.value.splice(i, 1)
-}
+  $db.ref(`/blog/${list.value[i].time}`).remove();
+  list.value.splice(i, 1);
+};
 
 useHead({
-  title: '창작 코너 - LCW'
-})
+  title: "창작 코너 - LCW",
+});
 </script>

@@ -95,42 +95,42 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp()
+const { $db } = useNuxtApp();
 
-const userInfo = User()
-const recent = ref<any>([])
-const random = ref<any>([])
-const popular = ref<any[]>([])
-const views = ref<any[]>([])
-const tab = ref<number>(0)
+const userInfo = User();
+const recent = ref<any>([]);
+const random = ref<any>([]);
+const popular = ref<any[]>([]);
+const views = ref<any[]>([]);
+const tab = ref<number>(0);
 
 onBeforeMount(async () => {
   $db
-    .ref('/contents')
+    .ref("/contents")
     .limitToLast(5)
-    .on('child_added', async (s: any) => recent.value.unshift(await s.val()))
+    .on("child_added", async (s: any) => recent.value.unshift(await s.val()));
 
   $db
-    .ref('/contents')
-    .orderByChild('likes')
+    .ref("/contents")
+    .orderByChild("likes")
     .limitToLast(5)
-    .on('child_added', async (s: any) => popular.value.unshift(await s.val()))
+    .on("child_added", async (s: any) => popular.value.unshift(await s.val()));
 
   $db
-    .ref('/contents')
-    .orderByChild('views')
+    .ref("/contents")
+    .orderByChild("views")
     .limitToLast(5)
-    .on('child_added', async (s: any) => views.value.unshift(await s.val()))
+    .on("child_added", async (s: any) => views.value.unshift(await s.val()));
 
   const all = await $db
-    .ref('/contents')
-    .once('value')
-    .then((s: any) => s.val())
+    .ref("/contents")
+    .once("value")
+    .then((s: any) => s.val());
 
   random.value = Object.values(all)
     .sort(() => 0.5 - Math.random())
-    .slice(0, 5)
-})
+    .slice(0, 5);
+});
 </script>
 
 <style scoped>

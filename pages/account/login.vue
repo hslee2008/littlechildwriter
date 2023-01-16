@@ -16,6 +16,7 @@
 
         <v-form class="mt-4">
           <v-text-field
+            variant="outlined"
             :model-value="email"
             type="email"
             label="이메일"
@@ -27,6 +28,7 @@
           />
 
           <v-text-field
+            variant="outlined"
             :model-value="password"
             type="password"
             label="암호"
@@ -47,39 +49,39 @@
 </template>
 
 <script setup script="ts">
-import firebase from 'firebase/compat/app'
-import { auth } from 'firebaseui'
-import 'firebaseui/dist/firebaseui.css'
+import firebase from "firebase/compat/app";
+import { auth } from "firebaseui";
+import "firebaseui/dist/firebaseui.css";
 
-const router = useRouter()
-const email = ref('')
-const password = ref('')
-const ui = new auth.AuthUI(firebase.auth())
+const router = useRouter();
+const email = ref("");
+const password = ref("");
+const ui = new auth.AuthUI(firebase.auth());
 
 const onSubmit = () =>
   firebase
     .auth()
     .signInWithEmailAndPassword(email.value, password.value)
-    .then(() => router.push)
+    .then(() => router.push);
 
 onMounted(() =>
-  ui.start('#firebaseui-auth-container', {
-    signInSuccessUrl: '/account/account',
+  ui.start("#firebaseui-auth-container", {
+    signInSuccessUrl: "/account/account",
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
       firebase.auth.GithubAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
       firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-    ]
+      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
+    ],
   })
-)
-onUnmounted(() => ui.delete())
+);
+onUnmounted(() => ui.delete());
 
 useHead({
-  title: '로그인 - LCW'
-})
+  title: "로그인 - LCW",
+});
 </script>
 
 <style>

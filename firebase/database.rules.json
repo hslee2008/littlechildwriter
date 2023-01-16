@@ -9,7 +9,7 @@
     "users": {
       ".indexOn": "/libris",
       "$userId": {
-      	".write": "$userId === auth.uid"
+        ".write": "$userId === auth.uid"
       }
     },
     "teams": {

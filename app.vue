@@ -57,8 +57,8 @@
                   <v-icon>
                     {{
                       notif.length > 0
-                        ? `mdi-bell-ring${notifOverlay ? '' : '-outline'}`
-                        : `mdi-bell${notifOverlay ? '' : '-outline'}`
+                        ? `mdi-bell-ring${notifOverlay ? "" : "-outline"}`
+                        : `mdi-bell${notifOverlay ? "" : "-outline"}`
                     }}
                   </v-icon>
                 </v-badge>
@@ -119,7 +119,7 @@
               </div>
             </v-card>
 
-            <v-list nav>
+            <v-list nav expand>
               <v-list-item to="/account/account">
                 <v-list-item-title>
                   <v-icon start>mdi-cog-outline</v-icon> 설정
@@ -140,7 +140,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
-          <v-btn variant="tonal" v-else to="/account/login" icon>
+          <v-btn v-else variant="tonal" to="/account/login" icon>
             <v-icon>mdi-account-circle</v-icon>
           </v-btn>
         </div>
@@ -238,51 +238,51 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from "vuetify";
 
-const { $db, $auth } = useNuxtApp()
-const router = useRouter()
-const { mobile } = useDisplay()
-const userInfo = User()
+const { $db, $auth } = useNuxtApp();
+const router = useRouter();
+const { mobile } = useDisplay();
+const userInfo = User();
 
-const notif = ref<any>([])
-const notifOverlay = ref<boolean>(false)
-const drawer = ref<boolean>(!mobile.value)
+const notif = ref<any>([]);
+const notifOverlay = ref<boolean>(false);
+const drawer = ref<boolean>(!mobile.value);
 
 useAuth((u: any) => {
   $db
     .ref(`/users/${u.uid}/notification`)
-    .on('child_added', async (s: any) => notif.value.push(await s.val()))
+    .on("child_added", async (s: any) => notif.value.push(await s.val()));
 
-  $db.ref('.info/connected').on('value', (s: any) => {
+  $db.ref(".info/connected").on("value", (s: any) => {
     if (s.val()) {
       $db
         .ref(`/users/${userInfo.value.uid}/status`)
         .onDisconnect()
-        .set('offline')
-      $db.ref(`/users/${userInfo.value.uid}/status`).set('online')
+        .set("offline");
+      $db.ref(`/users/${userInfo.value.uid}/status`).set("online");
     }
-  })
-})
+  });
+});
 
 const clearEverything = () => {
-  $db.ref(`/users/${userInfo.value.uid}/notification`).remove()
-  notif.value = []
-}
+  $db.ref(`/users/${userInfo.value.uid}/notification`).remove();
+  notif.value = [];
+};
 
 const load = (link: string) => {
-  notifOverlay.value = false
-  router.push(link)
-}
+  notifOverlay.value = false;
+  router.push(link);
+};
 
 const logout = () => {
-  $auth.signOut()
-  router.push('/account/login')
+  $auth.signOut();
+  router.push("/account/login");
   userInfo.value = {
-    displayName: '',
-    email: '',
-    photoURL: '',
-    uid: ''
-  }
-}
+    displayName: "",
+    email: "",
+    photoURL: "",
+    uid: "",
+  };
+};
 </script>

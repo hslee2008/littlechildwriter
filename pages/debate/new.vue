@@ -3,16 +3,21 @@
     <h1>새로운 주제</h1>
 
     <v-text-field
+      variant="outlined"
       :model-value="debate.topic"
       label="주제"
       placeholder="주제 / 질문 입력하기"
-      variant="outlined"
       clearable
       class="mt-3"
     />
 
     <v-col class="d-flex" cols="12" sm="6">
-      <v-select :model-value="debate.lang" :items="lang" width="300" />
+      <v-select
+        variant="outlined"
+        :model-value="debate.lang"
+        :items="lang"
+        width="300"
+      />
     </v-col>
 
     <v-btn variant="tonal" text primary @click="upload">
@@ -23,34 +28,34 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp()
+const { $db } = useNuxtApp();
 
-const userInfo = User()
-const router = useRouter()
-const lang = ref(['한국어', 'English'])
+const userInfo = User();
+const router = useRouter();
+const lang = ref(["한국어", "English"]);
 const debate = ref({
-  topic: '',
-  created_at: '',
-  uid: '',
-  photoURL: '',
-  lang: '한국어'
-})
+  topic: "",
+  created_at: "",
+  uid: "",
+  photoURL: "",
+  lang: "한국어",
+});
 
 const upload = () => {
-  const { uid, photoURL, displayName } = userInfo.value
-  const { topic } = debate.value
-  const time = Date.now()
+  const { uid, photoURL, displayName } = userInfo.value;
+  const { topic } = debate.value;
+  const time = Date.now();
 
   $db.ref(`/debate/${time}`).set({
     topic,
     time,
     uid,
     photoURL,
-    displayName
-  })
+    displayName,
+  });
 
-  Libris(uid, 10)
+  Libris(uid, 10);
 
-  router.push(`/debate/topic/${time}`)
-}
+  router.push(`/debate/topic/${time}`);
+};
 </script>
