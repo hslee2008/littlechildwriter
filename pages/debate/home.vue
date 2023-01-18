@@ -20,7 +20,7 @@
         :to="`/debate/topic/${item.time}`"
       >
         <template #prepend>
-          <v-avatar> <UserPhoto :src="item.photoURL" /></v-avatar>
+          <v-avatar> <UserPhoto :src="item?.photoURL" /></v-avatar>
         </template>
 
         <v-list-item-title>{{ item.topic }}</v-list-item-title>
@@ -35,7 +35,6 @@
           <v-list-item-action v-if="item.uid == userInfo.uid">
             <v-btn
               id="btn"
-              variant="tonal"
               icon
               cols="1"
               flat
@@ -62,23 +61,23 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const userInfo = User();
-const list = ref<any>([]);
+const userInfo = User()
+const list = ref<any>([])
 
 onMounted(() =>
   $db
-    .ref("/debate")
-    .on("child_added", async (s: any) => list.value.unshift(await s.val()))
-);
+    .ref('/debate')
+    .on('child_added', async (s: any) => list.value.unshift(await s.val()))
+)
 
 const DeleteContent = (i: number) => {
-  $db.ref(`/debate/${list.value[i].time}`).remove();
-  list.value.splice(i, 1);
-};
+  $db.ref(`/debate/${list.value[i].time}`).remove()
+  list.value.splice(i, 1)
+}
 
 useHead({
-  title: "토론 광장 - LCW",
-});
+  title: '토론 광장 - LCW'
+})
 </script>

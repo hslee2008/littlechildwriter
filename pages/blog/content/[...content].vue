@@ -19,7 +19,7 @@
           </v-card-subtitle>
         </div>
       </v-card>
-      <v-card-text v-html="parse(content?.markdown)"></v-card-text>
+      <v-card-text v-html="content?.markdown"></v-card-text>
     </v-card>
 
     <LazyCommentComponent
@@ -32,29 +32,28 @@
 </template>
 
 <script setup lang="ts">
-import { parse } from "marked";
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const route = useRoute();
-const time = route.params.content;
+const route = useRoute()
+const time = route.params.content
 const content = ref<any>({
-  topic: "",
-  markdown: "",
-  displayName: "",
-  photoURL: "",
+  topic: '',
+  markdown: '',
+  displayName: '',
+  photoURL: '',
   time: 0,
-  uid: "",
-});
+  uid: ''
+})
 
 onMounted(() => {
-  $db.ref(`/blog/${time}`).on("value", (s: any) => (content.value = s.val()));
-});
+  $db.ref(`/blog/${time}`).on('value', (s: any) => (content.value = s.val()))
+})
 </script>
 
 <script lang="ts">
 export default {
-  name: "ContentBlog",
+  name: 'ContentBlog',
   inheritAttrs: false,
-  customOptions: {},
-};
+  customOptions: {}
+}
 </script>

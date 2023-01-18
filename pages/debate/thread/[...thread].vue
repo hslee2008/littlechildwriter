@@ -2,7 +2,7 @@
   <div>
     <v-card class="d-flex" color="#23262e" :to="`/user/${threadData.uid}`">
       <v-avatar class="my-auto ml-2">
-        <UserPhoto :src="threadData.photoURL" />
+        <UserPhoto :src="threadData?.photoURL" />
       </v-avatar>
 
       <div>

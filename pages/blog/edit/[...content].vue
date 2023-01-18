@@ -3,15 +3,10 @@
 <template>
   <div>
     <v-card>
-      <NuxtLink to="./markdown" class="text-decoration-none">
-        <v-card-subtitle>
-          Markdown을 지원합니다 <v-icon size="small">mdi-information</v-icon>
-        </v-card-subtitle>
-      </NuxtLink>
       <v-card-title>
         <v-text-field
           variant="outlined"
-          :model-value="topic"
+          v-model="topic"
           label="Topic"
           placeholder="Topic"
           required
@@ -19,10 +14,9 @@
       </v-card-title>
       <v-card-text>
         <v-textarea
-          :model-value="content"
+          v-model="content"
           label="Content"
           placeholder="Content"
-          hint="Markdown을 사용할 수 있습니다."
           required
         />
       </v-card-text>
@@ -34,18 +28,10 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-
-    <br />
-
-    <v-card>
-      <v-card-title>미리보기</v-card-title>
-      <v-card-text v-html="parse(content)" />
-    </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { parse } from 'marked'
 const { $db } = useNuxtApp()
 
 const route = useRoute()
@@ -71,7 +57,7 @@ const SaveContent = () => {
 
   $db.ref(`/blog/${time}`).update({
     topic: topic.value,
-    markdown: parse(content.value),
+    markdown: content.value,
     uid,
     displayName,
     photoURL

@@ -142,7 +142,7 @@
               v-if="post.isbn && otherInfo.volumeInfo?.authors"
               class="subtitle-2 ml-1"
             >
-              ({{ (otherInfo.volumeInfo?.authors || []).join(", ") }})
+              ({{ (otherInfo.volumeInfo?.authors || []).join(', ') }})
             </span>
           </v-card-title>
 
@@ -284,7 +284,7 @@
                 class="rounded-lg ma-2"
               >
                 <v-overlay absolute>
-                  {{ item.canRental ? "대출 가능" : "대출 불가능" }}
+                  {{ item.canRental ? '대출 가능' : '대출 불가능' }}
                 </v-overlay>
               </v-img>
 
@@ -313,7 +313,6 @@
       <v-menu v-if="post.isbn" offset-y>
         <template #activator="{ props }">
           <v-btn
-            variant="flat"
             icon="mdi-dots-vertical"
             v-bind="props"
             cols="1"
@@ -358,7 +357,7 @@
                 {{ post.title }}
               </v-card-title>
               <v-card-subtitle>
-                {{ (otherInfo.volumeInfo?.authors || []).join(", ") }}
+                {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
               </v-card-subtitle>
 
               <v-card-text>
@@ -444,133 +443,133 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
-const { $db } = useNuxtApp();
+import { useDisplay } from 'vuetify'
+const { $db } = useNuxtApp()
 
-const { width } = useDisplay();
-const userInfo = User();
-const router = useRouter();
-const route = useRoute();
-const time = route.params.content;
+const { width } = useDisplay()
+const userInfo = User()
+const router = useRouter()
+const route = useRoute()
+const time = route.params.content
 
 const post = ref<any>({
-  isbn: "",
-  title: "",
-  image: "",
-  pageCount: "",
+  isbn: '',
+  title: '',
+  image: '',
+  pageCount: '',
   categories: [] as string[],
   rating: 5,
-  content: "",
-  uid: "",
-  displayName: "",
+  content: '',
+  uid: '',
+  displayName: '',
   views: 0,
-  time: Date.now(),
-});
+  time: Date.now()
+})
 const otherInfo = ref<any>({
   volumeInfo: {
     authors: [],
-    publisher: "",
-    publishedDate: "",
-    averageRating: 0,
-  },
-});
-const suggested = ref<any>([]);
+    publisher: '',
+    publishedDate: '',
+    averageRating: 0
+  }
+})
+const suggested = ref<any>([])
 const school = ref({
   list: [
-    "서울",
-    "부산",
-    "대구",
-    "인천",
-    "광주",
-    "대전",
-    "울산",
-    "세종",
-    "경기",
-    "강원",
-    "충북",
-    "충남",
-    "전북",
-    "전남",
-    "경북",
-    "경남",
-    "제주",
+    '서울',
+    '부산',
+    '대구',
+    '인천',
+    '광주',
+    '대전',
+    '울산',
+    '세종',
+    '경기',
+    '강원',
+    '충북',
+    '충남',
+    '전북',
+    '전남',
+    '경북',
+    '경남',
+    '제주'
   ] as string[],
   result: [] as any,
-  resultString: "",
-  local: "",
-  name: "",
-  title: "",
-});
-const iframe = ref<boolean>(false);
-const loading = ref<boolean>(true);
-const schoolLoading = ref<boolean>(false);
-const sheet = ref<boolean>(false);
+  resultString: '',
+  local: '',
+  name: '',
+  title: ''
+})
+const iframe = ref<boolean>(false)
+const loading = ref<boolean>(true)
+const schoolLoading = ref<boolean>(false)
+const sheet = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
-  schoolLoading.value = true;
+  schoolLoading.value = true
 
   localStorage.setItem(
-    "school",
+    'school',
     JSON.stringify({
       local: school.value.local,
-      name: school.value.name,
+      name: school.value.name
     })
-  );
+  )
 
   await fetch(
     `https://little-child-writer-school-book-search.onrender.com/?book=${school.value.title}&school=${school.value.name}&local=${school.value.local}`
   )
-    .then((res) => res.json())
-    .then((json) => {
-      school.value.result = json.result;
-      school.value.resultString = json.result.toString();
-    });
+    .then(res => res.json())
+    .then(json => {
+      school.value.result = json.result
+      school.value.resultString = json.result.toString()
+    })
 
-  schoolLoading.value = false;
-};
+  schoolLoading.value = false
+}
 
 const Content = async () => {
   const data = await $db
     .ref(`/contents/${time}`)
-    .once("value")
-    .then((r: any) => r.val());
+    .once('value')
+    .then((r: any) => r.val())
 
-  data !== null && Object.keys(data).length !== 1 && (post.value = data);
+  data !== null && Object.keys(data).length !== 1 && (post.value = data)
 
   if (data.isbn)
     await fetch(
       `https://www.googleapis.com/books/v1/volumes?q=isbn:${data.isbn}`
     )
-      .then((res) => res.json())
-      .then((res) => (otherInfo.value = res.items[0]));
+      .then(res => res.json())
+      .then(res => (otherInfo.value = res.items[0]))
 
-  school.value.title = post.value.title;
-};
+  school.value.title = post.value.title
+}
 
 const share = async () => {
-  const { title, content } = post.value;
+  const { title, content } = post.value
   await navigator.share({
     title,
     text: content,
-    url: `https://littlechildwriter.app/book/content/${time}`,
-  });
-  Libris(userInfo.value.uid, 1);
-};
+    url: `https://littlechildwriter.app/book/content/${time}`
+  })
+  Libris(userInfo.value.uid, 1)
+}
 
 const View = () => {
-  $db.ref(`contents/${time}/views`).transaction((view: any) => view + 1);
-  Libris(post.value.uid, 0.1);
-  Libris(userInfo.value.uid, 0.1);
+  $db.ref(`contents/${time}/views`).transaction((view: any) => view + 1)
+  Libris(post.value.uid, 0.1)
+  Libris(userInfo.value.uid, 0.1)
 
   if (userInfo.value.uid === post.value.uid) {
-    $db.ref(`contents/${time}/views`).transaction((view: any) => view - 1);
-    post.value.views--;
+    $db.ref(`contents/${time}/views`).transaction((view: any) => view - 1)
+    post.value.views--
   }
-};
+}
 
 const HandleBookInfo = (data: any) => {
   for (let i = 0; i < data.items.length; i++) {
-    const book = data.items[i];
+    const book = data.items[i]
 
     if (
       book.volumeInfo.imageLinks?.thumbnail &&
@@ -579,20 +578,20 @@ const HandleBookInfo = (data: any) => {
       const {
         imageLinks: { thumbnail },
         infoLink,
-        title,
-      } = book.volumeInfo;
+        title
+      } = book.volumeInfo
 
       suggested.value.push({
         thumbnail,
         infoLink,
-        title,
-      });
+        title
+      })
     }
   }
-};
+}
 
 const Suggestion = async () => {
-  loading.value = true;
+  loading.value = true
 
   if (otherInfo.value.volumeInfo?.authors.length > 0) {
     await fetch(
@@ -600,44 +599,44 @@ const Suggestion = async () => {
         otherInfo.value.volumeInfo?.authors[0]
       )}&maxResults=${20}`
     )
-      .then((res) => res.json())
-      .then(HandleBookInfo);
+      .then(res => res.json())
+      .then(HandleBookInfo)
   }
 
   if (post.value.categories.length > 1) {
-    const cat: string[] = [...post.value.categories];
-    cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)));
+    const cat: string[] = [...post.value.categories]
+    cat.forEach((tag, i) => (cat[i] = encodeURIComponent(`'${tag}'`)))
 
-    let done = false;
-    let n = 5;
-    let overflow = 0;
+    let done = false
+    let n = 5
+    let overflow = 0
 
     while (!done) {
-      overflow++;
+      overflow++
 
       if (overflow > 5) {
-        done = true;
-        break;
+        done = true
+        break
       }
 
       await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=subject:${cat.join(
-          ","
+          ','
         )}&maxResults=${n}`
       )
-        .then((res) => res.json())
-        .then((data) => {
-          const length = data.items.length;
+        .then(res => res.json())
+        .then(data => {
+          const length = data.items.length
 
-          if (length >= n) done = true;
+          if (length >= n) done = true
           else {
-            cat.shift();
-            n -= length;
+            cat.shift()
+            n -= length
           }
 
-          HandleBookInfo(data);
+          HandleBookInfo(data)
         })
-        .catch(() => cat.shift());
+        .catch(() => cat.shift())
     }
   } else {
     await fetch(
@@ -645,8 +644,8 @@ const Suggestion = async () => {
         post.value.title
       }&maxResults=${15}`
     )
-      .then((res) => res.json())
-      .then((data) => HandleBookInfo(data));
+      .then(res => res.json())
+      .then(data => HandleBookInfo(data))
   }
 
   suggested.value = [
@@ -655,79 +654,79 @@ const Suggestion = async () => {
         (v: any, i: number, a: any) =>
           a.findIndex((t: any) => t.title === v.title) === i
       )
-    ),
+    )
   ]
     .sort(() => 0.5 - Math.random())
-    .slice(0, 5);
+    .slice(0, 5)
 
-  loading.value = false;
-};
+  loading.value = false
+}
 
 const Del = () => {
-  $db.ref(`contents/${time}`).remove();
-  Libris(userInfo.value.uid, -(parseInt(post.value.pageCount) / 100));
-  router.push("/list");
-};
+  $db.ref(`contents/${time}`).remove()
+  Libris(userInfo.value.uid, -(parseInt(post.value.pageCount) / 100))
+  router.push('/list')
+}
 
 const Like = () => {
   if (post.value.liked[userInfo.value.uid]) {
-    post.value.likes--;
-    post.value.liked[userInfo.value.uid] = false;
+    post.value.likes--
+    post.value.liked[userInfo.value.uid] = false
 
     $db
       .ref(`/contents/${post.value.time}/liked/${userInfo.value.uid}`)
-      .set(false);
-    $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes);
+      .set(false)
+    $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
 
-    Libris(userInfo.value.uid, -0.1);
-    Libris(post.value.uid, -0.1);
+    Libris(userInfo.value.uid, -0.1)
+    Libris(post.value.uid, -0.1)
   } else {
-    post.value.likes++;
+    post.value.likes++
 
     try {
-      post.value.liked[userInfo.value.uid] = true;
+      post.value.liked[userInfo.value.uid] = true
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
 
     $db
       .ref(`/contents/${post.value.time}/liked/${userInfo.value.uid}`)
-      .set(true);
-    $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes);
+      .set(true)
+    $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
 
-    Libris(userInfo.value.uid, 0.1);
-    Libris(post.value.uid, 0.1);
+    Libris(userInfo.value.uid, 0.1)
+    Libris(post.value.uid, 0.1)
   }
-};
+}
 
 const endWithSchool = (v: string) =>
-  v.endsWith("학교") || "-학교로 끝나게 입력해주세요";
+  v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
 
 onBeforeMount(async () => {
-  await Content();
-  View();
-  Suggestion();
-});
+  await Content()
+  View()
+  Suggestion()
+})
 
 onMounted(() => {
-  if (localStorage.getItem("school"))
+  if (localStorage.getItem('school'))
     school.value = {
       ...school.value,
-      ...JSON.parse(localStorage.getItem("school")!),
-    };
-});
+      ...JSON.parse(localStorage.getItem('school')!)
+    }
+})
 
 useHead({
-  title: "컨텐츠 - LCW",
-});
+  title: '컨텐츠 - LCW'
+})
 </script>
 
 <script lang="ts">
 export default {
-  name: "Content",
+  name: 'Content',
   inheritAttrs: false,
-  customOptions: {},
-};
+  customOptions: {}
+}
 </script>
 
 <style scoped>

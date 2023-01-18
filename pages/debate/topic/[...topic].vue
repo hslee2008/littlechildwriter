@@ -7,7 +7,7 @@
       :to="`/user/${content.uid}`"
     >
       <v-avatar class="my-auto ml-2">
-        <UserPhoto :src="content.photoURL" />
+        <UserPhoto :src="content?.photoURL" />
       </v-avatar>
       <div>
         <v-card-title>{{ content.displayName }}</v-card-title>
@@ -33,7 +33,7 @@
               variant="tonal"
               text
               size="small"
-              @click="(side = 'pro'), (write = true);"
+              @click=";(side = 'pro'), (write = true)"
             >
               <v-icon>mdi-plus</v-icon>
               글쓰기
@@ -44,7 +44,7 @@
               <v-list-item v-for="(item, i) in content.pro" :key="item.time">
                 <template #prepend>
                   <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
-                    <UserPhoto :src="item.photoURL" />
+                    <UserPhoto :src="item?.photoURL" />
                   </NuxtLink>
                 </template>
 
@@ -59,7 +59,6 @@
                   <v-menu offset-y>
                     <template #activator="{ props }">
                       <v-btn
-                        variant="tonal"
                         icon
                         v-bind="props"
                         cols="1"
@@ -111,7 +110,7 @@
               variant="tonal"
               text
               size="small"
-              @click="(side = 'con'), (write = true);"
+              @click=";(side = 'con'), (write = true)"
             >
               <v-icon>mdi-plus</v-icon>
               글쓰기
@@ -122,7 +121,7 @@
               <v-list-item v-for="(item, i) in content.con" :key="item.time">
                 <template #prepend>
                   <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
-                    <UserPhoto :src="item.photoURL" />
+                    <UserPhoto :src="item?.photoURL" />
                   </NuxtLink>
                 </template>
 
@@ -137,7 +136,6 @@
                   <v-menu offset-y>
                     <template #activator="{ props }">
                       <v-btn
-                        variant="tonal"
                         icon
                         v-bind="props"
                         cols="1"
@@ -229,7 +227,7 @@
       <v-list-item v-for="(item, i) in content.suggestion" :key="item.time">
         <template #prepend>
           <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
-            <UserPhoto :src="item.photoURL" />
+            <UserPhoto :src="item?.photoURL" />
           </NuxtLink>
         </template>
 
@@ -243,13 +241,7 @@
         <template #append>
           <v-menu offset-y>
             <template #activator="{ props }">
-              <v-btn
-                variant="tonal"
-                icon
-                v-bind="props"
-                cols="1"
-                @click.stop.prevent=""
-              >
+              <v-btn icon v-bind="props" cols="1" @click.stop.prevent="">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
@@ -307,97 +299,96 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
-const { $db } = useNuxtApp();
+import { useDisplay } from 'vuetify'
+const { $db } = useNuxtApp()
 
-const { mobile } = useDisplay();
-const userInfo = User();
-const route = useRoute();
-const time = route.params.topic;
-const content = ref<any>({});
-const write = ref(false);
-const edit = ref(false);
-const editContent = ref<any>("");
-const editIndex = ref<any>("");
-const side = ref("");
-const claim = ref("");
+const { mobile } = useDisplay()
+const userInfo = User()
+const route = useRoute()
+const time = route.params.topic
+const content = ref<any>({})
+const write = ref(false)
+const edit = ref(false)
+const editContent = ref<any>('')
+const editIndex = ref<any>('')
+const side = ref('')
+const claim = ref('')
 
-const suggestionCard = ref(false);
-const suggestion = ref("");
-const suggestionContent = ref("");
+const suggestionCard = ref(false)
+const suggestion = ref('')
+const suggestionContent = ref('')
 
 const post = () => {
-  const { uid, displayName, photoURL } = userInfo.value;
+  const { uid, displayName, photoURL } = userInfo.value
 
   $db.ref(`/debate/${time}/${side.value}`).push({
     displayName,
     uid,
     photoURL,
     topic: claim.value,
-    time: Date.now(),
-  });
+    time: Date.now()
+  })
 
-  write.value = false;
-  claim.value = "";
+  write.value = false
+  claim.value = ''
 
-  Libris(userInfo.value.uid, 5);
+  Libris(userInfo.value.uid, 5)
   Notify(
     content.value.uid,
     userInfo.value.photoURL,
     `${userInfo.value.displayName}님이 새로운 의견을 냈습니다`,
     `/debate/topic/${time}`
-  );
-};
+  )
+}
 
 const update = () => {
-  if (side.value === "suggestion") {
+  if (side.value === 'suggestion') {
     $db.ref(`/debate/${time}/suggestion/${editIndex.value}`).update({
-      topic: editContent.value,
-    });
+      topic: editContent.value
+    })
 
-    edit.value = false;
-    suggestion.value = "";
-    suggestionContent.value = "";
+    edit.value = false
+    suggestion.value = ''
+    suggestionContent.value = ''
   } else {
     $db.ref(`/debate/${time}/${side.value}/${editIndex.value}`).update({
-      topic: editContent.value,
-    });
+      topic: editContent.value
+    })
 
-    edit.value = false;
-    editContent.value = "";
-    editIndex.value = "";
+    edit.value = false
+    editContent.value = ''
+    editIndex.value = ''
   }
-};
+}
 
 const DeleteContent = (side: string, i: number) => {
-  if (side === "suggestion")
-    $db.ref(`/debate/${time}/suggestion/${i}`).remove();
-  else $db.ref(`/debate/${time}/${side}/${i}`).remove();
-};
+  if (side === 'suggestion') $db.ref(`/debate/${time}/suggestion/${i}`).remove()
+  else $db.ref(`/debate/${time}/${side}/${i}`).remove()
+}
 
 const UpdateOnCon = (topic: string, index: number) => {
-  editContent.value = topic;
-  editIndex.value = index;
-  edit.value = true;
-  side.value = "con";
-};
+  editContent.value = topic
+  editIndex.value = index
+  edit.value = true
+  side.value = 'con'
+}
 
 const UpdateOnPro = (topic: string, index: number) => {
-  editContent.value = topic;
-  editIndex.value = index;
-  edit.value = true;
-  side.value = "pro";
-};
+  editContent.value = topic
+  editIndex.value = index
+  edit.value = true
+  side.value = 'pro'
+}
 
 const UpdateOnSuggestion = (topic: string, index: number) => {
-  editContent.value = topic;
-  editIndex.value = index;
-  edit.value = true;
-  side.value = "suggestion";
-};
+  editContent.value = topic
+  editIndex.value = index
+  edit.value = true
+  side.value = 'suggestion'
+}
 
 const newSuggestion = () => {
-  const { uid, displayName, photoURL } = userInfo.value;
+  const { uid, displayName, photoURL } = userInfo.value
 
   $db.ref(`/debate/${time}/suggestion`).push({
     displayName,
@@ -405,33 +396,33 @@ const newSuggestion = () => {
     photoURL,
     topic: suggestion.value,
     content: suggestionContent.value,
-    time: Date.now(),
-  });
+    time: Date.now()
+  })
 
-  suggestionCard.value = false;
-  suggestion.value = "";
-  suggestionContent.value = "";
+  suggestionCard.value = false
+  suggestion.value = ''
+  suggestionContent.value = ''
 
-  Libris(userInfo.value.uid, 5);
+  Libris(userInfo.value.uid, 5)
   Notify(
     content.value.uid,
     userInfo.value.photoURL,
     `${userInfo.value.displayName}님이 새로운 제언을 했습니다`,
     `/debate/topic/${time}`
-  );
-};
+  )
+}
 
 onMounted(() =>
   $db
     .ref(`/debate/${time}`)
-    .on("value", async (s: any) => (content.value = await s.val()))
-);
+    .on('value', async (s: any) => (content.value = await s.val()))
+)
 </script>
 
 <script lang="ts">
 export default {
-  name: "Topic",
+  name: 'Topic',
   inheritAttrs: false,
-  customOptions: {},
-};
+  customOptions: {}
+}
 </script>

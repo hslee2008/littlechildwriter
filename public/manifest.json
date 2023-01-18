@@ -1,0 +1,51 @@
+{
+  "short_name": "LCW",
+  "name": "Little Child Writer",
+  "icons": [
+    {
+      "src": "./pwa/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./pwa/256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "./pwa/192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./pwa/144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "./pwa/96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./pwa/books.jpg",
+      "type": "image/png",
+      "sizes": "1600x789"
+    }
+  ],
+  "start_url": "./",
+  "background_color": "#1B1B1D",
+  "display": "browser",
+  "display_override": ["fullscreen", "minimal-ui"],
+  "scope": "/",
+  "theme_color": "#1B1B1D",
+  "description": "Learn, Practice, Build and Deploy",
+  "categories": ["Education", "Books", "Library"],
+  "author": ["Hyunseung Lee", "Juha Im", "Jiwon Kim"],
+  "orientation": "portrait",
+  "dir": "ltr",
+  "lang": "ko-KR"
+}

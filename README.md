@@ -6,4 +6,4 @@ One of 18 projects to enter KOFAC, South Korea Competition.
 
 ## Other Links
 
-To-Do: https://github.com/HyunseungLee-Travis/littlechildwriter/discussions/6
+To-Do: https://github.com/HyunseungLee-Travis/littlechildwriter/blob/main/ToDo.md

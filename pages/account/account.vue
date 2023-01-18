@@ -5,7 +5,7 @@
 
       <div class="d-flex ml-5">
         <v-avatar size="100">
-          <UserPhoto :src="userInfo.photoURL" />
+          <UserPhoto :src="userInfo?.photoURL" />
         </v-avatar>
         <div>
           <v-card-title>{{ userInfo.displayName }}</v-card-title>

@@ -28,7 +28,7 @@
         >
           <NuxtLink :to="`/user/${message.uid}`" class="ma-auto ml-2">
             <v-avatar size="40">
-              <UserPhoto :src="message.photoURL" />
+              <UserPhoto :src="message?.photoURL" />
             </v-avatar>
           </NuxtLink>
 
@@ -54,7 +54,7 @@
                 text
                 depressed
                 class="mr-3"
-                @click="(message.edit = false), (comments = [...comments]);"
+                @click=";(message.edit = false), (comments = [...comments])"
               >
                 취소
               </v-btn>
@@ -81,7 +81,7 @@
             </v-btn>
             <v-menu offset-y>
               <template #activator="{ props }">
-                <v-btn variant="tonal" icon v-bind="props" cols="1">
+                <v-btn icon v-bind="props" cols="1">
                   <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
               </template>
@@ -90,7 +90,7 @@
                   <v-list-item @click="Edit(i)">
                     <v-list-item-title>
                       <v-icon start> mdi-pencil </v-icon>
-                      {{ comments[i].edit ? "취소" : "수정" }}
+                      {{ comments[i].edit ? '취소' : '수정' }}
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item @click="Delete(i)">
@@ -151,163 +151,163 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from "perspective-api-client";
+import Perspective from 'perspective-api-client'
 
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
 const perspective = new Perspective({
-  apiKey: "AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U",
-});
+  apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
+})
 
-const userInfo = User();
+const userInfo = User()
 const props = defineProps({
   link: {
     type: String,
-    required: true,
+    required: true
   },
   dbr: {
     type: String,
-    required: true,
+    required: true
   },
   uid: {
     type: String,
-    required: true,
+    required: true
   },
   nofield: {
     type: Boolean,
-    default: false,
+    default: false
   },
   cb: {
     type: Function,
-    default: () => {},
+    default: () => {}
   },
   parent: {
     type: Boolean,
-    default: false,
-  },
-});
-const comment = ref<string>("");
-const updatedcomment = ref<string>("");
-const comments = ref<any>([]);
-const snackbarBadWord = ref(false);
-const toxcity = ref(0);
+    default: false
+  }
+})
+const comment = ref<string>('')
+const updatedcomment = ref<string>('')
+const comments = ref<any>([])
+const snackbarBadWord = ref(false)
+const toxcity = ref(0)
 
 onBeforeMount(() =>
   $db
     .ref(props.dbr)
-    .on("child_added", async (s: any) =>
+    .on('child_added', async (s: any) =>
       comments.value.push({ ...(await s.val()), id: s.key })
     )
-);
+)
 
 const Edit = (i: number) => {
-  comments.value[i].edit = true;
-  updatedcomment.value = comments.value[i].content;
-  comments.value = [...comments.value];
-};
+  comments.value[i].edit = true
+  updatedcomment.value = comments.value[i].content
+  comments.value = [...comments.value]
+}
 
 const Update = (i: number) => {
-  comments.value[i].edit = false;
+  comments.value[i].edit = false
   $db.ref(`${props.dbr}/${Object.keys(comments.value)[i]}`).update({
     ...comments.value[i],
-    content: updatedcomment.value,
-  });
-  comments.value = [...comments.value];
-};
+    content: updatedcomment.value
+  })
+  comments.value = [...comments.value]
+}
 
 const Delete = (i: number) => {
-  $db.ref(props.dbr).child(comments.value[i].id).remove();
-  comments.value.splice(i, 1);
-};
+  $db.ref(props.dbr).child(comments.value[i].id).remove()
+  comments.value.splice(i, 1)
+}
 
 const Love = (i: number) => {
-  const cmt = $db.ref(props.dbr);
-  const love = comments.value[i].love;
+  const cmt = $db.ref(props.dbr)
+  const love = comments.value[i].love
   if (love) {
     if (love.includes(userInfo.value.uid)) {
-      love.splice(love.indexOf(userInfo.value.uid), 1);
+      love.splice(love.indexOf(userInfo.value.uid), 1)
     } else {
-      love.push(userInfo.value.uid);
+      love.push(userInfo.value.uid)
 
       Notify(
         comments.value[i].uid,
         userInfo.value.photoURL,
         `${userInfo.value.displayName}님이 좋아요를 눌렀습니다`,
         props.link
-      );
+      )
     }
   } else {
-    comments.value[i].love = [userInfo.value.uid];
+    comments.value[i].love = [userInfo.value.uid]
   }
-  cmt.set(comments.value);
-  comments.value = [...comments.value];
-};
+  cmt.set(comments.value)
+  comments.value = [...comments.value]
+}
 
 const Comment = async () => {
-  let result: any = {};
-  let score: number = 0;
-  let mostProbable: string = "";
+  let result: any = {}
+  let score: number = 0
+  let mostProbable: string = ''
 
   try {
     result = await perspective.analyze(comment.value, {
-      attributes: ["TOXICITY"],
-    });
-    score = result.attributeScores.TOXICITY.summaryScore.value || "good";
+      attributes: ['TOXICITY']
+    })
+    score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
     mostProbable = Object.keys(result.attributeScores).reduce((a, b) =>
       result.attributeScores[a].summaryScore.value >
       result.attributeScores[b].summaryScore.value
         ? a
         : b
-    );
+    )
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 
   if (score > 0.6) {
-    snackbarBadWord.value = true;
-    toxcity.value = score;
-    Libris(userInfo.value.uid, -score * 10);
-    return;
+    snackbarBadWord.value = true
+    toxcity.value = score
+    Libris(userInfo.value.uid, -score * 10)
+    return
   }
 
   if (comment.value.length > 0) {
-    const { displayName, photoURL, uid } = userInfo.value;
-    const badWord = score > 0.6;
-    const content = comment.value;
+    const { displayName, photoURL, uid } = userInfo.value
+    const badWord = score > 0.6
+    const content = comment.value
 
     $db.ref(props.dbr).push({
       uid,
       photoURL,
       displayName,
       time: Date.now(),
-      probably: badWord ? mostProbable : "good",
+      probably: badWord ? mostProbable : 'good',
       content,
-      score,
-    });
+      score
+    })
 
-    $db.ref(`${props.dbr.replace("/comments", "")}/joined`).update({
+    $db.ref(`${props.dbr.replace('/comments', '')}/joined`).update({
       [uid]: {
         displayName,
-        photoURL,
-      },
-    });
+        photoURL
+      }
+    })
 
     $db
-      .ref(`${props.dbr.replace("/comments", "")}/joined`)
-      .once("value", async (s: any) => {
-        const joined = Object.keys(await s.val());
+      .ref(`${props.dbr.replace('/comments', '')}/joined`)
+      .once('value', async (s: any) => {
+        const joined = Object.keys(await s.val())
 
         for (const user in joined) {
-          if (joined[user] === userInfo.value.uid) continue;
-          Notify(joined[user], userInfo.value.photoURL, content, props.link);
+          if (joined[user] === userInfo.value.uid) continue
+          Notify(joined[user], userInfo.value.photoURL, content, props.link)
         }
-      });
+      })
 
-    Notify(props.uid, userInfo.value.photoURL, content, props.link);
-    Libris(userInfo.value.uid, 5);
+    Notify(props.uid, userInfo.value.photoURL, content, props.link)
+    Libris(userInfo.value.uid, 5)
 
-    props.cb();
-    comment.value = "";
+    props.cb()
+    comment.value = ''
   }
-};
+}
 </script>

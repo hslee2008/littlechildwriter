@@ -12,7 +12,7 @@
       <template #prepend>
         {{ i + 1 }}등
         <v-avatar color="grey-lighten-1" class="ml-3">
-          <UserPhoto :src="lbt[i].photoURL" />
+          <UserPhoto :src="lbt[i]?.photoURL" />
         </v-avatar>
       </template>
 

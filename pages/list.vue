@@ -34,22 +34,21 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const books = ref<any[]>([]);
+const books = ref<any[]>([])
 // eslint-disable-next-line func-call-spacing
-const search = ref<string>("");
-const page = ref<number>(1);
-const itemsPerPage = ref<number>(12);
-const latest = ref<boolean>(true);
+const search = ref<string>('')
+const page = ref<number>(1)
+const itemsPerPage = ref<number>(12)
 
 onBeforeMount(() => {
   $db
-    .ref("contents")
-    .on("child_added", async (s: any) => books.value.unshift(await s.val()));
-});
+    .ref('contents')
+    .on('child_added', async (s: any) => books.value.unshift(await s.val()))
+})
 
 useHead({
-  title: "리스트 - LCW",
-});
+  title: '리스트 - LCW'
+})
 </script>
