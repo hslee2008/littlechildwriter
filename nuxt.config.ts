@@ -83,17 +83,6 @@ export default defineNuxtConfig({
         {
           rel: 'apple-touch-icon',
           href: '/favicon.ico'
-        },
-        {
-          rel: 'manifest',
-          href: '/manifest.json'
-        }
-      ],
-      script: [
-        {
-          src: '/sw.js',
-          async: true,
-          defer: true
         }
       ],
       noscript: [
@@ -125,8 +114,16 @@ export default defineNuxtConfig({
       nuxt.hooks.hook('vite:extendConfig', config =>
         config.plugins.push(vuetify())
       )
-    }
+    },
+    '@kevinmarrec/nuxt-pwa'
   ],
+
+  pwa: {
+    workbox: {
+      enabled: true
+    }
+  },
+
   target: 'static',
 
   vite: {
