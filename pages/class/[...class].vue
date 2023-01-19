@@ -38,7 +38,8 @@
             label="수업 전체 공개 여부"
             required
           />
-          <v-btn rounded="lg"
+          <v-btn
+            rounded="lg"
             variant="tonal"
             color="primary"
             class="mt-5"
@@ -49,67 +50,66 @@
           </v-btn>
         </v-card-text>
       </v-card>
-      <v-card class="mt-5">
-        <v-card-title>삭제</v-card-title>
-        <v-card-text>
-          <LazyDialogComponent
-            :cb="DeleteClass"
-            btn-title="삭제"
-            title="진짜로 삭제하겠습니까?"
-            text="삭제하면 복구할 수 없습니다"
-            icon="trash-can"
-          />
-        </v-card-text>
-      </v-card>
+      
+      <v-card-title>삭제</v-card-title>
+      <v-card-text>
+        <LazyDialogComponent
+          :cb="DeleteClass"
+          btn-title="삭제"
+          title="진짜로 삭제하겠습니까?"
+          text="삭제하면 복구할 수 없습니다"
+          icon="trash-can"
+        />
+      </v-card-text>
     </v-window-item>
   </v-window>
 </template>
 
 <script setup lang="ts">
-import DisplayCards from "./components/DisplayCards.vue";
-import UploadCards from "./components/UploadCards.vue";
+import DisplayCards from './components/DisplayCards.vue'
+import UploadCards from './components/UploadCards.vue'
 
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const userInfo = User();
-const route = useRoute();
-const router = useRouter();
-const id = route.params.class;
-const classInfo = ref<any>({});
-const listev = ref<any[]>([]);
-const tab = ref<number>(0);
+const userInfo = User()
+const route = useRoute()
+const router = useRouter()
+const id = route.params.class
+const classInfo = ref<any>({})
+const listev = ref<any[]>([])
+const tab = ref<number>(0)
 
 onBeforeMount(() => {
   $db
     .ref(`/classes/${id}`)
-    .on("value", async (s: any) => (classInfo.value = await s.val()));
+    .on('value', async (s: any) => (classInfo.value = await s.val()))
 
-  $db.ref("/contents/").on("child_added", (s: any) => {
-    const { title, time, uid, displayName, image } = s.val();
+  $db.ref('/contents/').on('child_added', (s: any) => {
+    const { title, time, uid, displayName, image } = s.val()
 
     listev.value.push({
       title,
       time,
       uid,
       displayName,
-      image,
-    });
-  });
-});
+      image
+    })
+  })
+})
 
-const updateTab = (num: number) => (tab.value = num);
+const updateTab = (num: number) => (tab.value = num)
 
 const Update = () => {
-  $db.ref(`/classes/${id}`).update(classInfo);
-  tab.value = 0;
-};
+  $db.ref(`/classes/${id}`).update(classInfo)
+  tab.value = 0
+}
 
 const DeleteClass = () => {
-  $db.ref("classes").child(id).remove();
-  router.push("/class/classes");
-};
+  $db.ref('classes').child(id).remove()
+  router.push('/class/classes')
+}
 
 useHead({
-  title: "알림판 (자세히) - LCW",
-});
+  title: '알림판 (자세히) - LCW'
+})
 </script>

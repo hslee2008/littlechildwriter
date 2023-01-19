@@ -1,4 +1,3 @@
-1. List page - v-data-iterator
-2. PWA
-3. Robots, sitemap
-4. Google Analytics
+1. Google Analytics
+2. BarcodeScanner Bug
+3. clipboard

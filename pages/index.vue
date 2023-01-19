@@ -4,7 +4,8 @@
       <v-col class="d-flex justify-center align-center">
         <div>
           <div class="text-center mb-5 mt-3 button">
-            <v-btn rounded="lg"
+            <v-btn
+              rounded="lg"
               v-if="userInfo.uid"
               to="/book/post"
               color="primary"
@@ -12,7 +13,13 @@
             >
               <v-icon start> mdi-pencil </v-icon> 작성하기
             </v-btn>
-            <v-btn rounded="lg" v-else to="/account/login" color="primary" min-width="300">
+            <v-btn
+              rounded="lg"
+              v-else
+              to="/account/login"
+              color="primary"
+              min-width="300"
+            >
               로그인 <v-icon right> mdi-account </v-icon>
             </v-btn>
           </div>
@@ -81,7 +88,9 @@
         <LibrisUsers :limit="true" />
 
         <div class="text-center">
-          <v-btn rounded="lg" variant="tonal" to="/libris/libris"> 더보기 </v-btn>
+          <v-btn rounded="lg" variant="tonal" to="/libris/libris">
+            더보기
+          </v-btn>
         </div>
       </v-card-text>
     </v-card>
@@ -107,7 +116,13 @@ const tab = ref<number>(0)
 const list = [
   'https://static01.nyt.com/images/2015/10/24/opinion/24manguel/24manguel-superJumbo.jpg',
   'https://i.pinimg.com/originals/1b/01/27/1b01274ac5ed6f2a117ba4754c0f8755.jpg',
-  './background.avif'
+  './background.avif',
+  'https://www.protocol.com/media-library/librarians-depend-on-libby-but-they-also-worry-that-its-newfound-popularity-could-seriously-strain-their-budgets.jpg?id=25634798&width=1245&height=700&quality=85&coordinates=0%2C230%2C0%2C230',
+  'https://d4804za1f1gw.cloudfront.net/wp-content/uploads/sites/50/2018/11/06110356/hero.jpg',
+  'https://img.freepik.com/premium-photo/pile-books-table-library_130388-600.jpg?w=2000',
+  'https://www.eastman.org/sites/default/files/styles/full_width_slider/public/library-01-1920_0.jpg.webp?itok=fiWZlYpB',
+  'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/fl16915765068-image-kybem7r7.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=1051d18eb5124f051dcce8f4f702dff3',
+  'https://cdn.pixabay.com/photo/2015/10/10/13/03/prague-980732__340.jpg'
 ]
 const image = ref<string>('./background.avif')
 

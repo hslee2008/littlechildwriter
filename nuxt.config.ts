@@ -124,7 +124,9 @@ export default defineNuxtConfig({
     }
   },
 
-  target: 'static',
+  devServer: {
+    host: '0.0.0.0'
+  },
 
   vite: {
     define: {

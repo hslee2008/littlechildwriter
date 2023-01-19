@@ -8,43 +8,71 @@
           label="검색"
           outlined
           dense
-          :loading="loading"
         />
       </v-col>
     </v-row>
 
-      <BookCard
-        :items="books.filter((book: any) => {
+    <v-card
+      v-if="loading"
+      :color="themeColor()"
+      class="elevation-0 text-center"
+    >
+      <v-card-text>
+        <v-progress-circular
+          v-if="loading"
+          indeterminate
+          color="primary"
+          size="30"
+        />
+
+        <v-card-title>책을 불러오는 중입니다...</v-card-title>
+      </v-card-text>
+    </v-card>
+    <BookCard
+      v-else
+      :items="
+        books.filter((book: any) => {
           return (
             (book.title?.toLowerCase() ?? []).includes(search?.toLowerCase()) ||
             book.displayName?.toLowerCase().includes(search?.toLowerCase()) ||
             (book?.categories ?? []) === (search?.toLowerCase()) ||
             search === ''
           )
-        }).slice((page - 1) * itemsPerPage, page * itemsPerPage)"
-      />
+        }).slice((page - 1) * itemsPerPage, page * itemsPerPage)
+      "
+    />
 
-    <div class="d-flex text-center">
-      <v-select
-        v-model="itemsPerPage"
-        :items="[12, 24, 36]"
-        variant="outlined"
-        dense
-        class="mr-10"
-      />
+    <div class="d-flex text-center ma-3 mx-5">
+      <v-row class="mt-10" align="center" justify="center">
+        <v-menu top>
+          <template #activator="{ props }">
+            <v-btn text color="primary" variant="tonal" class="ml-2" v-bind="props">
+              {{ itemsPerPage }}
+              <v-icon right> mdi-chevron-down </v-icon>
+            </v-btn>
+          </template>
 
-      <v-btn icon variant="plain" color="blue darken-3" @click="Before">
-        <v-icon>mdi-chevron-left</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        variant="plain"
-        color="blue darken-3"
-        @click="Next"
-        class="mr-10"
-      >
-        <v-icon>mdi-chevron-right</v-icon>
-      </v-btn>
+          <v-list>
+            <v-list-item
+              v-for="num in [10, 50, 150, 200]"
+              :key="num"
+              @click="itemsPerPage = num"
+            >
+              <v-list-item-title>{{ num }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-spacer />
+
+        <span class="mr-4 grey--text"> {{ page }} / {{ numberOfPages }} </span>
+        <v-btn icon variant="plain" color="blue darken-3" @click="Before">
+          <v-icon>mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-btn icon variant="plain" color="blue darken-3" @click="Next">
+          <v-icon>mdi-chevron-right</v-icon>
+        </v-btn>
+      </v-row>
     </div>
   </div>
 </template>
@@ -57,6 +85,9 @@ const books = ref<any[]>([])
 const search = ref<string>('')
 const page = ref<number>(1)
 const itemsPerPage = ref<number>(10)
+const numberOfPages = computed(() =>
+  Math.ceil(books.value.length / itemsPerPage.value)
+)
 const loading = ref<boolean>(true)
 
 onBeforeMount(() => {

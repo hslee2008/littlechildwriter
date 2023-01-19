@@ -9,6 +9,10 @@
         :width="mobile ? 150 : 200"
         class="my-4 mx-2 elevation-0"
         :color="themeColor()"
+        data-aos="fade"
+        data-aos-offset="200px"
+        data-aos-delay="100"
+        data-aos-easing="ease-in"
       >
         <v-card
           :to="`/book/content/${item.time}`"
@@ -115,6 +119,9 @@
 </template>
 
 <script setup lang="ts">
+import AOS from 'aos'
+import 'aos/dist/aos.css'
+
 import { useDisplay } from 'vuetify'
 
 const { $db } = useNuxtApp()
@@ -139,6 +146,10 @@ const bookmarked = (i: number) => {
     userInfo.value.uid
   )
 }
+
+onMounted(() => {
+  AOS.init()
+})
 
 const Like = (item: any) => {
   if (item.liked[userInfo.value.uid]) {

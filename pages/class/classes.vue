@@ -3,7 +3,8 @@
   <div>
     <v-dialog :model-value="dialog" width="500">
       <template #activator="{ props }">
-        <v-btn rounded="lg"
+        <v-btn
+          rounded="lg"
           variant="tonal"
           bottom
           right
@@ -40,7 +41,8 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg"
+          <v-btn
+            rounded="lg"
             variant="tonal"
             :disabled="!classInfo.name"
             color="primary"
@@ -93,7 +95,7 @@
           </v-img>
 
           <v-card-title class="text-primary">
-            {{ item.name }} ({{ item.public ? "공개" : "비공개" }})
+            {{ item.name }} ({{ item.public ? '공개' : '비공개' }})
           </v-card-title>
           <v-card-subtitle>{{ item.creator }}</v-card-subtitle>
           <v-card-text>{{ item.description }}</v-card-text>
@@ -104,67 +106,67 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const userInfo = User();
-const classes = ref<any>([]);
+const userInfo = User()
+const classes = ref<any>([])
 const classInfo = ref<any>({
-  name: "",
-  description: "",
-  image: "",
-  creator: "",
-  id: "",
-  uid: "",
-  photoURL: "",
+  name: '',
+  description: '',
+  image: '',
+  creator: '',
+  id: '',
+  uid: '',
+  photoURL: '',
   public: true,
-  users: [],
-});
-const dialog = ref<boolean>(false);
-const steps = ref<number>(1);
+  users: []
+})
+const dialog = ref<boolean>(false)
+const steps = ref<number>(1)
 
 onBeforeMount(() =>
   $db
-    .ref("classes")
-    .on("child_added", async (s: any) => classes.value.push(await s.val()))
-);
+    .ref('classes')
+    .on('child_added', async (s: any) => classes.value.push(await s.val()))
+)
 
-const filterUsers = (e: any) => e.uid === userInfo.value.uid;
+const filterUsers = (e: any) => e.uid === userInfo.value.uid
 
 const Make = () => {
-  dialog.value = false;
+  dialog.value = false
 
-  const { displayName, uid, photoURL } = userInfo.value;
-  const { name } = classInfo.value;
+  const { displayName, uid, photoURL } = userInfo.value
+  const { name } = classInfo.value
 
   classInfo.value = {
     ...classInfo.value,
     creator: displayName,
     id: uid + name,
     uid,
-    photoURL,
-  };
+    photoURL
+  }
 
   $db
-    .ref("classes")
+    .ref('classes')
     .child(uid + name)
-    .set(classInfo.value);
+    .set(classInfo.value)
 
   classInfo.value = {
-    name: "",
-    description: "",
-    image: "",
-    creator: "",
-    id: "",
-    uid: "",
-    photoURL: "",
+    name: '',
+    description: '',
+    image: '',
+    creator: '',
+    id: '',
+    uid: '',
+    photoURL: '',
     public: true,
-    users: [],
-  };
-  dialog.value = false;
-  steps.value = 1;
-};
+    users: []
+  }
+  dialog.value = false
+  steps.value = 1
+}
 
 useHead({
-  title: "알림판 - LCW",
-});
+  title: '알림판 - LCW'
+})
 </script>
