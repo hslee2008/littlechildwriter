@@ -109,7 +109,7 @@ const list = [
   'https://i.pinimg.com/originals/1b/01/27/1b01274ac5ed6f2a117ba4754c0f8755.jpg',
   './background.avif'
 ]
-const image = ref<string>(list[Math.floor(Math.random() * list.length)])
+const image = ref<string>('./background.avif')
 
 onBeforeMount(async () => {
   $db

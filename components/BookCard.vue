@@ -2,12 +2,12 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
   <v-lazy>
-    <v-row class="row" style="margin: 15px">
+    <v-row class="row d-flex justify-center" style="margin: 5px">
       <v-card
         v-for="(item, i) in items"
         :key="i"
         :width="mobile ? 150 : 200"
-        class="mx-auto my-5 elevation-0"
+        class="my-4 mx-2 elevation-0"
         color="#23262e"
       >
         <v-card
@@ -15,7 +15,7 @@
           color="#23262e"
           class="elevation-0"
         >
-          <v-img :src="item.image" :lazy-src="item.image" class="rounded-md">
+          <v-img :src="item.image" :lazy-src="item.image" class="rounded">
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey lighten-5" />

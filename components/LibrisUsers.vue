@@ -11,13 +11,13 @@
     >
       <template #prepend>
         {{ i + 1 }}등
-        <v-avatar color="grey-lighten-1" class="ml-3">
+        <v-avatar size="45" color="grey-lighten-1" class="ml-3">
           <UserPhoto :src="lbt[i]?.photoURL" />
         </v-avatar>
       </template>
 
       <template #append>
-        <v-avatar>
+        <v-avatar size="45">
           <v-icon :color="item.status === 'online' ? 'primary' : 'grey'">
             mdi-account-{{ item.status === "online" ? "check" : "remove" }}
           </v-icon>

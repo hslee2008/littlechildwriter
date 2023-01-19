@@ -27,7 +27,7 @@
           color="#23262e"
         >
           <NuxtLink :to="`/user/${message.uid}`" class="ma-auto ml-2">
-            <v-avatar size="40">
+            <v-avatar size="50">
               <UserPhoto :src="message?.photoURL" />
             </v-avatar>
           </NuxtLink>
@@ -151,7 +151,7 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from 'perspective-api-client'
+import Perspective from 'perspective-api-client';
 
 const { $db } = useNuxtApp()
 

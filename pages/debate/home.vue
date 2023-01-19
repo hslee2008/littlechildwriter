@@ -20,7 +20,7 @@
         :to="`/debate/topic/${item.time}`"
       >
         <template #prepend>
-          <v-avatar> <UserPhoto :src="item?.photoURL" /></v-avatar>
+          <v-avatar size="45"> <UserPhoto :src="item?.photoURL" /></v-avatar>
         </template>
 
         <v-list-item-title>{{ item.topic }}</v-list-item-title>

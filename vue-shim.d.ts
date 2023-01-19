@@ -1,6 +1,6 @@
 import Vue from "vue";
 
-declare module "ger";
+declare module "perspective-api-client";
 declare module "*.vue" {
   export default Vue;
 }

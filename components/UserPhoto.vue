@@ -1,5 +1,5 @@
 <template>
-  <v-avatar size="50">
+  <v-avatar size="45">
     <v-img v-if="src" :src="src" alt="User Photo" />
     <v-img
       v-else

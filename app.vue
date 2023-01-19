@@ -21,14 +21,15 @@
         </template>
 
         <NuxtLink to="/" class="ml-2">
-          <v-avatar size="30" density="compact" image="/icon.png" />
+          <v-avatar size="35" image="/icon.png" />
         </NuxtLink>
 
         <v-spacer />
 
         <div v-if="!$route.path.startsWith('/class')">
           <v-slide-x-transition>
-            <v-btn rounded="lg"
+            <v-btn
+              rounded="lg"
               v-if="$route.path !== '/book/post' && userInfo.uid"
               icon
               to="/book/post"
@@ -39,7 +40,7 @@
 
           <v-dialog
             v-if="userInfo.uid"
-            :model-value="notifOverlay"
+            v-model="notifOverlay"
             width="700"
             activator="#notif"
             scrollable
@@ -48,10 +49,8 @@
               <v-btn rounded="lg" icon v-bind="props" color="#23262E">
                 <v-badge
                   id="notif"
-                  overlap
-                  left
+                  color="primary"
                   :content="notif.length"
-                  :value="notif.length"
                   class="text-amber"
                 >
                   <v-icon>
@@ -88,7 +87,12 @@
 
               <v-card-actions>
                 <v-spacer />
-                <v-btn rounded="lg" variant="tonal" text @click="clearEverything">
+                <v-btn
+                  rounded="lg"
+                  variant="tonal"
+                  text
+                  @click="clearEverything"
+                >
                   비우기 <v-icon right> mdi-notification-clear-all </v-icon>
                 </v-btn>
               </v-card-actions>
@@ -109,7 +113,7 @@
             </template>
 
             <v-card class="d-flex pa-3 text-center rounded-0">
-              <v-avatar size="45" class="ma-auto">
+              <v-avatar size="35" class="ma-auto">
                 <v-img alt="User Avatar" :src="userInfo.photoURL" />
               </v-avatar>
 
@@ -119,7 +123,7 @@
               </div>
             </v-card>
 
-            <v-list nav expand>
+            <v-list nav>
               <v-list-item to="/account/account">
                 <v-list-item-title>
                   <v-icon start>mdi-cog-outline</v-icon> 설정
@@ -149,7 +153,6 @@
       <v-navigation-drawer
         :model-value="drawer"
         floating
-        rounded
         mobile-breakpoint="400"
         color="#23262E"
       >

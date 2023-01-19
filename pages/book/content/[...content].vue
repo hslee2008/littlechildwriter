@@ -10,14 +10,11 @@
       width="100%"
       height="100%"
     />
-    <v-btn rounded="lg"
+    <v-btn
+      rounded="lg"
       v-if="iframe"
-      variant="tonal"
-      bottom
-      right
-      fixed
       color="primary"
-      class="zmax"
+      class="zmax fab"
       @click="iframe = false"
     >
       닫기
@@ -56,7 +53,7 @@
                 }`"
               >
                 <template #prepend>
-                  <v-avatar size="40">
+                  <v-avatar size="45">
                     <v-img
                       src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
                       alt="aladdin"
@@ -73,7 +70,7 @@
                 }&domain=all`"
               >
                 <template #prepend>
-                  <v-avatar size="40">
+                  <v-avatar size="45">
                     <v-img
                       src="https://image.yes24.com/sysimage/renew/gnb/yes24.ico"
                       alt="yes24"
@@ -90,7 +87,7 @@
                 }&i=stripbooks&linkCode=qs`"
               >
                 <template #prepend>
-                  <v-avatar size="40">
+                  <v-avatar size="45">
                     <v-img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
                       alt="amazon"
@@ -107,7 +104,7 @@
                 }&collection=kyobo_new`"
               >
                 <template #prepend>
-                  <v-avatar size="40">
+                  <v-avatar size="45">
                     <v-img
                       src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/favicon/apple-touch-icon-144x144-precomposed.png"
                       alt="kyobo"
@@ -122,7 +119,7 @@
                 :href="`https://books.google.co.kr/books?id=${otherInfo?.id}`"
               >
                 <template #prepend>
-                  <v-avatar size="40">
+                  <v-avatar size="45">
                     <v-img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjzC2JyZDZ_RaWf0qp11K0lcvB6b6kYNMoqtZAQ9hiPZ4cTIOB"
                       alt="google"
@@ -184,7 +181,8 @@
 
     <div class="text-center my-10">
       <div v-if="userInfo.uid === post.uid">
-        <v-btn rounded="lg"
+        <v-btn
+          rounded="lg"
           variant="tonal"
           fab
           dark
@@ -195,7 +193,8 @@
         >
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn rounded="lg"
+        <v-btn
+          rounded="lg"
           variant="tonal"
           fab
           dark
@@ -248,11 +247,12 @@
                 :rules="[endWithSchool]"
                 class="mx-2"
               />
-              <v-btn rounded="lg"
+              <v-btn
+                rounded="lg"
                 ref="search"
                 variant="tonal"
                 icon="mdi-magnify"
-                class="ma-auto elevation-0"
+                class="elevation-0"
                 @click="schoolBookSearch"
               />
             </div>
@@ -312,33 +312,39 @@
       </v-btn>
       <v-menu v-if="post.isbn" offset-y>
         <template #activator="{ props }">
-          <v-btn rounded="lg"
+          <v-btn
+            rounded="lg"
             icon="mdi-dots-vertical"
             v-bind="props"
             cols="1"
             class="mx-1"
             color="#23262E"
+            flat
           />
         </template>
 
         <v-card>
-          <v-btn rounded="lg" variant="tonal" text @click="iframe = true">
+          <v-btn rounded="lg" variant="plain" text @click="iframe = true">
             <v-icon start> mdi-file-find </v-icon> 미리보기
           </v-btn>
           <v-dialog v-if="post.categories" width="700">
             <template #activator="{ props }">
-              <v-btn rounded="lg" variant="tonal" text v-bind="props">
+              <v-btn rounded="lg" variant="plain" text v-bind="props">
                 <v-icon start> mdi-shape </v-icon> 카테고리
               </v-btn>
             </template>
 
             <v-card>
+              <v-card-title class="text-center">
+                {{ post.title }} 카테고리
+              </v-card-title>
+
               <v-card-text>
                 <v-chip
                   v-for="tag in post.categories"
                   :key="tag"
                   label
-                  class="ma-2 d-block"
+                  class="ma-2 d-block text-center pa-1"
                 >
                   #{{ tag }}
                 </v-chip>
@@ -347,7 +353,7 @@
           </v-dialog>
           <v-dialog v-if="post.isbn" width="700">
             <template #activator="{ props }">
-              <v-btn rounded="lg" variant="tonal" text v-bind="props">
+              <v-btn rounded="lg" variant="plain" text v-bind="props">
                 <v-icon start> mdi-book-information-variant </v-icon> 정보
               </v-btn>
             </template>
@@ -744,6 +750,12 @@ export default {
 
 .pointer {
   cursor: pointer;
+}
+
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 
 @media screen and (max-width: 605px) {

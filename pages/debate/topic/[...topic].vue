@@ -6,7 +6,7 @@
       color="#23262e"
       :to="`/user/${content.uid}`"
     >
-      <v-avatar class="my-auto ml-2">
+      <v-avatar size="45" class="my-auto ml-2">
         <UserPhoto :src="content?.photoURL" />
       </v-avatar>
       <div>
@@ -299,7 +299,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()

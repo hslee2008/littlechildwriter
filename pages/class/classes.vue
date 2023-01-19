@@ -87,7 +87,7 @@
           :to="`/class/${item.id}`"
         >
           <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">
-            <v-avatar class="ma-3">
+            <v-avatar size="45" class="ma-3">
               <UserPhoto :src="item?.photoURL" />
             </v-avatar>
           </v-img>

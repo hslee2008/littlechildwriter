@@ -9,7 +9,7 @@
         color="#23262e"
         :to="`/user/${content.uid}`"
       >
-        <v-avatar class="my-auto ml-2">
+        <v-avatar size="45" class="my-auto ml-2">
           <UserPhoto :src="content?.photoURL" />
         </v-avatar>
         <div>
