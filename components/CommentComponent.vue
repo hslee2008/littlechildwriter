@@ -13,18 +13,18 @@
       @click:append-inner="Comment"
     />
 
-    <v-list v-if="comments.length > 0" dense clipped nav bg-color="#23262e">
+    <v-list v-if="comments.length > 0" dense clipped nav :bg-color="themeColor()">
       <v-list-item
         v-for="(message, i) in comments"
         :key="message.time"
         class="my-3 d-inline"
-        bg-color="#23262e"
+        :bg-color="themeColor()"
       >
         <v-card
           rounded
           width="100%"
           class="d-flex mr-5 rounded-lg"
-          color="#23262e"
+          :color="themeColor()"
         >
           <NuxtLink :to="`/user/${message.uid}`" class="ma-auto ml-2">
             <v-avatar size="50">
@@ -124,7 +124,7 @@
       <v-card
         v-if="comments.length === 0 && !parent"
         class="text-center"
-        color="#23262e"
+        :color="themeColor()"
         flat
       >
         <v-card-text>댓글이 없습니다.</v-card-text>

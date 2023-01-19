@@ -113,6 +113,12 @@ export default defineNuxtConfig({
     shim: false
   },
 
+  runtimeConfig: {
+    public: {
+      baseURL: process.env.BASE_URL || 'https://littlechildwriter.web.app/beta/'
+    }
+  },
+
   ssr: false,
 
   css: [

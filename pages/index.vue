@@ -75,7 +75,7 @@
       </v-window-item>
     </v-window>
 
-    <v-card class="mx-5 my-10 elevation-0" color="#23262e">
+    <v-card class="mx-5 my-10 elevation-0" :color="themeColor()">
       <v-card-text>
         <h2>명예의 전당</h2>
         <LibrisUsers :limit="true" />

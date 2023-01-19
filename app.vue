@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background-color: #23262e">
+  <v-app :v-theme="theme">
     <NuxtLayout>
       <NuxtLoadingIndicator />
 
@@ -14,7 +14,7 @@
         clipped-left
         class="elevation-0 pl-3 pr-3"
         :collapse="$route.path.startsWith('/class')"
-        color="#23262E"
+        :color="themeColor()"
       >
         <template #prepend>
           <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -46,7 +46,7 @@
             scrollable
           >
             <template #activator="{ props }">
-              <v-btn rounded="lg" icon v-bind="props" color="#23262E">
+              <v-btn rounded="lg" icon v-bind="props" :color="themeColor()">
                 <v-badge
                   id="notif"
                   color="primary"
@@ -64,7 +64,7 @@
               </v-btn>
             </template>
 
-            <v-card bg-color="#23262E">
+            <v-card :bg-color="themeColor()">
               <v-list v-if="notif.length > 0" nav>
                 <v-list-item
                   v-for="(d, i) in notif"
@@ -113,7 +113,7 @@
             </template>
 
             <v-card class="d-flex pa-3 text-center rounded-0">
-              <v-avatar size="35" class="ma-auto">
+              <v-avatar size="45" class="ma-auto">
                 <v-img alt="User Avatar" :src="userInfo.photoURL" />
               </v-avatar>
 
@@ -123,25 +123,35 @@
               </div>
             </v-card>
 
-            <v-list nav>
-              <v-list-item to="/account/account">
-                <v-list-item-title>
-                  <v-icon start>mdi-cog-outline</v-icon> 설정
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item :to="`/user/${userInfo.uid}`">
-                <v-list-item-title>
-                  <v-icon start>mdi-account-circle</v-icon> 프로필
-                </v-list-item-title>
-              </v-list-item>
+            <v-list nav class="rounded-0 elevation-0">
+              <v-list-item
+                to="/account/account"
+                title="설정"
+                prepend-icon="mdi-cog-outline"
+              />
+              <v-list-item
+                :to="`/user/${userInfo.uid}`"
+                title="프로필"
+                prepend-icon="mdi-account-circle"
+              />
 
               <v-divider />
 
-              <v-list-item @click="logout">
-                <v-list-item-title>
-                  <v-icon start>mdi-logout</v-icon> 로그아웃
-                </v-list-item-title>
-              </v-list-item>
+              <v-list-item
+                @click="logout"
+                title="로그아웃"
+                prepend-icon="mdi-logout"
+              />
+
+              <v-divider />
+
+              <v-list-item
+                @click="changeTheme"
+                :title="isDark() ? '라이트 모드로 변경' : '다크 모드로 변경'"
+                :prepend-icon="
+                  isDark() ? 'mdi-white-balance-sunny' : 'mdi-weather-night'
+                "
+              />
             </v-list>
           </v-menu>
           <v-btn rounded="lg" v-else variant="tonal" to="/account/login" icon>
@@ -154,7 +164,7 @@
         :model-value="drawer"
         floating
         mobile-breakpoint="400"
-        color="#23262E"
+        :color="themeColor()"
       >
         <v-list nav expand>
           <v-list-item
@@ -241,13 +251,14 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify';
 
 const { $db, $auth } = useNuxtApp()
-const router = useRouter()
 const { mobile } = useDisplay()
-const userInfo = User()
+const theme = useTheme()
 
+const router = useRouter()
+const userInfo = User()
 const notif = ref<any>([])
 const notifOverlay = ref<boolean>(false)
 const drawer = ref<boolean>(!mobile.value)
@@ -266,6 +277,8 @@ useAuth((u: any) => {
       $db.ref(`/users/${userInfo.value.uid}/status`).set('online')
     }
   })
+
+  theme.global.name.value = localStorage.getItem('theme') || 'dark'
 })
 
 const clearEverything = () => {
@@ -276,6 +289,11 @@ const clearEverything = () => {
 const load = (link: string) => {
   notifOverlay.value = false
   router.push(link)
+}
+
+const changeTheme = () => {
+  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+  localStorage.setItem('theme', theme.global.name.value)
 }
 
 const logout = () => {

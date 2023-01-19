@@ -4,12 +4,12 @@
 
     <br />
 
-    <v-list v-if="items.length > 0" :model-value="items" bg-color="#23262e" nav>
+    <v-list v-if="items.length > 0" :model-value="items" :bg-color="themeColor()" nav>
       <v-list-item
         v-for="(item, i) in items"
         :key="item.time"
         :to="`/book/content/${item.time}`"
-        bg-color="#23262E"
+        :bg-color="themeColor()"
       >
         <template #append>
           <v-btn
@@ -22,7 +22,7 @@
         <v-list-item-title> {{ item.title }} </v-list-item-title>
       </v-list-item>
     </v-list>
-    <v-card v-else color="#23262e" class="elevation-0">
+    <v-card v-else :color="themeColor()" class="elevation-0">
       <v-card-text> 책갈피가 없습니다. </v-card-text>
     </v-card>
   </div>

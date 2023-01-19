@@ -31,7 +31,7 @@
       </div>
     </v-row>
 
-    <v-card v-if="post.type === '책'" color="#23262e">
+    <v-card v-if="post.type === '책'" :color="themeColor()">
       <v-card-title>책 업로드</v-card-title>
       <v-card-text>
         <v-text-field
@@ -84,7 +84,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card v-else-if="post.type === '링크'" color="#23262e">
+    <v-card v-else-if="post.type === '링크'" :color="themeColor()">
       <v-card-title>링크 업로드</v-card-title>
       <v-card-text>
         <v-text-field
@@ -110,7 +110,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card v-else-if="post.type.startsWith('파일')" color="#23262e">
+    <v-card v-else-if="post.type.startsWith('파일')" :color="themeColor()">
       <v-radio-group v-model="post.type">
         <v-radio key="숙제" label="파일 (숙제로)" value="파일 (숙제로)" />
         <v-radio key="파일" label="파일" value="파일" />
@@ -151,7 +151,7 @@
 
       <v-btn rounded="lg" variant="tonal" text @click="Upload"> 파일 게시 </v-btn>
     </v-card>
-    <v-card v-else-if="post.type === '글 제출 (학생)'" color="#23262e">
+    <v-card v-else-if="post.type === '글 제출 (학생)'" :color="themeColor()">
       <v-card-title>숙제 업로드</v-card-title>
       <v-card-text>
         <v-text-field

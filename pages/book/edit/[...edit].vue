@@ -1,5 +1,5 @@
 <template>
-  <v-card color="#23262e">
+  <v-card :color="themeColor()">
     <v-card-text>
       <v-rating
         :model-value="post.rating"

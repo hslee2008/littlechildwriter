@@ -75,7 +75,7 @@
         v-for="item in classes"
         :key="item.name"
         class="my-3 elevation-0"
-        color="#23262e"
+        :color="themeColor()"
       >
         <v-card
           v-if="
@@ -83,7 +83,7 @@
             item.uid === userInfo.uid ||
             Object.values(item.users).filter(filterUsers).length > 0
           "
-          color="#23262e"
+          :color="themeColor()"
           :to="`/class/${item.id}`"
         >
           <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">

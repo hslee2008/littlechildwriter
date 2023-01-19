@@ -13,7 +13,7 @@
       />
     </div>
 
-    <v-list nav bg-color="#23262e">
+    <v-list nav :bg-color="themeColor()">
       <v-list-item
         v-for="(item, i) in list"
         :key="item.time"

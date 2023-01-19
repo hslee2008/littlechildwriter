@@ -1,11 +1,11 @@
 <template>
-  <v-tabs v-model="tab" show-arrows center-active grow bg-color="#23262e">
+  <v-tabs v-model="tab" show-arrows center-active grow :bg-color="themeColor()">
     <v-tab :value="0"> 홈 </v-tab>
     <v-tab :value="1"> 글 쓰기 </v-tab>
     <v-tab v-if="classInfo.uid === userInfo.uid" :value="2"> 설정 </v-tab>
   </v-tabs>
 
-  <v-window v-model="tab" class="py-5" color="#23262e">
+  <v-window v-model="tab" class="py-5" :color="themeColor()">
     <v-window-item :value="0">
       <DisplayCards :class-info="classInfo" />
     </v-window-item>

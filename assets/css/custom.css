@@ -15,3 +15,7 @@
 .v-card-subtitle > a {
   color: #159ecb !important;
 }
+
+.c-transparent {
+  background-color: transparent !important;
+}

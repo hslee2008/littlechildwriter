@@ -2,11 +2,11 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div>
-    <v-card color="#23262e" class="elevation-0">
+    <v-card :color="themeColor()" class="elevation-0">
       <h1>{{ content?.topic }}</h1>
       <v-card
         class="d-flex elevation-0"
-        color="#23262e"
+        :color="themeColor()"
         :to="`/user/${content.uid}`"
       >
         <v-avatar size="45" class="my-auto ml-2">

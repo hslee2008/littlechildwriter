@@ -36,7 +36,7 @@
       </div>
     </v-row>
 
-    <v-tabs v-model="tab" show-arrows center-active grow bg-color="#23262e">
+    <v-tabs v-model="tab" show-arrows center-active grow :bg-color="themeColor()">
       <v-tab> 홈 </v-tab>
       <v-tab> 게시물 </v-tab>
       <v-tab> 구독자 </v-tab>
@@ -44,12 +44,12 @@
       <v-tab v-if="userInfo.uid === uid"> 비공개 글 </v-tab>
     </v-tabs>
 
-    <v-window v-model="tab" class="py-5" color="#23262e">
+    <v-window v-model="tab" class="py-5" :color="themeColor()">
       <v-window-item :value="0">
         <v-card
           v-if="books.length > 0"
           :class="`elevation-0 d-${mobile ? 'block' : 'flex'}`"
-          color="#23262e"
+          :color="themeColor()"
           :to="`/book/content/${(chosenBookData || books[0]).time}`"
         >
           <template #prepend>
@@ -86,7 +86,7 @@
       </v-window-item>
 
       <v-window-item :value="2">
-        <v-list nav bg-color="#23262e">
+        <v-list nav :bg-color="themeColor()">
           <v-list-item
             v-for="(item, UID) in subscription"
             v-show="item"
@@ -199,7 +199,7 @@
           :items="privateBooks"
           :simple="true"
         />
-        <v-card v-else color="#23262e" class="elevation-0">
+        <v-card v-else :color="themeColor()" class="elevation-0">
           <v-card-text>비공개 글이 없습니다.</v-card-text>
         </v-card>
       </v-window-item>

@@ -8,14 +8,14 @@
         :key="i"
         :width="mobile ? 150 : 200"
         class="my-4 mx-2 elevation-0"
-        color="#23262e"
+        :color="themeColor()"
       >
         <v-card
           :to="`/book/content/${item.time}`"
-          color="#23262e"
+          :color="themeColor()"
           class="elevation-0"
         >
-          <v-img :src="item.image" :lazy-src="item.image" class="rounded">
+          <v-img :src="item.image" :lazy-src="item.image" class="rounded" cover>
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey lighten-5" />
@@ -39,7 +39,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card v-show="!simple" color="#23262e" class="elevation-0">
+        <v-card v-show="!simple" :color="themeColor()" class="elevation-0">
           <v-card-actions v-if="userInfo.uid">
             <v-btn
               rounded="lg"

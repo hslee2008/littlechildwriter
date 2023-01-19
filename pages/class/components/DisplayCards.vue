@@ -7,26 +7,24 @@
       {{ classInfo.name }}
     </h1>
 
-    <v-expansion-panels focusable>
+    <v-expansion-panels focusable class="elevation-0">
       <v-expansion-panel
         v-for="(category, title) in classInfo.contents"
         :key="title"
-        bg-color="#23262e"
+        :bg-color="themeColor()"
+        class="elevation-0"
       >
         <v-expansion-panel-title
-          :style="`background-color: ${
-            theme.global.name.value === 'dark' ? '#1e1e1e' : 'white'
-          } !important`"
+          :style="`background-color: ${themeColor()} !important`"
         >
-          {{ title.toString().replaceAll("_", " - ") }}
+          {{ title.toString().replaceAll('_', ' - ') }}
         </v-expansion-panel-title>
 
         <v-expansion-panel-text
           v-for="(item, i) in category"
           :key="item.title"
-          :style="`background-color: ${
-            theme.global.name.value ? '#23262e' : 'white'
-          } !important`"
+          :style="`background-color: ${themeColor()} !important`"
+          class="elevation-0"
         >
           <v-card
             v-if="item.type === '책'"
@@ -228,16 +226,16 @@
 </template>
 
 <script setup>
-import { useTheme } from "vuetify";
-import Actions from "./Actions.vue";
+import { useTheme } from 'vuetify'
+import Actions from './Actions.vue'
 
-const theme = useTheme();
-const userInfo = User();
+const theme = useTheme()
+const userInfo = User()
 
 defineProps({
   classInfo: {
     type: Object,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 </script>

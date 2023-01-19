@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="d-flex" color="#23262e" :to="`/user/${threadData.uid}`">
+    <v-card class="d-flex" :color="themeColor()" :to="`/user/${threadData.uid}`">
       <v-avatar size="45" class="my-auto ml-2">
         <UserPhoto :src="threadData?.photoURL" />
       </v-avatar>

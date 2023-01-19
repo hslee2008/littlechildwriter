@@ -20,7 +20,7 @@
       닫기
     </v-btn>
 
-    <v-card class="my-3 elevation-0" color="#23262e">
+    <v-card class="my-3 elevation-0" :color="themeColor()">
       <div class="cardy">
         <div class="ma-auto">
           <v-dialog :model-value="sheet" inset scrollable>
@@ -318,7 +318,7 @@
             v-bind="props"
             cols="1"
             class="mx-1"
-            color="#23262E"
+            :color="themeColor()"
             flat
           />
         </template>
@@ -434,7 +434,7 @@
           v-for="(item, i) in suggested"
           :key="i"
           class="mx-auto my-5 elevation-0"
-          color="#23262e"
+          :color="themeColor()"
           :href="item.infoLink"
           :width="width < 1264 ? 150 : 210"
         >
@@ -449,7 +449,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { width } = useDisplay()
