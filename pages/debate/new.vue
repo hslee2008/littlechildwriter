@@ -20,7 +20,7 @@
       />
     </v-col>
 
-    <v-btn variant="tonal" text primary @click="upload">
+    <v-btn rounded="lg" variant="tonal" text primary @click="upload">
       <v-icon>mdi-plus</v-icon>
       게시
     </v-btn>

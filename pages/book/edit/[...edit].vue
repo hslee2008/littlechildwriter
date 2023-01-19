@@ -34,7 +34,7 @@
 
       <v-spacer />
 
-      <v-btn
+      <v-btn rounded="lg"
         variant="tonal"
         color="primary"
         class="elevation-0 update"

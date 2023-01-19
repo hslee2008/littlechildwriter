@@ -11,7 +11,7 @@
           <v-card-title>{{ userInfo.displayName }}</v-card-title>
           <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
           <v-card-action>
-            <v-btn
+            <v-btn rounded="lg"
               variant="tonal"
               text
               color="primary"
@@ -99,11 +99,11 @@
         <v-divider />
 
         <v-card-actions>
-          <v-btn variant="tonal" color="red" text @click="imageEdit = false">
+          <v-btn rounded="lg" variant="tonal" color="red" text @click="imageEdit = false">
             취소
           </v-btn>
           <v-spacer />
-          <v-btn variant="tonal" color="primary" text @click="save">
+          <v-btn rounded="lg" variant="tonal" color="primary" text @click="save">
             Save
           </v-btn>
         </v-card-actions>
@@ -111,7 +111,7 @@
     </v-dialog>
 
     <v-row justify="center" class="g-10">
-      <v-btn variant="tonal" color="primary" @click="Update">
+      <v-btn rounded="lg" variant="tonal" color="primary" @click="Update">
         <v-icon start> mdi-account </v-icon>
         업데이트
       </v-btn>

@@ -51,7 +51,7 @@
         <v-dialog :model-value="dialog" width="700">
           <template #activator="{ props }">
             <div class="text-center">
-              <v-btn variant="tonal" color="primary" v-bind="props">
+              <v-btn rounded="lg" variant="tonal" color="primary" v-bind="props">
                 <v-icon start>mdi-bookshelf</v-icon> 책 선택
               </v-btn>
             </div>
@@ -73,7 +73,7 @@
 
         <v-spacer />
 
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           :disabled="post.title === ''"
           color="primary"
@@ -99,7 +99,7 @@
         />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           :disabled="post.title === ''"
           color="primary"
@@ -149,7 +149,7 @@
         </template>
       </v-file-input>
 
-      <v-btn variant="tonal" text @click="Upload"> 파일 게시 </v-btn>
+      <v-btn rounded="lg" variant="tonal" text @click="Upload"> 파일 게시 </v-btn>
     </v-card>
     <v-card v-else-if="post.type === '글 제출 (학생)'" color="#23262e">
       <v-card-title>숙제 업로드</v-card-title>
@@ -162,7 +162,7 @@
         <v-textarea :model-value="post.content" label="내용" />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           :disabled="post.title === ''"
           color="primary"

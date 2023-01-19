@@ -48,7 +48,7 @@
             @keydown.enter="Update(i)"
           >
             <template #append>
-              <v-btn
+              <v-btn rounded="lg"
                 variant="tonal"
                 color="error"
                 text
@@ -58,7 +58,7 @@
               >
                 취소
               </v-btn>
-              <v-btn variant="tonal" color="primary" text @click="Update(i)">
+              <v-btn rounded="lg" variant="tonal" color="primary" text @click="Update(i)">
                 저장
               </v-btn>
             </template>
@@ -67,7 +67,7 @@
           <v-spacer />
 
           <v-card-actions v-if="!message.edit">
-            <v-btn
+            <v-btn rounded="lg"
               v-if="(message.love || []).length > 0"
               variant="tonal"
               icon
@@ -81,7 +81,7 @@
             </v-btn>
             <v-menu offset-y>
               <template #activator="{ props }">
-                <v-btn icon v-bind="props" cols="1">
+                <v-btn rounded="lg" icon v-bind="props" cols="1">
                   <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
               </template>
@@ -102,7 +102,7 @@
 
                 <v-list-item v-if="message.uid !== userInfo.uid">
                   <v-col cols="2">
-                    <v-btn
+                    <v-btn rounded="lg"
                       variant="tonal"
                       icon
                       :color="
@@ -136,7 +136,7 @@
       수정해주세요.
 
       <template #action="{ props }">
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           color="pink"
           text

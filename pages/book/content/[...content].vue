@@ -10,7 +10,7 @@
       width="100%"
       height="100%"
     />
-    <v-btn
+    <v-btn rounded="lg"
       v-if="iframe"
       variant="tonal"
       bottom
@@ -184,7 +184,7 @@
 
     <div class="text-center my-10">
       <div v-if="userInfo.uid === post.uid">
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           fab
           dark
@@ -195,7 +195,7 @@
         >
           <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           fab
           dark
@@ -223,7 +223,7 @@
 
       <v-dialog width="700">
         <template #activator="{ props }">
-          <v-btn variant="tonal" text v-bind="props" class="mx-1">
+          <v-btn rounded="lg" variant="tonal" text v-bind="props" class="mx-1">
             <v-icon start> mdi-town-hall </v-icon>
             학교 도서관
           </v-btn>
@@ -248,7 +248,7 @@
                 :rules="[endWithSchool]"
                 class="mx-2"
               />
-              <v-btn
+              <v-btn rounded="lg"
                 ref="search"
                 variant="tonal"
                 icon="mdi-magnify"
@@ -306,13 +306,13 @@
           <v-card-text v-else>{{ school.resultString }}</v-card-text>
         </v-card>
       </v-dialog>
-      <v-btn variant="tonal" text class="mx-1" @click="share">
+      <v-btn rounded="lg" variant="tonal" text class="mx-1" @click="share">
         <v-icon start> mdi-share-variant </v-icon>
         공유
       </v-btn>
       <v-menu v-if="post.isbn" offset-y>
         <template #activator="{ props }">
-          <v-btn
+          <v-btn rounded="lg"
             icon="mdi-dots-vertical"
             v-bind="props"
             cols="1"
@@ -322,12 +322,12 @@
         </template>
 
         <v-card>
-          <v-btn variant="tonal" text @click="iframe = true">
+          <v-btn rounded="lg" variant="tonal" text @click="iframe = true">
             <v-icon start> mdi-file-find </v-icon> 미리보기
           </v-btn>
           <v-dialog v-if="post.categories" width="700">
             <template #activator="{ props }">
-              <v-btn variant="tonal" text v-bind="props">
+              <v-btn rounded="lg" variant="tonal" text v-bind="props">
                 <v-icon start> mdi-shape </v-icon> 카테고리
               </v-btn>
             </template>
@@ -347,7 +347,7 @@
           </v-dialog>
           <v-dialog v-if="post.isbn" width="700">
             <template #activator="{ props }">
-              <v-btn variant="tonal" text v-bind="props">
+              <v-btn rounded="lg" variant="tonal" text v-bind="props">
                 <v-icon start> mdi-book-information-variant </v-icon> 정보
               </v-btn>
             </template>

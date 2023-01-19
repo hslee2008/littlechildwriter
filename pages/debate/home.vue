@@ -3,12 +3,12 @@
     <div class="d-flex">
       <h1>토론 광장</h1>
       <v-btn
+        rounded="lg"
         variant="tonal"
         icon="mdi-plus"
         size="small"
         color="primary"
         class="ml-3"
-        rounded
         to="./new"
       />
     </div>
@@ -34,6 +34,7 @@
 
           <v-list-item-action v-if="item.uid == userInfo.uid">
             <v-btn
+              rounded="lg"
               id="btn"
               icon
               cols="1"

@@ -7,11 +7,11 @@
         </v-btn>
       </template>
       <v-list>
-        <v-btnt-item @click="DeleteContent(title, i)">
+        <v-list-item @click="DeleteContent(title, i)">
           <v-list-item-title>
             <v-icon start> mdi-trash-can </v-icon> 삭제
           </v-list-item-title>
-        </v-btnt-item>
+        </v-list-item>
       </v-list>
     </v-menu>
   </v-card-actions>

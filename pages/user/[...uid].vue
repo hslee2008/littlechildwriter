@@ -15,7 +15,7 @@
       </div>
 
       <div class="ml-auto my-auto float-right mr-5">
-        <v-btn
+        <v-btn rounded="lg"
           v-if="userInfo.uid !== uid"
           variant="tonal"
           color="red"
@@ -24,7 +24,7 @@
         >
           {{ subscribed ? '구독 취소' : '구독' }}
         </v-btn>
-        <v-btn
+        <v-btn rounded="lg"
           v-else
           variant="tonal"
           color="primary"

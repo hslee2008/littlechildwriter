@@ -12,7 +12,7 @@
           "
           absolute
         >
-          <v-btn variant="tonal" @click="isbn.upload = true">
+          <v-btn rounded="lg" variant="tonal" @click="isbn.upload = true">
             <v-icon class="ma-auto" left> mdi-book-open-page-variant </v-icon>
 
             책 사진 올리기
@@ -65,11 +65,11 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn variant="tonal" text @click="isbn.upload = false">
+          <v-btn rounded="lg" variant="tonal" text @click="isbn.upload = false">
             확인
           </v-btn>
           <v-spacer />
-          <v-btn
+          <v-btn rounded="lg"
             variant="tonal"
             text
             @click="(isbn.upload = false), (post.image = '');"
@@ -115,8 +115,8 @@
                 />
               </div>
               <v-card-actions>
-                <v-btn variant="tonal" @click="showCamera">시작</v-btn>
-                <v-btn variant="tonal" @click="takeISBNVideo">
+                <v-btn rounded="lg" variant="tonal" @click="showCamera">시작</v-btn>
+                <v-btn rounded="lg" variant="tonal" @click="takeISBNVideo">
                   ISBN 바코드 찍기
                 </v-btn>
               </v-card-actions>
@@ -126,7 +126,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="tonal" text @click="isbn.barcode = false">
+          <v-btn rounded="lg" variant="tonal" text @click="isbn.barcode = false">
             취소
           </v-btn>
         </v-card-actions>
@@ -150,12 +150,12 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn variant="tonal" text @click="voiceType">시작</v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="voiceType">시작</v-btn>
           <v-spacer />
-          <v-btn variant="tonal" text color="red" @click="isbn.barcode = false">
+          <v-btn rounded="lg" variant="tonal" text color="red" @click="isbn.barcode = false">
             취소
           </v-btn>
-          <v-btn variant="tonal" text color="primary" @click="saveAudio">
+          <v-btn rounded="lg" variant="tonal" text color="primary" @click="saveAudio">
             확인
           </v-btn>
         </v-card-actions>
@@ -189,7 +189,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="tonal" text @click="isbn.input = false"> 취소 </v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="isbn.input = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -278,7 +278,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="tonal" text @click="isbn.find = false"> 취소 </v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="isbn.find = false"> 취소 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -360,13 +360,13 @@
     </v-card-text>
 
     <v-card-actions class="g-10">
-      <v-btn variant="tonal" color="primary" class="upload" @click="Post">
+      <v-btn rounded="lg" variant="tonal" color="primary" class="upload" @click="Post">
         업로드
       </v-btn>
 
       <v-menu bottom>
         <template #activator="{ props }">
-          <v-btn variant="tonal" elevation="0" class="book" v-bind="props">
+          <v-btn rounded="lg" variant="tonal" elevation="0" class="book" v-bind="props">
             책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
@@ -397,7 +397,7 @@
       제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해주세요.
 
       <template #action="{ attrs }">
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           color="pink"
           text
@@ -412,7 +412,7 @@
       찾을 수 없었습니다.
 
       <template #action="{ attrs }">
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           color="pink"
           text

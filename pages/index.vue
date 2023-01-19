@@ -4,7 +4,7 @@
       <v-col class="d-flex justify-center align-center">
         <div>
           <div class="text-center mb-5 mt-3 button">
-            <v-btn
+            <v-btn rounded="lg"
               v-if="userInfo.uid"
               to="/book/post"
               color="primary"
@@ -12,7 +12,7 @@
             >
               <v-icon start> mdi-pencil </v-icon> 작성하기
             </v-btn>
-            <v-btn v-else to="/account/login" color="primary" min-width="300">
+            <v-btn rounded="lg" v-else to="/account/login" color="primary" min-width="300">
               로그인 <v-icon right> mdi-account </v-icon>
             </v-btn>
           </div>
@@ -31,19 +31,19 @@
           </v-card>
 
           <div class="d-flex justify-center mb-3 mt-5">
-            <v-btn to="/list" class="mx-3">
+            <v-btn rounded="lg" to="/list" class="mx-3">
               글 <v-icon right> mdi-format-list-text </v-icon>
             </v-btn>
-            <v-btn to="/class/classes" class="mx-3">
+            <v-btn rounded="lg" to="/class/classes" class="mx-3">
               알림판
               <v-icon right> mdi-clipboard-multiple </v-icon>
             </v-btn>
           </div>
           <div class="d-flex justify-center">
-            <v-btn to="/debate/home" class="mr-2">
+            <v-btn rounded="lg" to="/debate/home" class="mr-2">
               토론 광장 <v-icon right> mdi-lectern </v-icon>
             </v-btn>
-            <v-btn to="/blog/home">
+            <v-btn rounded="lg" to="/blog/home">
               창작 코너 <v-icon right> mdi-typewriter </v-icon>
             </v-btn>
           </div>
@@ -81,7 +81,7 @@
         <LibrisUsers :limit="true" />
 
         <div class="text-center">
-          <v-btn variant="tonal" to="/libris/libris"> 더보기 </v-btn>
+          <v-btn rounded="lg" variant="tonal" to="/libris/libris"> 더보기 </v-btn>
         </div>
       </v-card-text>
     </v-card>

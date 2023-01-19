@@ -30,16 +30,24 @@
           <v-text-field
             variant="outlined"
             :model-value="password"
-            type="password"
+            :type="eye ? 'text' : 'password'"
             label="암호"
             outlined
             required
             clearable
-            prepend-inner-icon="mdi-key"
             @keyup.enter="onSubmit"
+            prepend-inner-icon="mdi-key"
+            :append-icon="eye ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="eye = !eye"
           />
 
-          <v-btn variant="tonal" color="primary" block @click="onSubmit">
+          <v-btn
+            rounded="lg"
+            variant="tonal"
+            color="primary"
+            width="500"
+            @click="onSubmit"
+          >
             <v-icon start> mdi-account </v-icon>로그인
           </v-btn>
         </v-form>
@@ -49,39 +57,40 @@
 </template>
 
 <script setup script="ts">
-import firebase from "firebase/compat/app";
-import { auth } from "firebaseui";
-import "firebaseui/dist/firebaseui.css";
+import firebase from 'firebase/compat/app'
+import { auth } from 'firebaseui'
+import 'firebaseui/dist/firebaseui.css'
 
-const router = useRouter();
-const email = ref("");
-const password = ref("");
-const ui = new auth.AuthUI(firebase.auth());
+const router = useRouter()
+const email = ref('')
+const password = ref('')
+const eye = ref(false)
+const ui = new auth.AuthUI(firebase.auth())
 
 const onSubmit = () =>
   firebase
     .auth()
     .signInWithEmailAndPassword(email.value, password.value)
-    .then(() => router.push);
+    .then(() => router.push)
 
 onMounted(() =>
-  ui.start("#firebaseui-auth-container", {
-    signInSuccessUrl: "/account/account",
+  ui.start('#firebaseui-auth-container', {
+    signInSuccessUrl: '/account/account',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
       firebase.auth.GithubAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
       firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
-    ],
+      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+    ]
   })
-);
-onUnmounted(() => ui.delete());
+)
+onUnmounted(() => ui.delete())
 
 useHead({
-  title: "로그인 - LCW",
-});
+  title: '로그인 - LCW'
+})
 </script>
 
 <style>

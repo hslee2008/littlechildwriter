@@ -15,8 +15,6 @@
           <v-btn
             variant="tonal"
             icon="mdi-delete"
-            color="#23262e"
-            flat
             @click.prevent.stop="deleteBookmark(item.time, i)"
           />
         </template>
@@ -31,24 +29,24 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const userInfo = User();
-const items = ref<any>([]);
+const userInfo = User()
+const items = ref<any>([])
 
 useAuth((u: any) => {
   $db
     .ref(`/users/${u?.uid}/bookmarks`)
-    .on("child_added", async (s: any) => items.value.push(await s.val()));
-});
+    .on('child_added', async (s: any) => items.value.push(await s.val()))
+})
 
 const deleteBookmark = (time: string, i: number) => {
-  $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove();
-  $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove();
-  items.value.splice(i, 1);
-};
+  $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
+  $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
+  items.value.splice(i, 1)
+}
 
 useHead({
-  title: "책갈피 - LCW",
-});
+  title: '책갈피 - LCW'
+})
 </script>

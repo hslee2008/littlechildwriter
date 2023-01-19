@@ -38,7 +38,7 @@
             label="수업 전체 공개 여부"
             required
           />
-          <v-btn
+          <v-btn rounded="lg"
             variant="tonal"
             color="primary"
             class="mt-5"

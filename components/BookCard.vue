@@ -15,7 +15,7 @@
           color="#23262e"
           class="elevation-0"
         >
-          <v-img :src="item.image" :lazy-src="item.image" class="rounded-lg">
+          <v-img :src="item.image" :lazy-src="item.image" class="rounded-md">
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey lighten-5" />
@@ -41,12 +41,18 @@
 
         <v-card v-show="!simple" color="#23262e" class="elevation-0">
           <v-card-actions v-if="userInfo.uid">
-            <v-btn icon color="primary" @click="Bookmark(item.time, i)">
+            <v-btn
+              rounded="lg"
+              icon
+              color="primary"
+              @click="Bookmark(item.time, i)"
+            >
               <v-icon>
-                mdi-bookmark{{ bookmarked(i) ? "-check" : "-outline" }}
+                mdi-bookmark{{ bookmarked(i) ? '-check' : '-outline' }}
               </v-icon>
             </v-btn>
             <v-btn
+              rounded="lg"
               icon
               :color="(item?.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
               class="mr-2"
@@ -59,6 +65,7 @@
             <v-spacer />
 
             <v-btn
+              rounded="lg"
               v-if="
                 item?.comments?.length ||
                 Object.keys(item?.comments ?? {}).length
@@ -78,6 +85,7 @@
 
         <template #action="{ attrs }">
           <v-btn
+            rounded="lg"
             color="pink"
             text
             v-bind="props"
@@ -92,6 +100,7 @@
 
         <template #action="{ attrs }">
           <v-btn
+            rounded="lg"
             color="pink"
             text
             v-bind="props"
@@ -106,95 +115,98 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
+import { useDisplay } from 'vuetify'
 
-const { $db } = useNuxtApp();
-const { mobile } = useDisplay();
+const { $db } = useNuxtApp()
+const { mobile } = useDisplay()
 
-const userInfo = User();
+const userInfo = User()
+const router = useRouter()
 const props = defineProps({
   items: {
     type: Array as unknown as any[],
-    required: true,
+    required: true
   },
   simple: {
     type: Boolean,
-    default: false,
-  },
-});
-const bookmarkSnackbar = ref<boolean>(false);
-const bookmarkSnackbarDel = ref<boolean>(false);
+    default: false
+  }
+})
+const bookmarkSnackbar = ref<boolean>(false)
+const bookmarkSnackbarDel = ref<boolean>(false)
 const bookmarked = (i: number) => {
   return Object.keys(props.items[i].bookmarks ?? {}).includes(
     userInfo.value.uid
-  );
-};
+  )
+}
 
 const Like = (item: any) => {
   if (item.liked[userInfo.value.uid]) {
-    item.likes--;
-    item.liked[userInfo.value.uid] = false;
+    item.likes--
+    item.liked[userInfo.value.uid] = false
 
-    $db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(false);
-    $db.ref(`/contents/${item.time}/likes`).set(item.likes);
+    $db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(false)
+    $db.ref(`/contents/${item.time}/likes`).set(item.likes)
 
-    Libris(userInfo.value.uid, -0.1);
-    Libris(item.uid, -0.1);
+    Libris(userInfo.value.uid, -0.1)
+    Libris(item.uid, -0.1)
   } else {
-    item.likes++;
+    item.likes++
 
     try {
-      item.liked[userInfo.value.uid] = true;
+      item.liked[userInfo.value.uid] = true
     } catch (e) {
-      console.log(e);
+      console.log(e)
     }
 
-    $db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(true);
-    $db.ref(`/contents/${item.time}/likes`).set(item.likes);
+    $db.ref(`/contents/${item.time}/liked/${userInfo.value.uid}`).set(true)
+    $db.ref(`/contents/${item.time}/likes`).set(item.likes)
 
-    Libris(userInfo.value.uid, 0.1);
-    Libris(item.uid, 0.1);
+    Libris(userInfo.value.uid, 0.1)
+    Libris(item.uid, 0.1)
   }
-};
+}
 
 const Bookmark = (time: string, i: number) => {
   if (bookmarked(i)) {
-    bookmarkSnackbar.value = false;
-    bookmarkSnackbarDel.value = true;
+    bookmarkSnackbar.value = false
+    bookmarkSnackbarDel.value = true
 
-    $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove();
-    $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove();
+    $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
+    $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
 
     // eslint-disable-next-line vue/no-mutating-props
     props.items[i].bookmarks = Object.fromEntries(
       Object.entries(props.items[i].bookmarks ?? {}).filter(
         ([key]) => key !== userInfo.value.uid
       )
-    );
+    )
   } else {
-    const { title, image } = props.items[i];
+    const { title, image } = props.items[i]
 
-    bookmarkSnackbarDel.value = false;
-    bookmarkSnackbar.value = true;
+    bookmarkSnackbarDel.value = false
+    bookmarkSnackbar.value = true
 
     $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).set({
       title,
       image,
-      time,
-    });
-    $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true);
+      time
+    })
+    $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).set(true)
 
     // eslint-disable-next-line vue/no-mutating-props
     props.items[i] = {
       ...props.items[i],
       bookmarks: {
         ...props.items[i].bookmarks,
-        [userInfo.value.uid]: true,
-      },
-    };
-    Libris(userInfo.value.uid, 0.1);
+        [userInfo.value.uid]: true
+      }
+    }
+    Libris(userInfo.value.uid, 0.1)
   }
-};
+
+  router.push('/bookmarks')
+}
 </script>
 
 <style scoped>

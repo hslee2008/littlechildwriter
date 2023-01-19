@@ -3,7 +3,7 @@
   <div>
     <v-dialog :model-value="dialog" width="500">
       <template #activator="{ props }">
-        <v-btn
+        <v-btn rounded="lg"
           variant="tonal"
           bottom
           right
@@ -40,7 +40,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn
+          <v-btn rounded="lg"
             variant="tonal"
             :disabled="!classInfo.name"
             color="primary"
@@ -63,7 +63,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="tonal" text @click="Make">
+          <v-btn rounded="lg" variant="tonal" text @click="Make">
             <v-icon start> mdi-check </v-icon> 만들기
           </v-btn>
         </v-card-actions>

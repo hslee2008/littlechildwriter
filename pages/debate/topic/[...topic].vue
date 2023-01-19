@@ -29,7 +29,7 @@
                 ({{ Object.keys(content.pro ?? {}).length }})
               </span>
             </span>
-            <v-btn
+            <v-btn rounded="lg"
               variant="tonal"
               text
               size="small"
@@ -58,7 +58,7 @@
                 <template #append>
                   <v-menu offset-y>
                     <template #activator="{ props }">
-                      <v-btn
+                      <v-btn rounded="lg"
                         icon
                         v-bind="props"
                         cols="1"
@@ -106,7 +106,7 @@
                 ({{ Object.keys(content.con ?? {}).length }})
               </span>
             </span>
-            <v-btn
+            <v-btn rounded="lg"
               variant="tonal"
               text
               size="small"
@@ -135,7 +135,7 @@
                 <template #append>
                   <v-menu offset-y>
                     <template #activator="{ props }">
-                      <v-btn
+                      <v-btn rounded="lg"
                         icon
                         v-bind="props"
                         cols="1"
@@ -192,7 +192,7 @@
       </v-tooltip>
     </div>
 
-    <v-btn variant="tonal" text @click="suggestionCard = true">
+    <v-btn rounded="lg" variant="tonal" text @click="suggestionCard = true">
       <v-icon>mdi-plus</v-icon>
       제언하기
     </v-btn>
@@ -218,8 +218,8 @@
         />
       </v-card-text>
       <v-card-actions>
-        <v-btn variant="tonal" text @click="suggestionCard = false">취소</v-btn>
-        <v-btn variant="tonal" text @click="newSuggestion">등록</v-btn>
+        <v-btn rounded="lg" variant="tonal" text @click="suggestionCard = false">취소</v-btn>
+        <v-btn rounded="lg" variant="tonal" text @click="newSuggestion">등록</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -241,7 +241,7 @@
         <template #append>
           <v-menu offset-y>
             <template #activator="{ props }">
-              <v-btn icon v-bind="props" cols="1" @click.stop.prevent="">
+              <v-btn rounded="lg" icon v-bind="props" cols="1" @click.stop.prevent="">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
@@ -276,8 +276,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="tonal" text @click="write = false">취소</v-btn>
-          <v-btn variant="tonal" text @click="post">작성</v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="write = false">취소</v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="post">작성</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -290,8 +290,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn variant="tonal" text @click="edit = false">취소</v-btn>
-          <v-btn variant="tonal" text @click="update">업데이트</v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="edit = false">취소</v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="update">업데이트</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

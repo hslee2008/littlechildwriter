@@ -28,7 +28,7 @@
 
         <div v-if="!$route.path.startsWith('/class')">
           <v-slide-x-transition>
-            <v-btn
+            <v-btn rounded="lg"
               v-if="$route.path !== '/book/post' && userInfo.uid"
               icon
               to="/book/post"
@@ -45,7 +45,7 @@
             scrollable
           >
             <template #activator="{ props }">
-              <v-btn icon v-bind="props" color="#23262E">
+              <v-btn rounded="lg" icon v-bind="props" color="#23262E">
                 <v-badge
                   id="notif"
                   overlap
@@ -88,7 +88,7 @@
 
               <v-card-actions>
                 <v-spacer />
-                <v-btn variant="tonal" text @click="clearEverything">
+                <v-btn rounded="lg" variant="tonal" text @click="clearEverything">
                   비우기 <v-icon right> mdi-notification-clear-all </v-icon>
                 </v-btn>
               </v-card-actions>
@@ -97,7 +97,7 @@
 
           <v-menu v-if="userInfo.uid" right activator="#image">
             <template #activator="{ on }">
-              <v-btn icon>
+              <v-btn rounded="lg" icon>
                 <v-avatar size="35">
                   <v-img
                     id="image"
@@ -140,7 +140,7 @@
               </v-list-item>
             </v-list>
           </v-menu>
-          <v-btn v-else variant="tonal" to="/account/login" icon>
+          <v-btn rounded="lg" v-else variant="tonal" to="/account/login" icon>
             <v-icon>mdi-account-circle</v-icon>
           </v-btn>
         </div>
@@ -184,7 +184,7 @@
             <v-divider class="my-1" />
 
             <v-list-item
-              to="/bookmark"
+              to="/bookmarks"
               title="책갈피"
               prepend-icon="mdi-bookmark-multiple"
             />
@@ -227,7 +227,7 @@
           <template #text> 설정에서 이름과 사진을 변경하세요 </template>
 
           <template #actions>
-            <v-btn variant="tonal" to="/account/account">
+            <v-btn rounded="lg" variant="tonal" to="/account/account">
               <v-icon>mdi-open-in-new</v-icon>
             </v-btn>
           </template>

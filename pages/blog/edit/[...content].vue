@@ -23,7 +23,7 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn variant="tonal" color="primary" @click="SaveContent">
+        <v-btn rounded="lg" variant="tonal" color="primary" @click="SaveContent">
           업데이트
         </v-btn>
       </v-card-actions>
