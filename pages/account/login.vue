@@ -45,7 +45,7 @@
             rounded="lg"
             variant="tonal"
             color="primary"
-            width="500"
+            width="300"
             @click="onSubmit"
           >
             <v-icon start> mdi-account </v-icon>로그인
@@ -101,5 +101,11 @@ useHead({
 
 .mdl-button {
   border-radius: 5px !important;
+}
+
+@media (max-width: 700px) {
+  .login {
+    flex-direction: column;
+  }
 }
 </style>

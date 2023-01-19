@@ -13,7 +13,6 @@
       </v-col>
     </v-row>
 
-    <v-row class="mt-5 g-10">
       <BookCard
         :items="books.filter((book: any) => {
           return (
@@ -24,7 +23,6 @@
           )
         }).slice((page - 1) * itemsPerPage, page * itemsPerPage)"
       />
-    </v-row>
 
     <div class="d-flex text-center">
       <v-select
@@ -52,10 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
-
 const { $db } = useNuxtApp()
-const { mobile } = useDisplay()
 
 const books = ref<any[]>([])
 // eslint-disable-next-line func-call-spacing
@@ -72,10 +67,6 @@ onBeforeMount(() => {
   setTimeout(() => {
     loading.value = false
   }, 4000)
-
-  if (mobile.value) {
-    itemsPerPage.value = 12
-  }
 })
 
 const Before = () => {

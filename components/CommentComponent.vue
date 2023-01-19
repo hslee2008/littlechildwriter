@@ -13,7 +13,13 @@
       @click:append-inner="Comment"
     />
 
-    <v-list v-if="comments.length > 0" dense clipped nav :bg-color="themeColor()">
+    <v-list
+      v-if="comments.length > 0"
+      dense
+      clipped
+      nav
+      :bg-color="themeColor()"
+    >
       <v-list-item
         v-for="(message, i) in comments"
         :key="message.time"
@@ -48,7 +54,8 @@
             @keydown.enter="Update(i)"
           >
             <template #append>
-              <v-btn rounded="lg"
+              <v-btn
+                rounded="lg"
                 variant="tonal"
                 color="error"
                 text
@@ -58,7 +65,13 @@
               >
                 취소
               </v-btn>
-              <v-btn rounded="lg" variant="tonal" color="primary" text @click="Update(i)">
+              <v-btn
+                rounded="lg"
+                variant="tonal"
+                color="primary"
+                text
+                @click="Update(i)"
+              >
                 저장
               </v-btn>
             </template>
@@ -67,7 +80,8 @@
           <v-spacer />
 
           <v-card-actions v-if="!message.edit">
-            <v-btn rounded="lg"
+            <v-btn
+              rounded="lg"
               v-if="(message.love || []).length > 0"
               variant="tonal"
               icon
@@ -102,7 +116,8 @@
 
                 <v-list-item v-if="message.uid !== userInfo.uid">
                   <v-col cols="2">
-                    <v-btn rounded="lg"
+                    <v-btn
+                      rounded="lg"
                       variant="tonal"
                       icon
                       :color="
@@ -136,7 +151,8 @@
       수정해주세요.
 
       <template #action="{ props }">
-        <v-btn rounded="lg"
+        <v-btn
+          rounded="lg"
           variant="tonal"
           color="pink"
           text
@@ -151,7 +167,7 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from 'perspective-api-client';
+import Perspective from 'perspective-api-client'
 
 const { $db } = useNuxtApp()
 
@@ -304,7 +320,8 @@ const Comment = async () => {
       })
 
     Notify(props.uid, userInfo.value.photoURL, content, props.link)
-    Libris(userInfo.value.uid, 5)
+
+    if (comments.value.length > 5) Libris(userInfo.value.uid, 5)
 
     props.cb()
     comment.value = ''
