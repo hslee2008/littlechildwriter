@@ -1,3 +1,4 @@
-1. Debate/Thread Update
-2. Dark/Light Theme
-3. List page
+1. List page - v-data-iterator
+2. PWA
+3. Robots, sitemap
+4. Google Analytics

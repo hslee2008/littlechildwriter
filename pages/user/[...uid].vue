@@ -326,14 +326,6 @@ useHead({
 })
 </script>
 
-<script lang="ts">
-export default {
-  name: 'User',
-  inheritAttrs: false,
-  customOptions: {}
-}
-</script>
-
 <style scoped>
 .imgback {
   position: absolute;

@@ -418,11 +418,3 @@ onMounted(() =>
     .on('value', async (s: any) => (content.value = await s.val()))
 )
 </script>
-
-<script lang="ts">
-export default {
-  name: 'Topic',
-  inheritAttrs: false,
-  customOptions: {}
-}
-</script>

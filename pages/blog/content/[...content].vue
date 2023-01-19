@@ -49,11 +49,3 @@ onMounted(() => {
   $db.ref(`/blog/${time}`).on('value', (s: any) => (content.value = s.val()))
 })
 </script>
-
-<script lang="ts">
-export default {
-  name: 'ContentBlog',
-  inheritAttrs: false,
-  customOptions: {}
-}
-</script>

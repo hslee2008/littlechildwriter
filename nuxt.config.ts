@@ -30,10 +30,6 @@ async function getRoutes() {
 }
 
 export default defineNuxtConfig({
-  alias: {
-    tslib: 'tslib/tslib.es6.js'
-  },
-
   app: {
     keepalive: true,
     head: {
@@ -113,19 +109,14 @@ export default defineNuxtConfig({
     shim: false
   },
 
-  runtimeConfig: {
-    public: {
-      baseURL: process.env.BASE_URL || 'https://littlechildwriter.web.app/beta/'
-    }
-  },
-
   ssr: false,
 
   css: [
     '/assets/css/global.css',
     '/assets/css/custom.css',
     '/assets/sass/global.scss',
-    'vuetify/styles/main.sass',
+    '/assets/sass/main.scss',
+    'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
   ],
   plugins: ['/plugins/firebase', 'plugins/gtag'],
@@ -181,26 +172,9 @@ export default defineNuxtConfig({
     }
   },
 
-  vue: {
-    config: {
-      productionTip: true,
-      devtools: true,
-      silent: false,
-      performance: true
-    }
-  },
-
-  router: {
-    base: '/'
-  },
-
   hooks: {
     async 'nitro:config'(config) {
       config?.prerender?.routes?.push(...(await getRoutes()))
     }
-  },
-
-  googleAnalytics: {
-    id: 'G-F7Z7BLCQDQyy'
   }
 })

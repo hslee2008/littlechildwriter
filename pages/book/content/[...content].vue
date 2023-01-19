@@ -449,7 +449,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const { width } = useDisplay()
@@ -725,14 +725,6 @@ onMounted(() => {
 useHead({
   title: '컨텐츠 - LCW'
 })
-</script>
-
-<script lang="ts">
-export default {
-  name: 'Content',
-  inheritAttrs: false,
-  customOptions: {}
-}
 </script>
 
 <style scoped>

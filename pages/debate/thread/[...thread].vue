@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-card class="d-flex" :color="themeColor()" :to="`/user/${threadData.uid}`">
+    <v-card
+      class="d-flex elevation-0"
+      :color="themeColor()"
+      :to="`/user/${threadData.uid}`"
+    >
       <v-avatar size="45" class="my-auto ml-2">
         <UserPhoto :src="threadData?.photoURL" />
       </v-avatar>
@@ -25,23 +29,15 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const route = useRoute();
-const [time, side, thread] = (route.params.thread as string).split("+");
-const threadData = ref<any>({});
+const route = useRoute()
+const [time, side, thread] = route.params.thread[0].split('+')
+const threadData = ref<any>({})
 
 onMounted(() => {
-  $db.ref(`debate/${time}/${side}/${thread}`).on("value", async (s: any) => {
-    threadData.value = await s.val();
-  });
-});
-</script>
-
-<script lang="ts">
-export default {
-  name: "Thread",
-  inheritAttrs: false,
-  customOptions: {},
-};
+  $db.ref(`debate/${time}/${side}/${thread}`).on('value', async (s: any) => {
+    threadData.value = await s.val()
+  })
+})
 </script>

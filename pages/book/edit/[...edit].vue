@@ -91,10 +91,3 @@ useHead({
 });
 </script>
 
-<script lang="ts">
-export default {
-  name: "Edit",
-  inheritAttrs: false,
-  customOptions: {},
-};
-</script>
