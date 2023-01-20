@@ -3,12 +3,6 @@
     <NuxtLayout>
       <NuxtLoadingIndicator />
 
-      <NuxtErrorBoundary>
-        <template #error="{ error }">
-          <p>An error occurred: {{ error }}</p>
-        </template>
-      </NuxtErrorBoundary>
-
       <v-app-bar
         fixed
         clipped-left
@@ -251,7 +245,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay, useTheme } from 'vuetify';
+import { useDisplay, useTheme } from 'vuetify'
 
 const { $db, $auth } = useNuxtApp()
 const { mobile } = useDisplay()
@@ -288,7 +282,7 @@ const clearEverything = () => {
 
 const load = (link: string) => {
   notifOverlay.value = false
-  router.push(link)
+  navigateTo(link)
 }
 
 const changeTheme = () => {
@@ -298,7 +292,7 @@ const changeTheme = () => {
 
 const logout = () => {
   $auth.signOut()
-  router.push('/account/login')
+  navigateTo('/account/login')
   userInfo.value = {
     displayName: '',
     email: '',

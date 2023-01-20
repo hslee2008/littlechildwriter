@@ -63,7 +63,7 @@ const SaveContent = () => {
     photoURL
   })
 
-  router.push(`/blog/content/${time}`)
+  navigateTo(`/blog/content/${time}`)
 }
 
 useHead({

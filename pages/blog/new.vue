@@ -52,7 +52,7 @@ const SaveContent = () => {
 
   Libris(userInfo.value.uid, 50)
 
-  router.push(`/blog/content/${time}`)
+  navigateTo(`/blog/content/${time}`)
 }
 
 useHead({

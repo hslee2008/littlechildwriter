@@ -25,7 +25,7 @@
 
     <v-card-actions>
       <LazyDialogComponent
-        :cb="() => $router.push(`/book/content/${post.time}`)"
+        :cb="() => $navigateTo(`/book/content/${post.time}`)"
         btn-title="취소"
         title="진짜로 취소하겠습니까?"
         text="취소하면 복구할 수 없습니다"
@@ -83,7 +83,7 @@ const Update = () => {
     pageCount,
   });
 
-  router.push(`/book/content/${time}`);
+  navigateTo(`/book/content/${time}`);
 };
 
 useHead({

@@ -467,7 +467,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const userInfo = User()
@@ -733,7 +733,7 @@ const Post = () => {
 
   Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 20)
 
-  router.push(`/book/content/${time}`)
+  navigateTo(`/book/content/${time}`)
 }
 
 const voiceType = () => {

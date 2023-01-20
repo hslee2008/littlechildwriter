@@ -50,7 +50,7 @@
           </v-btn>
         </v-card-text>
       </v-card>
-      
+
       <v-card-title>삭제</v-card-title>
       <v-card-text>
         <LazyDialogComponent
@@ -66,8 +66,8 @@
 </template>
 
 <script setup lang="ts">
-import DisplayCards from './components/DisplayCards.vue'
-import UploadCards from './components/UploadCards.vue'
+import DisplayCards from './components/DisplayCards.vue';
+import UploadCards from './components/UploadCards.vue';
 
 const { $db } = useNuxtApp()
 
@@ -106,7 +106,7 @@ const Update = () => {
 
 const DeleteClass = () => {
   $db.ref('classes').child(id).remove()
-  router.push('/class/classes')
+  navigateTo('/class/classes')
 }
 
 useHead({

@@ -63,7 +63,7 @@ const Make = () =>
       subscriber: []
     })
 
-    router.push('/account/account')
+    navigateTo('/account/account')
   })
 
 useHead({

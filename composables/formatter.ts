@@ -34,7 +34,15 @@ export const DateFormatter = (time: number) => {
     return rtf.format(daysDifference, 'day')
   }
 
-  if (rtf.format(daysDifference, 'hour') === '현재 시간') return '방금 전'
+  // hour
+  if (daysDifference === 0) {
+    const hourDifference = Math.round(
+      (time - new Date().getTime()) / (1000 * 60 * 60)
+    )
+    return rtf.format(hourDifference, 'hour') === '현재 시간'
+      ? '방금 전'
+      : rtf.format(hourDifference, 'hour')
+  }
 
   return rtf.format(daysDifference, 'hour')
 }

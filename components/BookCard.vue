@@ -10,7 +10,7 @@
         class="my-4 mx-2 elevation-0"
         :color="themeColor()"
         data-aos="fade"
-        data-aos-offset="200px"
+        data-aos-offset="50px"
         data-aos-delay="100"
         data-aos-easing="ease-in"
       >
@@ -119,10 +119,10 @@
 </template>
 
 <script setup lang="ts">
-import AOS from 'aos'
-import 'aos/dist/aos.css'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
@@ -216,7 +216,7 @@ const Bookmark = (time: string, i: number) => {
     Libris(userInfo.value.uid, 0.1)
   }
 
-  router.push('/bookmarks')
+  navigateTo('/bookmarks')
 }
 </script>
 

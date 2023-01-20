@@ -56,6 +56,6 @@ const upload = () => {
 
   Libris(uid, 10);
 
-  router.push(`/debate/topic/${time}`);
+  navigateTo(`/debate/topic/${time}`);
 };
 </script>

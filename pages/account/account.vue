@@ -173,7 +173,7 @@ const Update = async () => {
     featured: featured.value
   })
 
-  router.push(`/user/${uid}`)
+  navigateTo(`/user/${uid}`)
 }
 
 const save = () => {
