@@ -201,7 +201,7 @@
       <v-card-title>
         <v-text-field
           variant="outlined"
-          :model-value="suggestion"
+          v-model="suggestion"
           label="주제"
           outlined
           dense
@@ -210,7 +210,7 @@
       </v-card-title>
       <v-card-text>
         <v-textarea
-          :model-value="suggestionContent"
+          v-model="suggestionContent"
           label="내용"
           outlined
           dense
@@ -262,12 +262,12 @@
       </v-list-item>
     </v-list>
 
-    <v-dialog :model-value="write" width="500">
+    <v-dialog v-model="write" width="500">
       <v-card>
         <v-card-title>글쓰기</v-card-title>
         <v-card-text>
           <v-textarea
-            :model-value="claim"
+            v-model="claim"
             label="내용"
             placeholder="내용을 입력해주세요."
             outlined
@@ -282,11 +282,11 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog :model-value="edit" width="500">
+    <v-dialog v-model="edit" width="500">
       <v-card>
         <v-card-title>글쓰기</v-card-title>
         <v-card-text>
-          <v-textarea :model-value="editContent" outlined rows="10" />
+          <v-textarea v-model="editContent" outlined rows="10" />
         </v-card-text>
         <v-card-actions>
           <v-spacer />

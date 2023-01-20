@@ -41,7 +41,6 @@
       <v-tab> 게시물 </v-tab>
       <v-tab> 구독자 </v-tab>
       <v-tab> 정보 </v-tab>
-      <v-tab v-if="userInfo.uid === uid"> 비공개 글 </v-tab>
     </v-tabs>
 
     <v-window v-model="tab" class="py-5" :color="themeColor()">
@@ -191,17 +190,6 @@
             </v-list-item>
           </template>
         </v-list>
-      </v-window-item>
-
-      <v-window-item :value="4">
-        <LazyBookCard
-          v-if="privateBooks.length > 0"
-          :items="privateBooks"
-          :simple="true"
-        />
-        <v-card v-else :color="themeColor()" class="elevation-0">
-          <v-card-text>비공개 글이 없습니다.</v-card-text>
-        </v-card>
       </v-window-item>
     </v-window>
   </div>

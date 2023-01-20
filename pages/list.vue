@@ -28,25 +28,24 @@
         <v-card-title>책을 불러오는 중입니다...</v-card-title>
       </v-card-text>
     </v-card>
-    <BookCard
-      v-else
-      :items="
-        books.filter((book: any) => {
-          return (
-            (book.title?.toLowerCase() ?? []).includes(search?.toLowerCase()) ||
-            book.displayName?.toLowerCase().includes(search?.toLowerCase()) ||
-            (book?.categories ?? []) === (search?.toLowerCase()) ||
-            search === ''
-          )
-        }).slice((page - 1) * itemsPerPage, page * itemsPerPage)
-      "
-    />
+    <BookCard v-else-if="item.length > 0" :items="item" />
+    <v-card v-else :color="themeColor()" class="elevation-0 text-center">
+      <v-card-text>
+        <v-card-title>책이 없습니다.</v-card-title>
+      </v-card-text>
+    </v-card>
 
     <div class="d-flex text-center ma-3 mx-5">
       <v-row class="mt-10" align="center" justify="center">
         <v-menu top>
           <template #activator="{ props }">
-            <v-btn text color="primary" variant="tonal" class="ml-2" v-bind="props">
+            <v-btn
+              text
+              color="primary"
+              variant="tonal"
+              class="ml-2"
+              v-bind="props"
+            >
               {{ itemsPerPage }}
               <v-icon right> mdi-chevron-down </v-icon>
             </v-btn>
@@ -89,6 +88,24 @@ const numberOfPages = computed(() =>
   Math.ceil(books.value.length / itemsPerPage.value)
 )
 const loading = ref<boolean>(true)
+
+const item = computed(() => {
+  return books.value
+    .filter((book: any) => {
+      return (
+        (book.title?.toLowerCase() ?? []).includes(
+          search.value.toLowerCase()
+        ) ||
+        book.displayName?.toLowerCase().includes(search.value.toLowerCase()) ||
+        (book?.categories ?? []) === search.value.toLowerCase() ||
+        search.value === ''
+      )
+    })
+    .slice(
+      (page.value - 1) * itemsPerPage.value,
+      page.value * itemsPerPage.value
+    )
+})
 
 onBeforeMount(() => {
   $db
