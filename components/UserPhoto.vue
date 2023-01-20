@@ -1,5 +1,5 @@
 <template>
-  <v-avatar size="45">
+  <v-avatar :size="size ?? 45">
     <v-img v-if="src" :src="src" alt="User Photo" cover />
     <v-img
       v-else
@@ -13,6 +13,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  src: string | null
+  src: string | null,
+  size: number
 }>()
 </script>

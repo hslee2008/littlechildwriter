@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-row class="mb-5">
-      <v-avatar size="70" class="mt-4 ml-5">
-        <UserPhoto :src="targetUser?.photoURL" />
+      <v-avatar size="90" class="mt-4 ml-5">
+        <UserPhoto :src="targetUser?.photoURL" :size="75" />
       </v-avatar>
 
       <div class="d-flex align-center">
@@ -15,7 +15,8 @@
       </div>
 
       <div class="ml-auto my-auto float-right mr-5">
-        <v-btn rounded="lg"
+        <v-btn
+          rounded="lg"
           v-if="userInfo.uid !== uid"
           variant="tonal"
           color="red"
@@ -24,7 +25,8 @@
         >
           {{ subscribed ? '구독 취소' : '구독' }}
         </v-btn>
-        <v-btn rounded="lg"
+        <v-btn
+          rounded="lg"
           v-else
           variant="tonal"
           color="primary"
@@ -36,11 +38,20 @@
       </div>
     </v-row>
 
-    <v-tabs v-model="tab" show-arrows center-active grow :bg-color="themeColor()">
+    <v-tabs
+      v-model="tab"
+      show-arrows
+      center-active
+      grow
+      :bg-color="themeColor()"
+    >
       <v-tab> 홈 </v-tab>
       <v-tab> 게시물 </v-tab>
       <v-tab> 구독자 </v-tab>
       <v-tab> 정보 </v-tab>
+      <v-tab>
+        <v-badge color="primary" content="베타" floating>뱃지</v-badge>
+      </v-tab>
     </v-tabs>
 
     <v-window v-model="tab" class="py-5" :color="themeColor()">
@@ -191,12 +202,80 @@
           </template>
         </v-list>
       </v-window-item>
+
+      <v-window-item :value="4">
+        <div class="d-flex justify-center align-center badge">
+          <v-card
+            v-if="targetUser.libris > 5000"
+            class="d-flex justify-center elevation-0"
+            :color="themeColor()"
+          >
+            <div>
+              <v-img src="/badge/5klibris.png" :width="mobile ? 100 : 160" />
+              <p class="text-center">5000 Libris</p>
+            </div>
+          </v-card>
+          <v-card
+            v-if="targetUser.libris > 1000"
+            class="d-flex justify-center elevation-0"
+            :color="themeColor()"
+          >
+            <div>
+              <v-img src="/badge/1klibris.png" :width="mobile ? 100 : 160" />
+              <p class="text-center">1000 Libris</p>
+            </div>
+          </v-card>
+          <v-card
+            v-if="targetUser.libris > 100"
+            class="d-flex justify-center elevation-0"
+            :color="themeColor()"
+          >
+            <div>
+              <v-img src="/badge/100libris.png" :width="mobile ? 100 : 160" />
+              <p class="text-center">100 Libris</p>
+            </div>
+          </v-card>
+
+          <v-card
+            v-if="readCount > 10000"
+            class="d-flex justify-center elevation-0"
+            :color="themeColor()"
+          >
+            <div>
+              <v-img src="/badge/10kviews.png" :width="mobile ? 100 : 160" />
+              <p class="text-center">1만 뷰</p>
+            </div>
+          </v-card>
+          <v-card
+            v-if="readCount > 1000"
+            class="d-flex justify-center elevation-0"
+            :color="themeColor()"
+          >
+            <div>
+              <v-img src="/badge/1kviews.png" :width="mobile ? 100 : 160" />
+              <p class="text-center">1천 뷰</p>
+            </div>
+          </v-card>
+          <v-card
+            v-if="readCount > 100"
+            class="d-flex justify-center elevation-0"
+            :color="themeColor()"
+          >
+            <div>
+              <v-img src="/badge/100views.png" :width="mobile ? 100 : 160" />
+              <p class="text-center">100 뷰</p>
+            </div>
+          </v-card>
+
+          <!--https://www.imgonline.com.ua/eng/replace-color.php-->
+        </div>
+      </v-window-item>
     </v-window>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()
@@ -319,5 +398,11 @@ useHead({
   position: absolute;
   top: 0;
   left: 0;
+}
+
+@media (max-width: 600px) {
+  .badge {
+    flex-direction: column;
+  }
 }
 </style>
