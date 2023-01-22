@@ -198,7 +198,7 @@
           <v-card v-else class="mt-5">
             <div class="d-flex">
               <v-avatar size="45" class="ml-3 mt-6">
-                <UserPhoto :src="item?.photoURL" />
+                <UserPhoto :size="45" :src="item?.photoURL" />
               </v-avatar>
               <v-card-item>
                 <v-card-title> {{ item.displayName }}의 공지사항 </v-card-title>
@@ -226,8 +226,8 @@
 </template>
 
 <script setup>
-import { useTheme } from 'vuetify'
-import Actions from './Actions.vue'
+import { useTheme } from 'vuetify';
+import Actions from './Actions.vue';
 
 const theme = useTheme()
 const userInfo = User()

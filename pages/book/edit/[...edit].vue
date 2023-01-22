@@ -47,10 +47,10 @@
 </template>
 
 <script setup lang="ts">
-const { $db, $auth } = useNuxtApp();
+const { $db } = useNuxtApp();
 
 const route = useRoute();
-const router = useRouter();
+;
 const time = route.params.edit;
 const post = ref<any>({
   isbn: "",

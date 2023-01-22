@@ -66,7 +66,7 @@
                   @click="load(d.link)"
                 >
                   <template #prepend>
-                    <UserPhoto :src="d?.photoURL" />
+                    <UserPhoto :size="45" :src="d?.photoURL" />
                   </template>
 
                   <v-list-item-title>{{ d.title }}</v-list-item-title>
@@ -250,9 +250,8 @@ import { useDisplay, useTheme } from 'vuetify'
 const { $db, $auth } = useNuxtApp()
 const { mobile } = useDisplay()
 const theme = useTheme()
-
-const router = useRouter()
 const userInfo = User()
+
 const notif = ref<any>([])
 const notifOverlay = ref<boolean>(false)
 const drawer = ref<boolean>(!mobile.value)
@@ -262,14 +261,9 @@ useAuth((u: any) => {
     .ref(`/users/${u.uid}/notification`)
     .on('child_added', async (s: any) => notif.value.push(await s.val()))
 
-  $db.ref('.info/connected').on('value', (s: any) => {
-    if (s.val()) {
-      $db
-        .ref(`/users/${userInfo.value.uid}/status`)
-        .onDisconnect()
-        .set('offline')
-      $db.ref(`/users/${userInfo.value.uid}/status`).set('online')
-    }
+  $db.ref('.info/connected').on('value', () => {
+    $db.ref(`/users/${userInfo.value.uid}/status`).onDisconnect().set('offline')
+    $db.ref(`/users/${userInfo.value.uid}/status`).set('online')
   })
 
   theme.global.name.value = localStorage.getItem('theme') || 'dark'

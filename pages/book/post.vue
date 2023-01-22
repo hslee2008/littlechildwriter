@@ -495,7 +495,7 @@ const isbn = ref<any>({
   upload: false,
   audioType: ''
 })
-const router = useRouter()
+
 const loading = ref<boolean>(false)
 const title = ref<string>('')
 const searched = ref<any>({})

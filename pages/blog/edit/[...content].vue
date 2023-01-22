@@ -37,7 +37,7 @@ const { $db } = useNuxtApp()
 const route = useRoute()
 const time = route.params.content
 const userInfo = User()
-const router = useRouter()
+
 const topic = ref('')
 const content = ref('')
 

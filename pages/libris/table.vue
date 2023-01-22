@@ -78,6 +78,6 @@
 
 <script setup>
 useHead({
-  title: "리브리스 포인트제 - LCW",
-});
+  title: '리브리스 포인트제 - LCW'
+})
 </script>

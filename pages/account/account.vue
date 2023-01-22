@@ -5,7 +5,7 @@
 
       <div class="d-flex ml-5">
         <v-avatar size="100">
-          <UserPhoto :src="userInfo?.photoURL" />
+          <UserPhoto :size="45" :src="userInfo?.photoURL" />
         </v-avatar>
         <div>
           <v-card-title>{{ userInfo.displayName }}</v-card-title>
@@ -136,7 +136,7 @@
 const { $db, $auth } = useNuxtApp()
 
 const userInfo = User()
-const router = useRouter()
+
 const userDB = ref<any>({ bio: '' })
 const books = ref<any[]>([])
 const imageEdit = ref<boolean>(false)

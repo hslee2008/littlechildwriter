@@ -10,7 +10,7 @@
         :to="`/user/${content.uid}`"
       >
         <v-avatar size="45" class="my-auto ml-2">
-          <UserPhoto :src="content?.photoURL" />
+          <UserPhoto :size="45" :src="content?.photoURL" />
         </v-avatar>
         <div>
           <v-card-title>{{ content?.displayName }}</v-card-title>

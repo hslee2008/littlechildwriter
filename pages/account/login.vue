@@ -57,11 +57,10 @@
 </template>
 
 <script setup script="ts">
-import firebase from 'firebase/compat/app';
-import { auth } from 'firebaseui';
-import 'firebaseui/dist/firebaseui.css';
+import firebase from 'firebase/compat/app'
+import { auth } from 'firebaseui'
+import 'firebaseui/dist/firebaseui.css'
 
-const router = useRouter()
 const email = ref('')
 const password = ref('')
 const eye = ref(false)

@@ -33,7 +33,7 @@
 const { $db } = useNuxtApp()
 
 const userInfo = User()
-const router = useRouter()
+
 const topic = ref('')
 const content = ref('')
 

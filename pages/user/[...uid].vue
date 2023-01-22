@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row class="mb-5">
-      <v-avatar size="90" class="mt-4 ml-5">
+      <v-avatar size="75" class="mt-4 ml-5">
         <UserPhoto :src="targetUser?.photoURL" :size="75" />
       </v-avatar>
 
@@ -275,7 +275,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()

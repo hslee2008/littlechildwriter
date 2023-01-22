@@ -96,10 +96,6 @@
     </v-card>
 
     <br />
-
-    <LazyBookCard :items="random" :simple="true" />
-
-    <br />
   </div>
 </template>
 
@@ -108,7 +104,6 @@ const { $db } = useNuxtApp()
 
 const userInfo = User()
 const recent = ref<any>([])
-const random = ref<any>([])
 const popular = ref<any[]>([])
 const views = ref<any[]>([])
 const tab = ref<number>(0)
@@ -121,8 +116,7 @@ const list = [
   'https://d4804za1f1gw.cloudfront.net/wp-content/uploads/sites/50/2018/11/06110356/hero.jpg',
   'https://img.freepik.com/premium-photo/pile-books-table-library_130388-600.jpg?w=2000',
   'https://www.eastman.org/sites/default/files/styles/full_width_slider/public/library-01-1920_0.jpg.webp?itok=fiWZlYpB',
-  'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/fl16915765068-image-kybem7r7.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=1051d18eb5124f051dcce8f4f702dff3',
-  'https://cdn.pixabay.com/photo/2015/10/10/13/03/prague-980732__340.jpg'
+  'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/fl16915765068-image-kybem7r7.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=1051d18eb5124f051dcce8f4f702dff3'
 ]
 const image = ref<string>('./background.avif')
 
@@ -143,15 +137,6 @@ onBeforeMount(async () => {
     .orderByChild('views')
     .limitToLast(5)
     .on('child_added', async (s: any) => views.value.unshift(await s.val()))
-
-  const all = await $db
-    .ref('/contents')
-    .once('value')
-    .then((s: any) => s.val())
-
-  random.value = Object.values(all)
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 5)
 
   setInterval(
     () => (image.value = list[Math.floor(Math.random() * list.length)]),

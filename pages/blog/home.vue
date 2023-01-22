@@ -20,7 +20,7 @@
         :to="`/blog/content/${item.time}`"
       >
         <template #prepend>
-          <UserPhoto :src="item?.photoURL" />
+          <UserPhoto :size="45" :src="item?.photoURL" />
         </template>
 
         <v-list-item-title>{{ item.topic }}</v-list-item-title>

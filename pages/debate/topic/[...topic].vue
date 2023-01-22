@@ -2,12 +2,12 @@
   <div>
     <h1>주제: {{ content.topic }}</h1>
     <v-card
-      class="d-flex elevation-0"
+      class="d-flex elevation-0 pb-2"
       :color="themeColor()"
       :to="`/user/${content.uid}`"
     >
       <v-avatar size="45" class="my-auto ml-2">
-        <UserPhoto :src="content?.photoURL" />
+        <UserPhoto :size="45" :src="content?.photoURL" />
       </v-avatar>
       <div>
         <v-card-title>{{ content.displayName }}</v-card-title>
@@ -29,8 +29,8 @@
                 ({{ Object.keys(content.pro ?? {}).length }})
               </span>
             </span>
-            <v-btn rounded="lg"
-              variant="tonal"
+            <v-btn
+              rounded="lg"
               text
               size="small"
               @click=";(side = 'pro'), (write = true)"
@@ -44,7 +44,7 @@
               <v-list-item v-for="(item, i) in content.pro" :key="item.time">
                 <template #prepend>
                   <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
-                    <UserPhoto :src="item?.photoURL" />
+                    <UserPhoto :size="45" :src="item?.photoURL" />
                   </NuxtLink>
                 </template>
 
@@ -58,7 +58,8 @@
                 <template #append>
                   <v-menu offset-y>
                     <template #activator="{ props }">
-                      <v-btn rounded="lg"
+                      <v-btn
+                        rounded="lg"
                         icon
                         v-bind="props"
                         cols="1"
@@ -106,8 +107,8 @@
                 ({{ Object.keys(content.con ?? {}).length }})
               </span>
             </span>
-            <v-btn rounded="lg"
-              variant="tonal"
+            <v-btn
+              rounded="lg"
               text
               size="small"
               @click=";(side = 'con'), (write = true)"
@@ -121,7 +122,7 @@
               <v-list-item v-for="(item, i) in content.con" :key="item.time">
                 <template #prepend>
                   <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
-                    <UserPhoto :src="item?.photoURL" />
+                    <UserPhoto :size="45" :src="item?.photoURL" />
                   </NuxtLink>
                 </template>
 
@@ -135,7 +136,8 @@
                 <template #append>
                   <v-menu offset-y>
                     <template #activator="{ props }">
-                      <v-btn rounded="lg"
+                      <v-btn
+                        rounded="lg"
                         icon
                         v-bind="props"
                         cols="1"
@@ -218,8 +220,12 @@
         />
       </v-card-text>
       <v-card-actions>
-        <v-btn rounded="lg" variant="tonal" text @click="suggestionCard = false">취소</v-btn>
-        <v-btn rounded="lg" variant="tonal" text @click="newSuggestion">등록</v-btn>
+        <v-btn rounded="lg" variant="tonal" text @click="suggestionCard = false"
+          >취소</v-btn
+        >
+        <v-btn rounded="lg" variant="tonal" text @click="newSuggestion"
+          >등록</v-btn
+        >
       </v-card-actions>
     </v-card>
 
@@ -227,7 +233,7 @@
       <v-list-item v-for="(item, i) in content.suggestion" :key="item.time">
         <template #prepend>
           <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
-            <UserPhoto :src="item?.photoURL" />
+            <UserPhoto :size="45" :src="item?.photoURL" />
           </NuxtLink>
         </template>
 
@@ -241,7 +247,13 @@
         <template #append>
           <v-menu offset-y>
             <template #activator="{ props }">
-              <v-btn rounded="lg" icon v-bind="props" cols="1" @click.stop.prevent="">
+              <v-btn
+                rounded="lg"
+                icon
+                v-bind="props"
+                cols="1"
+                @click.stop.prevent=""
+              >
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
@@ -276,7 +288,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="write = false">취소</v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="write = false"
+            >취소</v-btn
+          >
           <v-btn rounded="lg" variant="tonal" text @click="post">작성</v-btn>
         </v-card-actions>
       </v-card>
@@ -290,8 +304,12 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="edit = false">취소</v-btn>
-          <v-btn rounded="lg" variant="tonal" text @click="update">업데이트</v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="edit = false"
+            >취소</v-btn
+          >
+          <v-btn rounded="lg" variant="tonal" text @click="update"
+            >업데이트</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -299,7 +317,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()

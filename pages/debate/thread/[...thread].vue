@@ -6,7 +6,7 @@
       :to="`/user/${threadData.uid}`"
     >
       <v-avatar size="45" class="my-auto ml-2">
-        <UserPhoto :src="threadData?.photoURL" />
+        <UserPhoto :size="45" :src="threadData?.photoURL" />
       </v-avatar>
 
       <div>

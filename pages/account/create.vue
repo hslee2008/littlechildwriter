@@ -35,7 +35,13 @@
         @click:append="eye = !eye"
       />
 
-      <v-btn rounded="lg" variant="tonal" color="primary" @click="Make" min-width="500">
+      <v-btn
+        rounded="lg"
+        variant="tonal"
+        color="primary"
+        @click="Make"
+        min-width="500"
+      >
         <v-icon start> mdi-account </v-icon> 계정 만들기
       </v-btn>
     </v-form>
@@ -45,7 +51,6 @@
 <script setup lang="ts">
 const { $db, $auth } = useNuxtApp()
 
-const router = useRouter()
 const email = ref<string>('')
 const password = ref<string>('')
 const eye = ref(false)

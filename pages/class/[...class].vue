@@ -73,7 +73,7 @@ const { $db } = useNuxtApp()
 
 const userInfo = User()
 const route = useRoute()
-const router = useRouter()
+
 const id = route.params.class
 const classInfo = ref<any>({})
 const listev = ref<any[]>([])

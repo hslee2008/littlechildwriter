@@ -1,7 +1,12 @@
 <!-- eslint-disable vue/html-indent -->
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
-  <v-lazy>
+  <v-lazy
+    :options="{
+      threshold: 0.5
+    }"
+    transition="fade-transition"
+  >
     <v-row class="row d-flex justify-center" style="margin: 2.5px">
       <v-card
         v-for="(item, i) in items"
@@ -115,16 +120,13 @@
 </template>
 
 <script setup lang="ts">
-import AOS from 'aos'
-import 'aos/dist/aos.css'
-
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
 
 const userInfo = User()
-const router = useRouter()
+
 const props = defineProps({
   items: {
     type: Array as unknown as any[],
@@ -142,10 +144,6 @@ const bookmarked = (i: number) => {
     userInfo.value.uid
   )
 }
-
-onMounted(() => {
-  AOS.init()
-})
 
 const Like = (item: any) => {
   if (item.liked[userInfo.value.uid]) {

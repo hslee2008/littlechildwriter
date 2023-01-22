@@ -90,7 +90,7 @@
         >
           <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">
             <v-avatar size="45" class="ma-3">
-              <UserPhoto :src="item?.photoURL" />
+              <UserPhoto :size="45" :src="item?.photoURL" />
             </v-avatar>
           </v-img>
 
