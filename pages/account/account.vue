@@ -136,7 +136,6 @@
 const { $db, $auth } = useNuxtApp()
 
 const userInfo = User()
-
 const userDB = ref<any>({ bio: '' })
 const books = ref<any[]>([])
 const imageEdit = ref<boolean>(false)

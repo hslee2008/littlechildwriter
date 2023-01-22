@@ -64,7 +64,6 @@
 
 <script setup lang="ts">
 const { $db } = useNuxtApp()
-
 const userInfo = User()
 const list = ref<any>([])
 

@@ -23,7 +23,12 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn rounded="lg" variant="tonal" color="primary" @click="SaveContent">
+        <v-btn
+          rounded="lg"
+          variant="tonal"
+          color="primary"
+          @click="SaveContent"
+        >
           업데이트
         </v-btn>
       </v-card-actions>
@@ -33,11 +38,9 @@
 
 <script setup lang="ts">
 const { $db } = useNuxtApp()
-
 const route = useRoute()
 const time = route.params.content
 const userInfo = User()
-
 const topic = ref('')
 const content = ref('')
 

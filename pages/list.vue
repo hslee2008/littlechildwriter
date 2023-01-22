@@ -18,20 +18,32 @@
       class="elevation-0 text-center"
     >
       <v-card-text>
-        <v-progress-circular
-          v-if="loading"
-          indeterminate
-          color="primary"
-          size="30"
-        />
-
+        <v-progress-circular indeterminate color="primary" size="30" />
         <v-card-title>책을 불러오는 중입니다...</v-card-title>
       </v-card-text>
     </v-card>
     <BookCard v-else-if="item.length > 0" :items="item" />
+    <v-card
+      v-else-if="search.length === 0"
+      :color="themeColor()"
+      class="elevation-0 text-center"
+    >
+      <v-card-text class="d-flex justify-center">
+        <div>
+          <v-progress-circular indeterminate color="primary" size="30" />
+          <v-card-title>책을 불러오는데 오래 걸립니다...</v-card-title>
+
+          <v-img
+            src="https://media.tenor.com/6EY-3VQx2EIAAAAM/internet-fast.gif"
+            width="200"
+            class="rounded-xl mt-3 mb-5 mx-auto"
+          />
+        </div>
+      </v-card-text>
+    </v-card>
     <v-card v-else :color="themeColor()" class="elevation-0 text-center">
       <v-card-text>
-        <v-card-title>책이 없습니다.</v-card-title>
+        <v-card-title>검색 결과가 없습니다.</v-card-title>
       </v-card-text>
     </v-card>
 

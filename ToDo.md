@@ -1,6 +1,10 @@
-1. Google Analytics
-2. BarcodeScanner Bug
-3. Better handling of slow devices
-4. Overall JS, TS code cleanup
-5. Bug in Upload Cards --> books /class
-6. Icon Bug in Actions Debate
+# Right Now
+
+1. BarcodeScanner Bug
+2. Better handling of slow devices --> loading ui
+3. Bug in Upload Cards --> books /class
+4. Icon Bug in Actions Debate
+
+# Constantly
+
+1. Code review (JS, TS, Vue)

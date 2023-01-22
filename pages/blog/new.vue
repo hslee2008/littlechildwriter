@@ -21,7 +21,12 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn rounded="lg" variant="tonal" color="primary" @click="SaveContent">
+        <v-btn
+          rounded="lg"
+          variant="tonal"
+          color="primary"
+          @click="SaveContent"
+        >
           올리기
         </v-btn>
       </v-card-actions>
@@ -31,9 +36,7 @@
 
 <script setup lang="ts">
 const { $db } = useNuxtApp()
-
 const userInfo = User()
-
 const topic = ref('')
 const content = ref('')
 
