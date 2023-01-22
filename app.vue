@@ -11,29 +11,27 @@
         :color="themeColor()"
       >
         <template #prepend>
-          <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+          <v-app-bar-nav-icon @click="drawer = !drawer" />
         </template>
 
         <NuxtLink to="/" class="ml-2">
-          <v-avatar size="35" image="/icon.png" />
+          <v-avatar size="30" image="/icon.png" />
         </NuxtLink>
 
         <v-spacer />
 
         <div v-if="!$route.path.startsWith('/class')">
-          <v-slide-x-transition>
-            <v-btn
-              rounded="lg"
-              v-if="$route.path !== '/book/post' && userInfo.uid"
-              icon
-              to="/book/post"
-            >
-              <v-icon>mdi-plus-circle-outline</v-icon>
-            </v-btn>
-          </v-slide-x-transition>
+          <v-btn
+            v-if="$route.path !== '/book/post' && userInfo.loggedIn"
+            rounded="lg"
+            icon
+            to="/book/post"
+          >
+            <v-icon>mdi-plus-circle-outline</v-icon>
+          </v-btn>
 
           <v-dialog
-            v-if="userInfo.uid"
+            v-if="userInfo.loggedIn"
             v-model="notifOverlay"
             width="700"
             activator="#notif"
@@ -93,7 +91,7 @@
             </v-card>
           </v-dialog>
 
-          <v-menu v-if="userInfo.uid" right activator="#image">
+          <v-menu v-if="userInfo.loggedIn" right activator="#image">
             <template #activator="{ on }">
               <v-btn rounded="lg" icon>
                 <v-avatar size="35">
@@ -117,7 +115,7 @@
               </div>
             </v-card>
 
-            <v-list nav class="rounded-0 elevation-0">
+            <v-list nav class="rounded-0">
               <v-list-item
                 to="/account/account"
                 title="설정"
@@ -187,7 +185,7 @@
             prepend-icon="mdi-lectern"
           />
 
-          <template v-if="userInfo.uid">
+          <template v-if="userInfo.loggedIn">
             <v-divider class="my-1" />
 
             <v-list-item
@@ -217,24 +215,21 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-main
-        :style="
-          $route.path !== '/' ? 'margin-right: 10px; margin-left: 10px;' : ''
-        "
-      >
-        <NuxtPage />
-
-        <br />
+      <v-main :class="$route.path !== '/' ? 'mx-5' : ''">
+        <NuxtPage class="mb-10" />
 
         <v-banner
           v-if="userInfo.uid && (!userInfo.displayName || !userInfo.photoURL)"
           :sticky="true"
           lines="one"
+          class="rounded-lg"
         >
-          <template #text> 설정에서 이름과 사진을 변경하세요 </template>
+          <template #text>
+            <div class="ma-2">설정에서 이름과 사진을 변경하세요</div>
+          </template>
 
           <template #actions>
-            <v-btn rounded="lg" variant="tonal" to="/account/account">
+            <v-btn rounded="lg" to="/account/account">
               <v-icon>mdi-open-in-new</v-icon>
             </v-btn>
           </template>
@@ -245,7 +240,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay, useTheme } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify';
 
 const { $db, $auth } = useNuxtApp()
 const { mobile } = useDisplay()
@@ -287,11 +282,6 @@ const changeTheme = () => {
 const logout = () => {
   $auth.signOut()
   navigateTo('/account/login')
-  userInfo.value = {
-    displayName: '',
-    email: '',
-    photoURL: '',
-    uid: ''
-  }
+  userInfo.value = {}
 }
 </script>

@@ -3,7 +3,9 @@
     <div class="d-flex">
       <h1>창작 코너</h1>
 
-      <v-btn rounded="lg"
+      <v-btn
+        v-if="userInfo.loggedIn"
+        rounded="lg"
         variant="tonal"
         icon="mdi-plus"
         color="primary"
@@ -31,7 +33,13 @@
         <template v-if="item.uid == userInfo.uid" #append>
           <v-menu offset-y>
             <template #activator="{ props }">
-              <v-btn rounded="lg" icon v-bind="props" cols="1" @click.stop.prevent="">
+              <v-btn
+                rounded="lg"
+                icon
+                v-bind="props"
+                cols="1"
+                @click.stop.prevent=""
+              >
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>

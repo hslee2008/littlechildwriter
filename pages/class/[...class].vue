@@ -1,7 +1,7 @@
 <template>
   <v-tabs v-model="tab" show-arrows center-active grow :bg-color="themeColor()">
     <v-tab :value="0"> 홈 </v-tab>
-    <v-tab :value="1"> 글 쓰기 </v-tab>
+    <v-tab v-if="userInfo.loggedIn" :value="1"> 글 쓰기 </v-tab>
     <v-tab v-if="classInfo.uid === userInfo.uid" :value="2"> 설정 </v-tab>
   </v-tabs>
 

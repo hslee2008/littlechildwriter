@@ -30,6 +30,7 @@
               </span>
             </span>
             <v-btn
+              v-if="userInfo.loggedIn"
               rounded="lg"
               text
               size="small"
@@ -98,6 +99,7 @@
           </v-card-text>
         </v-card>
       </v-col>
+
       <v-col :cols="mobile ? 12 : 6">
         <v-card>
           <v-card-title class="d-flex justify-space-between">
@@ -108,6 +110,7 @@
               </span>
             </span>
             <v-btn
+              v-if="userInfo.loggedIn"
               rounded="lg"
               text
               size="small"
@@ -194,7 +197,13 @@
       </v-tooltip>
     </div>
 
-    <v-btn rounded="lg" variant="tonal" text @click="suggestionCard = true">
+    <v-btn
+      v-if="userInfo.loggedIn"
+      rounded="lg"
+      variant="tonal"
+      text
+      @click="suggestionCard = true"
+    >
       <v-icon>mdi-plus</v-icon>
       제언하기
     </v-btn>

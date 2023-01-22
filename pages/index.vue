@@ -6,7 +6,7 @@
           <div class="text-center mb-5 mt-3 button">
             <v-btn
               rounded="lg"
-              v-if="userInfo.uid"
+              v-if="userInfo.loggedIn"
               to="/book/post"
               color="primary"
               min-width="300"

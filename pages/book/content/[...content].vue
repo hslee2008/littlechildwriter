@@ -208,7 +208,7 @@
       </div>
 
       <v-chip
-        v-if="userInfo.uid"
+        v-if="userInfo.loggedIn"
         label
         :style="`background-color: ${
           (post?.liked ?? {})[userInfo.uid] ? '#159ECB' : 'grey'
@@ -449,7 +449,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { width } = useDisplay()

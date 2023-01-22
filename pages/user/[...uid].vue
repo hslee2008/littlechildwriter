@@ -14,10 +14,10 @@
         </div>
       </div>
 
-      <div class="ml-auto my-auto float-right mr-5">
+      <div v-if="userInfo.loggedIn" class="ml-auto my-auto float-right mr-5">
         <v-btn
-          rounded="lg"
           v-if="userInfo.uid !== uid"
+          rounded="lg"
           variant="tonal"
           color="red"
           class="rounded-xl"

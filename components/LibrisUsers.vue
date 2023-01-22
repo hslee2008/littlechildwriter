@@ -2,13 +2,7 @@
 <template>
   <v-card v-if="loading" :color="themeColor()" class="elevation-0 text-center">
     <v-card-text>
-      <v-progress-circular
-        v-if="loading"
-        indeterminate
-        color="primary"
-        size="30"
-      />
-
+      <v-progress-circular indeterminate color="primary" size="30" />
       <v-card-title>유저를 불러오고 있습니다...</v-card-title>
     </v-card-text>
   </v-card>
@@ -40,9 +34,6 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from 'vuetify';
-
-const theme = useTheme()
 const { $db } = useNuxtApp()
 
 const props = defineProps({

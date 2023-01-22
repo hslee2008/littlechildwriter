@@ -4,6 +4,7 @@
     <v-dialog :model-value="dialog" width="500">
       <template #activator="{ props }">
         <v-btn
+          v-if="userInfo.loggedIn"
           rounded="lg"
           variant="tonal"
           bottom

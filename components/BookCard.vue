@@ -45,7 +45,7 @@
         </v-card>
 
         <v-card v-show="!simple" :color="themeColor()" class="elevation-0">
-          <v-card-actions v-if="userInfo.uid">
+          <v-card-actions v-if="userInfo.loggedIn">
             <v-btn
               rounded="lg"
               icon

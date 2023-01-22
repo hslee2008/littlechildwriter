@@ -3,6 +3,7 @@
     <div class="d-flex">
       <h1>토론 광장</h1>
       <v-btn
+        v-if="userInfo.loggedIn"
         rounded="lg"
         variant="tonal"
         icon="mdi-plus"

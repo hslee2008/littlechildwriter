@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-text-field
-      v-if="userInfo && !nofield"
+      v-if="userInfo"
       v-model="comment"
       variant="outlined"
       flat
@@ -9,6 +9,7 @@
       hide-details
       label="댓글 달기"
       append-inner-icon="mdi-send"
+      :disabled="!userInfo.loggedIn"
       @keydown.enter="Comment"
       @click:append-inner="Comment"
     />
@@ -93,9 +94,10 @@
               <v-icon>mdi-heart</v-icon>
               <span v-text="message.love?.length" />
             </v-btn>
+
             <v-menu offset-y>
               <template #activator="{ props }">
-                <v-btn rounded="lg" icon v-bind="props" cols="1">
+                <v-btn v-if="userInfo.loggedIn" rounded="lg" icon v-bind="props" cols="1">
                   <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
               </template>
@@ -137,7 +139,7 @@
     </v-list>
     <div v-else>
       <v-card
-        v-if="comments.length === 0 && !parent"
+        v-if="comments.length === 0"
         class="text-center"
         :color="themeColor()"
         flat
@@ -189,17 +191,9 @@ const props = defineProps({
     type: String,
     required: true
   },
-  nofield: {
-    type: Boolean,
-    default: false
-  },
   cb: {
     type: Function,
     default: () => {}
-  },
-  parent: {
-    type: Boolean,
-    default: false
   }
 })
 const comment = ref<string>('')
