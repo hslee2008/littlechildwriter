@@ -1,18 +1,18 @@
 <template>
   <div>
-    <div class="d-flex">
+    <div>
       <h1>창작 코너</h1>
 
       <v-btn
         v-if="userInfo.loggedIn"
         rounded="lg"
         variant="tonal"
-        icon="mdi-plus"
         color="primary"
-        size="small"
-        class="rounded-lg ml-1 mb-5"
+        class="ml-3 my-5"
         to="./new"
-      />
+      >
+        <v-icon start>mdi-plus</v-icon> 새 블로그
+      </v-btn>
     </div>
 
     <v-list nav :bg-color="themeColor()">

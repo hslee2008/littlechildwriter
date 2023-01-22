@@ -15,6 +15,7 @@
         class="elevation-0"
       >
         <v-expansion-panel-title
+          class="elevation-0"
           :style="`background-color: ${themeColor()} !important`"
         >
           {{ title.toString().replaceAll('_', ' - ') }}
@@ -226,10 +227,9 @@
 </template>
 
 <script setup>
-import { useTheme } from 'vuetify';
-import Actions from './Actions.vue';
+import { useTheme } from 'vuetify'
+import Actions from './Actions.vue'
 
-const theme = useTheme()
 const userInfo = User()
 
 defineProps({

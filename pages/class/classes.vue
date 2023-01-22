@@ -15,7 +15,7 @@
           class="zmax"
           v-bind="props"
         >
-          <v-icon> mdi-plus </v-icon>
+          <v-icon start> mdi-plus </v-icon> 새로운 알림판 만들기
         </v-btn>
       </template>
 
@@ -39,20 +39,6 @@
 
           <v-checkbox :model-value="classInfo.public" label="공개" />
         </v-card-text>
-
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            rounded="lg"
-            variant="tonal"
-            :disabled="!classInfo.name"
-            color="primary"
-            text
-            @click="steps = 2"
-          >
-            👌 OK
-          </v-btn>
-        </v-card-actions>
 
         <v-card-title> 알림판 고급 정보 </v-card-title>
 
@@ -87,6 +73,7 @@
             Object.values(item.users).filter(filterUsers).length > 0
           "
           :color="themeColor()"
+          class="elevation-0"
           :to="`/class/${item.id}`"
         >
           <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">

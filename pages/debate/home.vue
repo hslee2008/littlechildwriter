@@ -1,17 +1,18 @@
 <template>
   <div>
-    <div class="d-flex">
+    <div>
       <h1>토론 광장</h1>
+
       <v-btn
         v-if="userInfo.loggedIn"
         rounded="lg"
         variant="tonal"
-        icon="mdi-plus"
-        size="small"
         color="primary"
-        class="ml-3"
+        class="ml-3 my-5"
         to="./new"
-      />
+      >
+        <v-icon start>mdi-plus</v-icon> 새 토론 주제
+      </v-btn>
     </div>
 
     <v-list nav :bg-color="themeColor()">
@@ -21,7 +22,9 @@
         :to="`/debate/topic/${item.time}`"
       >
         <template #prepend>
-          <v-avatar size="45"> <UserPhoto :size="45" :src="item?.photoURL" /></v-avatar>
+          <v-avatar size="45">
+            <UserPhoto :size="45" :src="item?.photoURL"
+          /></v-avatar>
         </template>
 
         <v-list-item-title>{{ item.topic }}</v-list-item-title>
