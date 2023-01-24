@@ -4,16 +4,16 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { md3 } from 'vuetify/blueprints'
 
-export default defineNuxtPlugin(nuxtApp => {
+export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
     components: {
       ...components,
-      VDataTable
+      VDataTable,
     },
     directives,
     blueprints: md3,
     styles: {
-      configFile: 'assets/sass/vuetify.scss'
+      configFile: 'assets/sass/vuetify.scss',
     },
     theme: {
       defaultTheme: 'dark',
@@ -28,8 +28,8 @@ export default defineNuxtPlugin(nuxtApp => {
             success: '#4CAF50',
             warning: '#FFC107',
             error: '#b71c1c',
-            background: '#23262E'
-          }
+            background: '#23262E',
+          },
         },
         light: {
           dark: false,
@@ -41,11 +41,11 @@ export default defineNuxtPlugin(nuxtApp => {
             success: '#4CAF50',
             warning: '#FFC107',
             error: '#b71c1c',
-            background: '#FFFFFF'
-          }
-        }
-      }
-    }
+            background: '#FFFFFF',
+          },
+        },
+      },
+    },
   })
 
   nuxtApp.vueApp.use(vuetify)

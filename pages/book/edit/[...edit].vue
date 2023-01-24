@@ -34,7 +34,8 @@
 
       <v-spacer />
 
-      <v-btn rounded="lg"
+      <v-btn
+        rounded="lg"
         variant="tonal"
         color="primary"
         class="elevation-0 update"
@@ -47,32 +48,31 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const route = useRoute();
-;
-const time = route.params.edit;
+const route = useRoute()
+const time = route.params.edit
 const post = ref<any>({
-  isbn: "",
-  title: "",
-  image: "",
-  pageCount: "",
+  isbn: '',
+  title: '',
+  image: '',
+  pageCount: '',
   categories: [] as string[],
   rating: 5,
-  content: "",
-  uid: "",
-  displayName: "",
+  content: '',
+  uid: '',
+  displayName: '',
   views: 0,
   time: Date.now(),
-});
+})
 
 const Post = async () =>
-  (post.value = (await $db.ref(`/contents/${time}`).once("value")).val());
+  (post.value = (await $db.ref(`/contents/${time}`).once('value')).val())
 
-useAuth(Post);
+useAuth(Post)
 
 const Update = () => {
-  const { title, content, image, time, rating, pageCount, isbn } = post.value;
+  const { title, content, image, time, rating, pageCount, isbn } = post.value
 
   $db.ref(`/contents/${time}`).update({
     title,
@@ -81,13 +81,12 @@ const Update = () => {
     isbn,
     image,
     pageCount,
-  });
+  })
 
-  navigateTo(`/book/content/${time}`);
-};
+  navigateTo(`/book/content/${time}`)
+}
 
 useHead({
-  title: "편집 - LCW",
-});
+  title: '편집 - LCW',
+})
 </script>
-

@@ -83,6 +83,6 @@ const DeleteContent = (i: number) => {
 }
 
 useHead({
-  title: '토론 광장 - LCW'
+  title: '토론 광장 - LCW',
 })
 </script>

@@ -1,13 +1,13 @@
-import { onMounted } from "vue";
+import { onMounted } from 'vue'
 
 export const useAuth = (mounted) => {
-  const { $auth } = useNuxtApp();
+  const { $auth } = useNuxtApp()
 
   onMounted(() => {
     $auth.onAuthStateChanged((user) => {
-      if (!user) return;
+      if (!user) return
 
-      mounted(user);
-    });
-  });
-};
+      mounted(user)
+    })
+  })
+}

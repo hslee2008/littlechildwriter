@@ -1,7 +1,8 @@
 <template>
   <v-dialog :model-value="dialog" width="500">
     <template #activator="{ props }">
-      <v-btn rounded="lg"
+      <v-btn
+        rounded="lg"
         variant="tonal"
         color="red lighten-2"
         v-bind="props"
@@ -19,7 +20,13 @@
 
       <v-card-actions>
         <v-spacer />
-        <v-btn rounded="lg" variant="tonal" color="primary" class="ma-3 ok" @click="cb">
+        <v-btn
+          rounded="lg"
+          variant="tonal"
+          color="primary"
+          class="ma-3 ok"
+          @click="cb"
+        >
           확인
         </v-btn>
       </v-card-actions>
@@ -28,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-const dialog = ref<boolean>(false);
+const dialog = ref<boolean>(false)
 defineProps({
   title: {
     type: String,
@@ -50,5 +57,5 @@ defineProps({
     type: String,
     required: true,
   },
-});
+})
 </script>

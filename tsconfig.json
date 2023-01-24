@@ -15,7 +15,7 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@types/node", "@nuxt/types", "@nuxtjs/pwa"]
+    "types": ["@types/node", "@nuxt/types", "@pinia/nuxt"]
   },
   "vueCompilerOptions": {
     "target": 3

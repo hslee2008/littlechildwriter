@@ -66,7 +66,7 @@
           <v-card>
             <v-row no-gutters>
               <v-card
-                v-for="i in listev.filter(i => i.uid == userInfo.uid)"
+                v-for="i in listev.filter((i) => i.uid == userInfo.uid)"
                 :key="i.title"
                 class="elevation-0"
                 @click="selectBook(i)"
@@ -220,7 +220,7 @@ const post = ref<any>({
   type: '책',
   category: '기타',
   book: true,
-  link: ''
+  link: '',
 })
 const dialog = ref<boolean>(false)
 const progress = ref<boolean>(false)
@@ -228,8 +228,8 @@ const progress = ref<boolean>(false)
 const props = defineProps({
   updateTab: {
     type: Function,
-    required: true
-  }
+    required: true,
+  },
 })
 
 onBeforeMount(() => {
@@ -245,7 +245,7 @@ onBeforeMount(() => {
       time,
       uid,
       displayName,
-      image
+      image,
     })
   })
 })
@@ -268,14 +268,14 @@ const Upload = () => {
         .getDownloadURL()
         .then((url: any) => {
           const { type, file, category } = post.value
-          const { uid, displayName } = userInfo.value
+          const { uid, displayName } = userInfo
 
           $db.ref(`classes/${id}/contents/${category}`).push({
             type,
             uid,
             displayName,
             url,
-            file: file[0].name
+            file: file[0].name,
           })
         })
         .then(() => {
@@ -294,7 +294,7 @@ const UploadFile = (f: File[]) => (post.value.file = f)
 
 const Post = () => {
   const { title, time, category, type, content } = post.value
-  const { uid, displayName } = userInfo.value
+  const { uid, displayName } = userInfo
 
   if (type === '글 제출 (학생)') {
     $db.ref(`classes/${id}/contents/${category}/${time}`).set({
@@ -303,7 +303,7 @@ const Post = () => {
       uid,
       displayName,
       type,
-      content
+      content,
     })
   } else {
     $db.ref(`/classes/${id}/contents/${category}`).push({
@@ -312,7 +312,7 @@ const Post = () => {
       time,
       displayName,
       type,
-      content
+      content,
     })
   }
 
@@ -333,14 +333,14 @@ const Post = () => {
     type: '포스트',
     category: '기타',
     book: true,
-    link: ''
+    link: '',
   }
   props.updateTab(0)
 
   Notify(
     post.value.uid,
-    userInfo.value.photoURL,
-    `${userInfo.value.displayName}님이 새로운 자료를 올렸습니다`,
+    userInfo.photoURL,
+    `${userInfo.displayName}님이 새로운 자료를 올렸습니다`,
     `/class/${id}`
   )
 }

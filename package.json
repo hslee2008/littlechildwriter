@@ -10,16 +10,19 @@
     "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn generate",
     "lint": "eslint --ext .ts,.js,.vue .",
     "lint:fix": "eslint --ext .ts,.js,.vue . --fix",
-    "api": "node ./api/index.js"
+    "api": "node ./api/index.js",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",
+    "@pinia/nuxt": "^0.4.6",
     "firebase": "^9.13.0",
     "firebaseui": "^6.0.1",
     "perspective-api-client": "^3.1.0",
+    "pinia": "^2.0.29",
     "vite-plugin-vuetify": "^1.0.0",
     "vue": "^3.2.45",
-    "vue-skeletor": "^1.0.6",
+    "vue-gtag-next": "^1.14.0",
     "vuetify": "^3.0.2"
   },
   "devDependencies": {
@@ -33,7 +36,6 @@
     "nuxt": "^3.0.0",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
-    "typescript": "^4.8.4",
-    "vue-gtag-next": "^1.14.0"
+    "typescript": "^4.8.4"
   }
 }

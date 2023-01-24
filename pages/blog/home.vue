@@ -79,6 +79,6 @@ const DeleteContent = (i: number) => {
 }
 
 useHead({
-  title: '창작 코너 - LCW'
+  title: '창작 코너 - LCW',
 })
 </script>

@@ -143,12 +143,12 @@ const featured = ref<number>(0)
 
 useAuth(() => {
   $db
-    .ref(`/users/${userInfo.value.uid}`)
+    .ref(`/users/${userInfo.uid}`)
     .once('value')
     .then(async (s: any) => (userDB.value = await s.val()))
 
   $db
-    .ref(`/users/${userInfo.value.uid}`)
+    .ref(`/users/${userInfo.uid}`)
     .once('value')
     .then(async (s: any) => (featured.value = await s.val().featured))
 
@@ -156,12 +156,12 @@ useAuth(() => {
     const data = await s.val()
 
     for (const key in data)
-      if (data[key].uid === userInfo.value.uid) books.value.push(data[key])
+      if (data[key].uid === userInfo.uid) books.value.push(data[key])
   })
 })
 
 const Update = async () => {
-  const { displayName, uid, email } = userInfo.value
+  const { displayName, uid, email } = userInfo
   const { bio } = userDB.value
 
   await $auth.currentUser?.updateEmail(email)
@@ -169,22 +169,22 @@ const Update = async () => {
   $db.ref(`/users/${uid}`).update({
     displayName,
     bio,
-    featured: featured.value
+    featured: featured.value,
   })
 
   navigateTo(`/user/${uid}`)
 }
 
 const save = () => {
-  const { photoURL } = userInfo.value
+  const { photoURL } = userInfo
 
   $auth.currentUser?.updateProfile({ photoURL })
-  $db.ref(`/users/${userInfo.value.uid}`).update({ photoURL })
+  $db.ref(`/users/${userInfo.uid}`).update({ photoURL })
 
   imageEdit.value = false
 }
 
 useHead({
-  title: '계정 - LCW'
+  title: '계정 - LCW',
 })
 </script>

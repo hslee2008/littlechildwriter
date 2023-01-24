@@ -4,7 +4,12 @@
 
     <br />
 
-    <v-list v-if="items.length > 0" :model-value="items" :bg-color="themeColor()" nav>
+    <v-list
+      v-if="items.length > 0"
+      :model-value="items"
+      :bg-color="themeColor()"
+      nav
+    >
       <v-list-item
         v-for="(item, i) in items"
         :key="item.time"
@@ -41,12 +46,12 @@ useAuth((u: any) => {
 })
 
 const deleteBookmark = (time: string, i: number) => {
-  $db.ref(`/users/${userInfo.value.uid}/bookmarks/${time}`).remove()
-  $db.ref(`/contents/${time}/bookmarks/${userInfo.value.uid}`).remove()
+  $db.ref(`/users/${userInfo.uid}/bookmarks/${time}`).remove()
+  $db.ref(`/contents/${time}/bookmarks/${userInfo.uid}`).remove()
   items.value.splice(i, 1)
 }
 
 useHead({
-  title: '책갈피 - LCW'
+  title: '책갈피 - LCW',
 })
 </script>

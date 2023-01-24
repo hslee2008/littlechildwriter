@@ -5,7 +5,7 @@ export async function getRoutes() {
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://littlechildwriter-default-rtdb.firebaseio.com'
+    databaseURL: 'https://littlechildwriter-default-rtdb.firebaseio.com',
   })
 
   const db = admin.database()

@@ -275,7 +275,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()
@@ -289,7 +289,7 @@ const targetUser = ref<any>({
   libris: 0,
   displayName: '',
   photoURL: '',
-  bio: ''
+  bio: '',
 })
 const books = ref<any>([])
 const privateBooks = ref<any>([])
@@ -326,7 +326,7 @@ onBeforeMount(() => {
           libris,
           displayName,
           photoURL,
-          bio
+          bio,
         }
 
         $db
@@ -335,13 +335,11 @@ onBeforeMount(() => {
 
         subscription.value = subscriber ?? []
         subCount.value = Object.keys(subscriber ?? {}).length
-        subscribed.value = Object.keys(subscriber ?? {}).includes(
-          userInfo.value.uid
-        )
+        subscribed.value = Object.keys(subscriber ?? {}).includes(userInfo.uid)
       }
     )
 
-  if (userInfo.value.uid === uid) {
+  if (userInfo.uid === uid) {
     $db.ref(`/private/${uid}/`).on('child_added', async (s: any) => {
       const data = await s.val()
       privateBooks.value.unshift(data)
@@ -351,35 +349,35 @@ onBeforeMount(() => {
 
 const Subscribe = () => {
   if (subscribed.value) {
-    $db.ref(`/users/${userInfo.value.uid}/subscribe/${uid}`).remove()
-    $db.ref(`/users/${uid}/subscriber/${userInfo.value.uid}`).remove()
+    $db.ref(`/users/${userInfo.uid}/subscribe/${uid}`).remove()
+    $db.ref(`/users/${uid}/subscriber/${userInfo.uid}`).remove()
 
-    delete subscription[userInfo.value.uid]
+    delete subscription[userInfo.uid]
     subscribed.value = false
     subCount.value--
     targetUser.value.libris -= 15
 
     Libris(uid, -15)
-    Libris(userInfo.value.uid, -15)
+    Libris(userInfo.uid, -15)
   } else {
     $db
-      .ref(`/users/${userInfo.value.uid}/subscribe/${uid}`)
+      .ref(`/users/${userInfo.uid}/subscribe/${uid}`)
       .set(targetUser.value.displayName)
     $db
-      .ref(`/users/${uid}/subscriber/${userInfo.value.uid}`)
-      .set(userInfo.value.displayName)
+      .ref(`/users/${uid}/subscriber/${userInfo.uid}`)
+      .set(userInfo.displayName)
 
-    subscription[userInfo.value.uid] = userInfo.value.displayName
+    subscription[userInfo.uid] = userInfo.displayName
     subscribed.value = true
     subCount.value++
     targetUser.value.libris += 15
 
     Libris(uid, 15)
-    Libris(userInfo.value.uid, 15)
+    Libris(userInfo.uid, 15)
     Notify(
       uid,
-      userInfo.value.photoURL,
-      `${userInfo.value.displayName}님이 구독했습니다`,
+      userInfo.photoURL,
+      `${userInfo.displayName}님이 구독했습니다`,
       `/user/${uid}`
     )
   }
@@ -389,7 +387,7 @@ const ratingFilter = (a: any) =>
   rating.value === '모두' ? 1 : a.rating === rating.value
 
 useHead({
-  title: '사용자 - LCW'
+  title: '사용자 - LCW',
 })
 </script>
 

@@ -130,7 +130,7 @@
               <v-divider />
 
               <v-list-item
-                @click="logout"
+                @click="userInfo.logout"
                 title="로그아웃"
                 prepend-icon="mdi-logout"
               />
@@ -240,12 +240,14 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay, useTheme } from 'vuetify';
+import { useDisplay, useTheme } from 'vuetify'
 
-const { $db, $auth } = useNuxtApp()
+const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
 const theme = useTheme()
+
 const userInfo = User()
+userInfo.initUserInfo()
 
 const notif = ref<any>([])
 const notifOverlay = ref<boolean>(false)
@@ -257,15 +259,15 @@ useAuth((u: any) => {
     .on('child_added', async (s: any) => notif.value.push(await s.val()))
 
   $db.ref('.info/connected').on('value', () => {
-    $db.ref(`/users/${userInfo.value.uid}/status`).onDisconnect().set('offline')
-    $db.ref(`/users/${userInfo.value.uid}/status`).set('online')
+    $db.ref(`/users/${userInfo.uid}/status`).onDisconnect().set('offline')
+    $db.ref(`/users/${userInfo.uid}/status`).set('online')
   })
 
   theme.global.name.value = localStorage.getItem('theme') || 'dark'
 })
 
 const clearEverything = () => {
-  $db.ref(`/users/${userInfo.value.uid}/notification`).remove()
+  $db.ref(`/users/${userInfo.uid}/notification`).remove()
   notif.value = []
 }
 
@@ -277,11 +279,5 @@ const load = (link: string) => {
 const changeTheme = () => {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
   localStorage.setItem('theme', theme.global.name.value)
-}
-
-const logout = () => {
-  $auth.signOut()
-  navigateTo('/account/login')
-  userInfo.value = {}
 }
 </script>

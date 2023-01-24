@@ -97,7 +97,13 @@
 
             <v-menu offset-y>
               <template #activator="{ props }">
-                <v-btn v-if="userInfo.loggedIn" rounded="lg" icon v-bind="props" cols="1">
+                <v-btn
+                  v-if="userInfo.loggedIn"
+                  rounded="lg"
+                  icon
+                  v-bind="props"
+                  cols="1"
+                >
                   <v-icon>mdi-dots-vertical</v-icon>
                 </v-btn>
               </template>
@@ -169,32 +175,32 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from 'perspective-api-client';
+import Perspective from 'perspective-api-client'
 
 const { $db } = useNuxtApp()
 
 const perspective = new Perspective({
-  apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
+  apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U',
 })
 
 const userInfo = User()
 const props = defineProps({
   link: {
     type: String,
-    required: true
+    required: true,
   },
   dbr: {
     type: String,
-    required: true
+    required: true,
   },
   uid: {
     type: String,
-    required: true
+    required: true,
   },
   cb: {
     type: Function,
-    default: () => {}
-  }
+    default: () => {},
+  },
 })
 const comment = ref<string>('')
 const updatedcomment = ref<string>('')
@@ -220,7 +226,7 @@ const Update = (i: number) => {
   comments.value[i].edit = false
   $db.ref(`${props.dbr}/${Object.keys(comments.value)[i]}`).update({
     ...comments.value[i],
-    content: updatedcomment.value
+    content: updatedcomment.value,
   })
   comments.value = [...comments.value]
 }
@@ -234,20 +240,20 @@ const Love = (i: number) => {
   const cmt = $db.ref(props.dbr)
   const love = comments.value[i].love
   if (love) {
-    if (love.includes(userInfo.value.uid)) {
-      love.splice(love.indexOf(userInfo.value.uid), 1)
+    if (love.includes(userInfo.uid)) {
+      love.splice(love.indexOf(userInfo.uid), 1)
     } else {
-      love.push(userInfo.value.uid)
+      love.push(userInfo.uid)
 
       Notify(
         comments.value[i].uid,
-        userInfo.value.photoURL,
-        `${userInfo.value.displayName}님이 좋아요를 눌렀습니다`,
+        userInfo.photoURL,
+        `${userInfo.displayName}님이 좋아요를 눌렀습니다`,
         props.link
       )
     }
   } else {
-    comments.value[i].love = [userInfo.value.uid]
+    comments.value[i].love = [userInfo.uid]
   }
   cmt.set(comments.value)
   comments.value = [...comments.value]
@@ -260,7 +266,7 @@ const Comment = async () => {
 
   try {
     result = await perspective.analyze(comment.value, {
-      attributes: ['TOXICITY']
+      attributes: ['TOXICITY'],
     })
     score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
     mostProbable = Object.keys(result.attributeScores).reduce((a, b) =>
@@ -276,12 +282,12 @@ const Comment = async () => {
   if (score > 0.6) {
     snackbarBadWord.value = true
     toxcity.value = score
-    Libris(userInfo.value.uid, -score * 10)
+    Libris(userInfo.uid, -score * 10)
     return
   }
 
   if (comment.value.length > 0) {
-    const { displayName, photoURL, uid } = userInfo.value
+    const { displayName, photoURL, uid } = userInfo
     const badWord = score > 0.6
     const content = comment.value
 
@@ -292,14 +298,14 @@ const Comment = async () => {
       time: Date.now(),
       probably: badWord ? mostProbable : 'good',
       content,
-      score
+      score,
     })
 
     $db.ref(`${props.dbr.replace('/comments', '')}/joined`).update({
       [uid]: {
         displayName,
-        photoURL
-      }
+        photoURL,
+      },
     })
 
     $db
@@ -308,14 +314,14 @@ const Comment = async () => {
         const joined = Object.keys(await s.val())
 
         for (const user in joined) {
-          if (joined[user] === userInfo.value.uid) continue
-          Notify(joined[user], userInfo.value.photoURL, content, props.link)
+          if (joined[user] === userInfo.uid) continue
+          Notify(joined[user], userInfo.photoURL, content, props.link)
         }
       })
 
-    Notify(props.uid, userInfo.value.photoURL, content, props.link)
+    Notify(props.uid, userInfo.photoURL, content, props.link)
 
-    if (comments.value.length > 5) Libris(userInfo.value.uid, 5)
+    if (comments.value.length > 5) Libris(userInfo.uid, 5)
 
     props.cb()
     comment.value = ''

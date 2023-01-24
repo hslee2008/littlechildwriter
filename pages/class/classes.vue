@@ -107,7 +107,7 @@ const classInfo = ref<any>({
   uid: '',
   photoURL: '',
   public: true,
-  users: []
+  users: [],
 })
 const dialog = ref<boolean>(false)
 const steps = ref<number>(1)
@@ -118,12 +118,12 @@ onBeforeMount(() =>
     .on('child_added', async (s: any) => classes.value.push(await s.val()))
 )
 
-const filterUsers = (e: any) => e.uid === userInfo.value.uid
+const filterUsers = (e: any) => e.uid === userInfo.uid
 
 const Make = () => {
   dialog.value = false
 
-  const { displayName, uid, photoURL } = userInfo.value
+  const { displayName, uid, photoURL } = userInfo
   const { name } = classInfo.value
 
   classInfo.value = {
@@ -131,7 +131,7 @@ const Make = () => {
     creator: displayName,
     id: uid + name,
     uid,
-    photoURL
+    photoURL,
   }
 
   $db
@@ -148,13 +148,13 @@ const Make = () => {
     uid: '',
     photoURL: '',
     public: true,
-    users: []
+    users: [],
   }
   dialog.value = false
   steps.value = 1
 }
 
 useHead({
-  title: '알림판 - LCW'
+  title: '알림판 - LCW',
 })
 </script>

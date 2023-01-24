@@ -92,7 +92,7 @@ onBeforeMount(() => {
       time,
       uid,
       displayName,
-      image
+      image,
     })
   })
 })
@@ -110,6 +110,6 @@ const DeleteClass = () => {
 }
 
 useHead({
-  title: '알림판 (자세히) - LCW'
+  title: '알림판 (자세히) - LCW',
 })
 </script>

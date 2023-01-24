@@ -1,4 +1,4 @@
-import { db } from "../plugins/firebase";
+import { db } from '../plugins/firebase'
 
 export const Notify = (
   uid: string | string[],
@@ -6,11 +6,11 @@ export const Notify = (
   title: string,
   link: string
 ) => {
-  const time = new Date().toLocaleDateString();
+  const time = new Date().toLocaleDateString()
   db.ref(`users/${uid}/notification`).push({
     title,
     time,
     link,
     photoURL,
-  });
-};
+  })
+}

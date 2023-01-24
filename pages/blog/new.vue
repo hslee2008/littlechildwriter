@@ -42,7 +42,7 @@ const content = ref('')
 
 const SaveContent = () => {
   const time = Date.now()
-  const { uid, displayName, photoURL } = userInfo.value
+  const { uid, displayName, photoURL } = userInfo
 
   $db.ref(`/blog/${time}`).set({
     topic: topic.value,
@@ -50,15 +50,15 @@ const SaveContent = () => {
     uid,
     displayName,
     photoURL,
-    time
+    time,
   })
 
-  Libris(userInfo.value.uid, 50)
+  Libris(userInfo.uid, 50)
 
   navigateTo(`/blog/content/${time}`)
 }
 
 useHead({
-  title: '창작 코너 글쓰기 - Little Child Writer'
+  title: '창작 코너 글쓰기 - Little Child Writer',
 })
 </script>

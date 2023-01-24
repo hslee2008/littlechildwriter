@@ -28,23 +28,22 @@
 </template>
 
 <script setup lang="ts">
-const { $db } = useNuxtApp();
+const { $db } = useNuxtApp()
 
-const userInfo = User();
-;
-const lang = ref(["한국어", "English"]);
+const userInfo = User()
+const lang = ref(['한국어', 'English'])
 const debate = ref({
-  topic: "",
-  created_at: "",
-  uid: "",
-  photoURL: "",
-  lang: "한국어",
-});
+  topic: '',
+  created_at: '',
+  uid: '',
+  photoURL: '',
+  lang: '한국어',
+})
 
 const upload = () => {
-  const { uid, photoURL, displayName } = userInfo.value;
-  const { topic } = debate.value;
-  const time = Date.now();
+  const { uid, photoURL, displayName } = userInfo
+  const { topic } = debate.value
+  const time = Date.now()
 
   $db.ref(`/debate/${time}`).set({
     topic,
@@ -52,10 +51,10 @@ const upload = () => {
     uid,
     photoURL,
     displayName,
-  });
+  })
 
-  Libris(uid, 10);
+  Libris(uid, 10)
 
-  navigateTo(`/debate/topic/${time}`);
-};
+  navigateTo(`/debate/topic/${time}`)
+}
 </script>

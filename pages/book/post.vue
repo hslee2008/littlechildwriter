@@ -29,7 +29,6 @@
 
         <v-card-text>
           <v-img
-            v-if="post.image"
             ref="isbnImageElement"
             :src="post.image"
             class="rounded-lg mb-2"
@@ -116,9 +115,9 @@
                 />
               </div>
               <v-card-actions>
-                <v-btn rounded="lg" variant="tonal" @click="showCamera"
-                  >시작</v-btn
-                >
+                <v-btn rounded="lg" variant="tonal" @click="showCamera">
+                  시작
+                </v-btn>
                 <v-btn rounded="lg" variant="tonal" @click="takeISBNVideo">
                   ISBN 바코드 찍기
                 </v-btn>
@@ -158,9 +157,9 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn rounded="lg" variant="tonal" text @click="voiceType"
-            >시작</v-btn
-          >
+          <v-btn rounded="lg" variant="tonal" text @click="voiceType">
+            시작
+          </v-btn>
           <v-spacer />
           <v-btn
             rounded="lg"
@@ -467,7 +466,9 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { Html5QrcodeScanner } from 'html5-qrcode'
+
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const userInfo = User()
@@ -485,7 +486,7 @@ const post = ref<any>({
   isPublic: true,
   author: '',
   views: 0,
-  time: Date.now()
+  time: Date.now(),
 })
 const isbn = ref<any>({
   barcode: false,
@@ -493,7 +494,7 @@ const isbn = ref<any>({
   find: false,
   audio: false,
   upload: false,
-  audioType: ''
+  audioType: '',
 })
 
 const loading = ref<boolean>(false)
@@ -528,29 +529,30 @@ const FetchWithTitle = async () => {
   await fetch(
     `https://www.googleapis.com/books/v1/volumes?q=intitle:${title.value}`
   )
-    .then(res => res.json())
-    .then(books => (searched.value = books.items))
+    .then((res) => res.json())
+    .then((books) => (searched.value = books.items))
 
   loading.value = false
 }
 
-const showCamera = () =>
+const showCamera = () => {
   navigator.mediaDevices
     .getUserMedia({
       video: {
         facingMode: 'environment',
         width: { ideal: 4096 },
-        height: { ideal: 2160 }
-      }
+        height: { ideal: 2160 },
+      },
     })
-    .then(s => (video.value.srcObject = s))
+    .then((s) => (video.value.srcObject = s))
+}
 
 const takeISBNVideo = () => {
   if ('BarcodeDetector' in window) {
     const BarcodeDetector = window.BarcodeDetector
 
     new BarcodeDetector({
-      barcodes
+      barcodes,
     })
       .detect(video.value)
       .then((res: any) => res[0].rawValue)
@@ -560,7 +562,7 @@ const takeISBNVideo = () => {
         fetchi()
       })
   } else {
-    Error('BarcodeDetector is not supported')
+    alert('BarcodeDetector is not supported')
   }
 }
 
@@ -570,18 +572,17 @@ const uploadFile = (file: File[]) => {
   reader.addEventListener(
     'load',
     () => {
-      isbnImageElement.value.src = reader.result || ''
-
       const tempImage: any = new Image()
       tempImage.src = reader.result
+
       tempImage.onload = () => {
         if ('BarcodeDetector' in window) {
           const BarcodeDetector = window.BarcodeDetector
 
           new BarcodeDetector({
-            barcodes
+            barcodes,
           })
-            .detect(isbnImageElement)
+            .detect(tempImage)
             .then((res: any) => res[0].rawValue)
             .then((a: any) => {
               post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
@@ -589,7 +590,7 @@ const uploadFile = (file: File[]) => {
               fetchi()
             })
         } else {
-          Error('BarcodeDetector is not supported')
+          alert('BarcodeDetector is not supported')
         }
       }
     },
@@ -603,19 +604,19 @@ const fetchi = () => {
   loading.value = true
 
   fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${post.value.isbn}`)
-    .then(res => res.json())
-    .then(async res => {
+    .then((res) => res.json())
+    .then(async (res) => {
       if (res.items[0].volumeInfo.imageLinks) {
         const {
           title,
           imageLinks: { thumbnail: image },
           authors: author,
-          pageCount
+          pageCount,
         } = res.items[0].volumeInfo
 
         const categories = await fetch(res.items[0].selfLink)
-          .then(cg => cg.json())
-          .then(cg => cg.volumeInfo.categories)
+          .then((cg) => cg.json())
+          .then((cg) => cg.volumeInfo.categories)
 
         post.value = {
           ...post.value,
@@ -623,7 +624,7 @@ const fetchi = () => {
           image,
           pageCount,
           author,
-          categories
+          categories,
         }
         post.value.categories = categories
       } else {
@@ -636,7 +637,7 @@ const fetchi = () => {
           author,
           image:
             'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif',
-          categories: ['Juvenile Fiction / General']
+          categories: ['Juvenile Fiction / General'],
         }
       }
 
@@ -664,7 +665,7 @@ const uploadImg = (f: File[]) => {
 }
 
 const Post = () => {
-  const { uid, displayName } = userInfo.value
+  const { uid, displayName } = userInfo
   const {
     title,
     content,
@@ -675,7 +676,7 @@ const Post = () => {
     pageCount,
     categories,
     isPublic,
-    author
+    author,
   } = post.value
 
   if (!title || !content || !pageCount || !author || categories?.length === 0) {
@@ -694,12 +695,12 @@ const Post = () => {
       categories,
       likes: 1,
       liked: {
-        [userInfo.value.uid]: true
+        [userInfo.uid]: true,
       },
       views: 0,
       uid,
       displayName,
-      content: content.replaceAll('\n', '<br>')
+      content: content.replaceAll('\n', '<br>'),
     })
   else
     $db.ref(`/private/${uid}/${time}`).set({
@@ -715,7 +716,7 @@ const Post = () => {
       views: 0,
       uid,
       displayName,
-      content: content.replaceAll('\n', '<br>')
+      content: content.replaceAll('\n', '<br>'),
     })
 
   $db.ref(`/user/${uid}/subscriber`).once('value', (snapshot: any) => {
@@ -724,14 +725,14 @@ const Post = () => {
     for (const subscriber in subscribers) {
       Notify(
         subscribers[subscriber],
-        userInfo.value.photoURL,
-        `${userInfo.value.displayName}님이 ${post.title} 새로운 글을 올렸습니다`,
+        userInfo.photoURL,
+        `${userInfo.displayName}님이 ${post.title} 새로운 글을 올렸습니다`,
         `/book/content/${post.time}`
       )
     }
   })
 
-  Libris(userInfo.value.uid, parseInt(post.value.pageCount) / 20)
+  Libris(userInfo.uid, parseInt(post.value.pageCount) / 20)
 
   navigateTo(`/book/content/${time}`)
 }
@@ -765,6 +766,10 @@ const isPageCountValid = (v: any) =>
   '옳바른 숫자를 넣어 주세요'
 
 useHead({
-  title: '업로드 - LCW'
+  title: '업로드 - LCW',
+})
+
+defineExpose({
+  isbnImageElement,
 })
 </script>

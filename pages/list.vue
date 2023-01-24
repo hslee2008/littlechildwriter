@@ -146,6 +146,6 @@ const Next = () => {
 }
 
 useHead({
-  title: '리스트 - LCW'
+  title: '리스트 - LCW',
 })
 </script>

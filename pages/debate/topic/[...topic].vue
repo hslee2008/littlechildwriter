@@ -346,24 +346,24 @@ const suggestion = ref('')
 const suggestionContent = ref('')
 
 const post = () => {
-  const { uid, displayName, photoURL } = userInfo.value
+  const { uid, displayName, photoURL } = userInfo
 
   $db.ref(`/debate/${time}/${side.value}`).push({
     displayName,
     uid,
     photoURL,
     topic: claim.value,
-    time: Date.now()
+    time: Date.now(),
   })
 
   write.value = false
   claim.value = ''
 
-  Libris(userInfo.value.uid, 5)
+  Libris(userInfo.uid, 5)
   Notify(
     content.value.uid,
-    userInfo.value.photoURL,
-    `${userInfo.value.displayName}님이 새로운 의견을 냈습니다`,
+    userInfo.photoURL,
+    `${userInfo.displayName}님이 새로운 의견을 냈습니다`,
     `/debate/topic/${time}`
   )
 }
@@ -371,7 +371,7 @@ const post = () => {
 const update = () => {
   if (side.value === 'suggestion') {
     $db.ref(`/debate/${time}/suggestion/${editIndex.value}`).update({
-      topic: editContent.value
+      topic: editContent.value,
     })
 
     edit.value = false
@@ -379,7 +379,7 @@ const update = () => {
     suggestionContent.value = ''
   } else {
     $db.ref(`/debate/${time}/${side.value}/${editIndex.value}`).update({
-      topic: editContent.value
+      topic: editContent.value,
     })
 
     edit.value = false
@@ -415,7 +415,7 @@ const UpdateOnSuggestion = (topic: string, index: number) => {
 }
 
 const newSuggestion = () => {
-  const { uid, displayName, photoURL } = userInfo.value
+  const { uid, displayName, photoURL } = userInfo
 
   $db.ref(`/debate/${time}/suggestion`).push({
     displayName,
@@ -423,18 +423,18 @@ const newSuggestion = () => {
     photoURL,
     topic: suggestion.value,
     content: suggestionContent.value,
-    time: Date.now()
+    time: Date.now(),
   })
 
   suggestionCard.value = false
   suggestion.value = ''
   suggestionContent.value = ''
 
-  Libris(userInfo.value.uid, 5)
+  Libris(userInfo.uid, 5)
   Notify(
     content.value.uid,
-    userInfo.value.photoURL,
-    `${userInfo.value.displayName}님이 새로운 제언을 했습니다`,
+    userInfo.photoURL,
+    `${userInfo.displayName}님이 새로운 제언을 했습니다`,
     `/debate/topic/${time}`
   )
 }
