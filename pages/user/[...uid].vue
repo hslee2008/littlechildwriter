@@ -84,15 +84,7 @@
       </v-window-item>
 
       <v-window-item :value="1">
-        <v-select
-          v-model="rating"
-          variant="outlined"
-          :items="['모두', 5, 4, 3, 2, 1]"
-          label="평점 선택"
-          flat
-          prepend-inner-icon="mdi-star"
-        />
-        <LazyBookCard :items="books.filter(ratingFilter)" :simple="true" />
+        <List :user="uid" star />
       </v-window-item>
 
       <v-window-item :value="2">
@@ -281,6 +273,9 @@ const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
 const userInfo = User()
 const route = useRoute()
+
+const page = ref<number>(0)
+const order = ref<string>('시간')
 
 const rating = ref<string>('모두')
 const tab = ref<string>('홈')

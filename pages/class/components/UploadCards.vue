@@ -184,8 +184,8 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <LazyCommentComponent
-      v-else
+    <CommentComponent
+      v-else-if="post.type === '공지사항'"
       :link="`/class/${id}`"
       :dbr="`classes/${id}/contents/${post.category}`"
       :nocomments="true"

@@ -24,7 +24,7 @@
     </v-card-text>
 
     <v-card-actions>
-      <LazyDialogComponent
+      <DialogComponent
         :cb="() => $navigateTo(`/book/content/${post.time}`)"
         btn-title="취소"
         title="진짜로 취소하겠습니까?"

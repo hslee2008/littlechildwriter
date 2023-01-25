@@ -20,7 +20,7 @@
 
     <br /><br />
 
-    <LazyCommentComponent
+    <CommentComponent
       :link="`/debate/thread/${time}+${side}+${thread}`"
       :dbr="`debate/${time}/${side}/${thread}/comments`"
       :uid="threadData.uid"

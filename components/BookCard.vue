@@ -7,12 +7,15 @@
     }"
     transition="fade-transition"
   >
-    <v-row class="row d-flex justify-center" style="margin: 2.5px">
+    <v-row
+      class="row d-flex justify-center"
+      :style="`margin: ${mobile ? 0 : 2.5}px`"
+    >
       <v-card
         v-for="(item, i) in items"
         :key="i"
         :width="mobile ? 150 : 200"
-        :class="`my-4 elevation-0 ${mobile ? 'mx-0' : 'mx-4'}`"
+        :class="`my-4 elevation-0 ${mobile ? 'mx-auto' : 'mx-4'}`"
         :color="themeColor()"
       >
         <v-card

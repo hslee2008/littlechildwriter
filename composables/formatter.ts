@@ -44,5 +44,9 @@ export const DateFormatter = (time: number) => {
       : rtf.format(hourDifference, 'hour')
   }
 
-  return rtf.format(daysDifference, 'hour')
+  try {
+    return rtf.format(daysDifference, 'hour')
+  } catch (error) {
+    return '에러'
+  }
 }

@@ -12,7 +12,6 @@
           fixed
           fab
           color="primary"
-          class="zmax"
           v-bind="props"
         >
           <v-icon start> mdi-plus </v-icon> 새로운 알림판 만들기

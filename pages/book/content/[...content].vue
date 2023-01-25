@@ -415,7 +415,7 @@
       </v-menu>
     </div>
 
-    <LazyCommentComponent
+    <CommentComponent
       :link="`/book/content/${time}`"
       :dbr="`contents/${time}/comments`"
       :uid="post.uid"
@@ -449,7 +449,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { width } = useDisplay()

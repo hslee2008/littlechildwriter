@@ -20,136 +20,125 @@
 
         <v-spacer />
 
-        <div v-if="!$route.path.startsWith('/class')">
-          <v-btn
-            v-if="$route.path !== '/book/post' && userInfo.loggedIn"
-            rounded="lg"
-            icon
-            to="/book/post"
-          >
-            <v-icon>mdi-plus-circle-outline</v-icon>
-          </v-btn>
+        <v-btn
+          v-if="$route.path !== '/book/post' && userInfo.loggedIn"
+          rounded="lg"
+          icon
+          to="/book/post"
+        >
+          <v-icon>mdi-plus-circle-outline</v-icon>
+        </v-btn>
 
-          <v-dialog
-            v-if="userInfo.loggedIn"
-            v-model="notifOverlay"
-            width="700"
-            activator="#notif"
-            scrollable
-          >
-            <template #activator="{ props }">
-              <v-btn rounded="lg" icon v-bind="props" :color="themeColor()">
-                <v-badge
-                  id="notif"
-                  color="primary"
-                  :content="notif.length"
-                  class="text-amber"
-                >
-                  <v-icon>
-                    {{
-                      notif.length > 0
-                        ? `mdi-bell-ring${notifOverlay ? '' : '-outline'}`
-                        : `mdi-bell${notifOverlay ? '' : '-outline'}`
-                    }}
-                  </v-icon>
-                </v-badge>
-              </v-btn>
-            </template>
+        <v-dialog
+          v-if="userInfo.loggedIn"
+          v-model="notifOverlay"
+          width="700"
+          activator="#notif"
+          scrollable
+        >
+          <template #activator="{ props }">
+            <v-btn rounded="lg" icon v-bind="props" :color="themeColor()">
+              <v-badge
+                id="notif"
+                color="primary"
+                :content="notif.length"
+                class="text-amber"
+              >
+                <v-icon>
+                  {{
+                    notif.length > 0
+                      ? `mdi-bell-ring${notifOverlay ? '' : '-outline'}`
+                      : `mdi-bell${notifOverlay ? '' : '-outline'}`
+                  }}
+                </v-icon>
+              </v-badge>
+            </v-btn>
+          </template>
 
-            <v-card :bg-color="themeColor()">
-              <v-list v-if="notif.length > 0" nav>
-                <v-list-item
-                  v-for="(d, i) in notif"
-                  :key="i"
-                  @click="load(d.link)"
-                >
-                  <template #prepend>
-                    <UserPhoto :size="45" :src="d?.photoURL" />
-                  </template>
-
-                  <v-list-item-title>{{ d.title }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ d.time }}</v-list-item-subtitle>
-                </v-list-item>
-              </v-list>
-              <div v-else>
-                <v-card-text class="text-center text-grey">
-                  알림이 없습니다.
-                </v-card-text>
-              </div>
-
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  rounded="lg"
-                  variant="tonal"
-                  text
-                  @click="clearEverything"
-                >
-                  비우기 <v-icon right> mdi-notification-clear-all </v-icon>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-
-          <v-menu v-if="userInfo.loggedIn" right activator="#image">
-            <template #activator="{ on }">
-              <v-btn rounded="lg" icon>
-                <v-avatar size="35">
-                  <v-img
-                    id="image"
-                    alt="User Avatar"
-                    :src="userInfo.photoURL"
-                  />
-                </v-avatar>
-              </v-btn>
-            </template>
-
-            <v-card class="d-flex pa-3 text-center rounded-0">
-              <v-avatar size="45" class="ma-auto">
-                <v-img alt="User Avatar" :src="userInfo.photoURL" />
-              </v-avatar>
-
-              <div>
-                <v-card-title>{{ userInfo.displayName }}</v-card-title>
-                <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
-              </div>
-            </v-card>
-
-            <v-list nav class="rounded-0">
+          <v-card :bg-color="themeColor()">
+            <v-list v-if="notif.length > 0" nav>
               <v-list-item
-                to="/account/account"
-                title="설정"
-                prepend-icon="mdi-cog-outline"
-              />
-              <v-list-item
-                :to="`/user/${userInfo.uid}`"
-                title="프로필"
-                prepend-icon="mdi-account-circle"
-              />
+                v-for="(d, i) in notif"
+                :key="i"
+                @click="load(d.link)"
+              >
+                <template #prepend>
+                  <UserPhoto :size="45" :src="d?.photoURL" />
+                </template>
 
-              <v-divider />
-
-              <v-list-item
-                @click="userInfo.logout"
-                title="로그아웃"
-                prepend-icon="mdi-logout"
-              />
-
-              <v-divider />
-
-              <v-list-item
-                @click="changeTheme"
-                :title="isDark() ? '라이트 모드로 변경' : '다크 모드로 변경'"
-                :prepend-icon="
-                  isDark() ? 'mdi-white-balance-sunny' : 'mdi-weather-night'
-                "
-              />
+                <v-list-item-title>{{ d.title }}</v-list-item-title>
+                <v-list-item-subtitle>{{ d.time }}</v-list-item-subtitle>
+              </v-list-item>
             </v-list>
-          </v-menu>
-          <v-btn rounded="lg" v-else variant="tonal" to="/account/login" icon>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-btn>
-        </div>
+            <div v-else>
+              <v-card-text class="text-center text-grey">
+                알림이 없습니다.
+              </v-card-text>
+            </div>
+
+            <v-card-actions>
+              <v-spacer />
+              <v-btn rounded="lg" variant="tonal" text @click="clearEverything">
+                비우기 <v-icon right> mdi-notification-clear-all </v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-menu v-if="userInfo.loggedIn" right activator="#image">
+          <template #activator="{ on }">
+            <v-btn rounded="lg" icon>
+              <v-avatar size="35">
+                <v-img id="image" alt="User Avatar" :src="userInfo.photoURL" />
+              </v-avatar>
+            </v-btn>
+          </template>
+
+          <v-card class="d-flex pa-3 text-center rounded-0">
+            <v-avatar size="45" class="ma-auto">
+              <v-img alt="User Avatar" :src="userInfo.photoURL" />
+            </v-avatar>
+
+            <div>
+              <v-card-title>{{ userInfo.displayName }}</v-card-title>
+              <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
+            </div>
+          </v-card>
+
+          <v-list nav class="rounded-0">
+            <v-list-item
+              to="/account/account"
+              title="설정"
+              prepend-icon="mdi-cog-outline"
+            />
+            <v-list-item
+              :to="`/user/${userInfo.uid}`"
+              title="프로필"
+              prepend-icon="mdi-account-circle"
+            />
+
+            <v-divider />
+
+            <v-list-item
+              @click="userInfo.logout"
+              title="로그아웃"
+              prepend-icon="mdi-logout"
+            />
+
+            <v-divider />
+
+            <v-list-item
+              @click="changeTheme"
+              :title="isDark() ? '라이트 모드로 변경' : '다크 모드로 변경'"
+              :prepend-icon="
+                isDark() ? 'mdi-white-balance-sunny' : 'mdi-weather-night'
+              "
+            />
+          </v-list>
+        </v-menu>
+        <v-btn rounded="lg" v-else variant="tonal" to="/account/login" icon>
+          <v-icon>mdi-account-circle</v-icon>
+        </v-btn>
       </v-app-bar>
 
       <v-navigation-drawer

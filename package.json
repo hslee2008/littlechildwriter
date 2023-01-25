@@ -32,7 +32,7 @@
     "@nuxtjs/google-gtag": "^1.0.4",
     "eslint": "^8.25.0",
     "eslint-plugin-nuxt": "4.0.0",
-    "firebase-admin": "11.4.1",
+    "firebase-admin": "11.5.0",
     "nuxt": "^3.0.0",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",

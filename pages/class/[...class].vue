@@ -19,7 +19,7 @@
       :value="2"
       class="pt-5"
     >
-      <v-card class="mt-5">
+      <v-card class="mt-5" :color="colorTheme()">
         <v-card-title>수업 세부정보</v-card-title>
         <v-card-text>
           <v-text-field
@@ -53,7 +53,7 @@
 
       <v-card-title>삭제</v-card-title>
       <v-card-text>
-        <LazyDialogComponent
+        <DialogComponent
           :cb="DeleteClass"
           btn-title="삭제"
           title="진짜로 삭제하겠습니까?"

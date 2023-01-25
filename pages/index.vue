@@ -75,10 +75,10 @@
         <BookCard :items="recent" :simple="true" />
       </v-window-item>
       <v-window-item :value="1">
-        <LazyBookCard :items="popular" :simple="true" />
+        <BookCard :items="popular" :simple="true" />
       </v-window-item>
       <v-window-item :value="2">
-        <LazyBookCard :items="views" :simple="true" />
+        <BookCard :items="views" :simple="true" />
       </v-window-item>
     </v-window>
 
@@ -100,7 +100,10 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
 const { $db } = useNuxtApp()
+const { mobile } = useDisplay()
 
 const userInfo = User()
 const recent = ref<any>([])
@@ -122,19 +125,19 @@ const image = ref<string>('./background.avif')
 onBeforeMount(async () => {
   $db
     .ref('/contents')
-    .limitToLast(5)
+    .limitToLast(mobile.value ? 4 : 5)
     .on('child_added', async (s: any) => recent.value.unshift(await s.val()))
 
   $db
     .ref('/contents')
     .orderByChild('likes')
-    .limitToLast(5)
+    .limitToLast(mobile.value ? 4 : 5)
     .on('child_added', async (s: any) => popular.value.unshift(await s.val()))
 
   $db
     .ref('/contents')
     .orderByChild('views')
-    .limitToLast(5)
+    .limitToLast(mobile.value ? 4 : 5)
     .on('child_added', async (s: any) => views.value.unshift(await s.val()))
 
   setInterval(

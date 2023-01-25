@@ -7,15 +7,6 @@
   gap: 10px;
 }
 
-/* Customize */
-.v-overlay__scrim {
-  background-color: #3d4754 !important;
-}
-
-.v-card-subtitle > a {
-  color: #159ecb !important;
-}
-
 .c-transparent {
   background-color: transparent !important;
 }

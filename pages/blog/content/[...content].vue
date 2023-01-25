@@ -22,7 +22,7 @@
       <v-card-text v-html="content?.markdown"></v-card-text>
     </v-card>
 
-    <LazyCommentComponent
+    <CommentComponent
       :link="`/blog/content/${time}`"
       :dbr="`blog/${time}/comments`"
       :uid="content.uid"
