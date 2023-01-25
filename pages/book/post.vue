@@ -153,7 +153,7 @@
             :items="['en-US', 'ko-KR']"
             label="보이스 타이핑 언어"
           />
-          <v-textarea v-model="typed" clearable counter />
+          <v-textarea v-model="typed" variant="outlined" clearable counter />
         </v-card-text>
 
         <v-card-actions>
@@ -466,8 +466,6 @@
 </template>
 
 <script setup lang="ts">
-import { Html5QrcodeScanner } from 'html5-qrcode'
-
 import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 

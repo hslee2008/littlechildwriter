@@ -1,0 +1,11 @@
+/*
+  Changing Vuetify style to the way I like
+*/
+
+.v-card-subtitle > a {
+  color: #159ecb !important;
+}
+
+.v-overlay__scrim {
+  background-color: #3d4754 !important;
+}

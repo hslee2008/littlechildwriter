@@ -19,7 +19,7 @@
       :value="2"
       class="pt-5"
     >
-      <v-card class="mt-5" :color="colorTheme()">
+      <v-card class="mt-5" :color="themeColor()">
         <v-card-title>수업 세부정보</v-card-title>
         <v-card-text>
           <v-text-field
@@ -30,6 +30,7 @@
           />
           <v-textarea
             :model-value="classInfo.description"
+            variant="outlined"
             label="수업 설명"
             required
           />

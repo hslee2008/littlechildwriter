@@ -1,7 +1,9 @@
 <template>
   <v-app :v-theme="theme">
     <NuxtLayout>
-      <NuxtLoadingIndicator />
+      <NuxtLoadingIndicator
+        color="repeating-linear-gradient(to right,#F7AD42 0%,#23262E 50%,#159ECB 100%)"
+      />
 
       <v-app-bar
         fixed

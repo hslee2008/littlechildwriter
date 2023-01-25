@@ -17,6 +17,7 @@
       />
       <v-textarea
         :model-value="post.content"
+        variant="outlined"
         label="책 소개"
         auto-grow
         counter
@@ -25,7 +26,7 @@
 
     <v-card-actions>
       <DialogComponent
-        :cb="() => $navigateTo(`/book/content/${post.time}`)"
+        :cb="() => navigateTo(`/book/content/${post.time}`)"
         btn-title="취소"
         title="진짜로 취소하겠습니까?"
         text="취소하면 복구할 수 없습니다"

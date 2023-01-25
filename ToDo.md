@@ -6,7 +6,3 @@
 # Features
 
 1. Uprade badge system
-
-# Constantly
-
-1. Code review (JS, TS, Vue)

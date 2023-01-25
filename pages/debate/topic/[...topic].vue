@@ -222,6 +222,7 @@
       <v-card-text>
         <v-textarea
           v-model="suggestionContent"
+          variant="outlined"
           label="내용"
           outlined
           dense
@@ -289,9 +290,9 @@
         <v-card-text>
           <v-textarea
             v-model="claim"
+            variant="outlined"
             label="내용"
             placeholder="내용을 입력해주세요."
-            outlined
             rows="10"
           />
         </v-card-text>
@@ -309,16 +310,16 @@
       <v-card>
         <v-card-title>글쓰기</v-card-title>
         <v-card-text>
-          <v-textarea v-model="editContent" outlined rows="10" />
+          <v-textarea v-model="editContent" variant="outlined" rows="10" />
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="edit = false"
-            >취소</v-btn
-          >
-          <v-btn rounded="lg" variant="tonal" text @click="update"
-            >업데이트</v-btn
-          >
+          <v-btn rounded="lg" variant="tonal" text @click="edit = false">
+            취소
+          </v-btn>
+          <v-btn rounded="lg" variant="tonal" text @click="update">
+            업데이트
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

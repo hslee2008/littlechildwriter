@@ -169,7 +169,7 @@
           :model-value="post.title"
           label="제목"
         />
-        <v-textarea :model-value="post.content" label="내용" />
+        <v-textarea v-model="post.content" variant="outlined" label="내용" />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
         <v-btn

@@ -15,6 +15,7 @@
       <v-card-text>
         <v-textarea
           v-model="content"
+          variant="outlined"
           label="Content"
           placeholder="Content"
           required
