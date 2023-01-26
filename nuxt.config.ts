@@ -102,6 +102,10 @@ export default defineNuxtConfig({
   ],
 
   pwa: {
+    meta: {
+      theme_color: '#159ECB',
+      mobileAppIOS: true,
+    },
     workbox: {
       enabled: true,
     },
@@ -154,5 +158,9 @@ export default defineNuxtConfig({
     async 'nitro:config'(config) {
       config?.prerender?.routes?.push(...(await getRoutes()))
     },
+  },
+
+  experimental: {
+    payloadExtraction: true
   },
 })

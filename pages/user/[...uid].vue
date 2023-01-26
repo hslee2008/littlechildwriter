@@ -198,68 +198,73 @@
       <v-window-item :value="4">
         <div class="d-flex justify-center align-center badge">
           <v-card
-            v-if="targetUser.libris > 5000"
+            v-if="readCount > 9"
             class="d-flex justify-center elevation-0"
             :color="themeColor()"
           >
-            <div>
-              <v-img src="/badge/5klibris.png" :width="mobile ? 100 : 160" />
-              <p class="text-center">5000 Libris</p>
-            </div>
-          </v-card>
-          <v-card
-            v-if="targetUser.libris > 1000"
-            class="d-flex justify-center elevation-0"
-            :color="themeColor()"
-          >
-            <div>
-              <v-img src="/badge/1klibris.png" :width="mobile ? 100 : 160" />
-              <p class="text-center">1000 Libris</p>
-            </div>
-          </v-card>
-          <v-card
-            v-if="targetUser.libris > 100"
-            class="d-flex justify-center elevation-0"
-            :color="themeColor()"
-          >
-            <div>
-              <v-img src="/badge/100libris.png" :width="mobile ? 100 : 160" />
-              <p class="text-center">100 Libris</p>
-            </div>
+            <v-tooltip :text="readCount.toString()" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-badge
+                  v-bind="props"
+                  color="primary"
+                  location="bottom end"
+                  offset-x="75"
+                  :offset-y="mobile ? 150 : 200"
+                  :content="`x ${Math.floor(Math.log10(readCount))}`"
+                >
+                  <v-img src="/img/views.png" :width="mobile ? 200 : 300" />
+                </v-badge>
+              </template>
+            </v-tooltip>
           </v-card>
 
           <v-card
-            v-if="readCount > 10000"
+            v-if="subCount > 1"
             class="d-flex justify-center elevation-0"
             :color="themeColor()"
           >
-            <div>
-              <v-img src="/badge/10kviews.png" :width="mobile ? 100 : 160" />
-              <p class="text-center">1만 뷰</p>
-            </div>
-          </v-card>
-          <v-card
-            v-if="readCount > 1000"
-            class="d-flex justify-center elevation-0"
-            :color="themeColor()"
-          >
-            <div>
-              <v-img src="/badge/1kviews.png" :width="mobile ? 100 : 160" />
-              <p class="text-center">1천 뷰</p>
-            </div>
-          </v-card>
-          <v-card
-            v-if="readCount > 100"
-            class="d-flex justify-center elevation-0"
-            :color="themeColor()"
-          >
-            <div>
-              <v-img src="/badge/100views.png" :width="mobile ? 100 : 160" />
-              <p class="text-center">100 뷰</p>
-            </div>
+            <v-tooltip
+              :text="`구독자: ${subCount.toString()}`"
+              location="bottom"
+            >
+              <template v-slot:activator="{ props }">
+                <v-badge
+                  v-bind="props"
+                  color="primary"
+                  location="bottom end"
+                  offset-x="75"
+                  :offset-y="mobile ? 150 : 200"
+                  :content="`x ${Math.floor(Math.log2(subCount))}`"
+                >
+                  <v-img src="/img/followers.png" :width="mobile ? 200 : 300" />
+                </v-badge>
+              </template>
+            </v-tooltip>
           </v-card>
 
-          <!--https://www.imgonline.com.ua/eng/replace-color.php-->
+          <v-card
+            v-if="books.length > 9"
+            class="d-flex justify-center elevation-0"
+            :color="themeColor()"
+          >
+            <v-tooltip
+              :text="`업로드 수: ${books.length.toString()}`"
+              location="bottom"
+            >
+              <template v-slot:activator="{ props }">
+                <v-badge
+                  v-bind="props"
+                  color="primary"
+                  location="bottom end"
+                  offset-x="75"
+                  :offset-y="mobile ? 150 : 200"
+                  :content="`x ${Math.floor(Math.log10(books.length))}`"
+                >
+                  <v-img src="/img/uploads.png" :width="mobile ? 200 : 300" />
+                </v-badge>
+              </template>
+            </v-tooltip>
+          </v-card>
         </div>
       </v-window-item>
     </v-window>
@@ -267,15 +272,12 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()
 const userInfo = User()
 const route = useRoute()
-
-const page = ref<number>(0)
-const order = ref<string>('시간')
 
 const rating = ref<string>('모두')
 const tab = ref<string>('홈')

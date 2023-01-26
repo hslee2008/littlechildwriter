@@ -28,12 +28,7 @@
         <br />
 
         <v-card-text>
-          <v-img
-            ref="isbnImageElement"
-            :src="post.image"
-            class="rounded-lg mb-2"
-            max-width="150"
-          />
+          <v-img :src="post.image" class="rounded-lg mb-2" max-width="150" />
 
           <v-tabs v-model="tab">
             <v-tab> 기기에서 업로드 </v-tab>
@@ -99,21 +94,14 @@
                 accept="image/*"
                 label="ISBN 사진"
                 color="grey"
-                outlined
+                variant="outlined"
                 dense
                 @update:modelValue="uploadFile($event)"
               />
             </v-window-item>
 
             <v-window-item class="pt-3">
-              <div id="container">
-                <video
-                  id="videoElement"
-                  ref="video"
-                  autoplay="true"
-                  width="100%"
-                />
-              </div>
+              <video id="video" />
               <v-card-actions>
                 <v-btn rounded="lg" variant="tonal" @click="showCamera">
                   시작
@@ -466,7 +454,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const userInfo = User()
@@ -500,16 +488,10 @@ const title = ref<string>('')
 const searched = ref<any>({})
 const barcodes = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
 const typed = ref<string>('')
-const isbnImageElement = ref<any>(null)
 const snackbar = ref<boolean>(false)
 const notfound = ref<boolean>(false)
-const video = ref<any>(null)
 const tab = ref<any>(0)
-
-onBeforeUnmount(() => {
-  if (video.value)
-    video.value.srcObject.getTracks().forEach((track: any) => track.stop())
-})
+const video = ref<any>(null)
 
 const remove = (item: string) => {
   post.value.categories.splice(post.value.categories.indexOf(item), 1)
@@ -542,23 +524,34 @@ const showCamera = () => {
         height: { ideal: 2160 },
       },
     })
-    .then((s) => (video.value.srcObject = s))
+    .then((s) => {
+      const videoElement = document.querySelector('#video') as HTMLVideoElement
+
+      videoElement.srcObject = s
+      videoElement.onloadedmetadata = () => {
+        videoElement.play()
+      }
+    })
+    .catch((e) => {
+      alert(e)
+    })
 }
 
 const takeISBNVideo = () => {
   if ('BarcodeDetector' in window) {
     const BarcodeDetector = window.BarcodeDetector
-
+    alert(video)
     new BarcodeDetector({
       barcodes,
     })
-      .detect(video.value)
+      .detect(video)
       .then((res: any) => res[0].rawValue)
       .then((a: any) => {
         post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
         isbn.value.barcode = false
         fetchi()
       })
+      .catch((e: any) => alert(e))
   } else {
     alert('BarcodeDetector is not supported')
   }
@@ -765,9 +758,5 @@ const isPageCountValid = (v: any) =>
 
 useHead({
   title: '업로드 - LCW',
-})
-
-defineExpose({
-  isbnImageElement,
 })
 </script>

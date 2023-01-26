@@ -9,7 +9,6 @@
         fixed
         clipped-left
         class="elevation-0 pl-1 pr-3"
-        :collapse="$route.path.startsWith('/class')"
         :color="themeColor()"
       >
         <template #prepend>

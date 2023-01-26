@@ -11,7 +11,9 @@
     "lint": "eslint --ext .ts,.js,.vue .",
     "lint:fix": "eslint --ext .ts,.js,.vue . --fix",
     "api": "node ./api/index.js",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "firebase": "yarn generate && firebase deploy",
+    "upgrade": "yarn upgrade && nuxi upgrade"
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",
@@ -33,7 +35,7 @@
     "eslint": "^8.25.0",
     "eslint-plugin-nuxt": "4.0.0",
     "firebase-admin": "11.5.0",
-    "nuxt": "^3.0.0",
+    "nuxt": "^3.1.1",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
     "typescript": "^4.8.4"
