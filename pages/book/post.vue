@@ -14,7 +14,6 @@
         >
           <v-btn rounded="lg" variant="tonal" @click="isbn.upload = true">
             <v-icon class="ma-auto" left> mdi-book-open-page-variant </v-icon>
-
             책 사진 올리기
           </v-btn>
         </v-overlay>
@@ -225,14 +224,13 @@
             variant="outlined"
             autofocus
             label="책 제목"
-            class="bookTitle"
             @keyup.enter="FetchWithTitle"
           />
         </v-card-text>
 
         <v-list v-if="searched" nav>
           <div
-            v-for="item in searched"
+            v-for="(item, index) in searched"
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
           >
             <v-list-item
@@ -309,28 +307,17 @@
         />
       </v-row>
 
-      <v-text-field
-        v-model="post.title"
-        variant="outlined"
-        label="제목"
-        class="title"
-      />
+      <v-text-field v-model="post.title" variant="outlined" label="제목" />
 
       <v-row class="g-10" style="margin: 0.5px 0">
         <v-text-field
           v-model="post.pageCount"
           variant="outlined"
           label="페이지"
-          class="page"
           type="number"
           :rules="[isPageCountValid]"
         />
-        <v-text-field
-          v-model="post.author"
-          variant="outlined"
-          label="작가"
-          class="author"
-        />
+        <v-text-field v-model="post.author" variant="outlined" label="작가" />
       </v-row>
 
       <v-checkbox
@@ -345,7 +332,6 @@
         clearable
         counter
         variant="underlined"
-        class="content"
       />
 
       <v-combobox
@@ -373,25 +359,13 @@
     </v-card-text>
 
     <v-card-actions class="g-10">
-      <v-btn
-        rounded="lg"
-        variant="tonal"
-        color="primary"
-        class="upload"
-        @click="Post"
-      >
+      <v-btn rounded="lg" variant="tonal" color="primary" @click="Post">
         업로드
       </v-btn>
 
       <v-menu bottom>
         <template #activator="{ props }">
-          <v-btn
-            rounded="lg"
-            variant="tonal"
-            elevation="0"
-            class="book"
-            v-bind="props"
-          >
+          <v-btn rounded="lg" variant="tonal" elevation="0" v-bind="props">
             책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
           </v-btn>
         </template>
@@ -403,10 +377,10 @@
           <v-list-item v-if="mobile" @click="isbn.barcode = true">
             <v-icon start> mdi-barcode-scan </v-icon> ISBN 촬영
           </v-list-item>
-          <v-list-item class="isbnDialog" @click="isbn.input = true">
+          <v-list-item @click="isbn.input = true">
             <v-icon start> mdi-form-textbox </v-icon> ISBN 입력
           </v-list-item>
-          <v-list-item class="bookDialog" @click="isbn.find = true">
+          <v-list-item @click="isbn.find = true">
             <v-icon start> mdi-book-search </v-icon> 책 찾기
           </v-list-item>
           <v-list-item @click="isbn.audio = true">
@@ -454,7 +428,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const userInfo = User()

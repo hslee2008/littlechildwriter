@@ -38,20 +38,33 @@
       </div>
     </v-row>
 
-    <v-tabs
-      v-model="tab"
-      show-arrows
-      center-active
-      grow
-      :bg-color="themeColor()"
-    >
+    <v-tabs v-model="tab" center-active grow :bg-color="themeColor()">
       <v-tab> 홈 </v-tab>
       <v-tab> 게시물 </v-tab>
-      <v-tab> 구독자 </v-tab>
-      <v-tab> 정보 </v-tab>
-      <v-tab>
-        <v-badge color="primary" content="베타" floating>뱃지</v-badge>
-      </v-tab>
+      <v-tab v-if="!mobile"> 구독자 </v-tab>
+      <v-tab v-if="!mobile"> 정보 </v-tab>
+      <v-tab v-if="!mobile"> 업적 </v-tab>
+
+      <v-menu v-if="mobile">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            variant="plain"
+            rounded="0"
+            class="align-self-center me-4"
+            height="100%"
+            v-bind="props"
+          >
+            더보기
+            <v-icon end> mdi-menu-down </v-icon>
+          </v-btn>
+        </template>
+
+        <v-list ey-li="bg-grey-lighten-3">
+          <v-list-item @click="tab = 2"> 구독자 </v-list-item>
+          <v-list-item @click="tab = 3"> 정보 </v-list-item>
+          <v-list-item @click="tab = 4"> 업적 </v-list-item>
+        </v-list>
+      </v-menu>
     </v-tabs>
 
     <v-window v-model="tab" class="py-5" :color="themeColor()">
@@ -272,7 +285,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()
@@ -280,7 +293,7 @@ const userInfo = User()
 const route = useRoute()
 
 const rating = ref<string>('모두')
-const tab = ref<string>('홈')
+const tab = ref<number>(0)
 const uid = route.params.uid[0]
 const targetUser = ref<any>({
   libris: 0,

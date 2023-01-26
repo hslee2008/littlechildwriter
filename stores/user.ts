@@ -68,8 +68,6 @@ export const User = defineStore('User', {
             photoURL: user.photoURL,
             loggedIn: true,
           })
-        } else {
-          this.clearUserInfo()
         }
       })
     },

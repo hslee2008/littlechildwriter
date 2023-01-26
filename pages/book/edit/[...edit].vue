@@ -1,22 +1,22 @@
 <template>
-  <v-card :color="themeColor()">
+  <v-card :color="themeColor()" class="elevation-0">
     <v-card-text>
       <v-rating
-        :model-value="post.rating"
+        v-model="post.rating"
         half-increments
         color="blue"
         size="30"
         class="my-10"
       />
 
-      <v-text-field variant="outlined" :model-value="post.title" label="제목" />
+      <v-text-field variant="outlined" v-model="post.title" label="제목" />
       <v-text-field
         variant="outlined"
-        :model-value="post.pageCount"
+        v-model="post.pageCount"
         label="페이지"
       />
       <v-textarea
-        :model-value="post.content"
+        v-model="post.content"
         variant="outlined"
         label="책 소개"
         auto-grow
@@ -39,7 +39,7 @@
         rounded="lg"
         variant="tonal"
         color="primary"
-        class="elevation-0 update"
+        class="elevation-0"
         @click="Update"
       >
         업데이트

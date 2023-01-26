@@ -13,7 +13,9 @@
     "api": "node ./api/index.js",
     "prettier": "prettier --write .",
     "firebase": "yarn generate && firebase deploy",
-    "upgrade": "yarn upgrade && nuxi upgrade"
+    "upgrade": "yarn upgrade && nuxi upgrade",
+    "formatter": "yarn lint:fix && yarn prettier",
+    "git": "yarn formatter && yarn upgrade && git add --all && git commit -m $1 && git push && yarn firebase"
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",

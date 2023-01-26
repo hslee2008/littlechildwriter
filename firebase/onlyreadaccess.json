@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "littlechildwriter",
+  "private_key_id": "ef77d5958ee9339cae67610c4e205c7f45e14a90",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC1zPxwJq3U8xVg\nBcHDU01Um52uL0QeSu9oUlzvy6DOHpikH0xNUFZwuge1bOrSKXC/y7/geyAtHjQb\nc2VNtltl5oDKSGww0mnPgI016KaCqwYTOyyFQBeWLgybSeVUA8HUbmw+rE2G48iz\n7fpthd5WHlaVj84/kLrLFXyR2L4P79DWHxUk6YCIg3KNylXogQqvd11MdzcM31wo\nzgJYqxc7UcNi7jMR4TYSheUTqEfSrL92FlmDRk7bTnUe2+1gHA4ORiWFZee7+ebd\nLf2XbUy0hJAcdxwHwsEFeUrfdOSvLjPvoyddh00tpfWTdKhk7vWfHAssDz40pY1k\nM2/d55kxAgMBAAECggEACOc4h5+FTNP4vIKbqh6mv1l9n92lttwRnGjIL2AoCGAc\nNpFn0bN5AD1ECmECoPcxk9r9ExfEjCEaCSweDm+7SyK+NOnWDpAHaYeQos65dNW+\nTuvLct0gKpUnveUhC3vBns8nkuwqQcxe9FzXskxnho0mzV1FCvziAPcU6imUqUAO\ntV1bOsRlXlY2e+Vgc1KDoplx1rnb4a5IwaFj+j+K8xOSLzv3Hn9JeXEB++39iWhV\nrcwQLO29x9daLcLLnmKSrEIJKawaOkACE1tD1aeoBsCnPQMXvVYmiJvhO10CVgP9\nYfCve12UHYayPVabjbgGUeK9kbKomzFsWT0x5mwKVwKBgQDdk3TSZuyiEYi5e6G6\nQwN3GJSVfiWXCQ9pa+3Wn1ET3/5ngWyjgbtRk1CKhcg/VhSOxACMOGgYrnW3yrQM\naVZCklXkn11xCipYRcc1chMTITGPbrb71TSOAchcDoZ5NQZJCpDGS3T/Lb3OTD9f\n5Ks5TD2+H2+S6ra3dqyqcCFchwKBgQDSC5Va8L89uS0lx40fMzFTh83jMOPxK7h2\ng283rWzmtlVzqnUhIkgc/aylQecYSbdAR2HwJk2fxmuKyirhJiL+WL8Lwno2xrCf\nbqe71DGw1ChKSXY0gLtvdEinukyaseyfKk0C5/OjI3TVo0Rd+J77TcxwB8elZe1v\nvPywpCNChwKBgBY3UbBC55j8XxQR5E5Tp8ZKLaOriUNSgjwUuT0arjtq6wwfuu/N\n8yUjuyCYd1J6ZAdIebGVekJ3Q5BQ/6p66U41c+0/WVQbK9G79VRTgrwZSOnTtP8d\nCm7umNM6FZuTiHTMXWW0bR+ky3IizPvlZpGRJmOorTwy0m0ktf1EzuODAoGBAM3O\n6cZUtJ4vDmzBLabPi1p0a6lb400Q8Mq3GEeu11Dsgag28lPH+m7lpL+8ZkpnGHaU\nOwOLFG4khoVUeFVp/8nGfVNxeDypzLA7RYEGdrXz+5Jmjrr9FCst/m7SXXMKOXbv\nhMv/KLvF5xnZwwhsrqJAZbuz88w9pjvhKpuOCLqLAoGAW8CShQUN9lyTSEVI4nEh\n93u2XAEQQ5HZobHYdFNH+qrK23s6FeSdLHCm9XFrpqQw7Et7ITQaSeh2WE6c2ybD\nX0k6lo5hLtGvFhSyTfghByPHU6Jb1YBGQmA3x7zwbA7ichH+VKvuCjTRiFqLmkLK\nQZSdI8xDnwmnEW0T9L3AOrU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "only-reading-service-account@littlechildwriter.iam.gserviceaccount.com",
+  "client_id": "107242890309209113626",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/only-reading-service-account%40littlechildwriter.iam.gserviceaccount.com"
+}

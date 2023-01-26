@@ -449,7 +449,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const { width } = useDisplay()
@@ -669,7 +669,7 @@ const Suggestion = async () => {
 }
 
 const Del = () => {
-  $db.ref(`contents/${time}`).remove()
+  $db.ref(`/contents/${post.value.time}`).remove()
   Libris(userInfo.uid, -(parseInt(post.value.pageCount) / 100))
   navigateTo('/list')
 }

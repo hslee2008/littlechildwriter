@@ -5,8 +5,8 @@
         <div>
           <div class="text-center mb-5 mt-3 button">
             <v-btn
-              rounded="lg"
               v-if="userInfo.loggedIn"
+              rounded="lg"
               to="/book/post"
               color="primary"
               min-width="300"
@@ -14,8 +14,8 @@
               <v-icon start> mdi-pencil </v-icon> 작성하기
             </v-btn>
             <v-btn
-              rounded="lg"
               v-else
+              rounded="lg"
               to="/account/login"
               color="primary"
               min-width="300"
