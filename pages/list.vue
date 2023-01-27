@@ -1,5 +1,5 @@
 <template>
-  <List user="everyone" />
+  <ListComponent user="everyone" />
 </template>
 
 <script setup lang="ts">

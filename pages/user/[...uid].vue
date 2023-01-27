@@ -26,8 +26,8 @@
           {{ subscribed ? '구독 취소' : '구독' }}
         </v-btn>
         <v-btn
-          rounded="lg"
           v-else
+          rounded="lg"
           variant="tonal"
           color="primary"
           to="/account/account"
@@ -46,7 +46,7 @@
       <v-tab v-if="!mobile"> 업적 </v-tab>
 
       <v-menu v-if="mobile">
-        <template v-slot:activator="{ props }">
+        <template #activator="{ props }">
           <v-btn
             variant="plain"
             rounded="0"
@@ -90,14 +90,18 @@
                 {{ targetUser.displayName }}님의 책
               </v-card-subtitle>
 
-              <v-card-text v-html="(chosenBookData || books[0]).content" />
+              <v-card-text>
+                {{
+                  (chosenBookData || books[0]).content.replaceAll('&lt;br>', '')
+                }}
+              </v-card-text>
             </div>
           </v-card-text>
         </v-card>
       </v-window-item>
 
       <v-window-item :value="1">
-        <List :user="uid" star />
+        <ListComponent :user="uid" star />
       </v-window-item>
 
       <v-window-item :value="2">
@@ -216,7 +220,7 @@
             :color="themeColor()"
           >
             <v-tooltip :text="readCount.toString()" location="bottom">
-              <template v-slot:activator="{ props }">
+              <template #activator="{ props }">
                 <v-badge
                   v-bind="props"
                   color="primary"
@@ -240,7 +244,7 @@
               :text="`구독자: ${subCount.toString()}`"
               location="bottom"
             >
-              <template v-slot:activator="{ props }">
+              <template #activator="{ props }">
                 <v-badge
                   v-bind="props"
                   color="primary"
@@ -264,7 +268,7 @@
               :text="`업로드 수: ${books.length.toString()}`"
               location="bottom"
             >
-              <template v-slot:activator="{ props }">
+              <template #activator="{ props }">
                 <v-badge
                   v-bind="props"
                   color="primary"
@@ -292,7 +296,6 @@ const { mobile } = useDisplay()
 const userInfo = User()
 const route = useRoute()
 
-const rating = ref<string>('모두')
 const tab = ref<number>(0)
 const uid = route.params.uid[0]
 const targetUser = ref<any>({
@@ -392,9 +395,6 @@ const Subscribe = () => {
     )
   }
 }
-
-const ratingFilter = (a: any) =>
-  rating.value === '모두' ? 1 : a.rating === rating.value
 
 useHead({
   title: '사용자 - LCW',

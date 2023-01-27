@@ -1,8 +1,8 @@
 <template>
   <v-card-actions>
     <v-menu offset-y>
-      <template #activator="{ props }">
-        <v-btn icon v-bind="props" cols="1" @click.stop.prevent="">
+      <template #activator="{ propsM }">
+        <v-btn icon v-bind="propsM" cols="1" @click.stop.prevent="">
           <v-icon>mdi-dots-vertical</v-icon>
         </v-btn>
       </template>

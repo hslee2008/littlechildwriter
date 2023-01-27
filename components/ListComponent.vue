@@ -42,6 +42,7 @@
         <div>
           <v-progress-circular indeterminate color="primary" size="30" />
           <v-card-title>책을 불러오는데 오래 걸립니다...</v-card-title>
+          <v-card-title>또는 검색 결과가 없습니다.</v-card-title>
 
           <v-img
             src="https://media.tenor.com/6EY-3VQx2EIAAAAM/internet-fast.gif"
@@ -51,22 +52,17 @@
         </div>
       </v-card-text>
     </v-card>
-    <v-card v-else :color="themeColor()" class="elevation-0 text-center">
-      <v-card-text>
-        <v-card-title>검색 결과가 없습니다.</v-card-title>
-      </v-card-text>
-    </v-card>
 
     <div class="d-flex text-center ma-3 mx-5">
       <v-row class="mt-10" align="center" justify="center">
         <v-menu top>
-          <template #activator="{ props }">
+          <template #activator="{ propsM }">
             <v-btn
               text
               color="primary"
               variant="tonal"
               class="ml-2"
-              v-bind="props"
+              v-bind="propsM"
             >
               {{ itemsPerPage }}
               <v-icon right> mdi-chevron-down </v-icon>
@@ -102,7 +98,7 @@
 const { $db } = useNuxtApp()
 
 const books = ref<any[]>([])
-// eslint-disable-next-line func-call-spacing
+
 const search = ref<string>('')
 const rating = ref<string>('모두')
 const page = ref<number>(1)
@@ -141,9 +137,7 @@ onBeforeMount(() => {
     const data = await s.val()
 
     if (props.user === 'everyone') books.value.unshift(data)
-    else {
-      if (data.uid === props.user) books.value.unshift(data)
-    }
+    else if (data.uid === props.user) books.value.unshift(data)
   })
 
   setTimeout(() => {

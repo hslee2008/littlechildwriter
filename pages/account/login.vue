@@ -35,9 +35,9 @@
             outlined
             required
             clearable
-            @keyup.enter="onSubmit"
             prepend-inner-icon="mdi-key"
             :append-icon="eye ? 'mdi-eye' : 'mdi-eye-off'"
+            @keyup.enter="onSubmit"
             @click:append="eye = !eye"
           />
 

@@ -7,7 +7,6 @@
       alt="User Photo"
       cover
     />
-    <v-icon v-else>mdi-account</v-icon>
   </v-avatar>
 </template>
 

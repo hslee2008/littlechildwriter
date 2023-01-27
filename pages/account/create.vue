@@ -39,8 +39,8 @@
         rounded="lg"
         variant="tonal"
         color="primary"
-        @click="Make"
         min-width="500"
+        @click="Make"
       >
         <v-icon start> mdi-account </v-icon> 계정 만들기
       </v-btn>

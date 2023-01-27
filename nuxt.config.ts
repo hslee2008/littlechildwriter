@@ -87,7 +87,7 @@ export default defineNuxtConfig({
   ],
   plugins: ['/plugins/firebase', 'plugins/gtag'],
   modules: [
-    async (options, nuxt) => {
+    (_, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) =>
         config.plugins.push(vuetify())
       )
@@ -161,6 +161,6 @@ export default defineNuxtConfig({
   },
 
   experimental: {
-    payloadExtraction: true
+    payloadExtraction: true,
   },
 })

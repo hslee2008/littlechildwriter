@@ -122,7 +122,7 @@ const list = [
 ]
 const image = ref<string>('./background.avif')
 
-onBeforeMount(async () => {
+onBeforeMount(() => {
   $db
     .ref('/contents')
     .limitToLast(mobile.value ? 4 : 5)
