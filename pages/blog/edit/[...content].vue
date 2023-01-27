@@ -5,8 +5,8 @@
     <v-card>
       <v-card-title>
         <v-text-field
-          variant="outlined"
           v-model="topic"
+          variant="outlined"
           label="Topic"
           placeholder="Topic"
           required

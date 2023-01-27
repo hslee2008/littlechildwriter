@@ -9,10 +9,10 @@
         class="my-10"
       />
 
-      <v-text-field variant="outlined" v-model="post.title" label="제목" />
+      <v-text-field v-model="post.title" variant="outlined" label="제목" />
       <v-text-field
-        variant="outlined"
         v-model="post.pageCount"
+        variant="outlined"
         label="페이지"
       />
       <v-textarea

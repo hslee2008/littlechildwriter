@@ -1,69 +1,77 @@
 <template>
-  <v-tabs v-model="tab" show-arrows center-active grow :bg-color="themeColor()">
-    <v-tab :value="0"> 홈 </v-tab>
-    <v-tab v-if="userInfo.loggedIn" :value="1"> 글 쓰기 </v-tab>
-    <v-tab v-if="classInfo.uid === userInfo.uid" :value="2"> 설정 </v-tab>
-  </v-tabs>
-
-  <v-window v-model="tab" class="py-5" :color="themeColor()">
-    <v-window-item :value="0">
-      <DisplayCards :class-info="classInfo" />
-    </v-window-item>
-
-    <v-window-item :value="1">
-      <UploadCards :update-tab="updateTab" />
-    </v-window-item>
-
-    <v-window-item
-      v-if="classInfo.uid === userInfo.uid"
-      :value="2"
-      class="pt-5"
+  <div>
+    <v-tabs
+      v-model="tab"
+      show-arrows
+      center-active
+      grow
+      :bg-color="themeColor()"
     >
-      <v-card class="mt-5" :color="themeColor()">
-        <v-card-title>수업 세부정보</v-card-title>
-        <v-card-text>
-          <v-text-field
-            variant="outlined"
-            :model-value="classInfo.name"
-            label="수업 이름"
-            required
-          />
-          <v-textarea
-            :model-value="classInfo.description"
-            variant="outlined"
-            label="수업 설명"
-            required
-          />
-          <v-checkbox
-            :model-value="classInfo.public"
-            label="수업 전체 공개 여부"
-            required
-          />
-          <v-btn
-            rounded="lg"
-            variant="tonal"
-            color="primary"
-            class="mt-5"
-            :disabled="!classInfo.name || !classInfo.description"
-            @click="Update"
-          >
-            수업 정보 수정
-          </v-btn>
-        </v-card-text>
-      </v-card>
+      <v-tab :value="0"> 홈 </v-tab>
+      <v-tab v-if="userInfo.loggedIn" :value="1"> 글 쓰기 </v-tab>
+      <v-tab v-if="classInfo.uid === userInfo.uid" :value="2"> 설정 </v-tab>
+    </v-tabs>
 
-      <v-card-title>삭제</v-card-title>
-      <v-card-text>
-        <DialogComponent
-          :cb="DeleteClass"
-          btn-title="삭제"
-          title="진짜로 삭제하겠습니까?"
-          text="삭제하면 복구할 수 없습니다"
-          icon="trash-can"
-        />
-      </v-card-text>
-    </v-window-item>
-  </v-window>
+    <v-window v-model="tab" class="py-5" :color="themeColor()">
+      <v-window-item :value="0">
+        <DisplayCards :class-info="classInfo" />
+      </v-window-item>
+
+      <v-window-item :value="1">
+        <UploadCards :update-tab="updateTab" />
+      </v-window-item>
+
+      <v-window-item
+        v-if="classInfo.uid === userInfo.uid"
+        :value="2"
+        class="pt-5"
+      >
+        <v-card class="mt-5" :color="themeColor()">
+          <v-card-title>수업 세부정보</v-card-title>
+          <v-card-text>
+            <v-text-field
+              variant="outlined"
+              :model-value="classInfo.name"
+              label="수업 이름"
+              required
+            />
+            <v-textarea
+              :model-value="classInfo.description"
+              variant="outlined"
+              label="수업 설명"
+              required
+            />
+            <v-checkbox
+              :model-value="classInfo.public"
+              label="수업 전체 공개 여부"
+              required
+            />
+            <v-btn
+              rounded="lg"
+              variant="tonal"
+              color="primary"
+              class="mt-5"
+              :disabled="!classInfo.name || !classInfo.description"
+              @click="Update"
+            >
+              수업 정보 수정
+            </v-btn>
+          </v-card-text>
+        </v-card>
+
+        <v-card-title>삭제</v-card-title>
+        <v-card-text>
+          <DialogComponent
+            :cb="DeleteClass"
+            btn-title="삭제"
+            title="진짜로 삭제하겠습니까?"
+            text="삭제하면 복구할 수 없습니다"
+            icon="trash-can"
+          />
+        </v-card-text>
+      </v-window-item>
+    </v-window>
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -227,7 +227,6 @@
 </template>
 
 <script setup>
-import { useTheme } from 'vuetify'
 import Actions from './Actions.vue'
 
 const userInfo = User()

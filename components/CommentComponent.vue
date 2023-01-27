@@ -82,8 +82,8 @@
 
           <v-card-actions v-if="!message.edit">
             <v-btn
-              rounded="lg"
               v-if="(message.love || []).length > 0"
+              rounded="lg"
               variant="tonal"
               icon
               depressed
@@ -96,12 +96,12 @@
             </v-btn>
 
             <v-menu offset-y>
-              <template #activator="{ props }">
+              <template #activator="{ propsM }">
                 <v-btn
                   v-if="userInfo.loggedIn"
                   rounded="lg"
                   icon
-                  v-bind="props"
+                  v-bind="propsM"
                   cols="1"
                 >
                   <v-icon>mdi-dots-vertical</v-icon>
@@ -158,13 +158,13 @@
       AI가 긴장감을 {{ Math.round(toxcity * 1000) / 10 }}% 감지했습니다. 댓글을
       수정해주세요.
 
-      <template #action="{ props }">
+      <template #action="{ propsS }">
         <v-btn
           rounded="lg"
           variant="tonal"
           color="pink"
           text
-          v-bind="props"
+          v-bind="propsS"
           @click="snackbarBadWord = false"
         >
           닫기
@@ -261,8 +261,8 @@ const Love = (i: number) => {
 
 const Comment = async () => {
   let result: any = {}
-  let score: number = 0
-  let mostProbable: string = ''
+  let score = 0
+  let mostProbable = ''
 
   try {
     result = await perspective.analyze(comment.value, {

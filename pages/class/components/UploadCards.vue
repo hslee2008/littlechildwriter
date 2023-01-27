@@ -50,13 +50,13 @@
 
       <v-card-actions class="ma-2 gap20">
         <v-dialog :model-value="dialog" width="700">
-          <template #activator="{ props }">
+          <template #activator="{ propsD }">
             <div class="text-center">
               <v-btn
                 rounded="lg"
                 variant="tonal"
                 color="primary"
-                v-bind="props"
+                v-bind="propsD"
               >
                 <v-icon start>mdi-bookshelf</v-icon> 책 선택
               </v-btn>
@@ -142,7 +142,7 @@
         prepend-icon="mdi-paperclip"
         outlined
         :show-size="1000"
-        @update:modelValue="UploadFile($event)"
+        @update:model-value="UploadFile($event)"
       >
         <template #selection="{ index, text }">
           <v-chip

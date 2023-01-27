@@ -73,11 +73,11 @@
             <v-spacer />
 
             <v-btn
-              rounded="lg"
               v-if="
                 item?.comments?.length ||
                 Object.keys(item?.comments ?? {}).length
               "
+              rounded="lg"
               disabled
               icon
               color="grey"
@@ -96,7 +96,7 @@
             rounded="lg"
             color="pink"
             text
-            v-bind="props"
+            v-bind="attrs"
             @click="bookmarkSnackbar = false"
           >
             닫기
@@ -111,7 +111,7 @@
             rounded="lg"
             color="pink"
             text
-            v-bind="props"
+            v-bind="attrs"
             @click="bookmarkSnackbarDel = false"
           >
             닫기

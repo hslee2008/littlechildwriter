@@ -211,8 +211,8 @@
     <v-card v-if="suggestionCard" class="mt-2" :color="themeColor()">
       <v-card-title>
         <v-text-field
-          variant="outlined"
           v-model="suggestion"
+          variant="outlined"
           label="주제"
           outlined
           dense
@@ -230,12 +230,17 @@
         />
       </v-card-text>
       <v-card-actions>
-        <v-btn rounded="lg" variant="tonal" text @click="suggestionCard = false"
-          >취소</v-btn
+        <v-btn
+          rounded="lg"
+          variant="tonal"
+          text
+          @click="suggestionCard = false"
         >
-        <v-btn rounded="lg" variant="tonal" text @click="newSuggestion"
-          >등록</v-btn
-        >
+          취소
+        </v-btn>
+        <v-btn rounded="lg" variant="tonal" text @click="newSuggestion">
+          등록
+        </v-btn>
       </v-card-actions>
     </v-card>
 
@@ -298,9 +303,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="write = false"
-            >취소</v-btn
-          >
+          <v-btn rounded="lg" variant="tonal" text @click="write = false">
+            취소
+          </v-btn>
           <v-btn rounded="lg" variant="tonal" text @click="post">작성</v-btn>
         </v-card-actions>
       </v-card>

@@ -23,8 +23,8 @@
       >
         <template #prepend>
           <v-avatar size="45">
-            <UserPhoto :size="45" :src="item?.photoURL"
-          /></v-avatar>
+            <UserPhoto :size="45" :src="item?.photoURL" />
+          </v-avatar>
         </template>
 
         <v-list-item-title>{{ item.topic }}</v-list-item-title>
@@ -38,8 +38,8 @@
 
           <v-list-item-action v-if="item.uid == userInfo.uid">
             <v-btn
-              rounded="lg"
               id="btn"
+              rounded="lg"
               icon
               cols="1"
               flat

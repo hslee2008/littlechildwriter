@@ -87,8 +87,8 @@
         </v-dialog>
 
         <v-menu v-if="userInfo.loggedIn" right activator="#image">
-          <template #activator="{ on }">
-            <v-btn rounded="lg" icon>
+          <template #activator="{ propsM }">
+            <v-btn rounded="lg" icon v-bind="propsM">
               <v-avatar size="35">
                 <v-img id="image" alt="User Avatar" :src="userInfo.photoURL" />
               </v-avatar>
@@ -121,23 +121,23 @@
             <v-divider />
 
             <v-list-item
-              @click="userInfo.logout"
               title="로그아웃"
               prepend-icon="mdi-logout"
+              @click="userInfo.logout"
             />
 
             <v-divider />
 
             <v-list-item
-              @click="changeTheme"
               :title="isDark() ? '라이트 모드로 변경' : '다크 모드로 변경'"
               :prepend-icon="
                 isDark() ? 'mdi-white-balance-sunny' : 'mdi-weather-night'
               "
+              @click="changeTheme"
             />
           </v-list>
         </v-menu>
-        <v-btn rounded="lg" v-else variant="tonal" to="/account/login" icon>
+        <v-btn v-else rounded="lg" variant="tonal" to="/account/login" icon>
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>
       </v-app-bar>

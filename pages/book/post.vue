@@ -42,7 +42,7 @@
                 dense
                 variant="underlined"
                 label="책 사진을 선택하세요"
-                @update:modelValue="uploadImg($event)"
+                @update:model-value="uploadImg($event)"
               />
             </v-window-item>
 
@@ -95,7 +95,7 @@
                 color="grey"
                 variant="outlined"
                 dense
-                @update:modelValue="uploadFile($event)"
+                @update:model-value="uploadFile($event)"
               />
             </v-window-item>
 
@@ -230,7 +230,7 @@
 
         <v-list v-if="searched" nav>
           <div
-            v-for="(item, index) in searched"
+            v-for="item in searched"
             :key="item.volumeInfo.industryIdentifiers[0].identifier"
           >
             <v-list-item

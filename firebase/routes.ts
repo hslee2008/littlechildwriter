@@ -1,7 +1,8 @@
 export async function getRoutes() {
-  const routes = [] as string[]
   const admin = require('firebase-admin')
   const serviceAccount = require('./onlyreadaccess.json')
+
+  const routes = [] as string[]
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),

@@ -11,8 +11,8 @@
       height="100%"
     />
     <v-btn
-      rounded="lg"
       v-if="iframe"
+      rounded="lg"
       color="primary"
       class="zmax fab"
       @click="iframe = false"
@@ -248,8 +248,8 @@
                 class="mx-2"
               />
               <v-btn
-                rounded="lg"
                 ref="search"
+                rounded="lg"
                 variant="tonal"
                 icon="mdi-magnify"
                 class="elevation-0"

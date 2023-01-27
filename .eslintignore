@@ -11,3 +11,6 @@ public/sw.js
 .env
 .firebase
 firebase/littlechildwriter-firebase-adminsdk-nzz0v-a45c9692df.json
+
+api/index.js
+firebase/routes.ts
