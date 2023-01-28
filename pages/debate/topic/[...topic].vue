@@ -260,31 +260,29 @@
         </div>
 
         <template #append>
-          <v-menu offset-y>
-            <template #activator="{ props }">
-              <v-btn
-                rounded="lg"
-                icon
-                v-bind="props"
-                cols="1"
-                @click.stop.prevent=""
-              >
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item @click="DeleteContent('suggestion', i)">
-                <v-list-item-title>
-                  <v-icon start> mdi-trash-can </v-icon> 삭제
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="UpdateOnSuggestion(item.topic, i)">
-                <v-list-item-title>
-                  <v-icon start> mdi-pencil </v-icon> 수정
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+          <v-btn
+            rounded="lg"
+            icon
+            cols="1"
+            @click.stop.prevent=""
+          >
+            <v-icon>mdi-dots-vertical</v-icon>
+
+            <v-menu offset-y activator="parent">
+              <v-list>
+                <v-list-item @click="DeleteContent('suggestion', i)">
+                  <v-list-item-title>
+                    <v-icon start> mdi-trash-can </v-icon> 삭제
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="UpdateOnSuggestion(item.topic, i)">
+                  <v-list-item-title>
+                    <v-icon start> mdi-pencil </v-icon> 수정
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-btn>
         </template>
       </v-list-item>
     </v-list>

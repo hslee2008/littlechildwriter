@@ -15,7 +15,7 @@
     "firebase": "yarn generate && firebase deploy",
     "upgrade": "yarn upgrade && nuxi upgrade",
     "formatter": "yarn lint:fix && yarn prettier",
-    "git": "yarn formatter && yarn upgrade && git add --all && git commit -m $1 && git push"
+    "git": "yarn formatter && yarn upgrade && git add --all && git commit -m $COMMIT && git push"
   },
   "dependencies": {
     "@mdi/font": "^7.0.96",

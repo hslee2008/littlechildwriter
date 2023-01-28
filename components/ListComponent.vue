@@ -55,30 +55,22 @@
 
     <div class="d-flex text-center ma-3 mx-5">
       <v-row class="mt-10" align="center" justify="center">
-        <v-menu top>
-          <template #activator="{ propsM }">
-            <v-btn
-              text
-              color="primary"
-              variant="tonal"
-              class="ml-2"
-              v-bind="propsM"
-            >
-              {{ itemsPerPage }}
-              <v-icon right> mdi-chevron-down </v-icon>
-            </v-btn>
-          </template>
+        <v-btn text color="primary" variant="tonal" class="ml-2">
+          {{ itemsPerPage }}
+          <v-icon right> mdi-chevron-down </v-icon>
 
-          <v-list>
-            <v-list-item
-              v-for="num in [10, 50, 150, 200]"
-              :key="num"
-              @click="itemsPerPage = num"
-            >
-              <v-list-item-title>{{ num }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+          <v-menu top activator="parent">
+            <v-list>
+              <v-list-item
+                v-for="num in [10, 50, 150, 200]"
+                :key="num"
+                @click="itemsPerPage = num"
+              >
+                <v-list-item-title>{{ num }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-btn>
 
         <v-spacer />
 

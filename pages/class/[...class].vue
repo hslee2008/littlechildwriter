@@ -61,13 +61,16 @@
 
         <v-card-title>삭제</v-card-title>
         <v-card-text>
-          <DialogComponent
-            :cb="DeleteClass"
-            btn-title="삭제"
-            title="진짜로 삭제하겠습니까?"
-            text="삭제하면 복구할 수 없습니다"
-            icon="trash-can"
-          />
+          <v-btn
+            rounded="lg"
+            variant="tonal"
+            color="red lighten-2"
+            class="delete"
+            @click="DeleteClass"
+          >
+            <v-icon start> mdi-trash-can </v-icon>
+            삭제하기
+          </v-btn>
         </v-card-text>
       </v-window-item>
     </v-window>

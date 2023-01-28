@@ -1,62 +1,59 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
   <div>
-    <v-dialog :model-value="dialog" width="500">
-      <template #activator="{ props }">
-        <v-btn
-          v-if="userInfo.loggedIn"
-          rounded="lg"
-          variant="tonal"
-          bottom
-          right
-          fixed
-          fab
-          color="primary"
-          v-bind="props"
-        >
-          <v-icon start> mdi-plus </v-icon> 새로운 알림판 만들기
-        </v-btn>
-      </template>
+    <v-btn
+      v-if="userInfo.loggedIn"
+      rounded="lg"
+      variant="tonal"
+      bottom
+      right
+      fixed
+      fab
+      color="primary"
+    >
+      <v-icon start> mdi-plus </v-icon> 새로운 알림판 만들기
 
-      <v-card>
-        <v-card-title> 알림판 기본 정보 </v-card-title>
+      <v-dialog :model-value="dialog" width="500" activator="parent">
+        <v-card>
+          <v-card-title> 알림판 기본 정보 </v-card-title>
 
-        <v-card-text>
-          <v-text-field
-            variant="outlined"
-            :model-value="classInfo.name"
-            label="알림판 이름"
-            required
-          />
+          <v-card-text>
+            <v-text-field
+              variant="outlined"
+              :model-value="classInfo.name"
+              label="알림판 이름"
+              required
+            />
 
-          <v-text-field
-            variant="outlined"
-            :model-value="classInfo.description"
-            label="알림판 설명"
-            required
-          />
+            <v-text-field
+              variant="outlined"
+              :model-value="classInfo.description"
+              label="알림판 설명"
+              required
+            />
 
-          <v-checkbox :model-value="classInfo.public" label="공개" />
-        </v-card-text>
+            <v-checkbox :model-value="classInfo.public" label="공개" />
+          </v-card-text>
 
-        <v-card-title> 알림판 고급 정보 </v-card-title>
+          <v-card-title> 알림판 고급 정보 </v-card-title>
 
-        <v-card-text>
-          <v-text-field
-            variant="outlined"
-            :model-value="classInfo.image"
-            label="알림판 사진 URL"
-          />
-        </v-card-text>
+          <v-card-text>
+            <v-text-field
+              variant="outlined"
+              :model-value="classInfo.image"
+              label="알림판 사진 URL"
+            />
+          </v-card-text>
 
-        <v-card-actions>
-          <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="Make">
-            <v-icon start> mdi-check </v-icon> 만들기
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn rounded="lg" variant="tonal" text @click="Make">
+              <v-icon start> mdi-check </v-icon> 만들기
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-btn>
 
     <v-row class="mt-5 ma-1 g-10">
       <v-card

@@ -22,114 +22,108 @@
 
     <v-card class="my-3 elevation-0" :color="themeColor()">
       <div class="cardy">
-        <div class="ma-auto">
-          <v-dialog :model-value="sheet" inset scrollable>
-            <template #activator="{ props }">
-              <v-img
-                :src="post.image"
-                width="200"
-                class="ml-5 my-5 rounded-lg pointer"
-                v-bind="props"
-              >
-                <template #placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular indeterminate color="grey lighten-5" />
-                  </v-row>
-                </template>
-              </v-img>
+        <div class="my-auto ml-3">
+          <v-img
+            :src="post.image"
+            width="200"
+            class="ml-5 my-5 rounded-lg pointer"
+          >
+            <template #placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-row>
             </template>
-            <v-list nav expand>
-              <v-list-item
-                target="_blank"
-                :href="`https://aladin.co.kr/${
-                  post.isbn
-                    ? 'shop/wproduct.aspx?isbn=' + post.isbn
-                    : 'search/wsearchresult.aspx?SearchTarget=All&SearchWord=' +
-                      post.title
-                }`"
-              >
-                <template #prepend>
-                  <v-avatar size="45">
-                    <v-img
-                      src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
-                      alt="aladdin"
-                    />
-                  </v-avatar>
-                </template>
-                <v-list-item-title>알라딘</v-list-item-title>
-              </v-list-item>
 
-              <v-list-item
-                target="_blank"
-                :href="`https://www.yes24.com/product/search?query=${
-                  post.isbn || post.title
-                }&domain=all`"
-              >
-                <template #prepend>
-                  <v-avatar size="45">
-                    <v-img
-                      src="https://image.yes24.com/sysimage/renew/gnb/yes24.ico"
-                      alt="yes24"
-                    />
-                  </v-avatar>
-                </template>
-                <v-list-item-title>YES24</v-list-item-title>
-              </v-list-item>
+            <v-dialog :model-value="sheet" inset scrollable activator="parent">
+              <v-list nav expand>
+                <v-list-item
+                  target="_blank"
+                  :href="`https://aladin.co.kr/${
+                    post.isbn
+                      ? 'shop/wproduct.aspx?isbn=' + post.isbn
+                      : 'search/wsearchresult.aspx?SearchTarget=All&SearchWord=' +
+                        post.title
+                  }`"
+                >
+                  <template #prepend>
+                    <v-avatar size="45">
+                      <v-img
+                        src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
+                        alt="aladdin"
+                      />
+                    </v-avatar>
+                  </template>
+                  <v-list-item-title>알라딘</v-list-item-title>
+                </v-list-item>
 
-              <v-list-item
-                target="_blank"
-                :href="`https://www.amazon.com/s?k=${
-                  post.isbn || post.title
-                }&i=stripbooks&linkCode=qs`"
-              >
-                <template #prepend>
-                  <v-avatar size="45">
-                    <v-img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
-                      alt="amazon"
-                    />
-                  </v-avatar>
-                </template>
-                <v-list-item-title>아마존</v-list-item-title>
-              </v-list-item>
+                <v-list-item
+                  target="_blank"
+                  :href="`https://www.yes24.com/product/search?query=${
+                    post.isbn || post.title
+                  }&domain=all`"
+                >
+                  <template #prepend>
+                    <v-avatar size="45">
+                      <v-img
+                        src="https://image.yes24.com/sysimage/renew/gnb/yes24.ico"
+                        alt="yes24"
+                      />
+                    </v-avatar>
+                  </template>
+                  <v-list-item-title>YES24</v-list-item-title>
+                </v-list-item>
 
-              <v-list-item
-                target="_blank"
-                :href="`https://search.kyobobook.co.kr/search?keyword=${
-                  post.isbn || post.title
-                }&collection=kyobo_new`"
-              >
-                <template #prepend>
-                  <v-avatar size="45">
-                    <v-img
-                      src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/favicon/apple-touch-icon-144x144-precomposed.png"
-                      alt="kyobo"
-                    />
-                  </v-avatar>
-                </template>
-                <v-list-item-title>교보문고</v-list-item-title>
-              </v-list-item>
+                <v-list-item
+                  target="_blank"
+                  :href="`https://www.amazon.com/s?k=${
+                    post.isbn || post.title
+                  }&i=stripbooks&linkCode=qs`"
+                >
+                  <template #prepend>
+                    <v-avatar size="45">
+                      <v-img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
+                        alt="amazon"
+                      />
+                    </v-avatar>
+                  </template>
+                  <v-list-item-title>아마존</v-list-item-title>
+                </v-list-item>
 
-              <v-list-item
-                target="_blank"
-                :href="`https://books.google.co.kr/books?id=${otherInfo?.id}`"
-              >
-                <template #prepend>
-                  <v-avatar size="45">
-                    <v-img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjzC2JyZDZ_RaWf0qp11K0lcvB6b6kYNMoqtZAQ9hiPZ4cTIOB"
-                      alt="google"
-                    />
-                  </v-avatar>
-                </template>
-                <v-list-item-title>구글</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-dialog>
+                <v-list-item
+                  target="_blank"
+                  :href="`https://search.kyobobook.co.kr/search?keyword=${
+                    post.isbn || post.title
+                  }&collection=kyobo_new`"
+                >
+                  <template #prepend>
+                    <v-avatar size="45">
+                      <v-img
+                        src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/favicon/apple-touch-icon-144x144-precomposed.png"
+                        alt="kyobo"
+                      />
+                    </v-avatar>
+                  </template>
+                  <v-list-item-title>교보문고</v-list-item-title>
+                </v-list-item>
+
+                <v-list-item
+                  target="_blank"
+                  :href="`https://books.google.co.kr/books?id=${otherInfo?.id}`"
+                >
+                  <template #prepend>
+                    <v-avatar size="45">
+                      <v-img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjzC2JyZDZ_RaWf0qp11K0lcvB6b6kYNMoqtZAQ9hiPZ4cTIOB"
+                        alt="google"
+                      />
+                    </v-avatar>
+                  </template>
+                  <v-list-item-title>구글</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-dialog>
+          </v-img>
         </div>
 
         <div class="ma-auto">
@@ -220,199 +214,189 @@
         <span class="subheading" v-text="post?.likes" />
       </v-chip>
 
-      <v-dialog width="700">
-        <template #activator="{ props }">
-          <v-btn rounded="lg" variant="tonal" text v-bind="props" class="mx-1">
-            <v-icon start> mdi-town-hall </v-icon>
-            학교 도서관
-          </v-btn>
-        </template>
+      <v-btn rounded="lg" variant="tonal" class="mx-1">
+        <v-icon start> mdi-town-hall </v-icon>
+        학교 도서관
 
-        <v-card>
-          <v-card-title>학교 도서관 책 검색</v-card-title>
+        <v-dialog width="700" activator="parent">
+          <v-card>
+            <v-card-title>학교 도서관 책 검색</v-card-title>
 
-          <v-card-text>
-            <div class="d-flex">
-              <v-select
-                variant="outlined"
-                :model-value="school.local"
-                :items="school.list"
-                label="지역 선택"
-                class="mr-2"
-              />
+            <v-card-text>
+              <div class="d-flex">
+                <v-select
+                  variant="outlined"
+                  :model-value="school.local"
+                  :items="school.list"
+                  label="지역 선택"
+                  class="mr-2"
+                />
+                <v-text-field
+                  variant="outlined"
+                  :model-value="school.name"
+                  label="학교 이름"
+                  :rules="[endWithSchool]"
+                  class="mx-2"
+                />
+                <v-btn
+                  ref="search"
+                  rounded="lg"
+                  variant="plain"
+                  icon="mdi-magnify"
+                  class="elevation-0 mt-1"
+                  @click="schoolBookSearch"
+                />
+              </div>
               <v-text-field
                 variant="outlined"
-                :model-value="school.name"
-                label="학교 이름"
-                :rules="[endWithSchool]"
-                class="mx-2"
+                :model-value="school.title"
+                label="책 제목"
               />
-              <v-btn
-                ref="search"
-                rounded="lg"
-                variant="tonal"
-                icon="mdi-magnify"
-                class="elevation-0"
-                @click="schoolBookSearch"
-              />
-            </div>
-            <v-text-field
-              variant="outlined"
-              :model-value="school.title"
-              label="책 제목"
-            />
-          </v-card-text>
+            </v-card-text>
 
-          <div v-if="schoolLoading" class="text-center">
-            <v-progress-circular indeterminate color="primary" class="mb-5" />
-          </div>
-          <v-list
-            v-else-if="!school.resultString?.endsWith('찾을 수 없습니다.')"
-            nav
-          >
-            <v-list-item
-              v-for="item in school.result"
-              :key="item.callNumber"
-              :style="`
+            <div v-if="schoolLoading" class="text-center">
+              <v-progress-circular indeterminate color="primary" class="mb-5" />
+            </div>
+            <v-list
+              v-else-if="!school.resultString?.endsWith('찾을 수 없습니다.')"
+              nav
+            >
+              <v-list-item
+                v-for="item in school.result"
+                :key="item.callNumber"
+                :style="`
                 border: 2px dashed #${item.canRental ? '4caf50' : 'f44336'};
               `"
-            >
-              <v-img
-                :src="item.previewImage"
-                alt="학교 도서관"
-                max-width="100"
-                class="rounded-lg ma-2"
               >
-                <v-overlay absolute>
-                  {{ item.canRental ? '대출 가능' : '대출 불가능' }}
-                </v-overlay>
-              </v-img>
+                <v-img
+                  :src="item.previewImage"
+                  alt="학교 도서관"
+                  max-width="100"
+                  class="rounded-lg ma-2"
+                >
+                  <v-overlay absolute>
+                    {{ item.canRental ? '대출 가능' : '대출 불가능' }}
+                  </v-overlay>
+                </v-img>
 
-              <v-card>
-                <v-card-title class="text-primary">
-                  {{ item.title }}
-                </v-card-title>
-                <v-card-subtitle>
-                  {{ item.writer }}
-                </v-card-subtitle>
+                <v-card>
+                  <v-card-title class="text-primary">
+                    {{ item.title }}
+                  </v-card-title>
+                  <v-card-subtitle>
+                    {{ item.writer }}
+                  </v-card-subtitle>
 
-                <v-card-text class="mt-2 text-white">
-                  청구 기호: {{ item.callNumber }}<br />
-                  회사: {{ item.company }}
-                </v-card-text>
-              </v-card>
-            </v-list-item>
-          </v-list>
-          <v-card-text v-else>{{ school.resultString }}</v-card-text>
-        </v-card>
-      </v-dialog>
+                  <v-card-text class="mt-2 text-white">
+                    청구 기호: {{ item.callNumber }}<br />
+                    회사: {{ item.company }}
+                  </v-card-text>
+                </v-card>
+              </v-list-item>
+            </v-list>
+            <v-card-text v-else>{{ school.resultString }}</v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-btn>
+
       <v-btn rounded="lg" variant="tonal" text class="mx-1" @click="share">
         <v-icon start> mdi-share-variant </v-icon>
         공유
       </v-btn>
-      <v-menu v-if="post.isbn" offset-y>
-        <template #activator="{ props }">
-          <v-btn
-            rounded="lg"
-            icon="mdi-dots-vertical"
-            v-bind="props"
-            cols="1"
-            class="mx-1"
-            :color="themeColor()"
-            flat
-          />
-        </template>
 
-        <v-card>
-          <v-btn rounded="lg" variant="plain" text @click="iframe = true">
-            <v-icon start> mdi-file-find </v-icon> 미리보기
-          </v-btn>
-          <v-dialog v-if="post.categories" width="700">
-            <template #activator="{ props }">
-              <v-btn rounded="lg" variant="plain" text v-bind="props">
-                <v-icon start> mdi-shape </v-icon> 카테고리
-              </v-btn>
-            </template>
+      <v-btn rounded="lg" cols="1" class="mx-1" variant="tonal">
+        <v-icon>mdi-dots-vertical</v-icon>
 
-            <v-card>
-              <v-card-title class="text-center">
-                {{ post.title }} 카테고리
-              </v-card-title>
+        <v-menu v-if="post.isbn" offset-y activator="parent">
+          <v-card>
+            <v-btn rounded="lg" variant="plain" text @click="iframe = true">
+              <v-icon start> mdi-file-find </v-icon> 미리보기
+            </v-btn>
 
-              <v-card-text>
-                <v-chip
-                  v-for="tag in post.categories"
-                  :key="tag"
-                  label
-                  class="ma-2 d-block text-center pa-1"
-                >
-                  #{{ tag }}
-                </v-chip>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-          <v-dialog v-if="post.isbn" width="700">
-            <template #activator="{ props }">
-              <v-btn rounded="lg" variant="plain" text v-bind="props">
-                <v-icon start> mdi-book-information-variant </v-icon> 정보
-              </v-btn>
-            </template>
+            <v-btn rounded="lg" variant="plain" text>
+              <v-icon start> mdi-shape </v-icon> 카테고리
 
-            <v-card>
-              <v-card-title>
-                {{ post.title }}
-              </v-card-title>
-              <v-card-subtitle>
-                {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
-              </v-card-subtitle>
+              <v-dialog v-if="post.categories" width="700" activator="parent">
+                <v-card>
+                  <v-card-title class="text-center">
+                    {{ post.title }} 카테고리
+                  </v-card-title>
 
-              <v-card-text>
-                <v-table>
-                  <template #default>
-                    <thead>
-                      <tr>
-                        <th class="text-left">카테고리</th>
-                        <th class="text-left">정보</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>ISBN 13</td>
-                        <td>{{ post.isbn }}</td>
-                      </tr>
-                      <tr v-if="otherInfo.volumeInfo.industryIdentifiers">
-                        <td>ISBN 10</td>
-                        <td>
-                          {{
-                            otherInfo.volumeInfo.industryIdentifiers[1]
-                              .identifier
-                          }}
-                        </td>
-                      </tr>
-                      <tr v-if="otherInfo.volumeInfo?.publishedDate">
-                        <td>출판된 날짜</td>
-                        <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
-                      </tr>
-                      <tr v-if="otherInfo.volumeInfo.publisher">
-                        <td>출판사</td>
-                        <td>{{ otherInfo.volumeInfo.publisher }}</td>
-                      </tr>
-                      <tr v-if="otherInfo.GBid">
-                        <td>Google Books ID</td>
-                        <td>{{ otherInfo.GBid }}</td>
-                      </tr>
-                      <tr v-if="otherInfo.volumeInfo.averageRating">
-                        <td>평균 별점 (구글)</td>
-                        <td>{{ otherInfo.volumeInfo.averageRating }}</td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-table>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
-        </v-card>
-      </v-menu>
+                  <v-card-text>
+                    <v-chip
+                      v-for="tag in post.categories"
+                      :key="tag"
+                      label
+                      class="ma-2 d-block text-center pa-1"
+                    >
+                      #{{ tag }}
+                    </v-chip>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
+            </v-btn>
+
+            <v-btn rounded="lg" variant="plain" text>
+              <v-icon start> mdi-book-information-variant </v-icon> 정보
+
+              <v-dialog v-if="post.isbn" width="700" activator="parent">
+                <v-card>
+                  <v-card-title>
+                    {{ post.title }}
+                  </v-card-title>
+                  <v-card-subtitle>
+                    {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
+                  </v-card-subtitle>
+
+                  <v-card-text>
+                    <v-table>
+                      <template #default>
+                        <thead>
+                          <tr>
+                            <th class="text-left">카테고리</th>
+                            <th class="text-left">정보</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>ISBN 13</td>
+                            <td>{{ post.isbn }}</td>
+                          </tr>
+                          <tr v-if="otherInfo.volumeInfo.industryIdentifiers">
+                            <td>ISBN 10</td>
+                            <td>
+                              {{
+                                otherInfo.volumeInfo.industryIdentifiers[1]
+                                  .identifier
+                              }}
+                            </td>
+                          </tr>
+                          <tr v-if="otherInfo.volumeInfo?.publishedDate">
+                            <td>출판된 날짜</td>
+                            <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
+                          </tr>
+                          <tr v-if="otherInfo.volumeInfo.publisher">
+                            <td>출판사</td>
+                            <td>{{ otherInfo.volumeInfo.publisher }}</td>
+                          </tr>
+                          <tr v-if="otherInfo.GBid">
+                            <td>Google Books ID</td>
+                            <td>{{ otherInfo.GBid }}</td>
+                          </tr>
+                          <tr v-if="otherInfo.volumeInfo.averageRating">
+                            <td>평균 별점 (구글)</td>
+                            <td>{{ otherInfo.volumeInfo.averageRating }}</td>
+                          </tr>
+                        </tbody>
+                      </template>
+                    </v-table>
+                  </v-card-text>
+                </v-card>
+              </v-dialog>
+            </v-btn>
+          </v-card>
+        </v-menu>
+      </v-btn>
     </div>
 
     <CommentComponent

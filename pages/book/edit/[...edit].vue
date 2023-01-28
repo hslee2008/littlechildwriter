@@ -25,13 +25,15 @@
     </v-card-text>
 
     <v-card-actions>
-      <DialogComponent
-        :cb="() => navigateTo(`/book/content/${post.time}`)"
-        btn-title="취소"
-        title="진짜로 취소하겠습니까?"
-        text="취소하면 복구할 수 없습니다"
-        icon="arrow-left"
-      />
+      <v-btn
+        rounded="lg"
+        variant="tonal"
+        color="primary"
+        class="elevation-0"
+        @click="() => navigateTo(`/book/content/${post.time}`)"
+      >
+        취소
+      </v-btn>
 
       <v-spacer />
 

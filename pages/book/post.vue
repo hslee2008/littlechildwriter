@@ -363,31 +363,29 @@
         업로드
       </v-btn>
 
-      <v-menu bottom>
-        <template #activator="{ props }">
-          <v-btn rounded="lg" variant="tonal" elevation="0" v-bind="props">
-            책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
-          </v-btn>
-        </template>
+      <v-btn rounded="lg" variant="tonal" elevation="0">
+        책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
 
-        <v-list>
-          <v-list-item @click="isbn.upload = true">
-            <v-icon start> mdi-upload </v-icon> 책 사진 업로드
-          </v-list-item>
-          <v-list-item v-if="mobile" @click="isbn.barcode = true">
-            <v-icon start> mdi-barcode-scan </v-icon> ISBN 촬영
-          </v-list-item>
-          <v-list-item @click="isbn.input = true">
-            <v-icon start> mdi-form-textbox </v-icon> ISBN 입력
-          </v-list-item>
-          <v-list-item @click="isbn.find = true">
-            <v-icon start> mdi-book-search </v-icon> 책 찾기
-          </v-list-item>
-          <v-list-item @click="isbn.audio = true">
-            <v-icon start> mdi-microphone </v-icon> 보이스 타이핑
-          </v-list-item>
-        </v-list>
-      </v-menu>
+        <v-menu bottom activator="parent">
+          <v-list>
+            <v-list-item @click="isbn.upload = true">
+              <v-icon start> mdi-upload </v-icon> 책 사진 업로드
+            </v-list-item>
+            <v-list-item v-if="mobile" @click="isbn.barcode = true">
+              <v-icon start> mdi-barcode-scan </v-icon> ISBN 촬영
+            </v-list-item>
+            <v-list-item @click="isbn.input = true">
+              <v-icon start> mdi-form-textbox </v-icon> ISBN 입력
+            </v-list-item>
+            <v-list-item @click="isbn.find = true">
+              <v-icon start> mdi-book-search </v-icon> 책 찾기
+            </v-list-item>
+            <v-list-item @click="isbn.audio = true">
+              <v-icon start> mdi-microphone </v-icon> 보이스 타이핑
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-btn>
     </v-card-actions>
 
     <br />

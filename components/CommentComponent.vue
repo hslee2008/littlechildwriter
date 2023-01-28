@@ -95,50 +95,48 @@
               <span v-text="message.love?.length" />
             </v-btn>
 
-            <v-menu offset-y>
-              <template #activator="{ propsM }">
-                <v-btn
-                  v-if="userInfo.loggedIn"
-                  rounded="lg"
-                  icon
-                  v-bind="propsM"
-                  cols="1"
-                >
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <template v-if="userInfo.displayName === message.displayName">
-                  <v-list-item @click="Edit(i)">
-                    <v-list-item-title>
-                      <v-icon start> mdi-pencil </v-icon>
-                      {{ comments[i].edit ? '취소' : '수정' }}
-                    </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="Delete(i)">
-                    <v-list-item-title>
-                      <v-icon start> mdi-trash-can </v-icon> 삭제
-                    </v-list-item-title>
-                  </v-list-item>
-                </template>
+            <v-btn
+              v-if="userInfo.loggedIn"
+              rounded="lg"
+              icon
+              cols="1"
+            >
+              <v-icon>mdi-dots-vertical</v-icon>
 
-                <v-list-item v-if="message.uid !== userInfo.uid">
-                  <v-col cols="2">
-                    <v-btn
-                      rounded="lg"
-                      variant="tonal"
-                      icon
-                      :color="
-                        message.love?.includes(userInfo.uid) ? 'red' : 'grey'
-                      "
-                      @click="Love(i)"
-                    >
-                      <v-icon> mdi-heart </v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+              <v-menu offset-y activator="parent">
+                <v-list>
+                  <template v-if="userInfo.displayName === message.displayName">
+                    <v-list-item @click="Edit(i)">
+                      <v-list-item-title>
+                        <v-icon start> mdi-pencil </v-icon>
+                        {{ comments[i].edit ? '취소' : '수정' }}
+                      </v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="Delete(i)">
+                      <v-list-item-title>
+                        <v-icon start> mdi-trash-can </v-icon> 삭제
+                      </v-list-item-title>
+                    </v-list-item>
+                  </template>
+
+                  <v-list-item v-if="message.uid !== userInfo.uid">
+                    <v-col cols="2">
+                      <v-btn
+                        rounded="lg"
+                        variant="tonal"
+                        icon
+                        :color="
+                          message.love?.includes(userInfo.uid) ? 'red' : 'grey'
+                        "
+                        @click="Love(i)"
+                      >
+                        <v-icon> mdi-heart </v-icon>
+                      </v-btn>
+                    </v-col>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-list-item>
