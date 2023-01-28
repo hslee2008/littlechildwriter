@@ -71,7 +71,7 @@
                     </template>
                     <v-list>
                       <v-list-item
-                        v-if="item.uid == userInfo.uid"
+                        v-if="userInfo.is(item.uid)"
                         @click="DeleteContent('pro', i)"
                       >
                         <v-list-item-title>
@@ -79,7 +79,7 @@
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item
-                        v-if="item.uid == userInfo.uid"
+                        v-if="userInfo.is(item.uid)"
                         @click="UpdateOnPro(item.topic, i)"
                       >
                         <v-list-item-title>
@@ -151,7 +151,7 @@
                     </template>
                     <v-list>
                       <v-list-item
-                        v-if="item.uid == userInfo.uid"
+                        v-if="userInfo.is(item.uid)"
                         @click="DeleteContent('con', i)"
                       >
                         <v-list-item-title>
@@ -159,7 +159,7 @@
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item
-                        v-if="item.uid == userInfo.uid"
+                        v-if="userInfo.is(item.uid)"
                         @click="UpdateOnCon(item.topic, i)"
                       >
                         <v-list-item-title>
@@ -260,12 +260,7 @@
         </div>
 
         <template #append>
-          <v-btn
-            rounded="lg"
-            icon
-            cols="1"
-            @click.stop.prevent=""
-          >
+          <v-btn rounded="lg" icon cols="1" @click.stop.prevent="">
             <v-icon>mdi-dots-vertical</v-icon>
 
             <v-menu offset-y activator="parent">

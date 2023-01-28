@@ -95,17 +95,12 @@
               <span v-text="message.love?.length" />
             </v-btn>
 
-            <v-btn
-              v-if="userInfo.loggedIn"
-              rounded="lg"
-              icon
-              cols="1"
-            >
+            <v-btn v-if="userInfo.loggedIn" rounded="lg" icon cols="1">
               <v-icon>mdi-dots-vertical</v-icon>
 
               <v-menu offset-y activator="parent">
                 <v-list>
-                  <template v-if="userInfo.displayName === message.displayName">
+                  <template v-if="userInfo.is(message.uid)">
                     <v-list-item @click="Edit(i)">
                       <v-list-item-title>
                         <v-icon start> mdi-pencil </v-icon>
@@ -119,7 +114,7 @@
                     </v-list-item>
                   </template>
 
-                  <v-list-item v-if="message.uid !== userInfo.uid">
+                  <v-list-item v-if="!userInfo.is(message.uid)">
                     <v-col cols="2">
                       <v-btn
                         rounded="lg"
@@ -274,7 +269,7 @@ const Comment = async () => {
         : b
     )
   } catch (e) {
-    console.log(e)
+    alert(e)
   }
 
   if (score > 0.6) {
@@ -312,7 +307,7 @@ const Comment = async () => {
         const joined = Object.keys(await s.val())
 
         for (const user in joined) {
-          if (joined[user] === userInfo.uid) continue
+          if (userInfo.is(joined[user])) continue
           Notify(joined[user], userInfo.photoURL, content, props.link)
         }
       })

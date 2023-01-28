@@ -15,31 +15,31 @@
     "firebase": "yarn generate && firebase deploy",
     "upgrade": "yarn upgrade && nuxi upgrade",
     "formatter": "yarn lint:fix && yarn prettier",
-    "git": "yarn formatter && yarn upgrade && git add --all && git commit -m $COMMIT && git push"
+    "git": "yarn formatter && yarn upgrade && git add --all"
   },
   "dependencies": {
-    "@mdi/font": "^7.0.96",
+    "@mdi/font": "^7.1.96",
     "@pinia/nuxt": "^0.4.6",
-    "firebase": "^9.13.0",
-    "firebaseui": "^6.0.1",
+    "firebase": "^9.16.0",
+    "firebaseui": "^6.0.2",
     "perspective-api-client": "^3.1.0",
     "pinia": "^2.0.29",
-    "vite-plugin-vuetify": "^1.0.0",
+    "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.2.45",
     "vue-gtag-next": "^1.14.0",
-    "vuetify": "^3.0.2"
+    "vuetify": "^3.1.2"
   },
   "devDependencies": {
     "@kevinmarrec/nuxt-pwa": "^0.15.0",
     "@nuxt/types": "2.15.8",
     "@nuxtjs/eslint-config-typescript": "12.0.0",
     "@nuxtjs/google-gtag": "^1.0.4",
-    "eslint": "^8.25.0",
+    "eslint": "^8.32.0",
     "eslint-plugin-nuxt": "4.0.0",
     "firebase-admin": "11.5.0",
     "nuxt": "^3.1.1",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
-    "typescript": "^4.8.4"
+    "typescript": "^4.9.4"
   }
 }

@@ -307,9 +307,15 @@
       <v-btn rounded="lg" cols="1" class="mx-1" variant="tonal">
         <v-icon>mdi-dots-vertical</v-icon>
 
-        <v-menu v-if="post.isbn" offset-y activator="parent">
+        <v-menu offset-y activator="parent">
           <v-card>
-            <v-btn rounded="lg" variant="plain" text @click="iframe = true">
+            <v-btn
+              v-if="post.isbn"
+              rounded="lg"
+              variant="plain"
+              text
+              @click="iframe = true"
+            >
               <v-icon start> mdi-file-find </v-icon> 미리보기
             </v-btn>
 
@@ -674,7 +680,7 @@ const Like = () => {
     try {
       post.value.liked[userInfo.uid] = true
     } catch (e) {
-      console.log(e)
+      alert(e)
     }
 
     $db.ref(`/contents/${post.value.time}/liked/${userInfo.uid}`).set(true)

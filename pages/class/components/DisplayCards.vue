@@ -47,7 +47,7 @@
             <v-spacer />
 
             <Actions
-              v-if="item.uid === userInfo.uid"
+              v-if="userInfo.is(item.uid)"
               :item="item"
               :i="i"
               :title="title"
@@ -71,7 +71,7 @@
             <v-spacer />
 
             <Actions
-              v-if="item.uid === userInfo.uid"
+              v-if="userInfo.is(item.uid)"
               :item="item"
               :i="i"
               :title="title"
@@ -80,7 +80,7 @@
           </v-card>
           <div v-else-if="item.type === '파일 (숙제로)'">
             <v-card
-              v-if="userInfo.uid === item.uid || userInfo.uid === classInfo.uid"
+              v-if="userInfo.is(item.uid) || userInfo.is(classInfo.uid)"
               :href="item.url"
               class="d-flex rounded-0"
             >
@@ -96,7 +96,7 @@
               <v-spacer />
 
               <Actions
-                v-if="item.uid === userInfo.uid"
+                v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
                 :title="title"
@@ -128,7 +128,7 @@
             <v-spacer />
 
             <Actions
-              v-if="item.uid === userInfo.uid"
+              v-if="userInfo.is(item.uid)"
               :item="item"
               :i="i"
               :title="title"
@@ -143,7 +143,7 @@
               </v-carditem>
 
               <Actions
-                v-if="item.uid === userInfo.uid"
+                v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
                 :title="title"
@@ -161,7 +161,7 @@
               </v-card-item>
 
               <Actions
-                v-if="item.uid === userInfo.uid"
+                v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
                 :title="title"
@@ -188,7 +188,7 @@
               <v-spacer />
 
               <Actions
-                v-if="item.uid === userInfo.uid"
+                v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
                 :title="title"
@@ -211,7 +211,7 @@
               <v-spacer />
 
               <Actions
-                v-if="item.uid === userInfo.uid"
+                v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
                 :title="title"

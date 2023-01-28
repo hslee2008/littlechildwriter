@@ -92,13 +92,13 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify())
       )
     },
-    '@kevinmarrec/nuxt-pwa',
     [
       '@pinia/nuxt',
       {
         autoImports: ['defineStore'],
       },
     ],
+    '@kevinmarrec/nuxt-pwa',
   ],
 
   pwa: {
@@ -119,39 +119,6 @@ export default defineNuxtConfig({
 
   build: {
     transpile: ['vuetify'],
-  },
-
-  vuetify: {
-    treeShake: true,
-    theme: {
-      dark: true,
-      themes: {
-        dark: {
-          primary: '#159ECB',
-          secondary: '#b0bec5',
-          info: '#2196F3',
-          accent: '#293540',
-          success: '#4CAF50',
-          warning: '#FFC107',
-          error: '#b71c1c',
-        },
-        light: {
-          primary: '#1976D2',
-          secondary: '#424242',
-          accent: '#82B1FF',
-          error: '#FF5252',
-          info: '#2196F3',
-          success: '#4CAF50',
-          warning: '#FFC107',
-        },
-      },
-      options: {
-        themeCache: {
-          get: (key) => localStorage.getItem(key),
-          set: (key, value) => localStorage.setItem(key, value),
-        },
-      },
-    },
   },
 
   hooks: {

@@ -162,7 +162,7 @@ const Like = (item: any) => {
     try {
       item.liked[userInfo.uid] = true
     } catch (e) {
-      console.log(e)
+      alert(e)
     }
 
     $db.ref(`/contents/${item.time}/liked/${userInfo.uid}`).set(true)
@@ -209,9 +209,8 @@ const Bookmark = (time: string, i: number) => {
       },
     }
     Libris(userInfo.uid, 0.1)
+    navigateTo('/bookmarks')
   }
-
-  navigateTo('/bookmarks')
 }
 </script>
 

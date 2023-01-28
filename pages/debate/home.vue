@@ -36,7 +36,7 @@
           <v-icon start class="mr-2">mdi-comment-flash</v-icon>
           {{ Object.keys({ ...item.pro, ...item.con } ?? {}).length }}
 
-          <v-list-item-action v-if="item.uid == userInfo.uid">
+          <v-list-item-action v-if="userInfo.is(item.uid)">
             <v-btn
               id="btn"
               rounded="lg"

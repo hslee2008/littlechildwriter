@@ -12,7 +12,7 @@
 
       <div>
         <v-combobox
-          v-if="classInfo.uid === userInfo.uid"
+          v-if="userInfo.is(classInfo.uid)"
           v-model="post.category"
           :items="Object.keys(classInfo.contents ?? {})"
           label="Search"
@@ -66,7 +66,7 @@
           <v-card>
             <v-row no-gutters>
               <v-card
-                v-for="i in listev.filter((i) => i.uid == userInfo.uid)"
+                v-for="i in listev.filter((i) => userInfo.is(i.uid))"
                 :key="i.title"
                 class="elevation-0"
                 @click="selectBook(i)"

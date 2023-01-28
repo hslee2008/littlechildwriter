@@ -90,7 +90,6 @@
 const { $db } = useNuxtApp()
 
 const books = ref<any[]>([])
-
 const search = ref<string>('')
 const rating = ref<string>('모두')
 const page = ref<number>(1)

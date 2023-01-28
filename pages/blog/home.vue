@@ -30,7 +30,7 @@
 
         <v-spacer />
 
-        <template v-if="item.uid == userInfo.uid" #append>
+        <template v-if="userInfo.is(item.uid)" #append>
           <v-btn rounded="lg" icon cols="1" @click.stop.prevent="">
             <v-icon>mdi-dots-vertical</v-icon>
 

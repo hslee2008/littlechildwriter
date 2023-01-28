@@ -715,7 +715,7 @@ const voiceType = () => {
     recognition.stop()
   }
 
-  recognition.onerror = (e: Error) => console.log(e)
+  recognition.onerror = (e: Error) => alert(e)
 }
 
 const saveAudio = () => {

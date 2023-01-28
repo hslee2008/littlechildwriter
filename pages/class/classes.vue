@@ -65,8 +65,8 @@
         <v-card
           v-if="
             item.public ||
-            item.uid === userInfo.uid ||
-            Object.values(item.users).filter(filterUsers).length > 0
+            userInfo.is(item.uid) ||
+            Object.values(item.users).filter((e: any) => userInfo.is(e.uid)).length > 0
           "
           :color="themeColor()"
           class="elevation-0"
@@ -113,8 +113,6 @@ onBeforeMount(() =>
     .ref('classes')
     .on('child_added', async (s: any) => classes.value.push(await s.val()))
 )
-
-const filterUsers = (e: any) => e.uid === userInfo.uid
 
 const Make = () => {
   dialog.value = false

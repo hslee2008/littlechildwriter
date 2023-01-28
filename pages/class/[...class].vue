@@ -9,7 +9,7 @@
     >
       <v-tab :value="0"> 홈 </v-tab>
       <v-tab v-if="userInfo.loggedIn" :value="1"> 글 쓰기 </v-tab>
-      <v-tab v-if="classInfo.uid === userInfo.uid" :value="2"> 설정 </v-tab>
+      <v-tab v-if="userInfo.is(classInfo.uid)" :value="2"> 설정 </v-tab>
     </v-tabs>
 
     <v-window v-model="tab" class="py-5" :color="themeColor()">
@@ -21,11 +21,7 @@
         <UploadCards :update-tab="updateTab" />
       </v-window-item>
 
-      <v-window-item
-        v-if="classInfo.uid === userInfo.uid"
-        :value="2"
-        class="pt-5"
-      >
+      <v-window-item v-if="userInfo.is(classInfo.uid)" :value="2" class="pt-5">
         <v-card class="mt-5" :color="themeColor()">
           <v-card-title>수업 세부정보</v-card-title>
           <v-card-text>

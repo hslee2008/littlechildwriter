@@ -156,7 +156,7 @@ useAuth(() => {
     const data = await s.val()
 
     for (const key in data)
-      if (data[key].uid === userInfo.uid) books.value.push(data[key])
+      if (userInfo.is(data[key].uid)) books.value.push(data[key])
   })
 })
 

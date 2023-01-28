@@ -31,11 +31,7 @@
         </v-btn>
 
         <v-btn rounded="lg" icon :color="themeColor()">
-          <v-badge
-            color="primary"
-            :content="notif.length"
-            class="text-amber"
-          >
+          <v-badge color="primary" :content="notif.length" class="text-amber">
             <v-icon>
               {{
                 notif.length > 0

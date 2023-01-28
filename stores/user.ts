@@ -58,6 +58,10 @@ export const User = defineStore('User', {
       this.FBloggedIn = false
     },
 
+    is(uid: string) {
+      return this.FBuid === uid
+    },
+
     initUserInfo() {
       auth.onAuthStateChanged((user) => {
         if (user) {
