@@ -444,7 +444,7 @@ const post = ref<any>({
   isPublic: true,
   author: '',
   views: 0,
-  time: Date.now(),
+  time: Date.now()
 })
 const isbn = ref<any>({
   barcode: false,
@@ -452,7 +452,7 @@ const isbn = ref<any>({
   find: false,
   audio: false,
   upload: false,
-  audioType: '',
+  audioType: ''
 })
 
 const loading = ref<boolean>(false)
@@ -493,8 +493,8 @@ const showCamera = () => {
       video: {
         facingMode: 'environment',
         width: { ideal: 4096 },
-        height: { ideal: 2160 },
-      },
+        height: { ideal: 2160 }
+      }
     })
     .then((s) => {
       const videoElement = document.querySelector('#video') as HTMLVideoElement
@@ -514,7 +514,7 @@ const takeISBNVideo = () => {
     const BarcodeDetector = window.BarcodeDetector
     alert(video)
     new BarcodeDetector({
-      barcodes,
+      barcodes
     })
       .detect(video)
       .then((res: any) => res[0].rawValue)
@@ -543,7 +543,7 @@ const uploadFile = (file: File[]) => {
           const BarcodeDetector = window.BarcodeDetector
 
           new BarcodeDetector({
-            barcodes,
+            barcodes
           })
             .detect(tempImage)
             .then((res: any) => res[0].rawValue)
@@ -574,7 +574,7 @@ const fetchi = () => {
           title,
           imageLinks: { thumbnail: image },
           authors: author,
-          pageCount,
+          pageCount
         } = res.items[0].volumeInfo
 
         const categories = await fetch(res.items[0].selfLink)
@@ -587,7 +587,7 @@ const fetchi = () => {
           image,
           pageCount,
           author,
-          categories,
+          categories
         }
         post.value.categories = categories
       } else {
@@ -600,7 +600,7 @@ const fetchi = () => {
           author,
           image:
             'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif',
-          categories: ['Juvenile Fiction / General'],
+          categories: ['Juvenile Fiction / General']
         }
       }
 
@@ -639,7 +639,7 @@ const Post = () => {
     pageCount,
     categories,
     isPublic,
-    author,
+    author
   } = post.value
 
   if (!title || !content || !pageCount || !author || categories?.length === 0) {
@@ -658,12 +658,12 @@ const Post = () => {
       categories,
       likes: 1,
       liked: {
-        [userInfo.uid]: true,
+        [userInfo.uid]: true
       },
       views: 0,
       uid,
       displayName,
-      content: content.replaceAll('\n', '<br>'),
+      content: content.replaceAll('\n', '<br>')
     })
   else
     $db.ref(`/private/${uid}/${time}`).set({
@@ -679,7 +679,7 @@ const Post = () => {
       views: 0,
       uid,
       displayName,
-      content: content.replaceAll('\n', '<br>'),
+      content: content.replaceAll('\n', '<br>')
     })
 
   $db.ref(`/user/${uid}/subscriber`).once('value', (snapshot: any) => {
@@ -729,6 +729,6 @@ const isPageCountValid = (v: any) =>
   '옳바른 숫자를 넣어 주세요'
 
 useHead({
-  title: '업로드 - LCW',
+  title: '업로드 - LCW'
 })
 </script>

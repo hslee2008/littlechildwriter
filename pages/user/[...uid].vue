@@ -302,7 +302,7 @@ const targetUser = ref<any>({
   libris: 0,
   displayName: '',
   photoURL: '',
-  bio: '',
+  bio: ''
 })
 const books = ref<any>([])
 const privateBooks = ref<any>([])
@@ -339,7 +339,7 @@ onBeforeMount(() => {
           libris,
           displayName,
           photoURL,
-          bio,
+          bio
         }
 
         $db
@@ -397,7 +397,7 @@ const Subscribe = () => {
 }
 
 useHead({
-  title: '사용자 - LCW',
+  title: '사용자 - LCW'
 })
 </script>
 

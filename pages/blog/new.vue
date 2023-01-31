@@ -51,7 +51,7 @@ const SaveContent = () => {
     uid,
     displayName,
     photoURL,
-    time,
+    time
   })
 
   Libris(userInfo.uid, 50)
@@ -60,6 +60,6 @@ const SaveContent = () => {
 }
 
 useHead({
-  title: '창작 코너 글쓰기 - Little Child Writer',
+  title: '창작 코너 글쓰기 - Little Child Writer'
 })
 </script>

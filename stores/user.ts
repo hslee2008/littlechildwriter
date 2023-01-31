@@ -7,7 +7,7 @@ export const User = defineStore('User', {
     FBemail: '',
     FBdisplayName: '',
     FBphotoURL: '',
-    FBloggedIn: false,
+    FBloggedIn: false
   }),
   getters: {
     uid() {
@@ -36,9 +36,9 @@ export const User = defineStore('User', {
         email: this.FBemail,
         displayName: this.FBdisplayName,
         photoURL: this.FBphotoURL,
-        loggedIn: this.FBloggedIn,
+        loggedIn: this.FBloggedIn
       }
-    },
+    }
   },
   actions: {
     setUserInfo(userInfo: any) {
@@ -70,10 +70,10 @@ export const User = defineStore('User', {
             email: user.email,
             displayName: user.displayName,
             photoURL: user.photoURL,
-            loggedIn: true,
+            loggedIn: true
           })
         }
       })
-    },
-  },
+    }
+  }
 })

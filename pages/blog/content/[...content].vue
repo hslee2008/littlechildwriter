@@ -42,7 +42,7 @@ const content = ref<any>({
   displayName: '',
   photoURL: '',
   time: 0,
-  uid: '',
+  uid: ''
 })
 
 onMounted(() => {

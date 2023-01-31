@@ -14,7 +14,7 @@ try {
     storageBucket: 'littlechildwriter.appspot.com',
     messagingSenderId: '986081147205',
     appId: '1:986081147205:web:fadaee26490f1f173d662c',
-    measurementId: 'G-F7Z7BLCQDQ',
+    measurementId: 'G-F7Z7BLCQDQ'
   })
   getPerformance(app)
 } catch (err) {

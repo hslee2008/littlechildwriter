@@ -11,6 +11,6 @@ export const Notify = (
     title,
     time,
     link,
-    photoURL,
+    photoURL
   })
 }

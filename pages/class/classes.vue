@@ -103,7 +103,7 @@ const classInfo = ref<any>({
   uid: '',
   photoURL: '',
   public: true,
-  users: [],
+  users: []
 })
 const dialog = ref<boolean>(false)
 const steps = ref<number>(1)
@@ -125,7 +125,7 @@ const Make = () => {
     creator: displayName,
     id: uid + name,
     uid,
-    photoURL,
+    photoURL
   }
 
   $db
@@ -142,13 +142,13 @@ const Make = () => {
     uid: '',
     photoURL: '',
     public: true,
-    users: [],
+    users: []
   }
   dialog.value = false
   steps.value = 1
 }
 
 useHead({
-  title: '알림판 - LCW',
+  title: '알림판 - LCW'
 })
 </script>

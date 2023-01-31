@@ -133,12 +133,12 @@ const userInfo = User()
 const props = defineProps({
   items: {
     type: Array as unknown as any[],
-    required: true,
+    required: true
   },
   simple: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 })
 const bookmarkSnackbar = ref<boolean>(false)
 const bookmarkSnackbarDel = ref<boolean>(false)
@@ -196,7 +196,7 @@ const Bookmark = (time: string, i: number) => {
     $db.ref(`/users/${userInfo.uid}/bookmarks/${time}`).set({
       title,
       image,
-      time,
+      time
     })
     $db.ref(`/contents/${time}/bookmarks/${userInfo.uid}`).set(true)
 
@@ -205,8 +205,8 @@ const Bookmark = (time: string, i: number) => {
       ...props.items[i],
       bookmarks: {
         ...props.items[i].bookmarks,
-        [userInfo.uid]: true,
-      },
+        [userInfo.uid]: true
+      }
     }
     Libris(userInfo.uid, 0.1)
     navigateTo('/bookmarks')

@@ -459,15 +459,15 @@ const post = ref<any>({
   uid: '',
   displayName: '',
   views: 0,
-  time: Date.now(),
+  time: Date.now()
 })
 const otherInfo = ref<any>({
   volumeInfo: {
     authors: [],
     publisher: '',
     publishedDate: '',
-    averageRating: 0,
-  },
+    averageRating: 0
+  }
 })
 const suggested = ref<any>([])
 const school = ref({
@@ -488,13 +488,13 @@ const school = ref({
     '전남',
     '경북',
     '경남',
-    '제주',
+    '제주'
   ] as string[],
   result: [] as any,
   resultString: '',
   local: '',
   name: '',
-  title: '',
+  title: ''
 })
 const iframe = ref<boolean>(false)
 const loading = ref<boolean>(true)
@@ -508,7 +508,7 @@ const schoolBookSearch = async () => {
     'school',
     JSON.stringify({
       local: school.value.local,
-      name: school.value.name,
+      name: school.value.name
     })
   )
 
@@ -547,7 +547,7 @@ const share = async () => {
   await navigator.share({
     title,
     text: content,
-    url: `https://littlechildwriter.app/book/content/${time}`,
+    url: `https://littlechildwriter.app/book/content/${time}`
   })
   Libris(userInfo.uid, 1)
 }
@@ -574,13 +574,13 @@ const HandleBookInfo = (data: any) => {
       const {
         imageLinks: { thumbnail },
         infoLink,
-        title,
+        title
       } = book.volumeInfo
 
       suggested.value.push({
         thumbnail,
         infoLink,
-        title,
+        title
       })
     }
   }
@@ -650,7 +650,7 @@ const Suggestion = async () => {
         (v: any, i: number, a: any) =>
           a.findIndex((t: any) => t.title === v.title) === i
       )
-    ),
+    )
   ]
     .sort(() => 0.5 - Math.random())
     .slice(0, 5)
@@ -704,12 +704,12 @@ onMounted(() => {
   if (localStorage.getItem('school'))
     school.value = {
       ...school.value,
-      ...JSON.parse(localStorage.getItem('school')!),
+      ...JSON.parse(localStorage.getItem('school')!)
     }
 })
 
 useHead({
-  title: '컨텐츠 - LCW',
+  title: '컨텐츠 - LCW'
 })
 </script>
 

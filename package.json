@@ -14,7 +14,7 @@
     "prettier": "prettier --write .",
     "firebase": "yarn generate && firebase deploy",
     "upgrade": "yarn upgrade && nuxi upgrade",
-    "formatter": "yarn lint:fix && yarn prettier",
+    "formatter": "yarn lint:fix",
     "git": "yarn formatter && yarn upgrade && git add --all"
   },
   "dependencies": {
@@ -34,6 +34,7 @@
     "@nuxt/types": "2.15.8",
     "@nuxtjs/eslint-config-typescript": "12.0.0",
     "@nuxtjs/google-gtag": "^1.0.4",
+    "@nuxtjs/i18n": "^8.0.0-beta.9",
     "eslint": "^8.32.0",
     "eslint-plugin-nuxt": "4.0.0",
     "firebase-admin": "11.5.0",

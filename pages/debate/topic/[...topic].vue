@@ -352,7 +352,7 @@ const post = () => {
     uid,
     photoURL,
     topic: claim.value,
-    time: Date.now(),
+    time: Date.now()
   })
 
   write.value = false
@@ -370,7 +370,7 @@ const post = () => {
 const update = () => {
   if (side.value === 'suggestion') {
     $db.ref(`/debate/${time}/suggestion/${editIndex.value}`).update({
-      topic: editContent.value,
+      topic: editContent.value
     })
 
     edit.value = false
@@ -378,7 +378,7 @@ const update = () => {
     suggestionContent.value = ''
   } else {
     $db.ref(`/debate/${time}/${side.value}/${editIndex.value}`).update({
-      topic: editContent.value,
+      topic: editContent.value
     })
 
     edit.value = false
@@ -422,7 +422,7 @@ const newSuggestion = () => {
     photoURL,
     topic: suggestion.value,
     content: suggestionContent.value,
-    time: Date.now(),
+    time: Date.now()
   })
 
   suggestionCard.value = false

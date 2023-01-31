@@ -4,12 +4,12 @@ export const formatter = (number: number) =>
   new Intl.NumberFormat('ko-kr', {
     notation: 'compact',
     compactDisplay: 'short',
-    maximumFractionDigits: 1,
+    maximumFractionDigits: 1
   }).format(Math.round(number))
 
 export const DateFormatter = (time: number) => {
   const rtf = new Intl.RelativeTimeFormat('ko-kr', {
-    numeric: 'auto',
+    numeric: 'auto'
   })
 
   // date

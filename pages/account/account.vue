@@ -85,11 +85,10 @@
           </div>
 
           <v-text-field
-            variant="outlined"
             :model-value="userInfo.photoURL"
+            variant="outlined"
             label="URL"
             placeholder="URL"
-            varaint="filled"
             required
             flat
             dense
@@ -169,7 +168,7 @@ const Update = async () => {
   $db.ref(`/users/${uid}`).update({
     displayName,
     bio,
-    featured: featured.value,
+    featured: featured.value
   })
 
   navigateTo(`/user/${uid}`)
@@ -185,6 +184,6 @@ const save = () => {
 }
 
 useHead({
-  title: '계정 - LCW',
+  title: '계정 - LCW'
 })
 </script>

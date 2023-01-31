@@ -65,14 +65,14 @@ const Make = () =>
       libris: 0,
       bio: `새롭게 계정 만든 ${displayName.value}입니다. (바꾸고 싶다면 편집 버튼을 누르세요.)`,
       subscribe: [],
-      subscriber: [],
+      subscriber: []
     })
 
     navigateTo('/account/account')
   })
 
 useHead({
-  title: '만들기 - LCW',
+  title: '만들기 - LCW'
 })
 </script>
 

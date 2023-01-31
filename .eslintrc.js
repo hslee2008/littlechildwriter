@@ -2,12 +2,12 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true,
+    node: true
   },
   extends: [
     '@nuxtjs',
     'plugin:nuxt/recommended',
-    '@nuxtjs/eslint-config-typescript',
+    '@nuxtjs/eslint-config-typescript'
   ],
   rules: {
     'space-before-function-paren': 'off',
@@ -18,19 +18,19 @@ module.exports = {
     'vue/no-use-v-if-with-v-for': [
       'error',
       {
-        allowUsingIterationVar: false,
-      },
+        allowUsingIterationVar: false
+      }
     ],
     'vue/max-attributes-per-line': [
       'error',
       {
         singleline: {
-          max: 10,
+          max: 10
         },
         multiline: {
-          max: 1,
-        },
-      },
-    ],
-  },
+          max: 1
+        }
+      }
+    ]
+  }
 }

@@ -37,7 +37,7 @@ const debate = ref({
   created_at: '',
   uid: '',
   photoURL: '',
-  lang: '한국어',
+  lang: '한국어'
 })
 
 const upload = () => {
@@ -50,7 +50,7 @@ const upload = () => {
     time,
     uid,
     photoURL,
-    displayName,
+    displayName
   })
 
   Libris(uid, 10)

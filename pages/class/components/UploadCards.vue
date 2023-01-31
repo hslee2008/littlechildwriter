@@ -220,7 +220,7 @@ const post = ref<any>({
   type: '책',
   category: '기타',
   book: true,
-  link: '',
+  link: ''
 })
 const dialog = ref<boolean>(false)
 const progress = ref<boolean>(false)
@@ -228,8 +228,8 @@ const progress = ref<boolean>(false)
 const props = defineProps({
   updateTab: {
     type: Function,
-    required: true,
-  },
+    required: true
+  }
 })
 
 onBeforeMount(() => {
@@ -245,7 +245,7 @@ onBeforeMount(() => {
       time,
       uid,
       displayName,
-      image,
+      image
     })
   })
 })
@@ -275,7 +275,7 @@ const Upload = () => {
             uid,
             displayName,
             url,
-            file: file[0].name,
+            file: file[0].name
           })
         })
         .then(() => {
@@ -303,7 +303,7 @@ const Post = () => {
       uid,
       displayName,
       type,
-      content,
+      content
     })
   } else {
     $db.ref(`/classes/${id}/contents/${category}`).push({
@@ -312,7 +312,7 @@ const Post = () => {
       time,
       displayName,
       type,
-      content,
+      content
     })
   }
 
@@ -333,7 +333,7 @@ const Post = () => {
     type: '포스트',
     category: '기타',
     book: true,
-    link: '',
+    link: ''
   }
   props.updateTab(0)
 

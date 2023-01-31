@@ -81,14 +81,14 @@ onMounted(() =>
       firebase.auth.GithubAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
       firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID,
-    ],
+      firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+    ]
   })
 )
 onUnmounted(() => ui.delete())
 
 useHead({
-  title: '로그인 - LCW',
+  title: '로그인 - LCW'
 })
 </script>
 

@@ -52,6 +52,6 @@ const deleteBookmark = (time: string, i: number) => {
 }
 
 useHead({
-  title: '책갈피 - LCW',
+  title: '책갈피 - LCW'
 })
 </script>

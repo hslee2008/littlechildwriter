@@ -66,7 +66,7 @@ const post = ref<any>({
   uid: '',
   displayName: '',
   views: 0,
-  time: Date.now(),
+  time: Date.now()
 })
 
 const Post = async () =>
@@ -83,13 +83,13 @@ const Update = () => {
     rating,
     isbn,
     image,
-    pageCount,
+    pageCount
   })
 
   navigateTo(`/book/content/${time}`)
 }
 
 useHead({
-  title: '편집 - LCW',
+  title: '편집 - LCW'
 })
 </script>

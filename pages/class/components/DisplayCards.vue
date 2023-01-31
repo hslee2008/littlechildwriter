@@ -234,7 +234,7 @@ const userInfo = User()
 defineProps({
   classInfo: {
     type: Object,
-    required: true,
-  },
+    required: true
+  }
 })
 </script>

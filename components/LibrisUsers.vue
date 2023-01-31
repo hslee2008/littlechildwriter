@@ -39,8 +39,8 @@ const { $db } = useNuxtApp()
 const props = defineProps({
   limit: {
     type: Boolean,
-    required: true,
-  },
+    required: true
+  }
 })
 const lbt = ref<any>([])
 const loading = ref(true)
@@ -56,7 +56,7 @@ const Handler = async (s: any) => {
     libris,
     photoURL,
     status,
-    uid: s.key,
+    uid: s.key
   })
 }
 

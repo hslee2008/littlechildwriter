@@ -173,27 +173,27 @@ import Perspective from 'perspective-api-client'
 const { $db } = useNuxtApp()
 
 const perspective = new Perspective({
-  apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U',
+  apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
 })
 
 const userInfo = User()
 const props = defineProps({
   link: {
     type: String,
-    required: true,
+    required: true
   },
   dbr: {
     type: String,
-    required: true,
+    required: true
   },
   uid: {
     type: String,
-    required: true,
+    required: true
   },
   cb: {
     type: Function,
-    default: () => {},
-  },
+    default: () => {}
+  }
 })
 const comment = ref<string>('')
 const updatedcomment = ref<string>('')
@@ -219,7 +219,7 @@ const Update = (i: number) => {
   comments.value[i].edit = false
   $db.ref(`${props.dbr}/${Object.keys(comments.value)[i]}`).update({
     ...comments.value[i],
-    content: updatedcomment.value,
+    content: updatedcomment.value
   })
   comments.value = [...comments.value]
 }
@@ -259,7 +259,7 @@ const Comment = async () => {
 
   try {
     result = await perspective.analyze(comment.value, {
-      attributes: ['TOXICITY'],
+      attributes: ['TOXICITY']
     })
     score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
     mostProbable = Object.keys(result.attributeScores).reduce((a, b) =>
@@ -291,14 +291,14 @@ const Comment = async () => {
       time: Date.now(),
       probably: badWord ? mostProbable : 'good',
       content,
-      score,
+      score
     })
 
     $db.ref(`${props.dbr.replace('/comments', '')}/joined`).update({
       [uid]: {
         displayName,
-        photoURL,
-      },
+        photoURL
+      }
     })
 
     $db
