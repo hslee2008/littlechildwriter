@@ -198,10 +198,6 @@
             title="포인트제"
             prepend-icon="mdi-table-large"
           />
-
-          <v-divider class="my-1" />
-
-          <v-select v-model="locale" :items="['en', 'ko']" variant="plain" />
         </v-list>
       </v-navigation-drawer>
 
@@ -232,7 +228,6 @@
 <script setup lang="ts">
 import { useDisplay, useTheme } from 'vuetify'
 
-const { locale } = useI18n()
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
 const theme = useTheme()

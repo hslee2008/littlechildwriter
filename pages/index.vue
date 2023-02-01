@@ -11,7 +11,7 @@
               color="primary"
               min-width="300"
             >
-              <v-icon start> mdi-pencil </v-icon> {{ $t('writing') }}
+              <v-icon start> mdi-pencil </v-icon> 작성하기
             </v-btn>
             <v-btn
               v-else

@@ -9,7 +9,11 @@ export default defineNuxtPlugin((nuxtApp) => {
     directives,
     blueprints: md3,
     styles: {
-      configFile: 'assets/sass/vuetify.scss'
+      configFile: 'assets/sass/vuetify.sass'
+    },
+    treeShake: true,
+    options: {
+      customProperties: true
     },
     theme: {
       defaultTheme: 'dark',

@@ -99,9 +99,10 @@
               />
             </v-window-item>
 
-            <v-window-item class="pt-3">
-              <video id="video" />
-              <v-card-actions>
+            <v-window-item class="pt-3 text-center">
+              <video id="video" width="320" height="240" />
+
+              <v-card-actions class="flex justify-center">
                 <v-btn rounded="lg" variant="tonal" @click="showCamera">
                   시작
                 </v-btn>
@@ -463,7 +464,6 @@ const typed = ref<string>('')
 const snackbar = ref<boolean>(false)
 const notfound = ref<boolean>(false)
 const tab = ref<any>(0)
-const video = ref<any>(null)
 
 const remove = (item: string) => {
   post.value.categories.splice(post.value.categories.indexOf(item), 1)
@@ -481,8 +481,8 @@ const FetchWithTitle = async () => {
   await fetch(
     `https://www.googleapis.com/books/v1/volumes?q=intitle:${title.value}`
   )
-    .then((res) => res.json())
-    .then((books) => (searched.value = books.items))
+    .then(res => res.json())
+    .then(books => (searched.value = books.items))
 
   loading.value = false
 }
@@ -496,7 +496,7 @@ const showCamera = () => {
         height: { ideal: 2160 }
       }
     })
-    .then((s) => {
+    .then(s => {
       const videoElement = document.querySelector('#video') as HTMLVideoElement
 
       videoElement.srcObject = s
@@ -504,7 +504,7 @@ const showCamera = () => {
         videoElement.play()
       }
     })
-    .catch((e) => {
+    .catch(e => {
       alert(e)
     })
 }
@@ -512,11 +512,11 @@ const showCamera = () => {
 const takeISBNVideo = () => {
   if ('BarcodeDetector' in window) {
     const BarcodeDetector = window.BarcodeDetector
-    alert(video)
+
     new BarcodeDetector({
       barcodes
     })
-      .detect(video)
+      .detect(document.querySelector('#video') as HTMLVideoElement)
       .then((res: any) => res[0].rawValue)
       .then((a: any) => {
         post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
@@ -567,8 +567,8 @@ const fetchi = () => {
   loading.value = true
 
   fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${post.value.isbn}`)
-    .then((res) => res.json())
-    .then(async (res) => {
+    .then(res => res.json())
+    .then(async res => {
       if (res.items[0].volumeInfo.imageLinks) {
         const {
           title,
@@ -578,8 +578,8 @@ const fetchi = () => {
         } = res.items[0].volumeInfo
 
         const categories = await fetch(res.items[0].selfLink)
-          .then((cg) => cg.json())
-          .then((cg) => cg.volumeInfo.categories)
+          .then(cg => cg.json())
+          .then(cg => cg.volumeInfo.categories)
 
         post.value = {
           ...post.value,

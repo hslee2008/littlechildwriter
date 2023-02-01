@@ -80,15 +80,15 @@ export default defineNuxtConfig({
     '/assets/css/global.css',
     '/assets/css/custom.css',
     '/assets/css/vuetify.css',
-    '/assets/sass/global.scss',
-    '/assets/sass/main.scss',
+    '/assets/css/tailwind.css',
+    '/assets/sass/vuetify.sass',
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
   ],
   plugins: ['/plugins/firebase', 'plugins/gtag'],
   modules: [
     (_, nuxt) => {
-      nuxt.hooks.hook('vite:extendConfig', (config) =>
+      nuxt.hooks.hook('vite:extendConfig', config =>
         config.plugins.push(vuetify())
       )
     },
@@ -98,8 +98,7 @@ export default defineNuxtConfig({
         autoImports: ['defineStore']
       }
     ],
-    '@kevinmarrec/nuxt-pwa',
-    '@nuxtjs/i18n'
+    '@kevinmarrec/nuxt-pwa'
   ],
 
   pwa: {
@@ -119,7 +118,15 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['vuetify']
+    transpile: ['vuetify'],
+    postcss: {
+      postcssOptions: {
+        plugins: {
+          tailwindcss: {},
+          autoprefixer: {}
+        }
+      }
+    }
   },
 
   hooks: {
@@ -130,32 +137,5 @@ export default defineNuxtConfig({
 
   experimental: {
     payloadExtraction: true
-  },
-
-  i18n: {
-    langDir: 'locales/',
-    lazy: true,
-    locales: [
-      {
-        code: 'ko',
-        iso: 'ko-KR',
-        name: '한국어',
-        file: 'ko.json'
-      },
-      {
-        code: 'en',
-        iso: 'en-US',
-        name: 'English',
-        file: 'en.json'
-      }
-    ],
-    defaultLocale: 'ko',
-    skipSettingLocaleOnNavigate: false,
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root'
-    },
-    baseURL: process.env.node_env === 'production' ? 'https://littlechildwriter.web.app' : 'http://localhost:3000'
   }
 })
