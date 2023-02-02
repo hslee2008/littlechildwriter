@@ -36,8 +36,8 @@
       <v-card-title>책 업로드</v-card-title>
       <v-card-text>
         <v-text-field
+          v-model="post.title"
           variant="outlined"
-          :model-value="post.title"
           label="제목"
         />
 
@@ -49,7 +49,7 @@
       </v-card-text>
 
       <v-card-actions class="ma-2 gap20">
-        <v-dialog :model-value="dialog" width="700">
+        <v-dialog v-model="dialog" width="700">
           <template #activator="{ propsD }">
             <div class="text-center">
               <v-btn
@@ -95,13 +95,13 @@
       <v-card-title>링크 업로드</v-card-title>
       <v-card-text>
         <v-text-field
+          v-model="post.title"
           variant="outlined"
-          :model-value="post.title"
           label="제목"
         />
         <v-text-field
+          v-model="post.link"
           variant="outlined"
-          :model-value="post.link"
           label="링크"
         />
       </v-card-text>
@@ -126,13 +126,13 @@
         <v-radio key="비디오" label="비디오" value="파일 비디오" />
       </v-radio-group>
 
-      <v-overlay :model-value="progress">
+      <v-overlay v-model="progress">
         <v-progress-circular indeterminate size="64" />
       </v-overlay>
 
       <v-file-input
         ref="file"
-        :model-value="post.file"
+        v-model="post.file"
         color="deep-purple accent-4"
         counter
         label="File input"
@@ -165,8 +165,8 @@
       <v-card-title>숙제 업로드</v-card-title>
       <v-card-text>
         <v-text-field
+          v-model="post.title"
           variant="outlined"
-          :model-value="post.title"
           label="제목"
         />
         <v-textarea v-model="post.content" variant="outlined" label="내용" />

@@ -139,7 +139,7 @@
       </v-app-bar>
 
       <v-navigation-drawer
-        :model-value="drawer"
+        v-model="drawer"
         floating
         mobile-breakpoint="400"
         :color="themeColor()"
@@ -226,7 +226,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay, useTheme } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify';
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()

@@ -13,34 +13,34 @@
     >
       <v-icon start> mdi-plus </v-icon> 새로운 알림판 만들기
 
-      <v-dialog :model-value="dialog" width="500" activator="parent">
+      <v-dialog v-model="dialog" width="500" activator="parent">
         <v-card>
           <v-card-title> 알림판 기본 정보 </v-card-title>
 
           <v-card-text>
             <v-text-field
+              v-model="classInfo.name"
               variant="outlined"
-              :model-value="classInfo.name"
               label="알림판 이름"
               required
             />
 
             <v-text-field
+              v-model="classInfo.description"
               variant="outlined"
-              :model-value="classInfo.description"
               label="알림판 설명"
               required
             />
 
-            <v-checkbox :model-value="classInfo.public" label="공개" />
+            <v-checkbox v-model="classInfo.public" label="공개" />
           </v-card-text>
 
           <v-card-title> 알림판 고급 정보 </v-card-title>
 
           <v-card-text>
             <v-text-field
+              v-model="classInfo.image"
               variant="outlined"
-              :model-value="classInfo.image"
               label="알림판 사진 URL"
             />
           </v-card-text>

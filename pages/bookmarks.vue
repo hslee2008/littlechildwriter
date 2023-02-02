@@ -6,7 +6,7 @@
 
     <v-list
       v-if="items.length > 0"
-      :model-value="items"
+      v-model="items"
       :bg-color="themeColor()"
       nav
     >

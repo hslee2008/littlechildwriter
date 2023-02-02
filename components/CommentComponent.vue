@@ -41,14 +41,14 @@
 
           <div v-if="!message.edit">
             <v-card-title>{{ message.displayName }}</v-card-title>
-            <v-card-subtitle>
+            <v-card-text>
               {{ message.content }}
-            </v-card-subtitle>
+            </v-card-text>
           </div>
           <v-text-field
             v-else
+            v-model="updatedcomment"
             variant="outlined"
-            :model-value="updatedcomment"
             flat
             single-line
             class="ml-2 mt-3"
@@ -147,7 +147,7 @@
       </v-card>
     </div>
 
-    <v-snackbar :model-value="snackbarBadWord">
+    <v-snackbar v-model="snackbarBadWord">
       AI가 긴장감을 {{ Math.round(toxcity * 1000) / 10 }}% 감지했습니다. 댓글을
       수정해주세요.
 
@@ -168,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from 'perspective-api-client'
+import Perspective from 'perspective-api-client';
 
 const { $db } = useNuxtApp()
 

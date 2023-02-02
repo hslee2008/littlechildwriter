@@ -79,15 +79,15 @@
             <v-card-text>
               <div class="d-flex">
                 <v-select
+                  v-model="school.local"
                   variant="outlined"
-                  :model-value="school.local"
                   :items="school.list"
                   label="지역 선택"
                   class="mr-2"
                 />
                 <v-text-field
+                  v-model="school.name"
                   variant="outlined"
-                  :model-value="school.name"
                   label="학교 이름"
                   :rules="[endWithSchool]"
                   class="mx-2"
@@ -102,8 +102,8 @@
                 />
               </div>
               <v-text-field
+                v-model="school.title"
                 variant="outlined"
-                :model-value="school.title"
                 label="책 제목"
               />
             </v-card-text>
@@ -196,7 +196,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { width } = useDisplay()

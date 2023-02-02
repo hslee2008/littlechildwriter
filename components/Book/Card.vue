@@ -88,7 +88,7 @@
         </v-card>
       </v-card>
 
-      <v-snackbar :model-value="bookmarkSnackbar">
+      <v-snackbar v-model="bookmarkSnackbar">
         책갈피가 추가되었습니다.
 
         <template #action="{ attrs }">
@@ -103,7 +103,7 @@
           </v-btn>
         </template>
       </v-snackbar>
-      <v-snackbar :model-value="bookmarkSnackbarDel">
+      <v-snackbar v-model="bookmarkSnackbarDel">
         책갈피가 삭제되었습니다.
 
         <template #action="{ attrs }">
@@ -123,7 +123,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()

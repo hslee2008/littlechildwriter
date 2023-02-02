@@ -26,19 +26,19 @@
           <v-card-title>수업 세부정보</v-card-title>
           <v-card-text>
             <v-text-field
+              v-model="classInfo.name"
               variant="outlined"
-              :model-value="classInfo.name"
               label="수업 이름"
               required
             />
             <v-textarea
-              :model-value="classInfo.description"
+              v-model="classInfo.description"
               variant="outlined"
               label="수업 설명"
               required
             />
             <v-checkbox
-              :model-value="classInfo.public"
+              v-model="classInfo.public"
               label="수업 전체 공개 여부"
               required
             />
@@ -74,8 +74,8 @@
 </template>
 
 <script setup lang="ts">
-import DisplayCards from './components/DisplayCards.vue'
-import UploadCards from './components/UploadCards.vue'
+import DisplayCards from './components/DisplayCards.vue';
+import UploadCards from './components/UploadCards.vue';
 
 const { $db } = useNuxtApp()
 

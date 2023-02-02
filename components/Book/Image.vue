@@ -7,7 +7,7 @@
         </v-row>
       </template>
 
-      <v-dialog :model-value="sheet" inset scrollable activator="parent">
+      <v-dialog v-model="sheet" inset scrollable activator="parent">
         <v-list nav expand>
           <v-list-item
             target="_blank"

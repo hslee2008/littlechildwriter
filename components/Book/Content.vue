@@ -19,12 +19,13 @@
 
     <v-card-text>
       <v-rating
+        v-model="post.rating"
         dense
         readonly
+        half-increments
         size="20"
         color="amber"
         background-color="white"
-        :model-value="post.rating"
       />
       <div class="my-5">
         {{ post.content.replaceAll('&lt;br>', '') }}

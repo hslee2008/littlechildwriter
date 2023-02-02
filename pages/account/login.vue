@@ -16,8 +16,8 @@
 
         <v-form class="mt-4">
           <v-text-field
+            v-model="email"
             variant="outlined"
-            :model-value="email"
             type="email"
             label="이메일"
             outlined
@@ -28,8 +28,8 @@
           />
 
           <v-text-field
+            v-model="password"
             variant="outlined"
-            :model-value="password"
             :type="eye ? 'text' : 'password'"
             label="암호"
             outlined
@@ -57,9 +57,9 @@
 </template>
 
 <script setup script="ts">
-import firebase from 'firebase/compat/app'
-import { auth } from 'firebaseui'
-import 'firebaseui/dist/firebaseui.css'
+import firebase from 'firebase/compat/app';
+import { auth } from 'firebaseui';
+import 'firebaseui/dist/firebaseui.css';
 
 const email = ref('')
 const password = ref('')

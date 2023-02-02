@@ -9,13 +9,13 @@
 
     <v-form>
       <v-text-field
+        v-model="displayName"
         variant="outlined"
-        :model-value="displayName"
         label="이름"
       />
       <v-text-field
+        v-model="email"
         variant="outlined"
-        :model-value="email"
         label="Email"
         placeholder="Email"
         outlined
@@ -23,8 +23,8 @@
         prepend-inner-icon="mdi-email"
       />
       <v-text-field
+        v-model="password"
         variant="outlined"
-        :model-value="password"
         :type="eye ? 'text' : 'password'"
         label="Password"
         placeholder="Password"

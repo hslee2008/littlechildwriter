@@ -27,7 +27,7 @@
 
       <v-card-text>
         <v-textarea
-          :model-value="userDB.bio"
+          v-model="userDB.bio"
           auto-grow
           required
           flat
@@ -60,32 +60,41 @@
 
       <v-card-text>
         <v-text-field
+          v-model="userInfo.uid"
           variant="outlined"
-          :model-value="userInfo.uid"
           label="UID"
           placeholder="UID"
-          required
           flat
           dense
           disabled
           prepend-inner-icon="mdi-account"
         />
+        <v-text-field
+          v-model="tempName"
+          variant="outlined"
+          label="이름"
+          placeholder="이름 바꾸기"
+          required
+          flat
+          dense
+          prepend-inner-icon="mdi-account"
+        />
       </v-card-text>
     </v-card>
 
-    <v-dialog :model-value="imageEdit" width="500">
+    <v-dialog v-model="imageEdit" width="500">
       <v-card>
         <v-card-title> 이미지 편집 </v-card-title>
 
         <v-card-text>
           <div class="text-center mb-3">
             <v-avatar size="100">
-              <v-img :src="userInfo.photoURL" />
+              <v-img :src="tempImage" />
             </v-avatar>
           </div>
 
           <v-text-field
-            :model-value="userInfo.photoURL"
+            v-model="tempImage"
             variant="outlined"
             label="URL"
             placeholder="URL"
@@ -140,6 +149,9 @@ const books = ref<any[]>([])
 const imageEdit = ref<boolean>(false)
 const featured = ref<number>(0)
 
+const tempImage = ref<string>(userInfo.photoURL)
+const tempName = ref<string>(userInfo.displayName)
+
 useAuth(() => {
   $db
     .ref(`/users/${userInfo.uid}`)
@@ -159,28 +171,30 @@ useAuth(() => {
   })
 })
 
-const Update = async () => {
-  const { displayName, uid, email } = userInfo
+const Update = () => {
+  const { uid } = userInfo
   const { bio } = userDB.value
 
-  await $auth.currentUser?.updateEmail(email)
-
   $db.ref(`/users/${uid}`).update({
-    displayName,
+    displayName: tempName.value,
     bio,
     featured: featured.value
+  })
+
+  $auth.currentUser?.updateProfile({
+    displayName: tempName.value
   })
 
   navigateTo(`/user/${uid}`)
 }
 
 const save = () => {
-  const { photoURL } = userInfo
-
-  $auth.currentUser?.updateProfile({ photoURL })
-  $db.ref(`/users/${userInfo.uid}`).update({ photoURL })
+  $auth.currentUser?.updateProfile({ photoURL: tempImage.value })
+  $db.ref(`/users/${userInfo.uid}`).update({ photoURL: tempImage.value })
 
   imageEdit.value = false
+
+  navigateTo(`/user/${userInfo.uid}`)
 }
 
 useHead({
