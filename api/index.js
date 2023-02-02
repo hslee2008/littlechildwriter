@@ -10,8 +10,8 @@ const axios = axiosModule.create({
   timeout: 60000,
   httpsAgent: new https.Agent({
     rejectUnauthorized: false,
-    keepAlive: true,
-  }),
+    keepAlive: true
+  })
 })
 
 const area = {
@@ -31,12 +31,12 @@ const area = {
   전남: 'http://reading.jnei.go.kr/',
   경북: 'http://reading.gyo6.net/',
   경남: 'https://reading.gne.go.kr/',
-  제주: 'https://reading.jje.go.kr/',
+  제주: 'https://reading.jje.go.kr/'
 }
 const NO_IMAGE =
   'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif'
 
-isEmptyOrNull = (str) => {
+isEmptyOrNull = str => {
   if (str === null || str.trim() === '') return true
   return false
 }
@@ -52,9 +52,9 @@ getSchoolFromName = async (local, name) => {
       searchGbn: '',
       selEducation: 'all',
       selSchool: 'all',
-      schoolSearch: encodeURI(name),
+      schoolSearch: encodeURI(name)
     }),
-    url: `${area[local]}r/newReading/search/schoolListData.jsp`,
+    url: `${area[local]}r/newReading/search/schoolListData.jsp`
   }
   const res = await axios(option)
 
@@ -62,7 +62,7 @@ getSchoolFromName = async (local, name) => {
   if (!cookies) throw new Error('쿠키가 없습니다.')
 
   let cookie = ''
-  cookies.forEach((c) => {
+  cookies.forEach(c => {
     cookie += c.split(';')[0] + '; '
   })
   cookie = cookie.substring(0, cookie.length - 2)
@@ -95,11 +95,11 @@ setSchoolCodeSetting = async (local, code, cookie) => {
       returnUrl: '',
       kind: 1,
       txtSearchWord: '도서검색',
-      searchGbn: '',
+      searchGbn: ''
     }),
     headers: {
-      Cookie: cookie,
-    },
+      Cookie: cookie
+    }
   }
   await axios(option)
 }
@@ -147,11 +147,11 @@ searchBookFromSchoolName = async (local, book, school) => {
         searchCon3: '',
         dataType: 'ALL',
         lineSize: 100,
-        cbSort: 'STIT',
+        cbSort: 'STIT'
       }),
       headers: {
-        Cookie: cookie,
-      },
+        Cookie: cookie
+      }
     }
 
     result.result = []
@@ -190,7 +190,7 @@ searchBookFromSchoolName = async (local, book, school) => {
         company,
         callNumber,
         canRental,
-        previewImage,
+        previewImage
       })
     })
     result.status = 'success'

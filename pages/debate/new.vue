@@ -3,8 +3,8 @@
     <h1>새로운 주제</h1>
 
     <v-text-field
+      v-model="debate.topic"
       variant="outlined"
-      :model-value="debate.topic"
       label="주제"
       placeholder="주제 / 질문 입력하기"
       clearable
@@ -13,8 +13,8 @@
 
     <v-col class="d-flex" cols="12" sm="6">
       <v-select
+        v-model="debate.lang"
         variant="outlined"
-        :model-value="debate.lang"
         :items="lang"
         width="300"
       />

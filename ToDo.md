@@ -5,3 +5,4 @@
 3. Use i18n module
 4. Custom PWA instead of relying on module
 5. SLOW transition to tailwind
+6. Code Splitting using components

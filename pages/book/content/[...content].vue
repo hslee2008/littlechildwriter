@@ -22,154 +22,8 @@
 
     <v-card class="my-3 elevation-0" :color="themeColor()">
       <div class="cardy">
-        <div class="my-auto ml-3">
-          <v-img
-            :src="post.image"
-            width="200"
-            class="ml-5 my-5 rounded-lg pointer"
-          >
-            <template #placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
-            </template>
-
-            <v-dialog :model-value="sheet" inset scrollable activator="parent">
-              <v-list nav expand>
-                <v-list-item
-                  target="_blank"
-                  :href="`https://aladin.co.kr/${
-                    post.isbn
-                      ? 'shop/wproduct.aspx?isbn=' + post.isbn
-                      : 'search/wsearchresult.aspx?SearchTarget=All&SearchWord=' +
-                        post.title
-                  }`"
-                >
-                  <template #prepend>
-                    <v-avatar size="45">
-                      <v-img
-                        src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
-                        alt="aladdin"
-                      />
-                    </v-avatar>
-                  </template>
-                  <v-list-item-title>알라딘</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item
-                  target="_blank"
-                  :href="`https://www.yes24.com/product/search?query=${
-                    post.isbn || post.title
-                  }&domain=all`"
-                >
-                  <template #prepend>
-                    <v-avatar size="45">
-                      <v-img
-                        src="https://image.yes24.com/sysimage/renew/gnb/yes24.ico"
-                        alt="yes24"
-                      />
-                    </v-avatar>
-                  </template>
-                  <v-list-item-title>YES24</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item
-                  target="_blank"
-                  :href="`https://www.amazon.com/s?k=${
-                    post.isbn || post.title
-                  }&i=stripbooks&linkCode=qs`"
-                >
-                  <template #prepend>
-                    <v-avatar size="45">
-                      <v-img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
-                        alt="amazon"
-                      />
-                    </v-avatar>
-                  </template>
-                  <v-list-item-title>아마존</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item
-                  target="_blank"
-                  :href="`https://search.kyobobook.co.kr/search?keyword=${
-                    post.isbn || post.title
-                  }&collection=kyobo_new`"
-                >
-                  <template #prepend>
-                    <v-avatar size="45">
-                      <v-img
-                        src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/favicon/apple-touch-icon-144x144-precomposed.png"
-                        alt="kyobo"
-                      />
-                    </v-avatar>
-                  </template>
-                  <v-list-item-title>교보문고</v-list-item-title>
-                </v-list-item>
-
-                <v-list-item
-                  target="_blank"
-                  :href="`https://books.google.co.kr/books?id=${otherInfo?.id}`"
-                >
-                  <template #prepend>
-                    <v-avatar size="45">
-                      <v-img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjzC2JyZDZ_RaWf0qp11K0lcvB6b6kYNMoqtZAQ9hiPZ4cTIOB"
-                        alt="google"
-                      />
-                    </v-avatar>
-                  </template>
-                  <v-list-item-title>구글</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-dialog>
-          </v-img>
-        </div>
-
-        <div class="ma-auto">
-          <v-card-title class="h1 text-primary title">
-            {{ post.title }}
-            <span
-              v-if="post.isbn && otherInfo.volumeInfo?.authors"
-              class="subtitle-2 ml-1"
-            >
-              ({{ (otherInfo.volumeInfo?.authors || []).join(', ') }})
-            </span>
-          </v-card-title>
-
-          <v-card-subtitle>
-            by
-            <NuxtLink :to="`/user/${post.uid}`">
-              {{ post.displayName }}
-            </NuxtLink>
-          </v-card-subtitle>
-
-          <v-card-text>
-            <v-rating
-              dense
-              readonly
-              size="20"
-              color="amber"
-              background-color="white"
-              :model-value="post.rating"
-            />
-            <div class="my-5" v-html="post.content" />
-            <v-chip-group class="my-5" column>
-              <v-chip label>
-                <v-icon start> mdi-eye </v-icon>
-                {{ formatter(post.views + 1) }}
-              </v-chip>
-              <v-chip label>
-                <v-icon start>mdi-sort-clock-descending-outline</v-icon>
-                {{ new Date(post.time).toLocaleDateString() }}
-              </v-chip>
-              <v-chip label>
-                <v-icon start>mdi-book</v-icon>
-                {{ post.pageCount }}
-              </v-chip>
-            </v-chip-group>
-          </v-card-text>
-        </div>
+        <BookImage :post="post" :other-info="otherInfo" />
+        <BookContent :post="post" :other-info="otherInfo" />
       </div>
     </v-card>
 
@@ -299,110 +153,13 @@
         </v-dialog>
       </v-btn>
 
-      <v-btn rounded="lg" variant="tonal" text class="mx-1" @click="share">
-        <v-icon start> mdi-share-variant </v-icon>
-        공유
-      </v-btn>
+      <BookMenu />
 
-      <v-btn rounded="lg" cols="1" class="mx-1" variant="tonal">
-        <v-icon>mdi-dots-vertical</v-icon>
-
-        <v-menu offset-y activator="parent">
-          <v-card>
-            <v-btn
-              v-if="post.isbn"
-              rounded="lg"
-              variant="plain"
-              text
-              @click="iframe = true"
-            >
-              <v-icon start> mdi-file-find </v-icon> 미리보기
-            </v-btn>
-
-            <v-btn rounded="lg" variant="plain" text>
-              <v-icon start> mdi-shape </v-icon> 카테고리
-
-              <v-dialog v-if="post.categories" width="700" activator="parent">
-                <v-card>
-                  <v-card-title class="text-center">
-                    {{ post.title }} 카테고리
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-chip
-                      v-for="tag in post.categories"
-                      :key="tag"
-                      label
-                      class="ma-2 d-block text-center pa-1"
-                    >
-                      #{{ tag }}
-                    </v-chip>
-                  </v-card-text>
-                </v-card>
-              </v-dialog>
-            </v-btn>
-
-            <v-btn rounded="lg" variant="plain" text>
-              <v-icon start> mdi-book-information-variant </v-icon> 정보
-
-              <v-dialog v-if="post.isbn" width="700" activator="parent">
-                <v-card>
-                  <v-card-title>
-                    {{ post.title }}
-                  </v-card-title>
-                  <v-card-subtitle>
-                    {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
-                  </v-card-subtitle>
-
-                  <v-card-text>
-                    <v-table>
-                      <template #default>
-                        <thead>
-                          <tr>
-                            <th class="text-left">카테고리</th>
-                            <th class="text-left">정보</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>ISBN 13</td>
-                            <td>{{ post.isbn }}</td>
-                          </tr>
-                          <tr v-if="otherInfo.volumeInfo.industryIdentifiers">
-                            <td>ISBN 10</td>
-                            <td>
-                              {{
-                                otherInfo.volumeInfo.industryIdentifiers[1]
-                                  .identifier
-                              }}
-                            </td>
-                          </tr>
-                          <tr v-if="otherInfo.volumeInfo?.publishedDate">
-                            <td>출판된 날짜</td>
-                            <td>{{ otherInfo.volumeInfo?.publishedDate }}</td>
-                          </tr>
-                          <tr v-if="otherInfo.volumeInfo.publisher">
-                            <td>출판사</td>
-                            <td>{{ otherInfo.volumeInfo.publisher }}</td>
-                          </tr>
-                          <tr v-if="otherInfo.GBid">
-                            <td>Google Books ID</td>
-                            <td>{{ otherInfo.GBid }}</td>
-                          </tr>
-                          <tr v-if="otherInfo.volumeInfo.averageRating">
-                            <td>평균 별점 (구글)</td>
-                            <td>{{ otherInfo.volumeInfo.averageRating }}</td>
-                          </tr>
-                        </tbody>
-                      </template>
-                    </v-table>
-                  </v-card-text>
-                </v-card>
-              </v-dialog>
-            </v-btn>
-          </v-card>
-        </v-menu>
-      </v-btn>
+      <BookMore
+        :post="post"
+        :other-info="otherInfo"
+        :showiframe="() => (iframe = true)"
+      />
     </div>
 
     <CommentComponent
@@ -499,7 +256,6 @@ const school = ref({
 const iframe = ref<boolean>(false)
 const loading = ref<boolean>(true)
 const schoolLoading = ref<boolean>(false)
-const sheet = ref<boolean>(false)
 
 const schoolBookSearch = async () => {
   schoolLoading.value = true
@@ -515,8 +271,8 @@ const schoolBookSearch = async () => {
   await fetch(
     `https://little-child-writer-school-book-search.onrender.com/?book=${school.value.title}&school=${school.value.name}&local=${school.value.local}`
   )
-    .then((res) => res.json())
-    .then((json) => {
+    .then(res => res.json())
+    .then(json => {
       school.value.result = json.result
       school.value.resultString = json.result.toString()
     })
@@ -536,20 +292,10 @@ const Content = async () => {
     await fetch(
       `https://www.googleapis.com/books/v1/volumes?q=isbn:${data.isbn}`
     )
-      .then((res) => res.json())
-      .then((res) => (otherInfo.value = res.items[0]))
+      .then(res => res.json())
+      .then(res => (otherInfo.value = res.items[0]))
 
   school.value.title = post.value.title
-}
-
-const share = async () => {
-  const { title, content } = post.value
-  await navigator.share({
-    title,
-    text: content,
-    url: `https://littlechildwriter.app/book/content/${time}`
-  })
-  Libris(userInfo.uid, 1)
 }
 
 const View = () => {
@@ -595,7 +341,7 @@ const Suggestion = async () => {
         otherInfo.value.volumeInfo?.authors[0]
       )}&maxResults=${20}`
     )
-      .then((res) => res.json())
+      .then(res => res.json())
       .then(HandleBookInfo)
   }
 
@@ -620,8 +366,8 @@ const Suggestion = async () => {
           ','
         )}&maxResults=${n}`
       )
-        .then((res) => res.json())
-        .then((data) => {
+        .then(res => res.json())
+        .then(data => {
           const length = data.items.length
 
           if (length >= n) done = true
@@ -640,8 +386,8 @@ const Suggestion = async () => {
         post.value.title
       }&maxResults=${15}`
     )
-      .then((res) => res.json())
-      .then((data) => HandleBookInfo(data))
+      .then(res => res.json())
+      .then(data => HandleBookInfo(data))
   }
 
   suggested.value = [
@@ -725,11 +471,6 @@ useHead({
   display: flex;
   padding: 10px;
 }
-
-.pointer {
-  cursor: pointer;
-}
-
 .fab {
   position: fixed;
   bottom: 20px;

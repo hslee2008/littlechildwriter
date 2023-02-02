@@ -14,6 +14,7 @@ module.exports = {
     'vue/singleline-html-element-content-newline': 'off',
     'vue/html-self-closing': 'off',
     'arrow-parens': 'off',
+    'vue/multi-word-component-names': 'off',
     curly: 'off',
     'vue/no-use-v-if-with-v-for': [
       'error',
