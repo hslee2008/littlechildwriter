@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template>
   <div class="ma-auto">
     <v-card-title class="h1 text-primary title">

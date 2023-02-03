@@ -3,7 +3,7 @@
 <template>
   <v-lazy
     :options="{
-      threshold: 0.5,
+      threshold: 0.5
     }"
     transition="fade-transition"
   >
@@ -23,7 +23,12 @@
           :color="themeColor()"
           class="elevation-0"
         >
-          <v-img :src="item.image" :lazy-src="item.image" class="rounded" cover>
+          <v-img
+            :src="item.image"
+            :lazy-src="item.image"
+            class="rounded book-image"
+            cover
+          >
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
                 <v-progress-circular indeterminate color="grey lighten-5" />
@@ -31,7 +36,15 @@
             </template>
           </v-img>
 
-          <v-card-title class="text-primary">{{ item.title }}</v-card-title>
+          <v-card-title
+            v-if="item.title.length < 10"
+            class="text-primary font-weight-black"
+          >
+            {{ item.title }}
+          </v-card-title>
+          <v-card-text v-else class="text-primary font-weight-black">
+            {{ item.title }}
+          </v-card-text>
 
           <v-card-subtitle>
             <NuxtLink :to="`/user/${item.uid}`">
@@ -123,7 +136,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
@@ -219,5 +232,13 @@ const Bookmark = (time: string, i: number) => {
   margin-top: 5px;
   gap: 3px;
   margin: 5px;
+}
+
+.book-image {
+  filter: blur(0.5px);
+}
+
+.book-image:hover {
+  filter: blur(0px);
 }
 </style>

@@ -168,7 +168,7 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from 'perspective-api-client';
+import Perspective from 'perspective-api-client'
 
 const { $db } = useNuxtApp()
 

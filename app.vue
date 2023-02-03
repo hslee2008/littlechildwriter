@@ -226,7 +226,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay, useTheme } from 'vuetify';
+import { useDisplay, useTheme } from 'vuetify'
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()

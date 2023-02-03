@@ -1,12 +1,6 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
-  <v-card v-if="loading" :color="themeColor()" class="elevation-0 text-center">
-    <v-card-text>
-      <v-progress-circular indeterminate color="primary" size="30" />
-      <v-card-title>유저를 불러오고 있습니다...</v-card-title>
-    </v-card-text>
-  </v-card>
-  <v-list v-else nav :bg-color="themeColor()" lines="two">
+  <v-list nav :bg-color="themeColor()" lines="two">
     <v-list-item
       v-for="(item, i) in lbt"
       v-show="lbt[i].displayName"
@@ -43,10 +37,8 @@ const props = defineProps({
   }
 })
 const lbt = ref<any>([])
-const loading = ref(true)
 
 onBeforeMount(() => (props.limit ? Limited() : UnLimited()))
-onMounted(() => (loading.value = false))
 
 const Handler = async (s: any) => {
   const { displayName, libris, photoURL, status } = await s.val()

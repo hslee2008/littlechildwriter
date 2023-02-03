@@ -74,8 +74,8 @@
 </template>
 
 <script setup lang="ts">
-import DisplayCards from './components/DisplayCards.vue';
-import UploadCards from './components/UploadCards.vue';
+import DisplayCards from './components/DisplayCards.vue'
+import UploadCards from './components/UploadCards.vue'
 
 const { $db } = useNuxtApp()
 
