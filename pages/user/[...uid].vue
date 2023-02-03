@@ -1,42 +1,13 @@
 <template>
   <div>
-    <v-row class="mb-5">
-      <v-avatar size="75" class="mt-4 ml-5">
-        <UserPhoto :src="targetUser?.photoURL" :size="75" />
-      </v-avatar>
-
-      <div class="d-flex align-center">
-        <div>
-          <v-card-title>{{ targetUser.displayName }}</v-card-title>
-          <v-card-subtitle class="text--grey">
-            구독자 {{ formatter(subCount) }}명
-          </v-card-subtitle>
-        </div>
-      </div>
-
-      <div v-if="userInfo.loggedIn" class="ml-auto my-auto float-right mr-5">
-        <v-btn
-          v-if="userInfo.uid !== uid"
-          rounded="lg"
-          variant="tonal"
-          color="red"
-          class="rounded-xl"
-          @click="Subscribe"
-        >
-          {{ subscribed ? '구독 취소' : '구독' }}
-        </v-btn>
-        <v-btn
-          v-else
-          rounded="lg"
-          variant="tonal"
-          color="primary"
-          to="/account/account"
-          class="rounded-xl"
-        >
-          편집 <v-icon right> mdi-pencil </v-icon>
-        </v-btn>
-      </div>
-    </v-row>
+    <UserHeader
+      :target-user="targetUser"
+      :sub-count="subCount"
+      :uid="uid"
+      :subscribed="subscribed"
+      :subscribe="Subscribe"
+      :user-info="userInfo"
+    />
 
     <v-tabs v-model="tab" center-active grow :bg-color="themeColor()">
       <v-tab> 홈 </v-tab>
@@ -105,184 +76,26 @@
       </v-window-item>
 
       <v-window-item :value="2">
-        <v-list nav :bg-color="themeColor()">
-          <v-list-item
-            v-for="(item, UID) in subscription"
-            v-show="item"
-            :key="UID"
-            :to="`/user/${UID}`"
-          >
-            <v-list-item-title>{{ item }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
+        <UserSubs :subscription="subscription" />
       </v-window-item>
 
       <v-window-item :value="3">
-        <div v-if="targetUser.bio" class="my-10">
-          <v-card-title>{{ targetUser.bio }}</v-card-title>
-        </div>
-
-        <v-list flat class="rounded-lg">
-          <v-list-item>
-            <template #prepend>
-              <v-icon> mdi-crown-circle </v-icon>
-            </template>
-
-            <v-list-item-title>
-              리브리스:
-              {{ Math.round(targetUser.libris) }}
-            </v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <template #prepend>
-              <v-icon> mdi-book </v-icon>
-            </template>
-
-            <v-list-item-title>
-              총 책 업로드: {{ books.length }}
-            </v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <template #prepend>
-              <v-icon> mdi-card-account-details </v-icon>
-            </template>
-
-            <v-list-item-title> UID: {{ uid }} </v-list-item-title>
-          </v-list-item>
-
-          <template v-if="books.length > 0">
-            <v-divider />
-
-            <v-list-item>
-              <template #prepend>
-                <v-icon> mdi-read </v-icon>
-              </template>
-
-              <v-list-item-title>
-                사람들이 책 읽은 수: {{ formatter(readCount) }}번
-              </v-list-item-title>
-            </v-list-item>
-
-            <v-list-item>
-              <template #prepend>
-                <v-icon> mdi-thumbs-up-down </v-icon>
-              </template>
-
-              <v-list-item-title>
-                총 좋아요: {{ formatter(likeCount) }}번
-              </v-list-item-title>
-            </v-list-item>
-
-            <v-divider />
-
-            <v-list-item>
-              <template #prepend>
-                <v-icon> mdi-star </v-icon>
-              </template>
-
-              <v-list-item-title>
-                평균 평점: {{ (avgRating / books.length).toFixed(2) }}
-              </v-list-item-title>
-            </v-list-item>
-
-            <v-list-item>
-              <template #prepend>
-                <v-icon> mdi-read </v-icon>
-              </template>
-
-              <v-list-item-title>
-                권당 평균 읽힌 수:
-                {{ (readCount / books.length).toFixed(2) }}번
-              </v-list-item-title>
-            </v-list-item>
-
-            <v-list-item>
-              <template #prepend>
-                <v-icon> mdi-thumbs-up-down </v-icon>
-              </template>
-
-              <v-list-item-title>
-                권당 평균 좋아요:
-                {{ (likeCount / books.length).toFixed(2) }}번
-              </v-list-item-title>
-            </v-list-item>
-          </template>
-        </v-list>
+        <UserStats
+          :user="uid"
+          :length="books.length"
+          :target-user="targetUser"
+          :read-count="readCount"
+          :like-count="likeCount"
+          :avg-rating="avgRating"
+        />
       </v-window-item>
 
       <v-window-item :value="4">
-        <div class="d-flex justify-center align-center badge">
-          <v-card
-            v-if="readCount > 9"
-            class="d-flex justify-center elevation-0"
-            :color="themeColor()"
-          >
-            <v-tooltip :text="readCount.toString()" location="bottom">
-              <template #activator="{ props }">
-                <v-badge
-                  v-bind="props"
-                  color="primary"
-                  location="bottom end"
-                  offset-x="75"
-                  :offset-y="mobile ? 150 : 200"
-                  :content="`x ${Math.floor(Math.log10(readCount))}`"
-                >
-                  <v-img src="/img/views.png" :width="mobile ? 200 : 300" />
-                </v-badge>
-              </template>
-            </v-tooltip>
-          </v-card>
-
-          <v-card
-            v-if="subCount > 1"
-            class="d-flex justify-center elevation-0"
-            :color="themeColor()"
-          >
-            <v-tooltip
-              :text="`구독자: ${subCount.toString()}`"
-              location="bottom"
-            >
-              <template #activator="{ props }">
-                <v-badge
-                  v-bind="props"
-                  color="primary"
-                  location="bottom end"
-                  offset-x="75"
-                  :offset-y="mobile ? 150 : 200"
-                  :content="`x ${Math.floor(Math.log2(subCount))}`"
-                >
-                  <v-img src="/img/followers.png" :width="mobile ? 200 : 300" />
-                </v-badge>
-              </template>
-            </v-tooltip>
-          </v-card>
-
-          <v-card
-            v-if="books.length > 9"
-            class="d-flex justify-center elevation-0"
-            :color="themeColor()"
-          >
-            <v-tooltip
-              :text="`업로드 수: ${books.length.toString()}`"
-              location="bottom"
-            >
-              <template #activator="{ props }">
-                <v-badge
-                  v-bind="props"
-                  color="primary"
-                  location="bottom end"
-                  offset-x="75"
-                  :offset-y="mobile ? 150 : 200"
-                  :content="`x ${Math.floor(Math.log10(books.length))}`"
-                >
-                  <v-img src="/img/uploads.png" :width="mobile ? 200 : 300" />
-                </v-badge>
-              </template>
-            </v-tooltip>
-          </v-card>
-        </div>
+        <UserBadge
+          :sub-count="subCount"
+          :read-count="readCount"
+          :length="books.length"
+        />
       </v-window-item>
     </v-window>
   </div>

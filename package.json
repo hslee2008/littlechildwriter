@@ -13,7 +13,7 @@
     "api": "node ./api/index.js",
     "prettier": "prettier --write .",
     "firebase": "yarn generate && firebase deploy",
-    "upgrade": "yarn upgrade && nuxi upgrade",
+    "update": "yarn upgrade && nuxi upgrade",
     "formatter": "yarn lint:fix",
     "git": "yarn formatter && yarn upgrade && git add --all"
   },
