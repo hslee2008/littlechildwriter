@@ -80,8 +80,6 @@ export default defineNuxtConfig({
     '/assets/css/global.css',
     '/assets/css/custom.css',
     '/assets/css/vuetify.css',
-    '/assets/css/tailwind.css',
-    '/assets/sass/vuetify.sass',
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
   ],
@@ -98,7 +96,8 @@ export default defineNuxtConfig({
         autoImports: ['defineStore']
       }
     ],
-    '@kevinmarrec/nuxt-pwa'
+    '@kevinmarrec/nuxt-pwa',
+    '@vueuse/nuxt'
   ],
 
   pwa: {
@@ -118,15 +117,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['vuetify'],
-    postcss: {
-      postcssOptions: {
-        plugins: {
-          tailwindcss: {},
-          autoprefixer: {}
-        }
-      }
-    }
+    transpile: ['vuetify']
   },
 
   hooks: {

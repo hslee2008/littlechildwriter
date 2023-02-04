@@ -142,6 +142,7 @@ const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
 
 const userInfo = User()
+const route = useRoute()
 
 const props = defineProps({
   items: {
@@ -158,6 +159,14 @@ const bookmarkSnackbarDel = ref<boolean>(false)
 const bookmarked = (i: number) => {
   return Object.keys(props.items[i].bookmarks ?? {}).includes(userInfo.uid)
 }
+
+onKeyStroke('l', () => {
+  if (route.path === '/list') {
+    for (let i = 0; i < props.items.length; i++) {
+      if (!props.items[i].liked[userInfo.uid]) Like(props.items[i])
+    }
+  }
+})
 
 const Like = (item: any) => {
   if (item.liked[userInfo.uid]) {

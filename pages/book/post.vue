@@ -695,7 +695,7 @@ const Post = () => {
     }
   })
 
-  Libris(userInfo.uid, parseInt(post.value.pageCount) / 20)
+  Libris(userInfo.uid, parseInt(post.value.pageCount) / 10)
 
   navigateTo(`/book/content/${time}`)
 }

@@ -4,5 +4,4 @@
 2. Use Nuxt firebase module instead of plugin
 3. Use i18n module
 4. Custom PWA instead of relying on module
-5. SLOW transition to tailwind
-6. Code Splitting using components
+5. Code Splitting using components

@@ -2,15 +2,26 @@
   <div>
     <v-row class="mt-5 mx-2 g-10">
       <v-col cols="12">
-        <v-select
-          v-if="star"
-          v-model="rating"
-          variant="outlined"
-          :items="['모두', 5, 4, 3, 2, 1]"
-          label="평점 선택"
-          flat
-          prepend-inner-icon="mdi-star"
-        />
+        <div v-if="star" class="ml-4">
+          <v-chip
+            v-if="everything"
+            class="ma-2"
+            closable
+            @click:close="everything = false"
+          >
+            모두
+          </v-chip>
+          <v-chip v-else class="ma-2" closable @click:close="everything = true">
+            <v-rating
+              v-model="rating"
+              half-increments
+              size="20"
+              color="amber"
+              background-color="white"
+            />
+          </v-chip>
+        </div>
+
         <v-text-field
           v-else
           v-model="search"
@@ -91,19 +102,21 @@ const { $db } = useNuxtApp()
 
 const books = ref<any[]>([])
 const search = ref<string>('')
-const rating = ref<string>('모두')
+const rating = ref<number>(5)
 const page = ref<number>(1)
 const itemsPerPage = ref<number>(10)
 const numberOfPages = computed(() =>
   Math.ceil(books.value.length / itemsPerPage.value)
 )
+
 const loading = ref<boolean>(true)
+const everything = ref<boolean>(true)
 
 const item = computed(() => {
   return books.value
     .filter((book: any) => {
       if (props.star) {
-        return book.rating === rating.value || rating.value === '모두'
+        return book.rating === rating.value || everything.value === true
       } else {
         return (
           (book.title?.toLowerCase() ?? []).includes(

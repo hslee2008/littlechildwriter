@@ -358,7 +358,7 @@ const post = () => {
   write.value = false
   claim.value = ''
 
-  Libris(userInfo.uid, 5)
+  Libris(userInfo.uid, 20)
   Notify(
     content.value.uid,
     userInfo.photoURL,
