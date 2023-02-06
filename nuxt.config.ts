@@ -87,11 +87,13 @@ export default defineNuxtConfig({
   modules: [
     (_, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', config =>
-        config.plugins.push(vuetify({
-          styles: {
-            configFile: 'assets/scss/vuetify.scss'
-          }
-        }))
+        config.plugins.push(
+          vuetify({
+            styles: {
+              configFile: 'assets/scss/vuetify.scss'
+            }
+          })
+        )
       )
     },
     [
@@ -111,6 +113,16 @@ export default defineNuxtConfig({
     },
     workbox: {
       enabled: true
+    },
+    manifest: {
+      name: 'Little 작가',
+      short_name: 'Little 작가',
+      description:
+        'Little 작가는 글을 올리고, 새롭게 배우고, 대화하기 위한 플랫폼입니다.',
+      lang: 'ko',
+      display: 'standalone',
+      background_color: '#23262E',
+      theme_color: '#23262E'
     }
   },
 
