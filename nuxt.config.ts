@@ -87,7 +87,11 @@ export default defineNuxtConfig({
   modules: [
     (_, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', config =>
-        config.plugins.push(vuetify())
+        config.plugins.push(vuetify({
+          styles: {
+            configFile: 'assets/scss/vuetify.scss'
+          }
+        }))
       )
     },
     [

@@ -56,20 +56,13 @@
     </v-btn>
 
     <v-row class="mt-5 ma-1 g-10">
-      <v-card
-        v-for="item in classes"
-        :key="item.name"
-        class="my-3 elevation-0"
-        :color="themeColor()"
-      >
+      <v-card v-for="item in classes" :key="item.name" class="my-3">
         <v-card
           v-if="
             item.public ||
             userInfo.is(item.uid) ||
             Object.values(item.users).filter((e: any) => userInfo.is(e.uid)).length > 0
           "
-          :color="themeColor()"
-          class="elevation-0"
           :to="`/class/${item.id}`"
         >
           <v-img :src="item.image" width="50vh" class="ma-auto rounded-lg">

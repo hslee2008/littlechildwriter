@@ -11,7 +11,6 @@
       <v-expansion-panel
         v-for="(category, title) in classInfo.contents"
         :key="title"
-        :bg-color="themeColor()"
         class="elevation-0"
       >
         <v-expansion-panel-title

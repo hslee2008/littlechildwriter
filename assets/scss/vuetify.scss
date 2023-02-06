@@ -1,3 +1,24 @@
+$bg: var(--bg);
+
 @use 'vuetify/settings' with (
-  $card-elevation: 0
+  /* Other */
+  $button-border-radius: 8,
+
+  /* Space */
+  $app-bar-padding-end: 5,
+  $app-bar-padding-start: 8,
+  $divider-margin : 10px,
+
+  /* Theme Color */
+  $application-background: $bg,
+  $app-bar-background: $bg,
+  $card-background: $bg,
+  $navigation-drawer-background: $bg,
+  $list-background: $bg,
+  $expansion-panel-background-color: $bg,
+  $overlay-scrim-background: '#3d4754',
+
+  /* Elevation */
+  $card-elevation: 0,
+  $app-bar-elevation: 0
 );

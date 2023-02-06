@@ -1,5 +1,5 @@
 <template>
-  <v-card :color="themeColor()" class="elevation-0">
+  <v-card>
     <v-card-text>
       <v-rating
         v-model="post.rating"
@@ -29,7 +29,6 @@
         rounded="lg"
         variant="tonal"
         color="primary"
-        class="elevation-0"
         @click="() => navigateTo(`/book/content/${post.time}`)"
       >
         취소
@@ -37,13 +36,7 @@
 
       <v-spacer />
 
-      <v-btn
-        rounded="lg"
-        variant="tonal"
-        color="primary"
-        class="elevation-0"
-        @click="Update"
-      >
+      <v-btn rounded="lg" variant="tonal" color="primary" @click="Update">
         업데이트
       </v-btn>
     </v-card-actions>

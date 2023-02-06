@@ -5,12 +5,7 @@
         color="repeating-linear-gradient(to right,#F7AD42 0%,#23262E 50%,#159ECB 100%)"
       />
 
-      <v-app-bar
-        fixed
-        clipped-left
-        class="elevation-0 pl-1 pr-3"
-        :color="themeColor()"
-      >
+      <v-app-bar fixed clipped-left>
         <template #prepend>
           <v-app-bar-nav-icon @click="drawer = !drawer" />
         </template>
@@ -23,14 +18,13 @@
 
         <v-btn
           v-if="$route.path !== '/book/post' && userInfo.loggedIn"
-          rounded="lg"
           icon
           to="/book/post"
         >
           <v-icon>mdi-plus-circle-outline</v-icon>
         </v-btn>
 
-        <v-btn rounded="lg" icon :color="themeColor()">
+        <v-btn icon>
           <v-badge color="primary" :content="notif.length" class="text-amber">
             <v-icon>
               {{
@@ -48,7 +42,7 @@
             scrollable
             activator="parent"
           >
-            <v-card :bg-color="themeColor()">
+            <v-card>
               <v-list v-if="notif.length > 0" nav>
                 <v-list-item
                   v-for="(d, i) in notif"
@@ -84,7 +78,7 @@
           </v-dialog>
         </v-btn>
 
-        <v-btn v-if="userInfo.loggedIn" rounded="lg" icon>
+        <v-btn v-if="userInfo.loggedIn" icon>
           <v-avatar size="35">
             <v-img alt="User Avatar" :src="userInfo.photoURL" />
           </v-avatar>
@@ -138,12 +132,7 @@
         </v-btn>
       </v-app-bar>
 
-      <v-navigation-drawer
-        v-model="drawer"
-        floating
-        mobile-breakpoint="400"
-        :color="themeColor()"
-      >
+      <v-navigation-drawer v-model="drawer" floating mobile-breakpoint="400">
         <v-list nav expand>
           <v-list-item
             to="/"
@@ -186,7 +175,7 @@
             />
           </template>
 
-          <v-divider class="my-1" />
+          <v-divider />
 
           <v-list-item
             to="/libris/libris"
@@ -230,6 +219,7 @@ import { useDisplay, useTheme } from 'vuetify'
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
+const router = useRouter()
 const theme = useTheme()
 
 const userInfo = User()
@@ -265,5 +255,6 @@ const load = (link: string) => {
 const changeTheme = () => {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
   localStorage.setItem('theme', theme.global.name.value)
+  router.go(0)
 }
 </script>

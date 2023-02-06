@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="pa-2 elevation-0" :color="themeColor()">
+    <v-card class="pa-2">
       <v-card-title>
         <v-text-field
           v-model="topic"

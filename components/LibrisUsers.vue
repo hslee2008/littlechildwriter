@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
-  <v-list nav :bg-color="themeColor()" lines="two">
+  <v-list nav lines="two">
     <v-list-item
       v-for="(item, i) in lbt"
       v-show="lbt[i].displayName"

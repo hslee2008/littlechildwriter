@@ -22,7 +22,7 @@
       </v-window-item>
 
       <v-window-item v-if="userInfo.is(classInfo.uid)" :value="2" class="pt-5">
-        <v-card class="mt-5" :color="themeColor()">
+        <v-card class="mt-5">
           <v-card-title>수업 세부정보</v-card-title>
           <v-card-text>
             <v-text-field

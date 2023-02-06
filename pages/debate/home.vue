@@ -15,7 +15,7 @@
       </v-btn>
     </div>
 
-    <v-list nav :bg-color="themeColor()">
+    <v-list nav>
       <v-list-item
         v-for="(item, i) in list"
         :key="item.time"
@@ -37,27 +37,19 @@
           {{ Object.keys({ ...item.pro, ...item.con } ?? {}).length }}
 
           <v-list-item-action v-if="userInfo.is(item.uid)">
-            <v-btn
-              id="btn"
-              rounded="lg"
-              icon
-              cols="1"
-              flat
-              :color="themeColor()"
-              @click.stop.prevent=""
-            >
+            <v-btn variant="plain" rounded="lg" icon cols="1" @click.stop.prevent="">
               <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
 
-            <v-menu offset-y activator="#btn">
-              <v-list>
-                <v-list-item @click="DeleteContent(i)">
-                  <v-list-item-title>
-                    <v-icon start> mdi-trash-can </v-icon> 삭제
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+              <v-menu offset-y activator="parent">
+                <v-list>
+                  <v-list-item @click="DeleteContent(i)">
+                    <v-list-item-title>
+                      <v-icon start> mdi-trash-can </v-icon> 삭제
+                    </v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-btn>
           </v-list-item-action>
         </template>
       </v-list-item>

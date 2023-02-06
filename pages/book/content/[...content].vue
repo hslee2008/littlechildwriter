@@ -20,7 +20,7 @@
       닫기
     </v-btn>
 
-    <v-card class="my-3 elevation-0" :color="themeColor()">
+    <v-card class="my-3">
       <div class="cardy">
         <BookImage :post="post" :other-info="otherInfo" />
         <BookContent :post="post" :other-info="otherInfo" />
@@ -97,7 +97,7 @@
                   rounded="lg"
                   variant="plain"
                   icon="mdi-magnify"
-                  class="elevation-0 mt-1"
+                  class="mt-1"
                   @click="schoolBookSearch"
                 />
               </div>
@@ -180,8 +180,7 @@
         <v-card
           v-for="(item, i) in suggested"
           :key="i"
-          class="mx-auto my-5 elevation-0"
-          :color="themeColor()"
+          class="mx-auto my-5"
           :href="item.infoLink"
           :width="width < 1264 ? 150 : 210"
         >

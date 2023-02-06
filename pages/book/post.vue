@@ -343,7 +343,6 @@
         label="카테고리"
         multiple
         variant="outlined"
-        :color="themeColor()"
       >
         <template #selection="{ attrs, item, select, selected }">
           <v-chip

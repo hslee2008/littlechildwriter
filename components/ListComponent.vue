@@ -33,22 +33,14 @@
       </v-col>
     </v-row>
 
-    <v-card
-      v-if="loading"
-      :color="themeColor()"
-      class="elevation-0 text-center"
-    >
+    <v-card v-if="loading" class="text-center">
       <v-card-text>
         <v-progress-circular indeterminate color="primary" size="30" />
         <v-card-title>책을 불러오는 중입니다...</v-card-title>
       </v-card-text>
     </v-card>
     <BookCard v-else-if="item.length > 0" :items="item" />
-    <v-card
-      v-else-if="search.length === 0"
-      :color="themeColor()"
-      class="elevation-0 text-center"
-    >
+    <v-card v-else-if="search.length === 0" class="text-center">
       <v-card-text class="d-flex justify-center">
         <div>
           <v-progress-circular indeterminate color="primary" size="30" />

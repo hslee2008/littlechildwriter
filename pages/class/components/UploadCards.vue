@@ -32,14 +32,10 @@
       </div>
     </v-row>
 
-    <v-card v-if="post.type === '책'" :color="themeColor()" class="elevation-0">
+    <v-card v-if="post.type === '책'">
       <v-card-title>책 업로드</v-card-title>
       <v-card-text>
-        <v-text-field
-          v-model="post.title"
-          variant="outlined"
-          label="제목"
-        />
+        <v-text-field v-model="post.title" variant="outlined" label="제목" />
 
         <div v-if="post.time">
           <h2>선택됨</h2>
@@ -66,9 +62,8 @@
           <v-card>
             <v-row no-gutters>
               <v-card
-                v-for="i in listev.filter((i) => userInfo.is(i.uid))"
+                v-for="i in listev.filter(i => userInfo.is(i.uid))"
                 :key="i.title"
-                class="elevation-0"
                 @click="selectBook(i)"
               >
                 <v-img :src="i.image" class="rounded-lg ma-3" max-width="100" />
@@ -84,26 +79,17 @@
           variant="tonal"
           :disabled="post.title === ''"
           color="primary"
-          class="elevation-0"
           @click="Post"
         >
           게시
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card v-else-if="post.type === '링크'" :color="themeColor()">
+    <v-card v-else-if="post.type === '링크'">
       <v-card-title>링크 업로드</v-card-title>
       <v-card-text>
-        <v-text-field
-          v-model="post.title"
-          variant="outlined"
-          label="제목"
-        />
-        <v-text-field
-          v-model="post.link"
-          variant="outlined"
-          label="링크"
-        />
+        <v-text-field v-model="post.title" variant="outlined" label="제목" />
+        <v-text-field v-model="post.link" variant="outlined" label="링크" />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
         <v-btn
@@ -111,14 +97,13 @@
           variant="tonal"
           :disabled="post.title === ''"
           color="primary"
-          class="elevation-0"
           @click="Post"
         >
           게시
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-card v-else-if="post.type.startsWith('파일')" :color="themeColor()">
+    <v-card v-else-if="post.type.startsWith('파일')">
       <v-radio-group v-model="post.type">
         <v-radio key="숙제" label="파일 (숙제로)" value="파일 (숙제로)" />
         <v-radio key="파일" label="파일" value="파일" />
@@ -161,14 +146,10 @@
         파일 게시
       </v-btn>
     </v-card>
-    <v-card v-else-if="post.type === '글 제출 (학생)'" :color="themeColor()">
+    <v-card v-else-if="post.type === '글 제출 (학생)'">
       <v-card-title>숙제 업로드</v-card-title>
       <v-card-text>
-        <v-text-field
-          v-model="post.title"
-          variant="outlined"
-          label="제목"
-        />
+        <v-text-field v-model="post.title" variant="outlined" label="제목" />
         <v-textarea v-model="post.content" variant="outlined" label="내용" />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
@@ -177,7 +158,6 @@
           variant="tonal"
           :disabled="post.title === ''"
           color="primary"
-          class="elevation-0"
           @click="Post"
         >
           게시

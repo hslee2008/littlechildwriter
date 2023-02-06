@@ -15,7 +15,7 @@
       </v-btn>
     </div>
 
-    <v-list nav :bg-color="themeColor()">
+    <v-list nav>
       <v-list-item
         v-for="(item, i) in list"
         :key="item.time"

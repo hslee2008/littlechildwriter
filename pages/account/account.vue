@@ -1,6 +1,6 @@
 <template>
   <v-form class="my-10">
-    <v-card id="profile" class="mb-10 elevation-0" :color="themeColor()">
+    <v-card id="profile" class="mb-10">
       <v-card-title>프로필 설정</v-card-title>
 
       <div class="d-flex ml-5">
@@ -35,12 +35,12 @@
           variant="outlined"
           label="Bio"
           placeholder="나의 소개"
-          class="ma-1 elevation-0"
+          class="ma-1"
         />
       </v-card-text>
     </v-card>
 
-    <v-card id="book" class="mb-10 elevation-0" :color="themeColor()">
+    <v-card id="book" class="mb-10">
       <v-card-title>책 추천</v-card-title>
       <v-radio-group v-model="featured" class="ma-3">
         <v-list class="rounded-lg">
@@ -55,7 +55,7 @@
       </v-radio-group>
     </v-card>
 
-    <v-card id="advanced" class="mb-10 elevation-0" :color="themeColor()">
+    <v-card id="advanced" class="mb-10">
       <v-card-title>고급 설정</v-card-title>
 
       <v-card-text>

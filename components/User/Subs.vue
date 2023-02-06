@@ -1,5 +1,5 @@
 <template>
-  <v-list nav :bg-color="themeColor()">
+  <v-list nav>
     <v-list-item
       v-for="(item, UID) in subscription"
       v-show="item"

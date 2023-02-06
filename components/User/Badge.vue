@@ -1,10 +1,6 @@
 <template>
   <div class="d-flex justify-center align-center badge">
-    <v-card
-      v-if="readCount > 9"
-      class="d-flex justify-center elevation-0"
-      :color="themeColor()"
-    >
+    <v-card v-if="readCount > 9" class="d-flex justify-center">
       <v-tooltip :text="readCount.toString()" location="bottom">
         <template #activator="{ props }">
           <v-badge
@@ -21,11 +17,7 @@
       </v-tooltip>
     </v-card>
 
-    <v-card
-      v-if="subCount > 1"
-      class="d-flex justify-center elevation-0"
-      :color="themeColor()"
-    >
+    <v-card v-if="subCount > 1" class="d-flex justify-center">
       <v-tooltip :text="`구독자: ${subCount.toString()}`" location="bottom">
         <template #activator="{ props }">
           <v-badge
@@ -42,11 +34,7 @@
       </v-tooltip>
     </v-card>
 
-    <v-card
-      v-if="length > 9"
-      class="d-flex justify-center elevation-0"
-      :color="themeColor()"
-    >
+    <v-card v-if="length > 9" class="d-flex justify-center">
       <v-tooltip :text="`업로드 수: ${length.toString()}`" location="bottom">
         <template #activator="{ props }">
           <v-badge

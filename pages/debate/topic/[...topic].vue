@@ -1,11 +1,7 @@
 <template>
   <div>
     <h1>주제: {{ content.topic }}</h1>
-    <v-card
-      class="d-flex elevation-0 pb-2"
-      :color="themeColor()"
-      :to="`/user/${content.uid}`"
-    >
+    <v-card class="d-flex pb-2" :to="`/user/${content.uid}`">
       <v-avatar size="45" class="my-auto ml-2">
         <UserPhoto :size="45" :src="content?.photoURL" />
       </v-avatar>
@@ -41,7 +37,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <v-list nav :color="themeColor()">
+            <v-list nav>
               <v-list-item v-for="(item, i) in content.pro" :key="item.time">
                 <template #prepend>
                   <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
@@ -121,7 +117,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <v-list nav :color="themeColor()">
+            <v-list nav>
               <v-list-item v-for="(item, i) in content.con" :key="item.time">
                 <template #prepend>
                   <NuxtLink :to="`/user/${item.uid}`" class="mr-3">
@@ -208,7 +204,7 @@
       제언하기
     </v-btn>
 
-    <v-card v-if="suggestionCard" class="mt-2" :color="themeColor()">
+    <v-card v-if="suggestionCard" class="mt-2">
       <v-card-title>
         <v-text-field
           v-model="suggestion"
@@ -244,7 +240,7 @@
       </v-card-actions>
     </v-card>
 
-    <v-list nav :bg-color="themeColor()">
+    <v-list nav>
       <v-list-item v-for="(item, i) in content.suggestion" :key="item.time">
         <template #prepend>
           <NuxtLink :to="`/user/${item.uid}`" class="mr-3">

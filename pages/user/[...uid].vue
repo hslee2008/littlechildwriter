@@ -42,8 +42,7 @@
       <v-window-item :value="0">
         <v-card
           v-if="books.length > 0"
-          :class="`elevation-0 d-${mobile ? 'block' : 'flex'}`"
-          :color="themeColor()"
+          :class="`d-${mobile ? 'block' : 'flex'}`"
           :to="`/book/content/${(chosenBookData || books[0]).time}`"
         >
           <template #prepend>

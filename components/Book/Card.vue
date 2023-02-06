@@ -15,14 +15,9 @@
         v-for="(item, i) in items"
         :key="i"
         :width="mobile ? 150 : 200"
-        :class="`my-4 elevation-0 ${mobile ? 'mx-auto' : 'mx-4'}`"
-        :color="themeColor()"
+        :class="`my-4 ${mobile ? 'mx-auto' : 'mx-4'}`"
       >
-        <v-card
-          :to="`/book/content/${item.time}`"
-          :color="themeColor()"
-          class="elevation-0"
-        >
+        <v-card :to="`/book/content/${item.time}`">
           <v-img
             :src="item.image"
             :lazy-src="item.image"
@@ -60,7 +55,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card v-show="!simple" :color="themeColor()" class="elevation-0">
+        <v-card v-show="!simple">
           <v-card-actions v-if="userInfo.loggedIn">
             <v-btn
               rounded="lg"
