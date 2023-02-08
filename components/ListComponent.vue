@@ -65,7 +65,7 @@
           <v-menu top activator="parent">
             <v-list>
               <v-list-item
-                v-for="num in [10, 50, 150, 200]"
+                v-for="num in [5, 10, 15, 20]"
                 :key="num"
                 @click="itemsPerPage = num"
               >
@@ -77,7 +77,6 @@
 
         <v-spacer />
 
-        <span class="mr-4 grey--text"> {{ page }} / {{ numberOfPages }} </span>
         <v-btn icon variant="plain" color="blue darken-3" @click="Before">
           <v-icon>mdi-chevron-left</v-icon>
         </v-btn>
@@ -97,9 +96,8 @@ const search = ref<string>('')
 const rating = ref<number>(5)
 const page = ref<number>(1)
 const itemsPerPage = ref<number>(10)
-const numberOfPages = computed(() =>
-  Math.ceil(books.value.length / itemsPerPage.value)
-)
+
+const currentBookLength = ref(10)
 
 const loading = ref<boolean>(true)
 const everything = ref<boolean>(true)
@@ -129,12 +127,15 @@ const item = computed(() => {
 })
 
 onBeforeMount(() => {
-  $db.ref('contents').on('child_added', async (s: any) => {
-    const data = await s.val()
+  $db
+    .ref('contents')
+    .limitToLast(20)
+    .on('child_added', async (s: any) => {
+      const data = await s.val()
 
-    if (props.user === 'everyone') books.value.unshift(data)
-    else if (data.uid === props.user) books.value.unshift(data)
-  })
+      if (props.user === 'everyone') books.value.unshift(data)
+      else if (data.uid === props.user) books.value.unshift(data)
+    })
 
   setTimeout(() => {
     loading.value = false
@@ -150,6 +151,18 @@ const Before = () => {
 }
 
 const Next = () => {
+  $db
+    .ref('contents')
+    .limitToLast(currentBookLength.value + 20)
+    .on('child_added', async (s: any) => {
+      const data = await s.val()
+
+      if (props.user === 'everyone') books.value.unshift(data)
+      else if (data.uid === props.user) books.value.unshift(data)
+    })
+
+  currentBookLength.value += 10
+
   if (page.value < Math.ceil(books.value.length / itemsPerPage.value)) {
     page.value++
   }

@@ -681,19 +681,6 @@ const Post = () => {
       content: content.replaceAll('\n', '<br>')
     })
 
-  $db.ref(`/user/${uid}/subscriber`).once('value', (snapshot: any) => {
-    const subscribers = snapshot.val()
-
-    for (const subscriber in subscribers) {
-      Notify(
-        subscribers[subscriber],
-        userInfo.photoURL,
-        `${userInfo.displayName}님이 ${post.title} 새로운 글을 올렸습니다`,
-        `/book/content/${post.time}`
-      )
-    }
-  })
-
   Libris(userInfo.uid, parseInt(post.value.pageCount) / 10)
 
   navigateTo(`/book/content/${time}`)

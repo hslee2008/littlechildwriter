@@ -4,7 +4,7 @@
       <v-select
         v-model="post.type"
         variant="outlined"
-        :items="['책', '공지사항', '파일', '링크', '글 제출 (학생)']"
+        :items="['공지사항', '파일', '링크', '글 제출 (학생)']"
         label="종류 선택"
         outlined
         class="mb-10"
@@ -32,60 +32,7 @@
       </div>
     </v-row>
 
-    <v-card v-if="post.type === '책'">
-      <v-card-title>책 업로드</v-card-title>
-      <v-card-text>
-        <v-text-field v-model="post.title" variant="outlined" label="제목" />
-
-        <div v-if="post.time">
-          <h2>선택됨</h2>
-          <br />
-          <v-img :src="post.image" max-width="200" class="rounded-lg" />
-        </div>
-      </v-card-text>
-
-      <v-card-actions class="ma-2 gap20">
-        <v-dialog v-model="dialog" width="700">
-          <template #activator="{ propsD }">
-            <div class="text-center">
-              <v-btn
-                rounded="lg"
-                variant="tonal"
-                color="primary"
-                v-bind="propsD"
-              >
-                <v-icon start>mdi-bookshelf</v-icon> 책 선택
-              </v-btn>
-            </div>
-          </template>
-
-          <v-card>
-            <v-row no-gutters>
-              <v-card
-                v-for="i in listev.filter(i => userInfo.is(i.uid))"
-                :key="i.title"
-                @click="selectBook(i)"
-              >
-                <v-img :src="i.image" class="rounded-lg ma-3" max-width="100" />
-              </v-card>
-            </v-row>
-          </v-card>
-        </v-dialog>
-
-        <v-spacer />
-
-        <v-btn
-          rounded="lg"
-          variant="tonal"
-          :disabled="post.title === ''"
-          color="primary"
-          @click="Post"
-        >
-          게시
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-card v-else-if="post.type === '링크'">
+    <v-card v-if="post.type === '링크'">
       <v-card-title>링크 업로드</v-card-title>
       <v-card-text>
         <v-text-field v-model="post.title" variant="outlined" label="제목" />
@@ -182,7 +129,6 @@ const userInfo = User()
 const route = useRoute()
 const id = route.params.class
 const classInfo = ref<any>({})
-const listev = ref<any[]>([])
 const post = ref<any>({
   isbn: '',
   title: '',
@@ -197,7 +143,7 @@ const post = ref<any>({
   views: 0,
   time: Date.now(),
   file: [] as File[],
-  type: '책',
+  type: '공지사항',
   category: '기타',
   book: true,
   link: ''
@@ -216,18 +162,6 @@ onBeforeMount(() => {
   $db
     .ref(`/classes/${id}`)
     .on('value', async (s: any) => (classInfo.value = await s.val()))
-
-  $db.ref('/contents/').on('child_added', (s: any) => {
-    const { title, time, uid, displayName, image } = s.val()
-
-    listev.value.push({
-      title,
-      time,
-      uid,
-      displayName,
-      image
-    })
-  })
 })
 
 const Upload = () => {
@@ -264,7 +198,7 @@ const Upload = () => {
           post.value.time = 0
           post.value.file = []
           post.value.book = true
-          post.value.type = '책'
+          post.value.type = '공지사항'
           progress.value = false
         })
   )

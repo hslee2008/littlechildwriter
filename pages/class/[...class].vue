@@ -84,25 +84,12 @@ const route = useRoute()
 
 const id = route.params.class
 const classInfo = ref<any>({})
-const listev = ref<any[]>([])
 const tab = ref<number>(0)
 
 onBeforeMount(() => {
   $db
     .ref(`/classes/${id}`)
     .on('value', async (s: any) => (classInfo.value = await s.val()))
-
-  $db.ref('/contents/').on('child_added', (s: any) => {
-    const { title, time, uid, displayName, image } = s.val()
-
-    listev.value.push({
-      title,
-      time,
-      uid,
-      displayName,
-      image
-    })
-  })
 })
 
 const updateTab = (num: number) => (tab.value = num)

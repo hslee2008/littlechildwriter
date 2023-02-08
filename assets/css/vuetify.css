@@ -2,6 +2,10 @@
   color: #159ecb !important;
 }
 
+.v-overlay__scrim {
+  background-color: #3d4754;
+}
+
 .v-theme--light {
   --bg: white;
 }
