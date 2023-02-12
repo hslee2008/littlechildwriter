@@ -36,7 +36,7 @@
       <v-card-title>링크 업로드</v-card-title>
       <v-card-text>
         <v-text-field v-model="post.title" variant="outlined" label="제목" />
-        <v-text-field v-model="post.link" variant="outlined" label="링크" />
+        <v-text-field v-model="post.content" variant="outlined" label="링크" />
       </v-card-text>
       <v-card-actions class="ma-2 gap20">
         <v-btn
@@ -148,7 +148,6 @@ const post = ref<any>({
   book: true,
   link: ''
 })
-const dialog = ref<boolean>(false)
 const progress = ref<boolean>(false)
 
 const props = defineProps({
@@ -257,12 +256,6 @@ const Post = () => {
     `${userInfo.displayName}님이 새로운 자료를 올렸습니다`,
     `/class/${id}`
   )
-}
-
-const selectBook = (b: any) => {
-  post.value.time = b.time
-  post.value.image = b.image
-  dialog.value = false
 }
 </script>
 

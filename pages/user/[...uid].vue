@@ -13,8 +13,8 @@
       <v-tab> 홈 </v-tab>
       <v-tab> 게시물 </v-tab>
       <v-tab v-if="!mobile"> 구독자 </v-tab>
-      <v-tab v-if="!mobile"> 정보 </v-tab>
-      <v-tab v-if="!mobile"> 업적 </v-tab>
+      <v-tab v-if="!mobile" @click="FetchUserStats"> 정보 </v-tab>
+      <v-tab v-if="!mobile" @click="FetchUserStats"> 업적 </v-tab>
 
       <v-menu v-if="mobile">
         <template #activator="{ props }">
@@ -41,7 +41,6 @@
     <v-window v-model="tab" class="py-5" :color="themeColor()">
       <v-window-item :value="0">
         <v-card
-          v-if="books.length > 0"
           :class="`d-${mobile ? 'block' : 'flex'}`"
           :to="`/book/content/${(chosenBookData || books[0]).time}`"
         >
@@ -71,7 +70,7 @@
       </v-window-item>
 
       <v-window-item :value="1">
-        <ListComponent :user="uid" star />
+        <BookList :user="uid" star />
       </v-window-item>
 
       <v-window-item :value="2">
@@ -128,19 +127,9 @@ const avgRating = ref<number>(0)
 
 const chosenBookData = ref<any>({})
 
+const blockSubscribe = ref<number>(0)
+
 onBeforeMount(() => {
-  $db.ref('/contents/').on('child_added', async (s: any) => {
-    const data = await s.val()
-
-    if (data.uid === uid) {
-      readCount.value += data.views
-      likeCount.value += data.likes
-      avgRating.value += data.rating
-
-      books.value.unshift(data)
-    }
-  })
-
   $db
     .ref(`/users/${uid}/`)
     .once('value')
@@ -172,7 +161,23 @@ onBeforeMount(() => {
   }
 })
 
+const FetchUserStats = () => {
+  $db.ref('/contents/').on('child_added', async (s: any) => {
+    const data = await s.val()
+
+    if (data.uid === uid) {
+      readCount.value += data.views
+      likeCount.value += data.likes
+      avgRating.value += data.rating
+
+      books.value.unshift(data)
+    }
+  })
+}
+
 const Subscribe = () => {
+  if (blockSubscribe.value > 3) return
+
   if (subscribed.value) {
     $db.ref(`/users/${userInfo.uid}/subscribe/${uid}`).remove()
     $db.ref(`/users/${uid}/subscriber/${userInfo.uid}`).remove()
@@ -206,6 +211,8 @@ const Subscribe = () => {
       `/user/${uid}`
     )
   }
+
+  blockSubscribe.value += 1
 }
 
 useHead({

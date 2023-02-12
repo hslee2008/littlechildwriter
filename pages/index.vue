@@ -29,7 +29,6 @@
             height="300"
             max-width="500"
             :elevation="2"
-            color="#212223"
           >
             <div>
               <h1>Little 작가</h1>
@@ -67,8 +66,8 @@
       class="transparent mt-5"
     >
       <v-tab>최근 포스트</v-tab>
-      <v-tab>좋아요 많은 포스트</v-tab>
-      <v-tab>인기있는 포스트</v-tab>
+      <v-tab @click="FetchLikes">좋아요 많은 포스트</v-tab>
+      <v-tab @click="FetchViews">인기있는 포스트</v-tab>
     </v-tabs>
 
     <v-window v-model="tab">
@@ -129,23 +128,31 @@ onBeforeMount(() => {
     .limitToLast(mobile.value ? 4 : 5)
     .on('child_added', async (s: any) => recent.value.unshift(await s.val()))
 
+  setInterval(
+    () => (image.value = list[Math.floor(Math.random() * list.length)]),
+    10000
+  )
+})
+
+const FetchLikes = () => {
+  if (popular.value.length > 0) return
+
   $db
     .ref('/contents')
     .orderByChild('likes')
     .limitToLast(mobile.value ? 4 : 5)
     .on('child_added', async (s: any) => popular.value.unshift(await s.val()))
+}
+
+const FetchViews = () => {
+  if (views.value.length > 0) return
 
   $db
     .ref('/contents')
     .orderByChild('views')
     .limitToLast(mobile.value ? 4 : 5)
     .on('child_added', async (s: any) => views.value.unshift(await s.val()))
-
-  setInterval(
-    () => (image.value = list[Math.floor(Math.random() * list.length)]),
-    10000
-  )
-})
+}
 </script>
 
 <style scoped>

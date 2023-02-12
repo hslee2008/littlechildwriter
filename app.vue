@@ -25,7 +25,12 @@
         </v-btn>
 
         <v-btn icon>
-          <v-badge color="primary" :content="notif.length" class="text-amber">
+          <v-badge
+            bordered
+            color="primary"
+            :content="notif.length"
+            class="text-amber"
+          >
             <v-icon>
               {{
                 notif.length > 0
@@ -83,47 +88,42 @@
             <v-img alt="User Avatar" :src="userInfo.photoURL" />
           </v-avatar>
           <v-menu right activator="parent">
-            <v-card class="d-flex pa-3 text-center rounded-0">
-              <v-avatar size="45" class="ma-auto">
-                <v-img alt="User Avatar" :src="userInfo.photoURL" />
-              </v-avatar>
+            <v-card>
+              <v-card class="d-flex">
+                <v-avatar size="60" class="ma-auto ml-6">
+                  <v-img alt="User Avatar" :src="userInfo.photoURL" />
+                </v-avatar>
 
-              <div>
-                <v-card-title>{{ userInfo.displayName }}</v-card-title>
-                <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
-              </div>
+                <v-card-text>
+                  <v-card-title>{{ userInfo.displayName }}</v-card-title>
+                  <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
+                </v-card-text>
+              </v-card>
+
+              <v-list nav>
+                <v-list-item
+                  title="로그아웃"
+                  prepend-icon="mdi-logout"
+                  @click="userInfo.logout"
+                />
+              </v-list>
+
+              <v-card class="py-3">
+                <v-btn-toggle
+                  block
+                  variant="outlined"
+                  class="d-flex justify-center"
+                >
+                  <v-btn to="/account/account" icon="mdi-cog-outline"></v-btn>
+                  <v-btn
+                    :to="`/user/${userInfo.uid}`"
+                    icon="mdi-account-circle"
+                  ></v-btn>
+                  <v-btn to="/bookmarks" icon="mdi-bookmark-multiple"></v-btn>
+                  <v-btn to="/book/post" icon="mdi-pencil"></v-btn>
+                </v-btn-toggle>
+              </v-card>
             </v-card>
-
-            <v-list nav class="rounded-0">
-              <v-list-item
-                to="/account/account"
-                title="설정"
-                prepend-icon="mdi-cog-outline"
-              />
-              <v-list-item
-                :to="`/user/${userInfo.uid}`"
-                title="프로필"
-                prepend-icon="mdi-account-circle"
-              />
-
-              <v-divider />
-
-              <v-list-item
-                title="로그아웃"
-                prepend-icon="mdi-logout"
-                @click="userInfo.logout"
-              />
-
-              <v-divider />
-
-              <v-list-item
-                :title="isDark() ? '라이트 모드로 변경' : '다크 모드로 변경'"
-                :prepend-icon="
-                  isDark() ? 'mdi-white-balance-sunny' : 'mdi-weather-night'
-                "
-                @click="changeTheme"
-              />
-            </v-list>
           </v-menu>
         </v-btn>
 
@@ -160,22 +160,7 @@
             prepend-icon="mdi-lectern"
           />
 
-          <template v-if="userInfo.loggedIn">
-            <v-divider class="my-1" />
-
-            <v-list-item
-              to="/bookmarks"
-              title="책갈피"
-              prepend-icon="mdi-bookmark-multiple"
-            />
-            <v-list-item
-              to="/account/account"
-              title="설정"
-              prepend-icon="mdi-cog"
-            />
-          </template>
-
-          <v-divider />
+          <v-divider class="my-3" />
 
           <v-list-item
             to="/libris/libris"
@@ -186,6 +171,16 @@
             to="/libris/table"
             title="포인트제"
             prepend-icon="mdi-table-large"
+          />
+
+          <v-divider class="my-3" />
+
+          <v-list-item
+            :title="isDark() ? '라이트 모드로 변경' : '다크 모드로 변경'"
+            :prepend-icon="
+              isDark() ? 'mdi-white-balance-sunny' : 'mdi-weather-night'
+            "
+            @click="changeTheme"
           />
         </v-list>
       </v-navigation-drawer>
@@ -219,7 +214,6 @@ import { useDisplay, useTheme } from 'vuetify'
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
-const router = useRouter()
 const theme = useTheme()
 
 const userInfo = User()
@@ -255,6 +249,5 @@ const load = (link: string) => {
 const changeTheme = () => {
   theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
   localStorage.setItem('theme', theme.global.name.value)
-  router.go(0)
 }
 </script>

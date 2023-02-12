@@ -61,6 +61,6 @@ const Limited = () => {
 }
 
 const UnLimited = () => {
-  $db.ref('/users').orderByChild('libris').on('child_added', Handler)
+  $db.ref('/users').orderByChild('libris')
 }
 </script>

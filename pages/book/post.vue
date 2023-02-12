@@ -426,6 +426,8 @@
 </template>
 
 <script setup lang="ts">
+import { BrowserBarcodeScanner } from 'browser-barcodescanner'
+
 import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
@@ -458,7 +460,6 @@ const isbn = ref<any>({
 const loading = ref<boolean>(false)
 const title = ref<string>('')
 const searched = ref<any>({})
-const barcodes = ['code_39', 'codabar', 'ean_13', 'ean_8', 'upc_a']
 const typed = ref<string>('')
 const snackbar = ref<boolean>(false)
 const notfound = ref<boolean>(false)
@@ -508,59 +509,23 @@ const showCamera = () => {
     })
 }
 
-const takeISBNVideo = () => {
-  if ('BarcodeDetector' in window) {
-    const BarcodeDetector = window.BarcodeDetector
-
-    new BarcodeDetector({
-      barcodes
-    })
-      .detect(document.querySelector('#video') as HTMLVideoElement)
-      .then((res: any) => res[0].rawValue)
-      .then((a: any) => {
-        post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-        isbn.value.barcode = false
-        fetchi()
-      })
-      .catch((e: any) => alert(e))
-  } else {
-    alert('BarcodeDetector is not supported')
-  }
-}
-
-const uploadFile = (file: File[]) => {
-  const reader = new FileReader()
-
-  reader.addEventListener(
-    'load',
-    () => {
-      const tempImage: any = new Image()
-      tempImage.src = reader.result
-
-      tempImage.onload = () => {
-        if ('BarcodeDetector' in window) {
-          const BarcodeDetector = window.BarcodeDetector
-
-          new BarcodeDetector({
-            barcodes
-          })
-            .detect(tempImage)
-            .then((res: any) => res[0].rawValue)
-            .then((a: any) => {
-              post.value.isbn = JSON.stringify(a, null, 2).replace(/"/g, '')
-              isbn.value.barcode = false
-              fetchi()
-            })
-        } else {
-          alert('BarcodeDetector is not supported')
-        }
-      }
-    },
-    false
+const takeISBNVideo = () =>
+  BrowserBarcodeScanner(
+    ['ean_13'],
+    document.querySelector('#video') as HTMLVideoElement,
+    (result: { res: string }) => {
+      post.value.isbn = result.res
+      isbn.value.barcode = false
+      fetchi()
+    }
   )
 
-  reader.readAsDataURL(file[0])
-}
+const uploadFile = (file: File[]) =>
+  BrowserBarcodeScanner(['ean_13'], file[0], (result: { res: string }) => {
+    post.value.isbn = result.res
+    isbn.value.barcode = false
+    fetchi()
+  })
 
 const fetchi = () => {
   loading.value = true

@@ -8,12 +8,13 @@
         <v-avatar size="45" class="my-auto ml-2">
           <UserPhoto :size="45" :src="content?.photoURL" />
         </v-avatar>
-        <div>
+
+        <v-card-text>
           <v-card-title>{{ content?.displayName }}</v-card-title>
           <v-card-subtitle class="text-grey">
             {{ new Date(content?.time).toLocaleDateString() }}
           </v-card-subtitle>
-        </div>
+        </v-card-text>
       </v-card>
       <v-card-text v-html="content?.markdown"></v-card-text>
     </v-card>

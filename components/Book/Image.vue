@@ -7,7 +7,7 @@
         </v-row>
       </template>
 
-      <v-dialog v-model="sheet" inset scrollable activator="parent">
+      <v-menu v-model="sheet" inset location="right" activator="parent">
         <v-list nav expand>
           <v-list-item
             target="_blank"
@@ -19,7 +19,7 @@
             }`"
           >
             <template #prepend>
-              <v-avatar size="45">
+              <v-avatar size="30">
                 <v-img
                   src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
                   alt="aladdin"
@@ -36,7 +36,7 @@
             }&domain=all`"
           >
             <template #prepend>
-              <v-avatar size="45">
+              <v-avatar size="30">
                 <v-img
                   src="https://image.yes24.com/sysimage/renew/gnb/yes24.ico"
                   alt="yes24"
@@ -53,7 +53,7 @@
             }&i=stripbooks&linkCode=qs`"
           >
             <template #prepend>
-              <v-avatar size="45">
+              <v-avatar size="30">
                 <v-img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
                   alt="amazon"
@@ -70,7 +70,7 @@
             }&collection=kyobo_new`"
           >
             <template #prepend>
-              <v-avatar size="45">
+              <v-avatar size="30">
                 <v-img
                   src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/favicon/apple-touch-icon-144x144-precomposed.png"
                   alt="kyobo"
@@ -85,7 +85,7 @@
             :href="`https://books.google.co.kr/books?id=${otherInfo?.id}`"
           >
             <template #prepend>
-              <v-avatar size="45">
+              <v-avatar size="30">
                 <v-img
                   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjzC2JyZDZ_RaWf0qp11K0lcvB6b6kYNMoqtZAQ9hiPZ4cTIOB"
                   alt="google"
@@ -95,7 +95,7 @@
             <v-list-item-title>구글</v-list-item-title>
           </v-list-item>
         </v-list>
-      </v-dialog>
+      </v-menu>
     </v-img>
   </div>
 </template>
@@ -111,6 +111,8 @@ defineProps({
     required: true
   }
 })
+
+const sheet = ref(false)
 </script>
 
 <style>

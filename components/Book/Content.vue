@@ -4,7 +4,7 @@
     <v-card-title class="h1 text-primary title">
       {{ post.title }}
       <span
-        v-if="post.isbn && otherInfo.volumeInfo?.authors"
+        v-if="otherInfo.volumeInfo?.authors.length > 0"
         class="subtitle-2 ml-1"
       >
         ({{ (otherInfo.volumeInfo?.authors || []).join(', ') }})

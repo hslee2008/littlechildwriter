@@ -1,5 +1,5 @@
 <template>
-  <v-btn rounded="lg" cols="1" class="mx-1" variant="tonal">
+  <v-btn size="small" class="mx-1" variant="tonal" icon>
     <v-icon>mdi-dots-vertical</v-icon>
 
     <v-menu offset-y activator="parent">

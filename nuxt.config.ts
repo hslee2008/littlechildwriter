@@ -103,7 +103,8 @@ export default defineNuxtConfig({
       }
     ],
     '@kevinmarrec/nuxt-pwa',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    '@nuxt/devtools'
   ],
 
   pwa: {
@@ -140,6 +141,11 @@ export default defineNuxtConfig({
     async 'nitro:config'(config) {
       config?.prerender?.routes?.push(...(await getRoutes()))
     }
+  },
+
+  sourcemap: {
+    server: false,
+    client: false
   },
 
   experimental: {
