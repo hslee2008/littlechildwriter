@@ -429,7 +429,7 @@
 import { BrowserBarcodeScanner } from 'browser-barcodescanner'
 
 import { useDisplay } from 'vuetify'
-const { $db } = useNuxtApp()
+const { $db, $storage } = useNuxtApp()
 
 const userInfo = User()
 const { mobile } = useDisplay()
@@ -578,17 +578,13 @@ const fetchi = () => {
 }
 
 const uploadImg = (f: File[]) => {
-  const reader = new FileReader()
-
-  reader.addEventListener(
-    'load',
-    () => {
-      post.value.image = reader.result || ''
-    },
-    false
-  )
-
-  reader.readAsDataURL(f[0])
+  const storageRef = $storage.ref('bookimages')
+  const fileRef = storageRef.child(f[0].name)
+  fileRef.put(f[0]).then(() => {
+    fileRef.getDownloadURL().then((url: any) => {
+      post.value.image = url
+    })
+  })
 }
 
 const Post = () => {
