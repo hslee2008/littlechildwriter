@@ -151,13 +151,7 @@
 </template>
 
 <script setup lang="ts">
-import Perspective from 'perspective-api-client'
-
 const { $db } = useNuxtApp()
-
-const perspective = new Perspective({
-  apiKey: 'AIzaSyDvYhT2fhpVhaPf3TMSQITmcl3Qh_OGd4U'
-})
 
 const userInfo = User()
 const props = defineProps({
@@ -235,36 +229,9 @@ const Love = (i: number) => {
   comments.value = [...comments.value]
 }
 
-const Comment = async () => {
-  let result: any = {}
-  let score = 0
-  let mostProbable = ''
-
-  try {
-    result = await perspective.analyze(comment.value, {
-      attributes: ['TOXICITY']
-    })
-    score = result.attributeScores.TOXICITY.summaryScore.value || 'good'
-    mostProbable = Object.keys(result.attributeScores).reduce((a, b) =>
-      result.attributeScores[a].summaryScore.value >
-      result.attributeScores[b].summaryScore.value
-        ? a
-        : b
-    )
-  } catch (e) {
-    alert(e)
-  }
-
-  if (score > 0.6) {
-    snackbarBadWord.value = true
-    toxcity.value = score
-    Libris(userInfo.uid, -score * 10)
-    return
-  }
-
+const Comment = () => {
   if (comment.value.length > 0) {
     const { displayName, photoURL, uid } = userInfo
-    const badWord = score > 0.6
     const content = comment.value
 
     $db.ref(props.dbr).push({
@@ -272,9 +239,7 @@ const Comment = async () => {
       photoURL,
       displayName,
       time: Date.now(),
-      probably: badWord ? mostProbable : 'good',
-      content,
-      score
+      content
     })
 
     $db.ref(`${props.dbr.replace('/comments', '')}/joined`).update({
