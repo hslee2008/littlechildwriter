@@ -5,5 +5,5 @@
 3. Git Installation: https://git-scm.com/
 
 4. `npm install -g yarn`
-5. `git clone https://github.com/HyunseungLee-Travis/littlechildwriter.git && cd littlechildwriter`
+5. `git clone https://github.com/hslee2008/littlechildwriter.git && cd littlechildwriter`
 6. `yarn && yarn dev`
