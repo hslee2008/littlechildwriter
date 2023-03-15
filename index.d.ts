@@ -7,7 +7,7 @@ declare module '*.vue' {
 declare module 'vue/types/vue' {
   interface Vue {
     BarcodeDetector: any
-    webkitSpeechRecognition: any
+    webkitSpeechRewcognition: any
     themeColor: any
   }
 }

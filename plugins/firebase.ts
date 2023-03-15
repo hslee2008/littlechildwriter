@@ -18,7 +18,7 @@ try {
   })
   getPerformance(app)
 } catch (err) {
-  firebaseAdmin.app()
+  firebase.app()
   getPerformance(app)
 }
 
