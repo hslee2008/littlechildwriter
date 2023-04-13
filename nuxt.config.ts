@@ -1,10 +1,12 @@
 import vuetify from 'vite-plugin-vuetify'
-import { getRoutes } from './firebase/routes.ts'
+import { getRoutes } from './firebase/routes'
 
 export default defineNuxtConfig({
   imports: {
     dirs: ['stores']
   },
+
+  devtools: true,
 
   app: {
     keepalive: true,
@@ -85,7 +87,12 @@ export default defineNuxtConfig({
   ],
   plugins: ['/plugins/firebase', 'plugins/gtag'],
   modules: [
-    (_, nuxt) => {
+    (
+      _: any,
+      nuxt: {
+        hooks: { hook: (arg0: string, arg1: (config: any) => any) => void }
+      }
+    ) => {
       nuxt.hooks.hook('vite:extendConfig', config =>
         config.plugins.push(
           vuetify({
@@ -103,8 +110,7 @@ export default defineNuxtConfig({
       }
     ],
     '@kevinmarrec/nuxt-pwa',
-    '@vueuse/nuxt',
-    '@nuxt/devtools'
+    '@vueuse/nuxt'
   ],
 
   pwa: {
@@ -138,7 +144,7 @@ export default defineNuxtConfig({
   },
 
   hooks: {
-    async 'nitro:config'(config) {
+    async 'nitro:config'(config: { prerender: { routes: any[] } }) {
       config?.prerender?.routes?.push(...(await getRoutes()))
     }
   },
@@ -149,6 +155,7 @@ export default defineNuxtConfig({
   },
 
   experimental: {
-    payloadExtraction: true
+    payloadExtraction: true,
+    viewTransition: true
   }
 })
