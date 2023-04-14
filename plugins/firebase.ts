@@ -27,9 +27,10 @@ const auth = firebase.auth()
 const storage = firebase.storage()
 const login = firebase.auth
 
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.$auth = auth
+export default defineNuxtPlugin(nuxtApp => {
+  nuxtApp.$firebase = firebase
   nuxtApp.$db = db
+  nuxtApp.$auth = auth
   nuxtApp.$storage = storage
   nuxtApp.$login = login
 })
