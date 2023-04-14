@@ -6,13 +6,17 @@
 </template>
 
 <script setup>
-const share = async () => {
+const share = () => {
   const { title, content } = post.value
-  await navigator.share({
+  const url = `https://libris.kr/book/content/${post.value.time}`
+  const text = `${title} - ${content}`
+
+  navigator.share({
     title,
-    text: content,
-    url: `https://littlechildwriter.app/book/content/${time}`
+    text,
+    url
   })
+
   Libris(userInfo.uid, 1)
 }
 </script>

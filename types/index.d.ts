@@ -10,6 +10,8 @@ interface PluginsInjections {
   BarcodeDetector: any
   webkitSpeechRewcognition: any
   navigateTo: any
+  formatter: any
+  DateFormatter: any
 }
 
 declare global {
