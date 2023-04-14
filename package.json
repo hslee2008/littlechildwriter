@@ -13,7 +13,7 @@
     "prettier": "prettier --write .",
     "firebase": "yarn generate && firebase deploy",
     "update": "yarn upgrade && ncu -u && yarn && nuxi upgrade",
-    "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn lint && yarn generate"
+    "envbuild": "export TERM=xterm && yarn install --frozen-lockfile && yarn generate"
   },
   "dependencies": {
     "@mdi/font": "^7.2.96",
