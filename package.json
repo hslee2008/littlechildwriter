@@ -18,8 +18,8 @@
   "dependencies": {
     "@mdi/font": "^7.2.96",
     "@pinia/nuxt": "^0.4.8",
-    "@vueuse/core": "^10.0.0",
-    "@vueuse/nuxt": "^10.0.0",
+    "@vueuse/core": "^10.0.2",
+    "@vueuse/nuxt": "^10.0.2",
     "browser-barcodescanner": "^1.0.5",
     "firebase": "^9.19.1",
     "firebaseui": "^6.0.2",

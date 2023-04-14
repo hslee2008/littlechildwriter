@@ -49,7 +49,7 @@ export default defineNuxtConfig({
         },
         {
           name: 'theme-color',
-          content: '#159ECB'
+          content: '#23262E'
         }
       ],
       link: [
@@ -87,13 +87,8 @@ export default defineNuxtConfig({
   ],
   plugins: ['/plugins/firebase', 'plugins/gtag'],
   modules: [
-    (
-      _: any,
-      nuxt: {
-        hooks: { hook: (arg0: string, arg1: (config: any) => any) => void }
-      }
-    ) => {
-      nuxt.hooks.hook('vite:extendConfig', config =>
+    (_, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config: any) =>
         config.plugins.push(
           vuetify({
             styles: {
@@ -114,13 +109,6 @@ export default defineNuxtConfig({
   ],
 
   pwa: {
-    meta: {
-      theme_color: '#159ECB',
-      mobileAppIOS: true
-    },
-    workbox: {
-      enabled: true
-    },
     manifest: {
       name: 'Little 작가',
       short_name: 'Little 작가',
@@ -129,7 +117,9 @@ export default defineNuxtConfig({
       lang: 'ko',
       display: 'standalone',
       background_color: '#23262E',
-      theme_color: '#23262E'
+      theme_color: '#23262E',
+      start_url: '/',
+      icons: []
     }
   },
 
