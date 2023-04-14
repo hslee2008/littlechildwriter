@@ -2179,36 +2179,36 @@
     find-cache-dir "^3.3.2"
     upath "^2.0.1"
 
-"@vueuse/core@10.0.0", "@vueuse/core@^10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-10.0.0.tgz#b2ad4d110994c878e01857e77ef8b038a2b46aea"
-  integrity sha512-Q/p2xaGVFVrJ0E4ID1SM35WIa0Eo4AeKPSLKuLpYG09zgUWuwEaY4lBoNzLzkdLjzq5goIJ3DfYFI0wt8W4MkA==
+"@vueuse/core@10.0.2", "@vueuse/core@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-10.0.2.tgz#d2cd237e19bda278ae8d4f2e4a9e2e8c273bdcef"
+  integrity sha512-/UGc2cXbxbeIFLDSJyHUjI9QZ4CJJkhiJe9TbKNPSofcWmYhhUgJ+7iw9njXTKu/Xc3Z6UeXVR9fosW1+cyrnQ==
   dependencies:
     "@types/web-bluetooth" "^0.0.16"
-    "@vueuse/metadata" "10.0.0"
-    "@vueuse/shared" "10.0.0"
+    "@vueuse/metadata" "10.0.2"
+    "@vueuse/shared" "10.0.2"
     vue-demi ">=0.14.0"
 
-"@vueuse/metadata@10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-10.0.0.tgz#272b92bb1eb171882cb89bcb5d05daf2db702374"
-  integrity sha512-7Rh6tcs6aYLRLSdDHF+74wWP0Y1zLwpNJszKAIqlNBrmqdbkz8yh6NtjCYvXrrW6g+FU3ZWvR7F5ASNls+bHmw==
+"@vueuse/metadata@10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/metadata/-/metadata-10.0.2.tgz#538bfe28d60335456084e783508361e07ef1e613"
+  integrity sha512-APSjlABrV+Q74c+FR0kFETvcN9W2pAaT3XF3WwqWUuk4srmVxv7DY4WshZxK2KYk1+MVY0Fus6J1Hk/JXVm6Aw==
 
-"@vueuse/nuxt@^10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/nuxt/-/nuxt-10.0.0.tgz#f7ecced3121243d9c1eeed4890b693268f91ab21"
-  integrity sha512-u1MU9eNpDg7MsTgz1DlF2RaCw2E/KMG17Xb/2wnnK4G65d1xgQiF4mb28W4Qkz9rs56GCSpgJss0g4y5U8LG4g==
+"@vueuse/nuxt@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/nuxt/-/nuxt-10.0.2.tgz#1916972a4142fe438d6eb8753df9d91fcd249f9f"
+  integrity sha512-JO/ja8DbvagM5bYmWKOCu+ZEge1Q9fLBnMlCiy7auWvMK6JiGpqloxqGYZGgKS3JXwhbCC9DkuZ1rGZ1RuyZ5w==
   dependencies:
     "@nuxt/kit" "^3.4.1"
-    "@vueuse/core" "10.0.0"
-    "@vueuse/metadata" "10.0.0"
+    "@vueuse/core" "10.0.2"
+    "@vueuse/metadata" "10.0.2"
     local-pkg "^0.4.3"
     vue-demi ">=0.14.0"
 
-"@vueuse/shared@10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-10.0.0.tgz#fe3ba8930a1a9de7cb4fd8dbc97de80da5782069"
-  integrity sha512-Zh3LgJqvUBWVY3SiMvXanTcfAneGbt63QPczBRDNgQ6jd/ehodO9a1lCFzaA6SWJJoI+ugVTjHFYJdoR656DVQ==
+"@vueuse/shared@10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-10.0.2.tgz#82a90e22a0809428e0710206bb7761acaa057ddf"
+  integrity sha512-7W2l6qZaFvla3zAeEVo8hNHkNRKCezJa3JjZAKv3K4KsevXobHhVNr+RHaOVNK/6ETpFmtqiK+0pMIADbHjjag==
   dependencies:
     vue-demi ">=0.14.0"
 
@@ -4925,7 +4925,7 @@ is-callable@^1.1.3, is-callable@^1.1.4, is-callable@^1.2.7:
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.7.tgz#3bc2a85ea742d9e36205dcacdd72ca1fdc51b055"
   integrity sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==
 
-is-core-module@^2.11.0, is-core-module@^2.8.1:
+is-core-module@^2.11.0, is-core-module@^2.12.0, is-core-module@^2.8.1:
   version "2.12.0"
   resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.12.0.tgz#36ad62f6f73c8253fd6472517a12483cf03e7ec4"
   integrity sha512-RECHCBCd/viahWmwj6enj19sKbHfJrddi/6cBDsNTKbNq0f7VeaUkBo60BqzvPqo/W54ChS62Z5qyun7cfOMqQ==
@@ -7264,11 +7264,11 @@ resolve-from@^5.0.0:
   integrity sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==
 
 resolve@^1.1.7, resolve@^1.10.0, resolve@^1.10.1, resolve@^1.22.1:
-  version "1.22.2"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.22.2.tgz#0ed0943d4e301867955766c9f3e1ae6d01c6845f"
-  integrity sha512-Sb+mjNHOULsBv818T40qSPeRiuWLyaGMa5ewydRLFimneixmVy2zdivRl+AF6jaYPC8ERxGDmFSiqui6SfPd+g==
+  version "1.22.3"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.22.3.tgz#4b4055349ffb962600972da1fdc33c46a4eb3283"
+  integrity sha512-P8ur/gp/AmbEzjr729bZnLjXK5Z+4P0zhIJgBgzqRih7hL7BOukHGtSTA3ACMY467GRFz3duQsi0bDZdR7DKdw==
   dependencies:
-    is-core-module "^2.11.0"
+    is-core-module "^2.12.0"
     path-parse "^1.0.7"
     supports-preserve-symlinks-flag "^1.0.0"
 
