@@ -1,12 +1,6 @@
 <template>
   <div class="my-auto ml-3">
     <v-img :src="post.image" width="200" class="ml-5 my-5 rounded-lg pointer">
-      <template #placeholder>
-        <v-row class="fill-height ma-0" align="center" justify="center">
-          <v-progress-circular indeterminate color="grey lighten-5" />
-        </v-row>
-      </template>
-
       <v-menu v-model="sheet" inset location="right" activator="parent">
         <v-list nav expand>
           <v-list-item
@@ -115,7 +109,7 @@ defineProps({
 const sheet = ref(false)
 </script>
 
-<style>
+<style scoped>
 .pointer {
   cursor: pointer;
 }

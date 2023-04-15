@@ -1,3 +1,6 @@
 {
-  "editor.defaultFormatter": "Vue.volar"
+  "editor.defaultFormatter": "Vue.volar",
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  }
 }

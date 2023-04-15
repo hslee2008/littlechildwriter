@@ -607,7 +607,7 @@ const Post = () => {
     return
   }
 
-  if (isPublic)
+  if (isPublic) {
     $db.ref(`/contents/${time}`).set({
       title,
       rating,
@@ -625,7 +625,7 @@ const Post = () => {
       displayName,
       content: content.replaceAll('\n', '<br>')
     })
-  else
+  } else {
     $db.ref(`/private/${uid}/${time}`).set({
       title,
       rating,
@@ -641,6 +641,7 @@ const Post = () => {
       displayName,
       content: content.replaceAll('\n', '<br>')
     })
+  }
 
   Libris(userInfo.uid, parseInt(post.value.pageCount) / 10)
 

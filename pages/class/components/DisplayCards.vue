@@ -15,7 +15,7 @@
       >
         <v-expansion-panel-title
           class="elevation-0"
-          :style="`background-color: ${themeColor()} !important`"
+          style="background-color: #23262e !important"
         >
           {{ title.toString().replaceAll('_', ' - ') }}
         </v-expansion-panel-title>
@@ -23,7 +23,7 @@
         <v-expansion-panel-text
           v-for="(item, i) in category"
           :key="item.title"
-          :style="`background-color: ${themeColor()} !important`"
+          style="background-color: #23262e !important"
           class="elevation-0"
         >
           <v-card

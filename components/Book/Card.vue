@@ -13,7 +13,7 @@
     >
       <v-card
         v-for="(item, i) in items"
-        :key="i"
+        :key="item.time"
         :width="mobile ? 150 : 200"
         :class="`my-4 ${mobile ? 'mx-auto' : 'mx-4'}`"
       >
@@ -21,25 +21,13 @@
           <v-img
             :src="item.image"
             :lazy-src="item.image"
-            class="rounded book-image"
+            class="rounded"
             cover
-          >
-            <template #placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-row>
-            </template>
-          </v-img>
+          />
 
-          <v-card-title
-            v-if="item.title.length < 10"
-            class="text-primary font-weight-black"
-          >
+          <v-card-title class="text-primary font-weight-black">
             {{ item.title }}
           </v-card-title>
-          <v-card-text v-else class="text-primary font-weight-black">
-            {{ item.title }}
-          </v-card-text>
 
           <v-card-subtitle>
             <NuxtLink :to="`/user/${item.uid}`">
@@ -55,7 +43,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card v-show="!simple">
+        <v-card v-if="!simple">
           <v-card-actions v-if="userInfo.loggedIn">
             <v-btn
               rounded="lg"
@@ -77,55 +65,12 @@
               <v-icon> mdi-thumb-up </v-icon>
             </v-btn>
             <span class="subheading" v-text="item?.likes" />
-
-            <v-spacer />
-
-            <v-btn
-              v-if="
-                item?.comments?.length ||
-                Object.keys(item?.comments ?? {}).length
-              "
-              rounded="lg"
-              disabled
-              icon
-              color="grey"
-            >
-              <v-icon size="small">mdi-comment-bookmark</v-icon>
-            </v-btn>
           </v-card-actions>
         </v-card>
       </v-card>
 
-      <v-snackbar v-model="bookmarkSnackbar">
-        책갈피가 추가되었습니다.
-
-        <template #action="{ attrs }">
-          <v-btn
-            rounded="lg"
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="bookmarkSnackbar = false"
-          >
-            닫기
-          </v-btn>
-        </template>
-      </v-snackbar>
-      <v-snackbar v-model="bookmarkSnackbarDel">
-        책갈피가 삭제되었습니다.
-
-        <template #action="{ attrs }">
-          <v-btn
-            rounded="lg"
-            color="pink"
-            text
-            v-bind="attrs"
-            @click="bookmarkSnackbarDel = false"
-          >
-            닫기
-          </v-btn>
-        </template>
-      </v-snackbar>
+      <v-snackbar v-model="bookmarkSnackbar"> 추가되었습니다. </v-snackbar>
+      <v-snackbar v-model="bookmarkSnackbarDel"> 삭제되었습니다. </v-snackbar>
     </v-row>
   </v-lazy>
 </template>
@@ -218,15 +163,11 @@ const Bookmark = (time: string, i: number) => {
     $db.ref(`/contents/${time}/bookmarks/${userInfo.uid}`).set(true)
 
     // eslint-disable-next-line vue/no-mutating-props
-    props.items[i] = {
-      ...props.items[i],
-      bookmarks: {
-        ...props.items[i].bookmarks,
-        [userInfo.uid]: true
-      }
+    props.items[i].bookmarks = {
+      ...props.items[i].bookmarks,
+      [userInfo.uid]: true
     }
     Libris(userInfo.uid, 0.1)
-    navigateTo('/bookmarks')
   }
 }
 </script>
@@ -236,13 +177,5 @@ const Bookmark = (time: string, i: number) => {
   margin-top: 5px;
   gap: 3px;
   margin: 5px;
-}
-
-.book-image {
-  filter: blur(0.5px);
-}
-
-.book-image:hover {
-  filter: blur(0px);
 }
 </style>

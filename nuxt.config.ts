@@ -6,8 +6,6 @@ export default defineNuxtConfig({
     dirs: ['stores']
   },
 
-  devtools: true,
-
   app: {
     keepalive: true,
     head: {

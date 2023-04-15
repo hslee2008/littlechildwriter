@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 export async function getRoutes() {
   const admin = require('firebase-admin')
   const serviceAccount = require('./onlyreadaccess.json')

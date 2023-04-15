@@ -4,9 +4,9 @@
 
     <br />
 
-    <v-list v-if="items.length > 0" v-model="items" nav>
+    <v-list v-if="bookmarks.length > 0" v-model="bookmarks" nav>
       <v-list-item
-        v-for="(item, i) in items"
+        v-for="(item, i) in bookmarks"
         :key="item.time"
         :to="`/book/content/${item.time}`"
       >
@@ -31,18 +31,18 @@
 const { $db } = useNuxtApp()
 
 const userInfo = User()
-const items = ref<any>([])
+const bookmarks = ref<any>([])
 
 useAuth((u: any) => {
   $db
     .ref(`/users/${u?.uid}/bookmarks`)
-    .on('child_added', async (s: any) => items.value.push(await s.val()))
+    .on('child_added', async (s: any) => bookmarks.value.push(await s.val()))
 })
 
 const deleteBookmark = (time: string, i: number) => {
   $db.ref(`/users/${userInfo.uid}/bookmarks/${time}`).remove()
   $db.ref(`/contents/${time}/bookmarks/${userInfo.uid}`).remove()
-  items.value.splice(i, 1)
+  bookmarks.value.splice(i, 1)
 }
 
 useHead({

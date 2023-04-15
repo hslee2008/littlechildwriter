@@ -33,7 +33,6 @@
           rounded="lg"
           variant="tonal"
           fab
-          dark
           size="small"
           color="green"
           :to="`/book/edit/${time}`"
@@ -45,7 +44,6 @@
           rounded="lg"
           variant="tonal"
           fab
-          dark
           size="small"
           color="red"
           class="ma-2"
@@ -153,7 +151,10 @@
         </v-dialog>
       </v-btn>
 
-      <BookMenu />
+      <v-btn rounded="lg" variant="tonal" text class="mx-1" @click="share">
+        <v-icon start> mdi-share-variant </v-icon>
+        공유
+      </v-btn>
 
       <BookMore
         :post="post"
@@ -436,6 +437,20 @@ const Like = () => {
   }
 }
 
+const share = () => {
+  const { title, content } = post.value
+  const url = `https://libris.kr/book/content/${post.value.time}`
+  const text = `${title} - ${content}`
+
+  navigator.share({
+    title,
+    text,
+    url
+  })
+
+  Libris(userInfo.uid, 1)
+}
+
 const endWithSchool = (v: string) =>
   v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
 
@@ -474,11 +489,5 @@ useHead({
   position: fixed;
   bottom: 20px;
   right: 20px;
-}
-
-@media screen and (max-width: 605px) {
-  .cardy {
-    display: block;
-  }
 }
 </style>
