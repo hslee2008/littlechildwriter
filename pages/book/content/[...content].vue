@@ -485,6 +485,13 @@ useHead({
   display: flex;
   padding: 10px;
 }
+
+@media screen and (max-width: 605px) {
+  .cardy {
+    display: block;
+  }
+}
+
 .fab {
   position: fixed;
   bottom: 20px;
