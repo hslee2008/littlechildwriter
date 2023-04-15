@@ -20,7 +20,7 @@
           <v-icon>mdi-plus-circle-outline</v-icon>
         </v-btn>
 
-        <v-btn icon>
+        <v-btn v-if="userInfo.loggedIn" icon>
           <v-badge
             bordered
             color="primary"
@@ -48,7 +48,7 @@
                 <v-list-item
                   v-for="(d, i) in notif"
                   :key="i"
-                  @click="load(d.link)"
+                  @click="LoadNotification(d.link)"
                 >
                   <template #prepend>
                     <UserPhoto :size="45" :src="d?.photoURL" />
@@ -237,7 +237,7 @@ const clearEverything = () => {
   notif.value = []
 }
 
-const load = (link: string) => {
+const LoadNotification = (link: string) => {
   notifOverlay.value = false
   navigateTo(link)
 }

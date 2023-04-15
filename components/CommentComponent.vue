@@ -125,7 +125,7 @@
       </v-list-item>
     </v-list>
     <div v-else>
-      <v-card v-if="comments.length === 0" class="text-center">
+      <v-card v-if="comments.length === 0" class="text-center text-grey">
         <v-card-text>댓글이 없습니다.</v-card-text>
       </v-card>
     </div>

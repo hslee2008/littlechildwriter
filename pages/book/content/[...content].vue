@@ -475,10 +475,4 @@ useHead({
   bottom: 20px;
   right: 20px;
 }
-
-@media screen and (max-width: 605px) {
-  .cardy {
-    display: block;
-  }
-}
 </style>
