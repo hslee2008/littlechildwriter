@@ -39,7 +39,7 @@
         <v-card-title>책을 불러오는 중입니다...</v-card-title>
       </v-card-text>
     </v-card>
-    <BookCard v-else-if="item.length > 0" :items="item" />
+    <BookCard v-else-if="(item ?? []).length > 0" :items="item" />
     <v-card v-else-if="search.length === 0" class="text-center">
       <v-card-text class="d-flex justify-center">
         <div>
@@ -103,6 +103,7 @@ const loading = ref<boolean>(true)
 const everything = ref<boolean>(true)
 
 const item = computed(() => {
+  /*
   return books.value
     .filter((book: any) => {
       if (props.star) {
@@ -120,10 +121,25 @@ const item = computed(() => {
         )
       }
     })
-    .slice(
+    */
+
+  let BooksInner: any[] = []
+
+  if (search.value) {
+    const ref = $db.ref('contents')
+    const query = ref.orderByChild('title').equalTo(search.value)
+    query.on('value', (snapshot: any) => {
+      BooksInner = snapshot.val()
+      BooksInner = Object.keys(BooksInner)?.map((key: any) => BooksInner[key])
+    })
+  } else {
+    BooksInner = books.value.slice(
       (page.value - 1) * itemsPerPage.value,
       page.value * itemsPerPage.value
     )
+  }
+
+  return BooksInner
 })
 
 onBeforeMount(() => {
