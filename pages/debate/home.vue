@@ -20,6 +20,7 @@
         v-for="(item, i) in list"
         :key="item.time"
         :to="`/debate/topic/${item.time}`"
+        class="mt-2"
       >
         <template #prepend>
           <v-avatar size="45">

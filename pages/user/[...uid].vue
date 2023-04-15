@@ -41,6 +41,7 @@
     <v-window v-model="tab" class="py-5" :color="themeColor()">
       <v-window-item :value="0">
         <v-card
+          v-if="chosenBookData || books[0]"
           :class="`d-${mobile ? 'block' : 'flex'}`"
           :to="`/book/content/${(chosenBookData || books[0]).time}`"
         >
@@ -61,7 +62,7 @@
 
               <v-card-text>
                 {{
-                  (chosenBookData || books[0]).content.replaceAll('&lt;br>', '')
+                  (chosenBookData || books[0]).content?.replaceAll('&lt;br>', '')
                 }}
               </v-card-text>
             </div>

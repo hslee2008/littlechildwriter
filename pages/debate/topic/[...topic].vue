@@ -56,8 +56,8 @@
                   <v-menu offset-y>
                     <template #activator="{ props }">
                       <v-btn
-                        rounded="lg"
                         icon
+                        variant="plain"
                         v-bind="props"
                         cols="1"
                         @click.stop.prevent=""
