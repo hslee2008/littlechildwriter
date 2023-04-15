@@ -10,27 +10,27 @@ export const User = defineStore('User', {
     FBloggedIn: false
   }),
   getters: {
-    uid() {
+    uid(): string {
       return this.FBuid
     },
 
-    email() {
+    email(): string {
       return this.FBemail
     },
 
-    displayName() {
+    displayName(): string {
       return this.FBdisplayName
     },
 
-    photoURL() {
+    photoURL(): string {
       return this.FBphotoURL
     },
 
-    loggedIn() {
+    loggedIn(): boolean {
       return this.FBloggedIn
     },
 
-    userInfo() {
+    userInfo(): object {
       return {
         uid: this.FBuid,
         email: this.FBemail,
