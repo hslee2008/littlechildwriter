@@ -15,9 +15,6 @@
     "https": "^1.0.0",
     "qs": "^6.11.0"
   },
-  "devDependencies": {
-    "netlify-lambda": "^1.6.3"
-  },
   "engines": {
     "node": ">15",
     "npm": ">7"

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const https = require('https')
 const axiosModule = require('axios')
 const express = require('express')
@@ -206,6 +207,7 @@ searchBookFromSchoolName = async (local, book, school) => {
 app.use(cors())
 
 app.listen(3000, () => {
+  // eslint-disable-next-line no-console
   console.log('서버 열림')
 })
 

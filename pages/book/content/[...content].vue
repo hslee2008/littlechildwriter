@@ -87,7 +87,6 @@
                   v-model="school.name"
                   variant="outlined"
                   label="학교 이름"
-                  :rules="[endWithSchool]"
                   class="mx-2"
                 />
                 <v-btn
@@ -100,7 +99,7 @@
                 />
               </div>
               <v-text-field
-                v-model="school.title"
+                v-model="post.title"
                 variant="outlined"
                 label="책 제목"
               />
@@ -251,7 +250,7 @@ const school = ref({
   resultString: '',
   local: '',
   name: '',
-  title: ''
+  title: post.value.title
 })
 const iframe = ref<boolean>(false)
 const loading = ref<boolean>(true)
@@ -450,9 +449,6 @@ const share = () => {
 
   Libris(userInfo.uid, 1)
 }
-
-const endWithSchool = (v: string) =>
-  v.endsWith('학교') || '-학교로 끝나게 입력해주세요'
 
 onBeforeMount(async () => {
   await Content()

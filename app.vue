@@ -26,6 +26,7 @@
             color="primary"
             :content="notif.length"
             class="text-amber"
+            size="x-small"
           >
             <v-icon>
               {{
