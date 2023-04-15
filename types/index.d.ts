@@ -5,8 +5,6 @@ interface PluginsInjections {
   $auth: any
   $storage: any
   $login: any
-  isDark: any
-  themeColor: any
   BarcodeDetector: any
   webkitSpeechRewcognition: any
   navigateTo: any

@@ -6,10 +6,6 @@
   background-color: #3d4754;
 }
 
-.v-theme--light {
-  --bg: white;
-}
-
 .v-theme--dark {
   --bg: #23262e;
 }

@@ -80,7 +80,6 @@
           <v-chip
             v-if="index < 2"
             color="deep-purple accent-4"
-            dark
             label
             size="small"
           >

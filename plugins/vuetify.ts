@@ -22,19 +22,6 @@ export default defineNuxtPlugin(nuxtApp => {
             error: '#b71c1c',
             background: '#23262E'
           }
-        },
-        light: {
-          dark: false,
-          colors: {
-            primary: '#159ECB',
-            secondary: '#b0bec5',
-            info: '#2196F3',
-            accent: '#293540',
-            success: '#4CAF50',
-            warning: '#FFC107',
-            error: '#b71c1c',
-            background: '#FFFFFF'
-          }
         }
       }
     }

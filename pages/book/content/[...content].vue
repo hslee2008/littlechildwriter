@@ -33,7 +33,6 @@
           rounded="lg"
           variant="tonal"
           fab
-          dark
           size="small"
           color="green"
           :to="`/book/edit/${time}`"
@@ -45,7 +44,6 @@
           rounded="lg"
           variant="tonal"
           fab
-          dark
           size="small"
           color="red"
           class="ma-2"

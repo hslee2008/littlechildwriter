@@ -1,5 +1,5 @@
 <template>
-  <v-app :v-theme="theme">
+  <v-app>
     <NuxtLayout>
       <v-app-bar fixed clipped-left>
         <template #prepend>
@@ -168,16 +168,6 @@
             title="포인트제"
             prepend-icon="mdi-table-large"
           />
-
-          <v-divider class="my-3" />
-
-          <v-list-item
-            :title="isDark() ? '라이트 모드로 변경' : '다크 모드로 변경'"
-            :prepend-icon="
-              isDark() ? 'mdi-white-balance-sunny' : 'mdi-weather-night'
-            "
-            @click="changeTheme"
-          />
         </v-list>
       </v-navigation-drawer>
 
@@ -206,11 +196,10 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay, useTheme } from 'vuetify'
+import { useDisplay } from 'vuetify'
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
-const theme = useTheme()
 
 const userInfo = User()
 userInfo.initUserInfo()
@@ -228,8 +217,6 @@ useAuth((u: any) => {
     $db.ref(`/users/${userInfo.uid}/status`).onDisconnect().set('offline')
     $db.ref(`/users/${userInfo.uid}/status`).set('online')
   })
-
-  theme.global.name.value = localStorage.getItem('theme') || 'dark'
 })
 
 const clearEverything = () => {
@@ -240,10 +227,5 @@ const clearEverything = () => {
 const LoadNotification = (link: string) => {
   notifOverlay.value = false
   navigateTo(link)
-}
-
-const changeTheme = () => {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-  localStorage.setItem('theme', theme.global.name.value)
 }
 </script>

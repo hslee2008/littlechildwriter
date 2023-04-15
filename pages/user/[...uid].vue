@@ -9,7 +9,7 @@
       :user-info="userInfo"
     />
 
-    <v-tabs v-model="tab" center-active grow :bg-color="themeColor()">
+    <v-tabs v-model="tab" center-active grow bg-color="#23262E">
       <v-tab> 홈 </v-tab>
       <v-tab> 게시물 </v-tab>
       <v-tab v-if="!mobile"> 구독자 </v-tab>
@@ -38,7 +38,7 @@
       </v-menu>
     </v-tabs>
 
-    <v-window v-model="tab" class="py-5" :color="themeColor()">
+    <v-window v-model="tab" class="py-5" color="#23262E">
       <v-window-item :value="0">
         <v-card
           v-if="chosenBookData || books[0]"
@@ -101,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()
