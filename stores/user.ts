@@ -64,15 +64,15 @@ export const User = defineStore('User', {
 
     initUserInfo() {
       auth.onAuthStateChanged((user) => {
-        if (user) {
-          this.setUserInfo({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            loggedIn: true
-          })
-        }
+        if (!user) return
+
+        this.setUserInfo({
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          loggedIn: true
+        })
       })
     }
   }

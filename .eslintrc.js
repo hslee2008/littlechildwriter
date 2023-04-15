@@ -21,17 +21,6 @@ module.exports = {
       {
         allowUsingIterationVar: false
       }
-    ],
-    'vue/max-attributes-per-line': [
-      'error',
-      {
-        singleline: {
-          max: 10
-        },
-        multiline: {
-          max: 1
-        }
-      }
     ]
   }
 }
