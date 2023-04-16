@@ -72,7 +72,9 @@ const onSubmit = () =>
     .signInWithEmailAndPassword(email.value, password.value)
     .then(() => navigateTo)
 
-onMounted(() =>
+onMounted(() => {
+  if (User().loggedIn) navigateTo('/account/account')
+
   ui.start('#firebaseui-auth-container', {
     signInSuccessUrl: '/account/account',
     signInOptions: [
@@ -84,7 +86,7 @@ onMounted(() =>
       firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
     ]
   })
-)
+})
 
 onUnmounted(() => ui.delete())
 

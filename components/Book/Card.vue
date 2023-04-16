@@ -58,7 +58,7 @@
             <v-btn
               rounded="lg"
               icon
-              :color="(item?.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
+              :color="(item.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
               class="mr-2"
               @click="Like(item)"
             >
