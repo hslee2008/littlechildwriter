@@ -74,6 +74,10 @@ const Make = () =>
 useHead({
   title: '만들기 - LCW'
 })
+
+definePageMeta({
+  middleware: ['loggedin']
+})
 </script>
 
 <style scoped>

@@ -17,17 +17,17 @@
   },
   "dependencies": {
     "@mdi/font": "^7.2.96",
-    "@pinia/nuxt": "^0.4.8",
-    "@vueuse/core": "^10.0.2",
-    "@vueuse/nuxt": "^10.0.2",
+    "@pinia/nuxt": "^0.4.9",
+    "@vueuse/core": "^10.1.0",
+    "@vueuse/nuxt": "^10.1.0",
     "browser-barcodescanner": "^1.0.5",
-    "firebase": "^9.19.1",
+    "firebase": "^9.20.0",
     "firebaseui": "^6.0.2",
-    "pinia": "^2.0.34",
+    "pinia": "^2.0.35",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.2.47",
     "vue-gtag-next": "^1.14.0",
-    "vuetify": "^3.1.14"
+    "vuetify": "^3.1.15"
   },
   "devDependencies": {
     "@kevinmarrec/nuxt-pwa": "^0.17.0",
@@ -35,11 +35,11 @@
     "@nuxtjs/eslint-config": "^12.0.0",
     "@nuxtjs/eslint-config-typescript": "12.0.0",
     "@nuxtjs/google-gtag": "^1.0.4",
-    "eslint": "^8.38.0",
+    "eslint": "^8.39.0",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-nuxt": "4.0.0",
-    "firebase-admin": "11.6.0",
-    "nuxt": "^3.4.1",
+    "firebase-admin": "11.7.0",
+    "nuxt": "^3.4.2",
     "sass": "^1.62.0",
     "typescript": "^5.0.4",
     "vue-eslint-parser": "^9.1.1"

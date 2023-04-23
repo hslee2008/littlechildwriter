@@ -48,4 +48,8 @@ const deleteBookmark = (time: string, i: number) => {
 useHead({
   title: '책갈피 - LCW'
 })
+
+definePageMeta({
+  middleware: ['notloggedin']
+})
 </script>

@@ -200,4 +200,8 @@ const save = () => {
 useHead({
   title: '계정 - LCW'
 })
+
+definePageMeta({
+  middleware: ['notloggedin']
+})
 </script>

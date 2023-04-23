@@ -93,6 +93,10 @@ onUnmounted(() => ui.delete())
 useHead({
   title: '로그인 - LCW'
 })
+
+definePageMeta({
+  middleware: ['loggedin']
+})
 </script>
 
 <style>

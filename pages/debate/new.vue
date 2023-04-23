@@ -57,4 +57,8 @@ const upload = () => {
 
   navigateTo(`/debate/topic/${time}`)
 }
+
+definePageMeta({
+  middleware: ['notloggedin']
+})
 </script>
