@@ -116,7 +116,7 @@
                     :to="`/user/${userInfo.uid}`"
                     icon="mdi-account-circle"
                   ></v-btn>
-                  <v-btn to="/bookmarks" icon="mdi-bookmark-multiple"></v-btn>
+                  <v-btn to="/user/bookmarks" icon="mdi-bookmark-multiple"></v-btn>
                   <v-btn to="/book/post" icon="mdi-pencil"></v-btn>
                 </v-btn-toggle>
               </v-card>
@@ -137,7 +137,7 @@
             prepend-icon="mdi-home-variant"
           />
           <v-list-item
-            to="/list"
+            to="/book/list"
             title="책 목록"
             prepend-icon="mdi-format-list-text"
           />

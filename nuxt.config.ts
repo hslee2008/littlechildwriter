@@ -83,7 +83,7 @@ export default defineNuxtConfig({
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
   ],
-  plugins: ['/plugins/firebase', 'plugins/gtag'],
+  plugins: ['/plugins/firebase'],
   modules: [
     (_, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config: any) =>
@@ -103,7 +103,8 @@ export default defineNuxtConfig({
       }
     ],
     '@kevinmarrec/nuxt-pwa',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    'nuxt-gtag'
   ],
 
   pwa: {
@@ -145,5 +146,9 @@ export default defineNuxtConfig({
   experimental: {
     payloadExtraction: true,
     viewTransition: true
+  },
+
+  gtag: {
+    id: 'G-F7Z7BLCQDQ'
   }
 })

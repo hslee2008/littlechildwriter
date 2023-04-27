@@ -36,6 +36,8 @@
         <template #append>
           <v-icon start class="mr-2">mdi-comment-flash</v-icon>
           {{ Object.keys({ ...item.pro, ...item.con } ?? {}).length }}
+          <v-icon start class="mr-2">mdi-arrow-up</v-icon>
+          {{ Object.keys(item.upvote ?? {}).length }}
 
           <v-list-item-action v-if="userInfo.is(item.uid)">
             <v-btn variant="plain" rounded="lg" icon cols="1" @click.stop.prevent="">
@@ -67,6 +69,7 @@ const list = ref<any>([])
 onMounted(() =>
   $db
     .ref('/debate')
+    .orderByChild('upvote')
     .on('child_added', async (s: any) => list.value.unshift(await s.val()))
 )
 

@@ -68,15 +68,11 @@ const Make = () =>
       subscriber: []
     })
 
-    navigateTo('/account/account')
+    navigateTo('/')
   })
 
 useHead({
   title: '만들기 - LCW'
-})
-
-definePageMeta({
-  middleware: ['loggedin']
 })
 </script>
 

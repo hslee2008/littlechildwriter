@@ -101,7 +101,7 @@ const bookmarked = (i: number) => {
 }
 
 onKeyStroke('l', () => {
-  if (route.path === '/list') {
+  if (route.path === '/book/list') {
     for (let i = 0; i < props.items.length; i++) {
       if (!props.items[i].liked[userInfo.uid]) Like(props.items[i])
     }

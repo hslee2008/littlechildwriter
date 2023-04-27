@@ -406,7 +406,7 @@ const Suggestion = async () => {
 const Del = () => {
   $db.ref(`/contents/${post.value.time}`).remove()
   Libris(userInfo.uid, -(parseInt(post.value.pageCount) / 100))
-  navigateTo('/list')
+  navigateTo('/book/list')
 }
 
 const Like = () => {

@@ -73,10 +73,8 @@ const onSubmit = () =>
     .then(() => navigateTo)
 
 onMounted(() => {
-  if (User().loggedIn) navigateTo('/account/account')
-
   ui.start('#firebaseui-auth-container', {
-    signInSuccessUrl: '/account/account',
+    signInSuccessUrl: '/',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -92,10 +90,6 @@ onUnmounted(() => ui.delete())
 
 useHead({
   title: '로그인 - LCW'
-})
-
-definePageMeta({
-  middleware: ['loggedin']
 })
 </script>
 

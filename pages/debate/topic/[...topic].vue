@@ -1,8 +1,10 @@
 <template>
   <div>
+    <br />
+
     <h1>주제: {{ content.topic }}</h1>
     <v-card class="d-flex pb-2" :to="`/user/${content.uid}`">
-      <v-avatar size="45" class="my-auto ml-2">
+      <v-avatar size="45" class="my-auto ml-3">
         <UserPhoto :size="45" :src="content?.photoURL" />
       </v-avatar>
       <div>
@@ -12,6 +14,25 @@
         </v-card-subtitle>
       </div>
     </v-card>
+
+    <v-btn
+      v-if="userInfo.loggedIn"
+      rounded="lg"
+      :variant="
+        Object.values(content.upvote ?? {}).includes(userInfo.uid)
+          ? 'tonal'
+          : 'outline'
+      "
+      :elevation="
+        Object.values(content.upvote ?? {}).includes(userInfo.uid) ? 2 : 0
+      "
+      size="small"
+      @click="Upvote()"
+    >
+      <v-icon left>mdi-arrow-up</v-icon>
+
+      좋은 주제
+    </v-btn>
 
     <v-divider class="my-10" />
 
@@ -28,7 +49,7 @@
             <v-btn
               v-if="userInfo.loggedIn"
               rounded="lg"
-              text
+              variant="tonal"
               size="small"
               @click=";(side = 'pro'), (write = true)"
             >
@@ -108,7 +129,7 @@
             <v-btn
               v-if="userInfo.loggedIn"
               rounded="lg"
-              text
+              variant="tonal"
               size="small"
               @click=";(side = 'con'), (write = true)"
             >
@@ -328,7 +349,9 @@ const { mobile } = useDisplay()
 const userInfo = User()
 const route = useRoute()
 const time = route.params.topic
-const content = ref<any>({})
+const content = ref<any>({
+  upvote: {}
+})
 const write = ref(false)
 const edit = ref(false)
 const editContent = ref<any>('')
@@ -409,6 +432,32 @@ const UpdateOnSuggestion = (topic: string, index: number) => {
   side.value = 'suggestion'
 }
 
+const Upvote = () => {
+  const { uid } = userInfo
+
+  if (!Object.values(content.value.upvote ?? {}).includes(userInfo.uid)) {
+    $db.ref(`/debate/${time}/upvote`).push(uid)
+  } else {
+    $db
+      .ref(`/debate/${time}/upvote`)
+      .orderByValue()
+      .equalTo(uid)
+      .once('value', (snapshot: any) => {
+        snapshot.forEach((child: any) => {
+          $db.ref(`/debate/${time}/upvote/${child.key}`).remove()
+        })
+      })
+  }
+
+  Libris(content.value.uid, 10)
+  Notify(
+    content.value.uid,
+    userInfo.photoURL,
+    `${userInfo.displayName}님이 토론 주제를 추천했습니다`,
+    `/debate/topic/${time}`
+  )
+}
+
 const newSuggestion = () => {
   const { uid, displayName, photoURL } = userInfo
 
@@ -434,9 +483,9 @@ const newSuggestion = () => {
   )
 }
 
-onMounted(() =>
+onMounted(() => {
   $db
     .ref(`/debate/${time}`)
     .on('value', async (s: any) => (content.value = await s.val()))
-)
+})
 </script>

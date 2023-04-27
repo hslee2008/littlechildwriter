@@ -38,7 +38,7 @@
           </v-card>
 
           <div class="d-flex justify-center mb-3 mt-5">
-            <v-btn rounded="lg" to="/list" class="mx-3">
+            <v-btn rounded="lg" to="/book/list" class="mx-3">
               글 <v-icon right> mdi-format-list-text </v-icon>
             </v-btn>
             <v-btn rounded="lg" to="/class/classes" class="mx-3">
