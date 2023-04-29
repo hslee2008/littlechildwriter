@@ -40,32 +40,18 @@
 
     <v-window v-model="tab" class="py-5" color="#23262E">
       <v-window-item :value="0">
-        <v-card
+        <BookSingle
           v-if="chosenBookData || books[0]"
-          :class="`d-${mobile ? 'block' : 'flex'}`"
-          :to="`/book/content/${(chosenBookData || books[0]).time}`"
-        >
-          <template #prepend>
-            <v-avatar size="250" rounded="0">
-              <v-img :src="(chosenBookData || books[0]).image" />
-            </v-avatar>
-          </template>
-
-          <v-card-text class="d-flex justify-center align-center">
-            <div>
-              <v-card-title>
-                {{ (chosenBookData || books[0]).title }}
-              </v-card-title>
-              <v-card-subtitle>
-                {{ targetUser.displayName }}님의 책
-              </v-card-subtitle>
-
-              <v-card-text>
-                {{
-                  (chosenBookData || books[0]).content?.replaceAll('&lt;br>', '')
-                }}
-              </v-card-text>
-            </div>
+          :data="chosenBookData || books[0]"
+          :target-user="targetUser"
+          :colored="false"
+        />
+        <v-card v-else>
+          <v-card-text>
+            <v-card-title> 책이 없습니다. </v-card-title>
+            <v-card-subtitle>
+              책을 추가하고 다른 사람들과 공유해보세요!
+            </v-card-subtitle>
           </v-card-text>
         </v-card>
       </v-window-item>
@@ -101,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()
@@ -127,7 +113,6 @@ const readCount = ref<number>(0)
 const avgRating = ref<number>(0)
 
 const chosenBookData = ref<any>({})
-
 const blockSubscribe = ref<number>(0)
 
 onBeforeMount(() => {
@@ -160,6 +145,24 @@ onBeforeMount(() => {
       privateBooks.value.unshift(data)
     })
   }
+})
+
+onMounted(() => {
+  $db
+    .ref('/contents/')
+    .orderByChild('uid')
+    .equalTo(uid)
+    .limitToLast(1)
+    .once('value')
+    .then((res: any) => res.val())
+    .then((res: any) => {
+      if (res) {
+        const key = Object.keys(res)[0]
+        const data = res[key]
+
+        books.value.unshift(data)
+      }
+    })
 })
 
 const FetchUserStats = () => {

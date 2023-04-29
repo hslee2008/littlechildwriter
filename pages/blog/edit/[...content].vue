@@ -73,8 +73,4 @@ const SaveContent = () => {
 useHead({
   title: '창작 코너 업데이트 - Little Child Writer'
 })
-
-definePageMeta({
-  middleware: ['notloggedin']
-})
 </script>

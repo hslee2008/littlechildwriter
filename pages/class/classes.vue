@@ -47,7 +47,7 @@
 
           <v-card-actions>
             <v-spacer />
-            <v-btn rounded="lg" variant="tonal" text @click="Make">
+              <v-btn rounded="lg" variant="tonal" @click="Make">
               <v-icon start> mdi-check </v-icon> 만들기
             </v-btn>
           </v-card-actions>

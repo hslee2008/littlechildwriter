@@ -82,10 +82,31 @@
       </v-window-item>
     </v-window>
 
-    <v-card class="mx-5 my-10">
+    <v-card v-if="pin" class="mx-1 my-10" color="#385F73">
+      <v-card-title>
+        핀
+        <v-tooltip right>
+          <template #activator="{ props }">
+            <v-icon color="grey" size="small" v-bind="props">
+              mdi-information-outline
+            </v-icon>
+          </template>
+          <span>
+            설정에서 Libris를 사용해서 핀을 설정할 수 있습니다.
+          </span>
+        </v-tooltip>
+      </v-card-title>
+      <v-card-text>
+        <div v-for="item in pinnedBooks" :key="item.time">
+          <BookSingle :data="item" target-user="" :colored="true" />
+        </div>
+      </v-card-text>
+    </v-card>
+
+    <v-card class="mx-1 my-10">
       <v-card-text>
         <h2>명예의 전당</h2>
-        <LibrisUsers :limit="true" />
+        <UserLibris :limit="true" />
 
         <div class="text-center">
           <v-btn rounded="lg" variant="tonal" to="/libris/libris">
@@ -110,6 +131,8 @@ const recent = ref<any>([])
 const popular = ref<any[]>([])
 const views = ref<any[]>([])
 const tab = ref<number>(0)
+const pin = ref<any[]>([])
+const pinnedBooks = ref<any[]>([])
 
 const list = [
   'https://static01.nyt.com/images/2015/10/24/opinion/24manguel/24manguel-superJumbo.jpg',
@@ -127,10 +150,31 @@ onBeforeMount(() => {
     .limitToLast(mobile.value ? 4 : 5)
     .on('child_added', async (s: any) => recent.value.unshift(await s.val()))
 
+  $db.ref('/pin').once('value', (s: any) => {
+    const data = s.val()
+
+    pin.value = data
+
+    for (let i = 0; i < Object.keys(data).length; i++) {
+      pinnedBooks.value.push(data[Object.keys(data)[i]].book)
+    }
+  })
+
   setInterval(
     () => (image.value = list[Math.floor(Math.random() * list.length)]),
-    10000
+    600000
   )
+})
+
+onMounted(() => {
+  setTimeout(() => {
+    for (let i = 0; i < Object.keys(pin.value).length; i++) {
+      // check the value of pin time and delete it if it is over 1 week
+      if (Object.values(pin.value)[i].time < new Date().getTime() - 604800000) {
+        $db.ref(`/pin/${Object.keys(pin.value)[i]}`).remove()
+      }
+    }
+  }, 3000)
 })
 
 const FetchLikes = () => {

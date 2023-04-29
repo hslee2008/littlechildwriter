@@ -45,6 +45,27 @@
       <template #default>
         <thead>
           <tr>
+            <th class="text-left">Libris 사용하기</th>
+            <th class="text-left">점수</th>
+            <th class="text-left">예시</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>홈페이지에 핀하기</td>
+            <td>-250</td>
+            <td>1주일 동안 내가 가장 좋아하는 책 홈페이지에 핀하기</td>
+          </tr>
+        </tbody>
+      </template>
+    </v-table>
+
+    <br />
+
+    <v-table class="rounded-lg">
+      <template #default>
+        <thead>
+          <tr>
             <th class="text-left">기타 활동</th>
             <th class="text-left">점수</th>
           </tr>

@@ -1,5 +1,5 @@
 <template>
-  <LibrisUsers :limit="false" />
+    <UserLibris :limit="false" />
 </template>
 
 <script setup lang="ts">

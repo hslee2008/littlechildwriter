@@ -58,7 +58,7 @@
 
     <div class="d-flex text-center ma-3 mx-5">
       <v-row class="mt-10" align="center" justify="center">
-        <v-btn text color="primary" variant="tonal" class="ml-2">
+          <v-btn color="primary" variant="tonal" class="ml-2">
           {{ itemsPerPage }}
           <v-icon right> mdi-chevron-down </v-icon>
 

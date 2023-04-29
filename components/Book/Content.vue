@@ -29,7 +29,9 @@
         background-color="white"
       />
       <div class="my-5">
-        {{ post.content.replaceAll('&lt;br>', '') }}
+        <p v-for="p in post.content.split('&lt;br>')" :key="p">
+          {{ p }}
+        </p>
       </div>
       <v-chip-group class="my-5" column>
         <v-chip label>

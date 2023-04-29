@@ -21,7 +21,7 @@
       :variant="
         Object.values(content.upvote ?? {}).includes(userInfo.uid)
           ? 'tonal'
-          : 'outline'
+          : 'outlined'
       "
       :elevation="
         Object.values(content.upvote ?? {}).includes(userInfo.uid) ? 2 : 0
@@ -218,7 +218,6 @@
       v-if="userInfo.loggedIn"
       rounded="lg"
       variant="tonal"
-      text
       @click="suggestionCard = true"
     >
       <v-icon>mdi-plus</v-icon>
@@ -247,15 +246,10 @@
         />
       </v-card-text>
       <v-card-actions>
-        <v-btn
-          rounded="lg"
-          variant="tonal"
-          text
-          @click="suggestionCard = false"
-        >
+        <v-btn rounded="lg" variant="tonal" @click="suggestionCard = false">
           취소
         </v-btn>
-        <v-btn rounded="lg" variant="tonal" text @click="newSuggestion">
+        <v-btn rounded="lg" variant="tonal" @click="newSuggestion">
           등록
         </v-btn>
       </v-card-actions>
@@ -313,10 +307,10 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="write = false">
+          <v-btn rounded="lg" variant="tonal" @click="write = false">
             취소
           </v-btn>
-          <v-btn rounded="lg" variant="tonal" text @click="post">작성</v-btn>
+          <v-btn rounded="lg" variant="tonal" @click="post">작성</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -329,12 +323,10 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="edit = false">
+          <v-btn rounded="lg" variant="tonal" @click="edit = false">
             취소
           </v-btn>
-          <v-btn rounded="lg" variant="tonal" text @click="update">
-            업데이트
-          </v-btn>
+          <v-btn rounded="lg" variant="tonal" @click="update"> 업데이트 </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

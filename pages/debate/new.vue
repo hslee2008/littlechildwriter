@@ -20,7 +20,7 @@
       />
     </v-col>
 
-    <v-btn rounded="lg" variant="tonal" text primary @click="upload">
+        <v-btn rounded="lg" variant="tonal" primary @click="upload">
       <v-icon>mdi-plus</v-icon>
       게시
     </v-btn>
@@ -57,8 +57,4 @@ const upload = () => {
 
   navigateTo(`/debate/topic/${time}`)
 }
-
-definePageMeta({
-  middleware: ['notloggedin']
-})
 </script>

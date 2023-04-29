@@ -67,12 +67,7 @@
 
               <v-card-actions>
                 <v-spacer />
-                <v-btn
-                  rounded="lg"
-                  variant="tonal"
-                  text
-                  @click="clearEverything"
-                >
+                <v-btn rounded="lg" variant="tonal" @click="clearEverything">
                   비우기 <v-icon right> mdi-notification-clear-all </v-icon>
                 </v-btn>
               </v-card-actions>
@@ -81,95 +76,15 @@
         </v-btn>
 
         <v-btn v-if="userInfo.loggedIn" icon>
-          <v-avatar size="35">
-            <v-img alt="User Avatar" :src="userInfo.photoURL" />
-          </v-avatar>
-          <v-menu right activator="parent">
-            <v-card>
-              <v-card class="d-flex">
-                <v-avatar size="60" class="ma-auto ml-6">
-                  <v-img alt="User Avatar" :src="userInfo.photoURL" />
-                </v-avatar>
-
-                <v-card-text>
-                  <v-card-title>{{ userInfo.displayName }}</v-card-title>
-                  <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
-                </v-card-text>
-              </v-card>
-
-              <v-list nav>
-                <v-list-item
-                  title="로그아웃"
-                  prepend-icon="mdi-logout"
-                  @click="userInfo.logout"
-                />
-              </v-list>
-
-              <v-card class="py-3">
-                <v-btn-toggle
-                  block
-                  variant="outlined"
-                  class="d-flex justify-center"
-                >
-                  <v-btn to="/account/account" icon="mdi-cog-outline"></v-btn>
-                  <v-btn
-                    :to="`/user/${userInfo.uid}`"
-                    icon="mdi-account-circle"
-                  ></v-btn>
-                  <v-btn to="/user/bookmarks" icon="mdi-bookmark-multiple"></v-btn>
-                  <v-btn to="/book/post" icon="mdi-pencil"></v-btn>
-                </v-btn-toggle>
-              </v-card>
-            </v-card>
-          </v-menu>
+          <MenuUserBox />
         </v-btn>
-
         <v-btn v-else rounded="lg" variant="tonal" to="/account/login" icon>
           <v-icon>mdi-account-circle</v-icon>
         </v-btn>
       </v-app-bar>
 
       <v-navigation-drawer v-model="drawer" floating mobile-breakpoint="400">
-        <v-list nav expand>
-          <v-list-item
-            to="/"
-            title="홈페이지"
-            prepend-icon="mdi-home-variant"
-          />
-          <v-list-item
-            to="/book/list"
-            title="책 목록"
-            prepend-icon="mdi-format-list-text"
-          />
-          <v-list-item
-            to="/class/classes"
-            title="알림판"
-            prepend-icon="mdi-clipboard-multiple"
-          />
-          <v-list-item
-            to="/blog/home"
-            title="창작 코너"
-            prepend-icon="mdi-typewriter"
-          />
-          <v-list-item
-            to="/debate/home"
-            title="토론 광장"
-            prepend-icon="mdi-lectern"
-          />
-
-          <v-divider class="my-3" />
-
-          <v-list-item
-            to="/libris/libris"
-            title="명예의 전당"
-            prepend-icon="mdi-podium"
-          />
-          <v-list-item
-            to="/libris/table"
-            title="포인트제"
-            prepend-icon="mdi-table-large"
-          />
-        </v-list>
+        <MenuNavigation />
       </v-navigation-drawer>
 
       <v-main :class="$route.path !== '/' ? 'mx-5' : ''">

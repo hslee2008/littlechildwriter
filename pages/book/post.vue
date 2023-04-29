@@ -58,7 +58,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn rounded="lg" variant="tonal" text @click="isbn.upload = false">
+          <v-btn rounded="lg" variant="tonal" @click="isbn.upload = false">
             확인
           </v-btn>
           <v-spacer />
@@ -145,7 +145,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn rounded="lg" variant="tonal" text @click="voiceType">
+          <v-btn rounded="lg" variant="tonal" @click="voiceType">
             시작
           </v-btn>
           <v-spacer />
@@ -198,7 +198,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="isbn.input = false">
+          <v-btn rounded="lg" variant="tonal" @click="isbn.input = false">
             취소
           </v-btn>
         </v-card-actions>
@@ -288,7 +288,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn rounded="lg" variant="tonal" text @click="isbn.find = false">
+          <v-btn rounded="lg" variant="tonal" @click="isbn.find = false">
             취소
           </v-btn>
         </v-card-actions>

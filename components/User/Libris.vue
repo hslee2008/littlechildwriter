@@ -56,7 +56,7 @@ const Limited = () => {
   $db
     .ref('/users')
     .orderByChild('libris')
-    .limitToLast(5)
+    .limitToLast(3)
     .on('child_added', Handler)
 }
 

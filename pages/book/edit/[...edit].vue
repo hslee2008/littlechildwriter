@@ -85,8 +85,4 @@ const Update = () => {
 useHead({
   title: '편집 - LCW'
 })
-
-definePageMeta({
-  middleware: ['notloggedin']
-})
 </script>

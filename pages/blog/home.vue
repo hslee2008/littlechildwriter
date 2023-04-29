@@ -9,7 +9,7 @@
         variant="tonal"
         color="primary"
         class="ml-3 my-5"
-        to="./new"
+        to="/blog/new"
       >
         <v-icon start>mdi-plus</v-icon> 새 블로그
       </v-btn>

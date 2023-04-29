@@ -150,7 +150,7 @@
         </v-dialog>
       </v-btn>
 
-      <v-btn rounded="lg" variant="tonal" text class="mx-1" @click="share">
+      <v-btn rounded="lg" variant="tonal" class="mx-1" @click="share">
         <v-icon start> mdi-share-variant </v-icon>
         공유
       </v-btn>
@@ -204,7 +204,7 @@ const userInfo = User()
 const route = useRoute()
 const time = route.params.content
 
-const post = ref<any>({
+const post = ref({
   isbn: '',
   title: '',
   image: '',
@@ -215,7 +215,9 @@ const post = ref<any>({
   uid: '',
   displayName: '',
   views: 0,
-  time: Date.now()
+  time: Date.now(),
+  likes: 0,
+  liked: {} as any
 })
 const otherInfo = ref<any>({
   volumeInfo: {

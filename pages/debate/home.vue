@@ -9,7 +9,7 @@
         variant="tonal"
         color="primary"
         class="ml-3 my-5"
-        to="./new"
+        to="/debate/new"
       >
         <v-icon start>mdi-plus</v-icon> 새 토론 주제
       </v-btn>

@@ -8,7 +8,6 @@
           v-if="post.isbn"
           rounded="lg"
           variant="plain"
-          text
           @click="showiframe"
         >
           <v-icon start> mdi-file-find </v-icon> 미리보기

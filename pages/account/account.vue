@@ -14,7 +14,6 @@
             <v-btn
               rounded="lg"
               variant="tonal"
-              text
               color="primary"
               class="ml-3 mt-3"
               @click="imageEdit = true"
@@ -53,6 +52,41 @@
           </v-list-item>
         </v-list>
       </v-radio-group>
+    </v-card>
+
+    <v-card id="advanced" class="mb-10">
+      <v-card-title>핀</v-card-title>
+      <v-card-text>
+        Libris를 사용해서 홈페이지에 원하는 책을 1주일 동안 고정할 수 있습니다.
+        <br />
+        250 point를 사용하면 1주일 동안 책을 고정할 수 있습니다.
+        <br />
+        핀을 하나 구매하면 250 point가 줄어듭니다.
+      </v-card-text>
+
+      <v-radio-group v-model="pin" class="ma-3">
+        <v-list class="rounded-lg">
+          <v-list-item v-for="(book, i) in books" :key="book.time">
+            <template #prepend>
+              <v-radio :key="book.time + '-radio'" :value="i" />
+            </template>
+
+            <v-list-item-title>{{ book.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-radio-group>
+
+      <v-card-actions>
+        <v-btn
+          rounded="lg"
+          variant="tonal"
+          color="primary"
+          class="ml-3 mt-3"
+          @click="BuyPin"
+        >
+          핀 구매
+        </v-btn>
+      </v-card-actions>
     </v-card>
 
     <v-card id="advanced" class="mb-10">
@@ -112,19 +146,12 @@
             rounded="lg"
             variant="tonal"
             color="red"
-            text
             @click="imageEdit = false"
           >
             취소
           </v-btn>
           <v-spacer />
-          <v-btn
-            rounded="lg"
-            variant="tonal"
-            color="primary"
-            text
-            @click="save"
-          >
+          <v-btn rounded="lg" variant="tonal" color="primary" @click="save">
             Save
           </v-btn>
         </v-card-actions>
@@ -148,6 +175,7 @@ const userDB = ref<any>({ bio: '' })
 const books = ref<any[]>([])
 const imageEdit = ref<boolean>(false)
 const featured = ref<number>(0)
+const pin = ref<number>(0)
 
 const tempImage = ref<string>(userInfo.photoURL)
 const tempName = ref<string>(userInfo.displayName)
@@ -187,6 +215,19 @@ const Update = () => {
 
   navigateTo(`/user/${uid}`)
 }
+const BuyPin = () => {
+  const time = new Date().getTime()
+
+  $db.ref(`/pin/${time}`).set({
+    uid: userInfo.uid,
+    time,
+    book: books.value[pin.value]
+  })
+
+  Libris(userInfo.uid, -250)
+
+  navigateTo('/')
+}
 
 const save = () => {
   $auth.currentUser?.updateProfile({ photoURL: tempImage.value })
@@ -199,9 +240,5 @@ const save = () => {
 
 useHead({
   title: '계정 - LCW'
-})
-
-definePageMeta({
-  middleware: ['notloggedin']
 })
 </script>

@@ -1,4 +1,11 @@
 import { db } from '../plugins/firebase'
 
-export const Libris = (uid: string | string[], incrementBy: number) =>
-  db.ref(`users/${uid}/libris`).transaction(v => v + incrementBy)
+export const Libris = (uid: string | string[], incrementBy: number) => {
+  const currentLibris = db.ref(`users/${uid}/libris`).once('value')
+
+  currentLibris.then(snapshot => {
+    const currentLibris = snapshot.val()
+    const newLibris = currentLibris + incrementBy
+    db.ref(`users/${uid}/libris`).set(newLibris)
+  })
+}
