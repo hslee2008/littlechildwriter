@@ -47,7 +47,6 @@
                 rounded="lg"
                 variant="tonal"
                 color="error"
-                text
                 depressed
                 class="mr-3"
                 @click=";(message.edit = false), (comments = [...comments])"
@@ -58,7 +57,6 @@
                 rounded="lg"
                 variant="tonal"
                 color="primary"
-                text
                 @click="Update(i)"
               >
                 저장
@@ -139,7 +137,6 @@
           rounded="lg"
           variant="tonal"
           color="pink"
-          text
           v-bind="propsS"
           @click="snackbarBadWord = false"
         >

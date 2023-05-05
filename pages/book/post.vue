@@ -334,14 +334,8 @@
         multiple
         variant="outlined"
       >
-        <template #selection="{ attrs, item, select, selected }">
-          <v-chip
-            v-bind="attrs"
-            :input-v-model="selected"
-            close
-            @click="select"
-            @click:close="remove(item)"
-          >
+        <template #selection="{ item }">
+          <v-chip close @click:close="remove(item)">
             <strong>{{ item }}</strong>
           </v-chip>
         </template>
@@ -455,7 +449,7 @@ const snackbar = ref<boolean>(false)
 const notfound = ref<boolean>(false)
 const tab = ref<any>(0)
 
-const remove = (item: string) => {
+const remove = (item: any) => {
   post.value.categories.splice(post.value.categories.indexOf(item), 1)
 }
 

@@ -443,11 +443,13 @@ const share = () => {
   const url = `https://libris.kr/book/content/${post.value.time}`
   const text = `${title} - ${content}`
 
-  navigator.share({
-    title,
-    text,
-    url
-  })
+  if (navigator.canShare()) {
+    navigator.share({
+      title,
+      text,
+      url
+    })
+  }
 
   Libris(userInfo.uid, 1)
 }

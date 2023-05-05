@@ -8,11 +8,11 @@
 
     <v-window v-model="tab" class="py-5" color="#23262E">
       <v-window-item :value="0">
-        <DisplayCards :class-info="classInfo" />
+        <ClassDisplayCards :class-info="classInfo" />
       </v-window-item>
 
       <v-window-item :value="1">
-        <UploadCards :update-tab="updateTab" />
+        <ClassUploadCards :update-tab="updateTab" />
       </v-window-item>
 
       <v-window-item v-if="userInfo.is(classInfo.uid)" :value="2" class="pt-5">
@@ -68,9 +68,6 @@
 </template>
 
 <script setup lang="ts">
-import DisplayCards from './components/DisplayCards.vue'
-import UploadCards from './components/UploadCards.vue'
-
 const { $db } = useNuxtApp()
 
 const userInfo = User()

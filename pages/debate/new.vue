@@ -11,16 +11,7 @@
       class="mt-3"
     />
 
-    <v-col class="d-flex" cols="12" sm="6">
-      <v-select
-        v-model="debate.lang"
-        variant="outlined"
-        :items="lang"
-        width="300"
-      />
-    </v-col>
-
-        <v-btn rounded="lg" variant="tonal" primary @click="upload">
+    <v-btn rounded="lg" variant="tonal" primary @click="upload">
       <v-icon>mdi-plus</v-icon>
       게시
     </v-btn>
@@ -31,7 +22,6 @@
 const { $db } = useNuxtApp()
 
 const userInfo = User()
-const lang = ref(['한국어', 'English'])
 const debate = ref({
   topic: '',
   created_at: '',
@@ -39,6 +29,16 @@ const debate = ref({
   photoURL: '',
   lang: '한국어'
 })
+
+const AddNewUser = () => {
+  $db.ref(`/debate/posted/${userInfo.uid}`).transaction((count: any) => {
+    if (count === null) {
+      return 1
+    } else {
+      return count + 1
+    }
+  })
+}
 
 const upload = () => {
   const { uid, photoURL, displayName } = userInfo
@@ -53,6 +53,7 @@ const upload = () => {
     displayName
   })
 
+  AddNewUser()
   Libris(uid, 3)
 
   navigateTo(`/debate/topic/${time}`)

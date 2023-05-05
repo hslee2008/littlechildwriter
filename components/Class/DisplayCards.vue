@@ -45,7 +45,7 @@
 
             <v-spacer />
 
-            <Actions
+            <ClassActions
               v-if="userInfo.is(item.uid)"
               :item="item"
               :i="i"
@@ -69,7 +69,7 @@
 
             <v-spacer />
 
-            <Actions
+            <ClassActions
               v-if="userInfo.is(item.uid)"
               :item="item"
               :i="i"
@@ -94,7 +94,7 @@
 
               <v-spacer />
 
-              <Actions
+              <ClassActions
                 v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
@@ -126,7 +126,7 @@
 
             <v-spacer />
 
-            <Actions
+            <ClassActions
               v-if="userInfo.is(item.uid)"
               :item="item"
               :i="i"
@@ -141,7 +141,7 @@
                 <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
               </v-carditem>
 
-              <Actions
+              <ClassActions
                 v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
@@ -159,7 +159,7 @@
                 <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
               </v-card-item>
 
-              <Actions
+              <ClassActions
                 v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
@@ -186,7 +186,7 @@
 
               <v-spacer />
 
-              <Actions
+              <ClassActions
                 v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
@@ -209,7 +209,7 @@
 
               <v-spacer />
 
-              <Actions
+              <ClassActions
                 v-if="userInfo.is(item.uid)"
                 :item="item"
                 :i="i"
@@ -226,8 +226,6 @@
 </template>
 
 <script setup>
-import Actions from './Actions.vue'
-
 const userInfo = User()
 
 defineProps({

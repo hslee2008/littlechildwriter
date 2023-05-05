@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="mb-5">
       <h1>토론 광장</h1>
 
       <v-btn
@@ -8,55 +8,46 @@
         rounded="lg"
         variant="tonal"
         color="primary"
-        class="ml-3 my-5"
+        class="my-3 mr-2"
         to="/debate/new"
       >
-        <v-icon start>mdi-plus</v-icon> 새 토론 주제
+        <v-icon start>mdi-plus</v-icon> 새 주제
+      </v-btn>
+      <v-btn
+        v-if="userInfo.loggedIn"
+        rounded="lg"
+        variant="tonal"
+        color="primary"
+        class="my-3 mr-2"
+        :to="`/debate/user/${userInfo.uid}}`"
+      >
+        <v-icon start>mdi-account</v-icon> 나의 주제
       </v-btn>
     </div>
 
-    <v-list nav>
-      <v-list-item
-        v-for="(item, i) in list"
-        :key="item.time"
-        :to="`/debate/topic/${item.time}`"
-        class="mt-2"
+    <v-row>
+      <v-col
+        v-for="(item, i) in ImageList"
+        :key="i"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="3"
       >
-        <template #prepend>
-          <v-avatar size="45">
-            <UserPhoto :size="45" :src="item?.photoURL" />
-          </v-avatar>
-        </template>
+        <v-card :to="`/debate/user/${item.uid}`" variant="outlined">
+          <v-card-text class="text-center">
+            <UserPhoto :size="45" :src="item.src" />
+          </v-card-text>
 
-        <v-list-item-title>{{ item.topic }}</v-list-item-title>
-        <v-list-item-subtitle>{{ item.displayName }}</v-list-item-subtitle>
-
-        <v-spacer />
-
-        <template #append>
-          <v-icon start class="mr-2">mdi-comment-flash</v-icon>
-          {{ Object.keys({ ...item.pro, ...item.con } ?? {}).length }}
-          <v-icon start class="mr-2">mdi-arrow-up</v-icon>
-          {{ Object.keys(item.upvote ?? {}).length }}
-
-          <v-list-item-action v-if="userInfo.is(item.uid)">
-            <v-btn variant="plain" rounded="lg" icon cols="1" @click.stop.prevent="">
-              <v-icon>mdi-dots-vertical</v-icon>
-
-              <v-menu offset-y activator="parent">
-                <v-list>
-                  <v-list-item @click="DeleteContent(i)">
-                    <v-list-item-title>
-                      <v-icon start> mdi-trash-can </v-icon> 삭제
-                    </v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-btn>
-          </v-list-item-action>
-        </template>
-      </v-list-item>
-    </v-list>
+          <v-card-subtitle class="text-center">
+            {{ item.count }}
+          </v-card-subtitle>
+          <v-card-title class="text-center">
+            {{ item.displayName }}
+          </v-card-title>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -64,19 +55,26 @@
 const { $db } = useNuxtApp()
 
 const userInfo = User()
-const list = ref<any>([])
+const ImageList = ref<any>([])
 
-onMounted(() =>
-  $db
-    .ref('/debate')
-    .orderByChild('upvote')
-    .on('child_added', async (s: any) => list.value.unshift(await s.val()))
-)
+onMounted(async () => {
+  await $db.ref('/debate/posted').once('value', async (snapshot: any) => {
+    const data = await snapshot.val()
 
-const DeleteContent = (i: number) => {
-  $db.ref(`/debate/${list.value[i].time}`).remove()
-  list.value.splice(i, 1)
-}
+    for (const uid in data) {
+      await $db.ref(`/users/${uid}`).once('value', async (snapshot: any) => {
+        const user = await snapshot.val()
+
+        ImageList.value.push({
+          uid,
+          count: data[uid],
+          displayName: user?.displayName ?? '이름 없음',
+          src: user?.photoURL ?? '이미지 없음'
+        })
+      })
+    }
+  })
+})
 
 useHead({
   title: '토론 광장 - LCW'
