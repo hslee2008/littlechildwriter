@@ -12,6 +12,9 @@
         ".write": "$userId === auth.uid"
       }
     },
+    "debate": {
+      ".indexOn": "/uid"
+    },
     "teams": {
       ".indexOn": "/points"
     }

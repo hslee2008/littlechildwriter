@@ -19,7 +19,7 @@
         variant="tonal"
         color="primary"
         class="my-3 mr-2"
-        :to="`/debate/user/${userInfo.uid}}`"
+        :to="`/debate/user/${userInfo.uid}`"
       >
         <v-icon start>mdi-account</v-icon> 나의 주제
       </v-btn>
@@ -27,7 +27,7 @@
 
     <v-row>
       <v-col
-        v-for="(item, i) in ImageList"
+        v-for="(item, i) in ImageList.sort((a: any, b: any) => b.count - a.count)"
         :key="i"
         cols="12"
         sm="6"
@@ -36,7 +36,7 @@
       >
         <v-card :to="`/debate/user/${item.uid}`" variant="outlined">
           <v-card-text class="text-center">
-            <UserPhoto :size="45" :src="item.src" />
+            <UserPhoto :size="65" :src="item.src" />
           </v-card-text>
 
           <v-card-subtitle class="text-center">

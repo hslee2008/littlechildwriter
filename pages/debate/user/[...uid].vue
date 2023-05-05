@@ -1,54 +1,43 @@
 <template>
   <div>
-    <div>
-      <h1>토론 광장 - 나의 주제</h1>
+    <v-card class="d-flex justify-center align-center mb-5">
+      <div class="mt-3">
+        <UserPhoto :src="targetUser.photoURL" :size="55" />
+      </div>
+      <div class="ml-2">
+        <v-card-title>{{ targetUser.displayName }}</v-card-title>
+        <v-card-subtitle>토론 광장</v-card-subtitle>
+      </div>
+    </v-card>
 
-      <v-btn
-        v-if="userInfo.loggedIn"
-        rounded="lg"
-        variant="tonal"
-        color="primary"
-        class="my-3 mr-2"
-        to="/debate/new"
-      >
-        <v-icon start>mdi-plus</v-icon> 새 주제
+    <div class="text-center">
+      <v-btn rounded="lg" variant="tonal" class="my-3 mr-2" to="/debate/home">
+        <v-icon start>mdi-chevron-left</v-icon> 모든 주제
       </v-btn>
-      <v-btn
-        v-if="userInfo.loggedIn"
-        rounded="lg"
-        variant="tonal"
-        color="primary"
-        class="my-3 mr-2"
-        to="/debate/home"
-      >
-        <v-icon start>mdi-account</v-icon> 모든 주제
-      </v-btn>
-
-      <v-chip-group class="mt-1">
-        <v-chip class="text-center">
-          <v-icon class="mr-2">mdi-lectern</v-icon>
-          {{ list.length }}개 주제
-        </v-chip>
-        <v-chip class="text-center">
-          <v-icon class="mr-2">mdi-comment-flash</v-icon>
-          {{ totalComment }}개 의견
-        </v-chip>
-      </v-chip-group>
     </div>
 
-    <v-list nav class="mt-3">
+    <v-card class="mt-5">
+      <v-card-text>
+        <v-row>
+          <v-col cols="6">
+            <v-card-title class="text-center">총 주제</v-card-title>
+            <v-card-text class="text-center">{{ list.length }}</v-card-text>
+          </v-col>
+          <v-col cols="6">
+            <v-card-title class="text-center">총 댓글</v-card-title>
+            <v-card-text class="text-center">{{ totalComment }}</v-card-text>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+
+    <v-list v-if="list.length" class="mt-3" lines="two">
       <v-list-item
         v-for="(item, i) in list"
         :key="item.time"
         :to="`/debate/topic/${item.time}`"
         class="mt-2"
       >
-        <template #prepend>
-          <v-avatar size="45">
-            <UserPhoto :size="45" :src="item?.photoURL" />
-          </v-avatar>
-        </template>
-
         <v-list-item-title>{{ item.topic }}</v-list-item-title>
         <v-list-item-subtitle>{{ item.displayName }}</v-list-item-subtitle>
 
@@ -82,6 +71,9 @@
         </template>
       </v-list-item>
     </v-list>
+    <v-card v-else class="mt-5">
+      <v-card-text class="text-center">주제가 없습니다.</v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -93,9 +85,14 @@ const router = useRouter()
 const userInfo = User()
 const list = ref<any>([])
 
+const targetUser = ref<any>({})
 const totalComment = ref(0)
 
-onMounted(() =>
+onMounted(() => {
+  $db.ref(`/users/${route.params.uid}`).on('value', (s: any) => {
+    targetUser.value = s.val()
+  })
+
   $db
     .ref('/debate')
     .orderByChild('uid')
@@ -107,7 +104,7 @@ onMounted(() =>
         ...s.val().con
       }).length
     })
-)
+})
 
 const DeleteContent = (i: number) => {
   $db.ref(`/debate/${list.value[i].time}`).remove()

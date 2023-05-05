@@ -1,8 +1,8 @@
 <template>
   <div>
     <div
-      class="d-flex justify-center align-center text-center login"
-      style="height: calc(100vh - 100px)"
+      class="d-flex justify-center align-center text-center login mt-2"
+      :style="!mobile ? 'height: calc(100vh - 100px)' : ''"
     >
       <section id="firebaseui-auth-container" />
 
@@ -59,8 +59,10 @@
 <script setup script="ts">
 import firebase from 'firebase/compat/app'
 import { auth } from 'firebaseui'
+import { useDisplay } from 'vuetify'
 import 'firebaseui/dist/firebaseui.css'
 
+const { mobile } = useDisplay()
 const email = ref('')
 const password = ref('')
 const eye = ref(false)
@@ -85,7 +87,6 @@ onMounted(() => {
     ]
   })
 })
-
 onUnmounted(() => ui.delete())
 
 useHead({

@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  src: string | null
+  src: string | null | undefined
   size: number
 }>()
 </script>
