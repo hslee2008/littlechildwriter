@@ -367,15 +367,16 @@ const post = () => {
   })
 
   write.value = false
-  claim.value = ''
 
-  Libris(userInfo.uid, 20)
+  Libris(userInfo.uid, 35 + claim.value.length / 10)
   Notify(
     content.value.uid,
     userInfo.photoURL,
     `${userInfo.displayName}님이 새로운 의견을 냈습니다`,
     `/debate/topic/${time}`
   )
+
+  claim.value = ''
 }
 
 const update = () => {
@@ -429,7 +430,6 @@ const Upvote = () => {
 
   if (!Object.values(content.value.upvote ?? {}).includes(userInfo.uid)) {
     $db.ref(`/debate/${time}/upvote`).push(uid)
-    Libris(content.value.uid, 10)
   } else {
     $db
       .ref(`/debate/${time}/upvote`)
@@ -440,8 +440,6 @@ const Upvote = () => {
           $db.ref(`/debate/${time}/upvote/${child.key}`).remove()
         })
       })
-
-    Libris(content.value.uid, -11)
   }
 
   Notify(
@@ -468,7 +466,7 @@ const newSuggestion = () => {
   suggestion.value = ''
   suggestionContent.value = ''
 
-  Libris(userInfo.uid, 5)
+  Libris(userInfo.uid, 10)
   Notify(
     content.value.uid,
     userInfo.photoURL,

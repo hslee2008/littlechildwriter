@@ -53,7 +53,7 @@ const upload = () => {
     displayName
   })
 
-  Libris(uid, 5)
+  Libris(uid, 3)
 
   navigateTo(`/debate/topic/${time}`)
 }

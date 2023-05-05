@@ -54,12 +54,12 @@ const SaveContent = () => {
     time
   })
 
-  Libris(userInfo.uid, 50)
+  Libris(userInfo.uid, 75)
 
   navigateTo(`/blog/content/${time}`)
 }
 
 useHead({
-  title: '창작 코너 글쓰기 - Little Child Writer'
+  title: '창작 코너 글쓰기'
 })
 </script>

@@ -65,7 +65,6 @@
           <v-btn
             rounded="lg"
             variant="tonal"
-            text
             @click=";(isbn.upload = false), (post.image = '')"
           >
             취소
@@ -116,12 +115,7 @@
 
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            rounded="lg"
-            variant="tonal"
-            text
-            @click="isbn.barcode = false"
-          >
+          <v-btn rounded="lg" variant="tonal" @click="isbn.barcode = false">
             취소
           </v-btn>
         </v-card-actions>
@@ -145,14 +139,11 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn rounded="lg" variant="tonal" @click="voiceType">
-            시작
-          </v-btn>
+          <v-btn rounded="lg" variant="tonal" @click="voiceType"> 시작 </v-btn>
           <v-spacer />
           <v-btn
             rounded="lg"
             variant="tonal"
-            text
             color="red"
             @click="isbn.barcode = false"
           >
@@ -161,7 +152,6 @@
           <v-btn
             rounded="lg"
             variant="tonal"
-            text
             color="primary"
             @click="saveAudio"
           >
@@ -607,6 +597,11 @@ const Post = () => {
     return
   }
 
+  if (pageCount > 1000) {
+    alert('최대 페이지 수는 1000페이지입니다.')
+    return
+  }
+
   if (isPublic) {
     $db.ref(`/contents/${time}`).set({
       title,
@@ -645,6 +640,7 @@ const Post = () => {
 
   Libris(userInfo.uid, parseInt(post.value.pageCount) / 5)
 
+  content.value = ''
   navigateTo(`/book/content/${time}`)
 }
 
