@@ -456,11 +456,12 @@ const share = () => {
 
 onBeforeMount(async () => {
   await Content()
-  View()
   Suggestion()
 })
 
 onMounted(() => {
+  View()
+
   if (localStorage.getItem('school'))
     school.value = {
       ...school.value,

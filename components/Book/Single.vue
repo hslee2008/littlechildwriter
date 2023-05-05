@@ -30,10 +30,17 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 
+const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
-defineProps<{
+const props = defineProps<{
   data: any
   targetUser: any
   colored: any
 }>()
+
+onMounted(() => {
+  $db
+    .ref(`contents/${props.data.time}/views`)
+    .transaction((view: any) => view + 1)
+})
 </script>

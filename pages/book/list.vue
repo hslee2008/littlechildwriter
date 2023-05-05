@@ -1,5 +1,5 @@
 <template>
-  <BookList user="everyone" :star="false" />
+  <BookList user="everyone" :search="true" />
 </template>
 
 <script setup lang="ts">

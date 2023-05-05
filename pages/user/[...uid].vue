@@ -57,7 +57,7 @@
       </v-window-item>
 
       <v-window-item :value="1">
-        <BookList :user="uid" star />
+        <BookList :user="uid" :search="false" />
       </v-window-item>
 
       <v-window-item :value="2">

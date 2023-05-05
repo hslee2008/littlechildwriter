@@ -2,8 +2,8 @@
   <div>
     <br />
 
-    <h1>주제: {{ content.topic }}</h1>
-    <v-card class="d-flex pb-2" :to="`/user/${content.uid}`">
+    <h1>{{ content.topic }}</h1>
+    <v-card class="d-flex" :to="`/user/${content.uid}`">
       <v-avatar size="45" class="my-auto ml-3">
         <UserPhoto :size="45" :src="content?.photoURL" />
       </v-avatar>
@@ -27,6 +27,7 @@
         Object.values(content.upvote ?? {}).includes(userInfo.uid) ? 2 : 0
       "
       size="small"
+      class="mt-5"
       @click="Upvote()"
     >
       <v-icon left>mdi-arrow-up</v-icon>

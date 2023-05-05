@@ -13,19 +13,11 @@
         :key="title"
         class="elevation-0"
       >
-        <v-expansion-panel-title
-          class="elevation-0"
-          style="background-color: #23262e !important"
-        >
+        <v-expansion-panel-title class="elevation-0">
           {{ title.toString().replaceAll('_', ' - ') }}
         </v-expansion-panel-title>
 
-        <v-expansion-panel-text
-          v-for="(item, i) in category"
-          :key="item.title"
-          style="background-color: #23262e !important"
-          class="elevation-0"
-        >
+        <v-expansion-panel-text v-for="(item, i) in category" :key="item.title">
           <v-card
             v-if="item.type === '책'"
             class="d-flex mt-5"
@@ -54,9 +46,34 @@
             />
           </v-card>
           <v-card
+            v-else-if="item.type === '파일 사진' || item.file.endsWith('jpg')"
+            class="mt-5"
+          >
+            <div class="d-flex">
+              <v-carditem>
+                <v-card-title>{{ item.file }}</v-card-title>
+                <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+              </v-carditem>
+
+              <ClassActions
+                v-if="userInfo.is(item.uid)"
+                :item="item"
+                :i="i"
+                :title="title"
+                type="파일"
+              />
+            </div>
+
+            <a :href="item.url" target="_blank">
+              <v-img :src="item.url" width="500" class="mt-4" />
+            </a>
+          </v-card>
+          <v-card
             v-else-if="item.type === '파일'"
             :href="item.url"
-            class="d-flex mt-5"
+            class="d-flex mt-3"
+            rounded="lg"
+            variant="outlined"
           >
             <template #prepend>
               <v-icon class="ml-4"> mdi-link-variant </v-icon>
@@ -64,7 +81,9 @@
 
             <v-card-item>
               <v-card-title>{{ item.file }}</v-card-title>
-              <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
+              <v-card-subtitle>
+                {{ item.displayName || '비공개' }}
+              </v-card-subtitle>
             </v-card-item>
 
             <v-spacer />
@@ -81,10 +100,11 @@
             <v-card
               v-if="userInfo.is(item.uid) || userInfo.is(classInfo.uid)"
               :href="item.url"
-              class="d-flex rounded-0"
+              class="d-flex"
+              rounded="lg"
             >
               <template #prepend>
-                <v-icon class="ml-4"> mdi-link-variant </v-icon>
+                <v-icon class="ml-4"> mdi-note </v-icon>
               </template>
 
               <v-card-item>
@@ -102,16 +122,24 @@
                 type="파일"
               />
             </v-card>
-            <v-card v-else class="d-flex">
-              <v-icon start color="green" class="ml-3">mdi-check</v-icon>
-              <v-card-text>
-                {{ item.displayName }}님이 숙제를 비공개로 제출함
-              </v-card-text>
+            <v-card v-else class="d-flex" variant="tonal" rounded="lg">
+              <template #prepend>
+                <v-icon class="ml-4"> mdi-note </v-icon>
+              </template>
+              <v-card-item>
+                <v-card-text>
+                  {{ item.displayName || '?' }}님이 숙제를 비공개로 제출함
+                </v-card-text>
+              </v-card-item>
             </v-card>
           </div>
           <v-card
             v-else-if="item.type === '링크'"
-            class="d-flex mt-5 rounded-lg pa-2"
+            class="d-flex mt-5 pa-2"
+            variant="outlined"
+            :href="item.link"
+            target="_blank"
+            rounded="lg"
           >
             <template #prepend>
               <v-icon class="ml-4"> mdi-link </v-icon>
@@ -134,25 +162,11 @@
               type="other"
             />
           </v-card>
-          <v-card v-else-if="item.type === '파일 사진'" class="mt-5">
-            <div class="d-flex">
-              <v-carditem>
-                <v-card-title>{{ item.file }}</v-card-title>
-                <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-              </v-carditem>
-
-              <ClassActions
-                v-if="userInfo.is(item.uid)"
-                :item="item"
-                :i="i"
-                :title="title"
-                type="파일"
-              />
-            </div>
-
-            <v-img :src="item.url" />
-          </v-card>
-          <v-card v-else-if="item.type === '파일 비디오'" class="mt-5">
+          <v-card
+            v-else-if="item.type === '파일 비디오'"
+            class="mt-5"
+            variant="outlined"
+          >
             <div class="d-flex">
               <v-card-item>
                 <v-card-title>{{ item.file }}</v-card-title>
@@ -170,19 +184,22 @@
             <v-card-text>
               <video width="320" height="240" controls autoplay loop muted>
                 <source :src="item.url" type="video/mp4" />
-                Your browser does not support the video tag.
+                비디오 태그를 지원하지 않는 브라우저입니다.
               </video>
             </v-card-text>
           </v-card>
           <div v-else-if="item.type === '숙제 제출 (학생)'">
             <v-card class="d-flex mt-5">
-              <v-icon color="orange" class="ml-4"> mdi-school </v-icon>
-              <v-card-item>
+              <template #prepend>
+                <v-icon> mdi-school </v-icon>
+              </template>
+
+              <div>
                 <v-card-title>{{ item.title }}</v-card-title>
                 <v-card-text>
                   {{ item.content }}
                 </v-card-text>
-              </v-card-item>
+              </div>
 
               <v-spacer />
 
@@ -197,11 +214,13 @@
           </div>
           <v-card v-else class="mt-5">
             <div class="d-flex">
-              <v-avatar size="45" class="ml-3 mt-6">
+              <v-avatar size="45" class="ml-3 mt-4">
                 <UserPhoto :size="45" :src="item?.photoURL" />
               </v-avatar>
               <v-card-item>
-                <v-card-title> {{ item.displayName }}의 공지사항 </v-card-title>
+                <v-card-title>
+                  {{ item.displayName }}님의 공지사항
+                </v-card-title>
                 <v-card-subtitle>
                   {{ new Date(item.time).toLocaleDateString() }}
                 </v-card-subtitle>

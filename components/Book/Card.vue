@@ -64,7 +64,10 @@
             >
               <v-icon> mdi-thumb-up </v-icon>
             </v-btn>
-            <span class="subheading" v-text="item?.likes" />
+            <span
+              class="subheading"
+              v-text="Object.keys(item.liked ?? {}).length"
+            />
           </v-card-actions>
         </v-card>
       </v-card>

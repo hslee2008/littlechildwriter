@@ -1,8 +1,31 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <template>
-  <v-list nav lines="two">
+  <v-row class="d-flex justify-center align-center my-5">
+    <v-col
+      v-for="(item, i) in lbt.slice(0, 3)"
+      :key="i"
+      cols="12"
+      sm="6"
+      md="4"
+      lg="3"
+    >
+      <v-card :to="`/user/${item.uid}`" variant="outlined">
+        <v-card-text class="text-center">
+          <UserPhoto :size="65" :src="item.photoURL" />
+        </v-card-text>
+
+        <v-card-subtitle class="text-center">
+          {{ i + 1 }}등
+        </v-card-subtitle>
+        <v-card-title class="text-center">
+          {{ item.displayName }}
+        </v-card-title>
+      </v-card>
+    </v-col>
+  </v-row>
+  <v-list v-if="!limit" nav lines="two">
     <v-list-item
-      v-for="(item, i) in lbt"
+      v-for="(item, i) in lbt.slice(3, -2)"
       v-show="lbt[i].displayName"
       :key="lbt[i].uid"
       :to="`/user/${lbt[i].uid}`"

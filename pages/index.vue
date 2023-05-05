@@ -91,9 +91,7 @@
               mdi-information-outline
             </v-icon>
           </template>
-          <span>
-            설정에서 Libris를 사용해서 핀을 설정할 수 있습니다.
-          </span>
+          <span> 설정에서 Libris를 사용해서 핀을 설정할 수 있습니다. </span>
         </v-tooltip>
       </v-card-title>
       <v-card-text>
@@ -104,9 +102,9 @@
     </v-card>
 
     <v-card class="mx-1 my-10">
-      <v-card-text>
+      <v-card-text class="text-center">
         <h2>명예의 전당</h2>
-        <UserLibris :limit="true" />
+        <UserList :limit="true" />
 
         <div class="text-center">
           <v-btn rounded="lg" variant="tonal" to="/libris/libris">

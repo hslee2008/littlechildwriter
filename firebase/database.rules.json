@@ -3,7 +3,7 @@
     ".read": true,
     ".write": true,
     "contents": {
-      ".indexOn": ["/time", "/likes", "/views"],
+      ".indexOn": ["/time", "/title"],
       ".write": "auth.uid != null"
     },
     "users": {

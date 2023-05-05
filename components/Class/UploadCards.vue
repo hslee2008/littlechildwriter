@@ -76,21 +76,19 @@
         :show-size="1000"
         @update:model-value="UploadFile($event)"
       >
-          <template #selection="{ index, }">
-            <v-chip
-              v-if="index < 2"
-              color="deep-purple accent-4"
-              label
-              size="small"
-            >
-              {{ }}
-            </v-chip>
-          </template>
-        </v-file-input>
+        <template #selection="{ index }">
+          <v-chip
+            v-if="index < 2"
+            color="deep-purple accent-4"
+            label
+            size="small"
+          >
+            {{}}
+          </v-chip>
+        </template>
+      </v-file-input>
 
-        <v-btn rounded="lg" variant="tonal" @click="Upload">
-        파일 게시
-      </v-btn>
+      <v-btn rounded="lg" variant="tonal" @click="Upload"> 파일 게시 </v-btn>
     </v-card>
     <v-card v-else-if="post.type === '글 제출 (학생)'">
       <v-card-title>숙제 업로드</v-card-title>
