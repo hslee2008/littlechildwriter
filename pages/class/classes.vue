@@ -108,9 +108,9 @@ const dialog = ref<boolean>(false)
 const steps = ref<number>(1)
 
 onBeforeMount(() =>
-  $db
-    .ref('classes')
-    .on('child_added', async (s: any) => classes.value.push(await s.val()))
+  $db.ref('classes').once('value', (snapshot: any) => {
+    classes.value = Object.values(snapshot.val())
+  })
 )
 
 const Make = () => {

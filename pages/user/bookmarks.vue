@@ -34,9 +34,13 @@ const userInfo = User()
 const bookmarks = ref<any>([])
 
 useAuth((u: any) => {
-  $db
-    .ref(`/users/${u?.uid}/bookmarks`)
-    .on('child_added', async (s: any) => bookmarks.value.push(await s.val()))
+  $db.ref(`/users/${u?.uid}/bookmarks`).once('value', (snapshot: any) => {
+    const data = snapshot.val()
+
+    if (data) {
+      bookmarks.value = Object.values(data)
+    }
+  })
 })
 
 const deleteBookmark = (time: string, i: number) => {

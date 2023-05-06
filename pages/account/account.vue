@@ -1,7 +1,7 @@
 <template>
   <v-form class="my-10">
-    <v-card id="profile" class="mb-10">
-      <v-card-title>프로필 설정</v-card-title>
+    <v-card id="profile" class="mb-10" variant="outlined">
+      <v-card-title class="text-center">프로필 설정</v-card-title>
 
       <div class="d-flex ml-5">
         <v-avatar size="100">
@@ -39,8 +39,8 @@
       </v-card-text>
     </v-card>
 
-    <v-card id="book" class="mb-10">
-      <v-card-title>책 추천</v-card-title>
+    <v-card id="book" class="mb-10" variant="outlined">
+      <v-card-title class="text-center">책 추천</v-card-title>
       <v-radio-group v-model="featured" class="ma-3">
         <v-list class="rounded-lg">
           <v-list-item v-for="book in books" :key="book.time">
@@ -54,8 +54,8 @@
       </v-radio-group>
     </v-card>
 
-    <v-card id="advanced" class="mb-10">
-      <v-card-title>핀</v-card-title>
+    <v-card id="advanced" class="mb-10" variant="outlined">
+      <v-card-title class="text-center">핀</v-card-title>
       <v-card-text>
         Libris를 사용해서 홈페이지에 원하는 책을 1주일 동안 고정할 수 있습니다.
         <br />
@@ -81,7 +81,7 @@
           rounded="lg"
           variant="tonal"
           color="primary"
-          class="ml-3 mt-3"
+          class="ml-3 my-3"
           @click="BuyPin"
         >
           핀 구매
@@ -89,10 +89,10 @@
       </v-card-actions>
     </v-card>
 
-    <v-card id="advanced" class="mb-10">
-      <v-card-title>고급 설정</v-card-title>
+    <v-card id="advanced" class="mb-10" variant="outlined">
+      <v-card-title class="text-center">고급 설정</v-card-title>
 
-      <v-card-text>
+      <v-card-item>
         <v-text-field
           v-model="userInfo.uid"
           variant="outlined"
@@ -113,7 +113,7 @@
           dense
           prepend-inner-icon="mdi-account"
         />
-      </v-card-text>
+      </v-card-item>
     </v-card>
 
     <v-dialog v-model="imageEdit" width="500">

@@ -65,9 +65,13 @@ const userInfo = User()
 const list = ref<any>([])
 
 onMounted(() =>
-  $db
-    .ref('/blog')
-    .on('child_added', async (s: any) => list.value.unshift(await s.val()))
+  $db.ref('/blog').once('value', (snapshot: any) => {
+    const data = snapshot.val()
+
+    if (data) {
+      list.value = Object.values(data).reverse()
+    }
+  })
 )
 
 const DeleteContent = (i: number) => {

@@ -9,12 +9,18 @@
       md="4"
       lg="3"
     >
-      <v-card :to="`/user/${item.uid}`" variant="outlined">
+      <v-card
+        :to="`/user/${item.uid}`"
+        variant="outlined"
+        :color="i === 0 ? '#d4af37' : i === 1 ? '#c7d1da' : '#cd8032'"
+      >
         <v-card-text class="text-center">
           <UserPhoto :size="65" :src="item.photoURL" />
         </v-card-text>
 
-        <v-card-subtitle class="text-center"> {{ i + 1 }}등 </v-card-subtitle>
+        <v-card-subtitle class="text-center">
+          {{ i + 1 }}등 ({{ formatter(item.libris) }})
+        </v-card-subtitle>
         <v-card-title class="text-center">
           {{ item.displayName }}
         </v-card-title>

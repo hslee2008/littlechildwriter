@@ -12,28 +12,7 @@
     <v-tabs v-model="tab" center-active grow bg-color="#23262E">
       <v-tab> 홈 </v-tab>
       <v-tab> 게시물 </v-tab>
-      <v-tab v-if="!mobile" @click="FetchUserStats"> 정보 </v-tab>
-      <v-tab v-if="!mobile" @click="FetchUserStats"> 업적 </v-tab>
-
-      <v-menu v-if="mobile">
-        <template #activator="{ props }">
-          <v-btn
-            variant="plain"
-            rounded="0"
-            class="align-self-center me-4"
-            height="100%"
-            append-icon="mdi-menu-down"
-            v-bind="props"
-          >
-            더보기
-          </v-btn>
-        </template>
-
-        <v-list ey-li="bg-grey-lighten-3">
-          <v-list-item @click="tab = 2"> 정보 </v-list-item>
-          <v-list-item @click="tab = 3"> 업적 </v-list-item>
-        </v-list>
-      </v-menu>
+      <v-tab> 정보 </v-tab>
     </v-tabs>
 
     <v-window v-model="tab" class="py-5" color="#23262E">
@@ -61,32 +40,15 @@
       </v-window-item>
 
       <v-window-item :value="2">
-        <UserStats
-          :uid="uid"
-          :length="books.length"
-          :target-user="targetUser"
-          :read-count="readCount"
-          :like-count="likeCount"
-          :avg-rating="avgRating"
-        />
-      </v-window-item>
-
-      <v-window-item :value="3">
-        <UserBadge
-          :sub-count="subCount"
-          :read-count="readCount"
-          :length="books.length"
-        />
+        <UserStats :uid="uid" :target-user="targetUser" />
       </v-window-item>
     </v-window>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 
-const { mobile } = useDisplay()
 const userInfo = User()
 const route = useRoute()
 
@@ -99,13 +61,10 @@ const targetUser = ref<any>({
   bio: ''
 })
 const books = ref<any>([])
+
 const subscription = ref<any>({})
 const subscribed = ref<boolean>(false)
-
 const subCount = ref<number>(0)
-const likeCount = ref<number>(0)
-const readCount = ref<number>(0)
-const avgRating = ref<number>(0)
 
 const chosen = ref<any>({})
 const blockSubscribe = ref<number>(0)
@@ -138,11 +97,14 @@ onBeforeMount(() => {
     .orderByChild('uid')
     .equalTo(uid)
     .limitToLast(1)
-    .on('child_added', (s: any) => {
-      const data = s.val()
+    .once('value', (snapshot: any) => {
+      const data = snapshot.val()
 
-      if (data.uid === uid) {
-        books.value.unshift(data)
+      if (data) {
+        const key = Object.keys(data)[0]
+        const value = data[key]
+
+        books.value.unshift(value)
       }
     })
 })
@@ -164,22 +126,6 @@ onMounted(() => {
       }
     })
 })
-
-const FetchUserStats = () => {
-  $db
-    .ref('/contents/')
-    .orderByChild('uid')
-    .equalTo(uid)
-    .on('child_added', async (s: any) => {
-      const data = await s.val()
-
-      readCount.value += data.views
-      likeCount.value += data.likes
-      avgRating.value += data.rating
-
-      books.value.unshift(data)
-    })
-}
 
 const Subscribe = () => {
   if (blockSubscribe.value > 3) return

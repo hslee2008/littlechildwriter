@@ -88,10 +88,10 @@
 
     <v-window v-model="tab">
       <v-window-item :value="0">
-        <BookCard :items="recent" :simple="true" />
+        <BookCard :items="time" :simple="true" />
       </v-window-item>
       <v-window-item :value="1">
-        <BookCard :items="popular" :simple="true" />
+        <BookCard :items="likes" :simple="true" />
       </v-window-item>
       <v-window-item :value="2">
         <BookCard :items="views" :simple="true" />
@@ -141,8 +141,8 @@ const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
 
 const userInfo = User()
-const recent = ref<any>([])
-const popular = ref<any[]>([])
+const time = ref<any>([])
+const likes = ref<any[]>([])
 const views = ref<any[]>([])
 const tab = ref<number>(0)
 const pin = ref<any[]>([])
@@ -150,7 +150,7 @@ const pinnedBooks = ref<any[]>([])
 
 const list = [
   'https://static01.nyt.com/images/2015/10/24/opinion/24manguel/24manguel-superJumbo.jpg',
-  'https://www.protocol.com/media-library/librarians-depend-on-libby-but-they-also-worry-that-its-newfound-popularity-could-seriously-strain-their-budgets.jpg?id=25634798&width=1245&height=700&quality=85&coordinates=0%2C230%2C0%2C230',
+  'https://www.protocol.com/media-library/librarians-depend-on-libby-but-they-also-worry-that-its-newfound-likesity-could-seriously-strain-their-budgets.jpg?id=25634798&width=1245&height=700&quality=85&coordinates=0%2C230%2C0%2C230',
   'https://www.eastman.org/sites/default/files/styles/full_width_slider/public/library-01-1920_0.jpg.webp?itok=fiWZlYpB',
   'https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/fl16915765068-image-kybem7r7.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=1051d18eb5124f051dcce8f4f702dff3',
   'https://livestorm.imgix.net/1127/1642785418-home_017.jpg?w=1280&h=720&fit=crop&dl=wall-of-bookshelves-in-cozy-library.jpg',
@@ -162,7 +162,7 @@ onBeforeMount(() => {
   $db
     .ref('/contents')
     .limitToLast(mobile.value ? 4 : 5)
-    .on('child_added', async (s: any) => recent.value.unshift(await s.val()))
+    .once('value', (s: any) => (time.value = Object.values(s.val()).reverse()))
 
   $db.ref('/pin').once('value', (s: any) => {
     const data = s.val()
@@ -192,13 +192,13 @@ onMounted(() => {
 })
 
 const FetchLikes = () => {
-  if (popular.value.length > 0) return
+  if (likes.value.length > 0) return
 
   $db
     .ref('/contents')
     .orderByChild('likes')
     .limitToLast(mobile.value ? 4 : 5)
-    .on('child_added', async (s: any) => popular.value.unshift(await s.val()))
+    .once('value', (s: any) => (likes.value = Object.values(s.val()).reverse()))
 }
 
 const FetchViews = () => {
@@ -208,7 +208,7 @@ const FetchViews = () => {
     .ref('/contents')
     .orderByChild('views')
     .limitToLast(mobile.value ? 4 : 5)
-    .on('child_added', async (s: any) => views.value.unshift(await s.val()))
+    .once('value', (s: any) => (views.value = Object.values(s.val()).reverse()))
 }
 </script>
 

@@ -42,8 +42,9 @@ const content = ref<any>({
   uid: ''
 })
 
-onMounted(() => {
-  $db.ref(`/blog/${time}`).on('value', (s: any) => (content.value = s.val()))
-  Libris(content.uid, 15)
+onMounted(async () => {
+  await $db
+    .ref(`/blog/${time}`)
+    .on('value', (s: any) => (content.value = s.val()))
 })
 </script>
