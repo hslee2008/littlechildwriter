@@ -8,11 +8,7 @@
     <br />
 
     <v-form>
-      <v-text-field
-        v-model="displayName"
-        variant="outlined"
-        label="이름"
-      />
+      <v-text-field v-model="displayName" variant="outlined" label="이름" />
       <v-text-field
         v-model="email"
         variant="outlined"
@@ -40,9 +36,10 @@
         variant="tonal"
         color="primary"
         min-width="500"
+        append-icon="mdi-account-plus"
         @click="Make"
       >
-        <v-icon start> mdi-account </v-icon> 계정 만들기
+        계정 만들기
       </v-btn>
     </v-form>
   </div>

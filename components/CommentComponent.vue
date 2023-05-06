@@ -75,15 +75,18 @@
               depressed
               disabled
               :color="message.love?.includes(userInfo.uid) ? 'red' : 'grey'"
+              prepend-icon="mdi-heart"
               @click="Love(i)"
             >
-              <v-icon>mdi-heart</v-icon>
               <span v-text="message.love?.length" />
             </v-btn>
 
-            <v-btn v-if="userInfo.loggedIn" rounded="lg" icon cols="1">
-              <v-icon>mdi-dots-vertical</v-icon>
-
+            <v-btn
+              v-if="userInfo.loggedIn"
+              rounded="lg"
+              icon="mdi-dots-vertical"
+              cols="1"
+            >
               <v-menu offset-y activator="parent">
                 <v-list>
                   <template v-if="userInfo.is(message.uid)">
@@ -105,14 +108,12 @@
                       <v-btn
                         rounded="lg"
                         variant="tonal"
-                        icon
+                        icon="mdi-heart"
                         :color="
                           message.love?.includes(userInfo.uid) ? 'red' : 'grey'
                         "
                         @click="Love(i)"
-                      >
-                        <v-icon> mdi-heart </v-icon>
-                      </v-btn>
+                      />
                     </v-col>
                   </v-list-item>
                 </v-list>
@@ -127,23 +128,6 @@
         <v-card-text>댓글이 없습니다.</v-card-text>
       </v-card>
     </div>
-
-    <v-snackbar v-model="snackbarBadWord">
-      AI가 긴장감을 {{ Math.round(toxcity * 1000) / 10 }}% 감지했습니다. 댓글을
-      수정해주세요.
-
-      <template #action="{ propsS }">
-        <v-btn
-          rounded="lg"
-          variant="tonal"
-          color="pink"
-          v-bind="propsS"
-          @click="snackbarBadWord = false"
-        >
-          닫기
-        </v-btn>
-      </template>
-    </v-snackbar>
   </div>
 </template>
 
@@ -172,8 +156,6 @@ const props = defineProps({
 const comment = ref<string>('')
 const updatedcomment = ref<string>('')
 const comments = ref<any>([])
-const snackbarBadWord = ref(false)
-const toxcity = ref(0)
 
 onBeforeMount(() =>
   $db

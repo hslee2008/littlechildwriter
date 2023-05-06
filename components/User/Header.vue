@@ -31,8 +31,9 @@
         color="primary"
         to="/account/account"
         class="rounded-xl"
+        append-icon="mdi-pencil"
       >
-        편집 <v-icon right> mdi-pencil </v-icon>
+        편집
       </v-btn>
     </div>
   </v-row>

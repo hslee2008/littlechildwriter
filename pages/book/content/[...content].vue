@@ -33,24 +33,22 @@
           rounded="lg"
           variant="tonal"
           fab
+          icon="mdi-pencil"
           size="small"
           color="green"
           :to="`/book/edit/${time}`"
           class="ma-2"
-        >
-          <v-icon>mdi-pencil</v-icon>
-        </v-btn>
+        />
         <v-btn
           rounded="lg"
           variant="tonal"
           fab
+          icon="mdi-delete"
           size="small"
           color="red"
           class="ma-2"
           @click="Del"
-        >
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
+        />
       </div>
 
       <v-chip
@@ -60,14 +58,18 @@
           (post?.liked ?? {})[userInfo.uid] ? '#159ECB' : 'grey'
         }`"
         class="mr-3"
+        prepend-icon="mdi-thumb-up"
         @click="Like()"
       >
-        <v-icon start> mdi-thumb-up </v-icon>
         <span class="subheading" v-text="post?.likes" />
       </v-chip>
 
-      <v-btn rounded="lg" variant="tonal" class="mx-1">
-        <v-icon start> mdi-town-hall </v-icon>
+      <v-btn
+        rounded="lg"
+        variant="tonal"
+        class="mx-1"
+        prepend-icon="mdi-town-hall"
+      >
         학교 도서관
 
         <v-dialog width="700" activator="parent">
@@ -150,8 +152,13 @@
         </v-dialog>
       </v-btn>
 
-      <v-btn rounded="lg" variant="tonal" class="mx-1" @click="share">
-        <v-icon start> mdi-share-variant </v-icon>
+      <v-btn
+        rounded="lg"
+        variant="tonal"
+        class="mx-1"
+        prepend-icon="mdi-share-variant"
+        @click="share"
+      >
         공유
       </v-btn>
 

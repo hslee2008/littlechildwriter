@@ -159,8 +159,13 @@
     </v-dialog>
 
     <v-row justify="center" class="g-10">
-      <v-btn rounded="lg" variant="tonal" color="primary" @click="Update">
-        <v-icon start> mdi-account </v-icon>
+      <v-btn
+        rounded="lg"
+        variant="tonal"
+        color="primary"
+        prepend-icon="mdi-account"
+        @click="Update"
+      >
         업데이트
       </v-btn>
     </v-row>

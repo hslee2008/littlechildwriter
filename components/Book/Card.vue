@@ -13,6 +13,7 @@
     >
       <v-card
         v-for="(item, i) in items"
+        v-show="item.time"
         :key="item.time"
         :width="mobile ? 150 : 200"
         :class="`my-4 ${mobile ? 'mx-auto' : 'mx-4'}`"
@@ -47,23 +48,17 @@
           <v-card-actions v-if="userInfo.loggedIn">
             <v-btn
               rounded="lg"
-              icon
+              :icon="`mdi-bookmark${bookmarked(i) ? '-check' : '-outline'}`"
               color="primary"
               @click="Bookmark(item.time, i)"
-            >
-              <v-icon>
-                mdi-bookmark{{ bookmarked(i) ? '-check' : '-outline' }}
-              </v-icon>
-            </v-btn>
+            />
             <v-btn
               rounded="lg"
-              icon
+              icon="mdi-thumb-up"
               :color="(item.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
               class="mr-2"
               @click="Like(item)"
-            >
-              <v-icon> mdi-thumb-up </v-icon>
-            </v-btn>
+            />
             <span
               class="subheading"
               v-text="Object.keys(item.liked ?? {}).length"
@@ -72,8 +67,24 @@
         </v-card>
       </v-card>
 
-      <v-snackbar v-model="bookmarkSnackbar"> 추가되었습니다. </v-snackbar>
-      <v-snackbar v-model="bookmarkSnackbarDel"> 삭제되었습니다. </v-snackbar>
+      <v-snackbar v-model="bookmarkSnackbar" color="white">
+        추가되었습니다.
+
+        <template #actions>
+          <v-btn color="red" variant="text" to="/user/bookmarks">
+            확인하기
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar v-model="bookmarkSnackbarDel" color="white">
+        삭제되었습니다.
+
+        <template #actions>
+          <v-btn color="red" variant="text" @click="bookmarkSnackbarDel = false">
+            닫기
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-row>
   </v-lazy>
 </template>

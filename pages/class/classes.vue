@@ -9,9 +9,10 @@
       right
       fixed
       fab
+      prepend-icon="mdi-plus"
       color="primary"
     >
-      <v-icon start> mdi-plus </v-icon> 새로운 알림판 만들기
+      새로운 알림판 만들기
 
       <v-dialog v-model="dialog" width="500" activator="parent">
         <v-card>
@@ -47,8 +48,14 @@
 
           <v-card-actions>
             <v-spacer />
-              <v-btn rounded="lg" variant="tonal" @click="Make">
-              <v-icon start> mdi-check </v-icon> 만들기
+
+            <v-btn
+              rounded="lg"
+              variant="tonal"
+              prepend-icon="mdi-check"
+              @click="Make"
+            >
+              만들기
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -58,10 +65,9 @@
     <v-row class="mt-5 ma-1 g-10">
       <v-card v-for="item in classes" :key="item.name" class="my-3">
         <v-card
-          v-if="
-            item.public ||
-            userInfo.is(item.uid) ||
-            Object.values(item.users).filter((e: any) => userInfo.is(e.uid)).length > 0
+          v-if="item.public ||
+          userInfo.is(item.uid) ||
+          Object.values(item.users).filter((e: any) => userInfo.is(e.uid)).length > 0
           "
           :to="`/class/${item.id}`"
         >

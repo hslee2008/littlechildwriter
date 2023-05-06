@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <NuxtLayout>
-      <v-app-bar fixed clipped-left>
+      <v-app-bar fixed clipped-left class="px-3">
         <template #prepend>
           <v-app-bar-nav-icon @click="drawer = !drawer" />
         </template>
@@ -14,11 +14,9 @@
 
         <v-btn
           v-if="$route.path !== '/book/post' && userInfo.loggedIn"
-          icon
+          icon="mdi-plus-circle-outline"
           to="/book/post"
-        >
-          <v-icon>mdi-plus-circle-outline</v-icon>
-        </v-btn>
+        />
 
         <v-btn v-if="userInfo.loggedIn" icon>
           <v-badge
@@ -67,8 +65,14 @@
 
               <v-card-actions>
                 <v-spacer />
-                <v-btn rounded="lg" variant="tonal" @click="clearEverything">
-                  비우기 <v-icon right> mdi-notification-clear-all </v-icon>
+
+                <v-btn
+                  rounded="lg"
+                  variant="tonal"
+                  append-icon="mdi-notification-clear-all"
+                  @click="clearEverything"
+                >
+                  비우기
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -78,9 +82,13 @@
         <v-btn v-if="userInfo.loggedIn" icon>
           <MenuUserBox />
         </v-btn>
-        <v-btn v-else rounded="lg" variant="tonal" to="/account/login" icon>
-          <v-icon>mdi-account-circle</v-icon>
-        </v-btn>
+        <v-btn
+          v-else
+          rounded="lg"
+          variant="tonal"
+          to="/account/login"
+          icon="mdi-account-circle"
+        />
       </v-app-bar>
 
       <v-navigation-drawer v-model="drawer" floating mobile-breakpoint="400">
@@ -101,9 +109,7 @@
           </template>
 
           <template #actions>
-            <v-btn rounded="lg" to="/account/account">
-              <v-icon>mdi-open-in-new</v-icon>
-            </v-btn>
+            <v-btn rounded="lg" to="/account/account" icon="mdi-open-in-new" />
           </template>
         </v-banner>
       </v-main>

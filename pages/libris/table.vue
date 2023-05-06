@@ -10,14 +10,12 @@
           <tr>
             <th class="text-left">책 관련 활동</th>
             <th class="text-left">점수</th>
-            <th class="text-left">예시</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>새로운 책 올리기</td>
             <td>해당 페이지 수 / 5 점</td>
-            <td>100 페이지 ➜ 20점</td>
           </tr>
           <tr>
             <td>책의 좋아요 버튼 누르기</td>

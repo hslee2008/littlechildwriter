@@ -8,13 +8,14 @@
           v-if="post.isbn"
           rounded="lg"
           variant="plain"
+          prepend-icon="mdi-file-find"
           @click="showiframe"
         >
-          <v-icon start> mdi-file-find </v-icon> 미리보기
+          미리보기
         </v-btn>
 
-        <v-btn rounded="lg" variant="plain" text>
-          <v-icon start> mdi-shape </v-icon> 카테고리
+        <v-btn rounded="lg" variant="plain" text prepend-icon="mdi-shape">
+          카테고리
 
           <v-dialog v-if="post.categories" width="700" activator="parent">
             <v-card>
@@ -36,8 +37,13 @@
           </v-dialog>
         </v-btn>
 
-        <v-btn rounded="lg" variant="plain" text>
-          <v-icon start> mdi-book-information-variant </v-icon> 정보
+        <v-btn
+          rounded="lg"
+          variant="plain"
+          text
+          prepend-icon="mdi-book-information-variant"
+        >
+          정보
 
           <v-dialog v-if="post.isbn" width="700" activator="parent">
             <v-card>

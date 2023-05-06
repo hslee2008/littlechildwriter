@@ -10,8 +10,9 @@
         color="primary"
         class="my-3 mr-2"
         to="/debate/new"
+        prepend-icon="mdi-plus"
       >
-        <v-icon start>mdi-plus</v-icon> 새 주제
+        새 주제
       </v-btn>
       <v-btn
         v-if="userInfo.loggedIn"
@@ -19,9 +20,10 @@
         variant="tonal"
         color="primary"
         class="my-3 mr-2"
+        prepend-icon="mdi-account"
         :to="`/debate/user/${userInfo.uid}`"
       >
-        <v-icon start>mdi-account</v-icon> 나의 주제
+        나의 주제
       </v-btn>
     </div>
 

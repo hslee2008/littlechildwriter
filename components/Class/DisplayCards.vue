@@ -7,11 +7,10 @@
       {{ classInfo.name }}
     </h1>
 
-    <v-expansion-panels focusable class="elevation-0">
+    <v-expansion-panels>
       <v-expansion-panel
         v-for="(category, title) in classInfo.contents"
         :key="title"
-        class="elevation-0"
       >
         <v-expansion-panel-title class="elevation-0">
           {{ title.toString().replaceAll('_', ' - ') }}
@@ -46,14 +45,16 @@
             />
           </v-card>
           <v-card
-            v-else-if="item.type === '파일 사진' || item.file.endsWith('jpg')"
+            v-else-if="
+              item.type === '파일 사진' || (item.file || '').endsWith('jpg')
+            "
             class="mt-5"
           >
             <div class="d-flex">
-              <v-carditem>
+              <v-card-item>
                 <v-card-title>{{ item.file }}</v-card-title>
                 <v-card-subtitle>{{ item.displayName }}</v-card-subtitle>
-              </v-carditem>
+              </v-card-item>
 
               <ClassActions
                 v-if="userInfo.is(item.uid)"
@@ -122,14 +123,15 @@
                 type="파일"
               />
             </v-card>
-            <v-card v-else class="d-flex" variant="tonal" rounded="lg">
+            <v-card v-else variant="tonal" rounded="lg">
               <template #prepend>
-                <v-icon class="ml-4"> mdi-note </v-icon>
+                <v-icon> mdi-note </v-icon>
               </template>
               <v-card-item>
-                <v-card-text>
-                  {{ item.displayName || '?' }}님이 숙제를 비공개로 제출함
-                </v-card-text>
+                <v-card-title> 비공개 파일 </v-card-title>
+                <v-card-subtitle>
+                  {{ item.displayName || '?' }}
+                </v-card-subtitle>
               </v-card-item>
             </v-card>
           </div>
@@ -189,11 +191,7 @@
             </v-card-text>
           </v-card>
           <div v-else-if="item.type === '숙제 제출 (학생)'">
-            <v-card class="d-flex mt-5">
-              <template #prepend>
-                <v-icon> mdi-school </v-icon>
-              </template>
-
+            <v-card class="d-flex mt-5" variant="outlined">
               <div>
                 <v-card-title>{{ item.title }}</v-card-title>
                 <v-card-text>

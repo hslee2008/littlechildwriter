@@ -11,8 +11,13 @@
       class="mt-3"
     />
 
-    <v-btn rounded="lg" variant="tonal" primary @click="upload">
-      <v-icon>mdi-plus</v-icon>
+    <v-btn
+      rounded="lg"
+      variant="tonal"
+      primary
+      prepend-icon="mdi-plus"
+      @click="upload"
+    >
       게시
     </v-btn>
   </div>

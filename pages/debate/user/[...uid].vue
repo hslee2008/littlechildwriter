@@ -2,7 +2,7 @@
   <div>
     <v-card class="d-flex justify-center align-center mb-5">
       <div class="mt-3">
-        <UserPhoto :src="targetUser.photoURL" :size="55" />
+        <UserPhoto :src="targetUser?.photoURL" :size="55" />
       </div>
       <div class="ml-2">
         <v-card-title>{{ targetUser.displayName }}</v-card-title>
@@ -11,8 +11,14 @@
     </v-card>
 
     <div class="text-center">
-      <v-btn rounded="lg" variant="tonal" class="my-3 mr-2" to="/debate/home">
-        <v-icon start>mdi-chevron-left</v-icon> 모든 주제
+      <v-btn
+        rounded="lg"
+        variant="tonal"
+        class="my-3 mr-2"
+        to="/debate/home"
+        append-icon="mdi-chevron-left"
+      >
+        모든 주제
       </v-btn>
     </div>
 
@@ -53,10 +59,9 @@
               rounded="lg"
               icon
               cols="1"
+              prepend-icon="mdi-dots-vertical"
               @click.stop.prevent=""
             >
-              <v-icon>mdi-dots-vertical</v-icon>
-
               <v-menu offset-y activator="parent">
                 <v-list>
                   <v-list-item @click="DeleteContent(i)">

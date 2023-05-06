@@ -1,7 +1,7 @@
 <template>
   <div class="my-auto ml-3">
     <v-img :src="post.image" width="200" class="ml-5 my-5 rounded-lg pointer">
-      <v-menu v-model="sheet" inset location="right" activator="parent">
+      <v-menu v-model="sheet" inset location="bottom" activator="parent">
         <v-list nav expand>
           <v-list-item
             target="_blank"

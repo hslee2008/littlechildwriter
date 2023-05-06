@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="mb-5">
       <h1>창작 코너</h1>
 
       <v-btn
@@ -8,10 +8,11 @@
         rounded="lg"
         variant="tonal"
         color="primary"
-        class="ml-3 my-5"
+        class="my-5"
         to="/blog/new"
+        prepend-icon="mdi-plus"
       >
-        <v-icon start>mdi-plus</v-icon> 새 블로그
+        새 블로그
       </v-btn>
     </div>
 
@@ -31,9 +32,12 @@
         <v-spacer />
 
         <template v-if="userInfo.is(item.uid)" #append>
-          <v-btn rounded="lg" icon cols="1" @click.stop.prevent="">
-            <v-icon>mdi-dots-vertical</v-icon>
-
+          <v-btn
+            rounded="lg"
+            icon="mdi-dots-vertical"
+            cols="1"
+            @click.stop.prevent=""
+          >
             <v-menu offset-y activator="parent">
               <v-list>
                 <v-list-item @click="DeleteContent(i)">

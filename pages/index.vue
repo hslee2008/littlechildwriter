@@ -10,8 +10,9 @@
               to="/book/post"
               color="primary"
               min-width="300"
+              prepend-icon="mdi-pencil"
             >
-              <v-icon start> mdi-pencil </v-icon> 작성하기
+              작성하기
             </v-btn>
             <v-btn
               v-else
@@ -19,8 +20,9 @@
               to="/account/login"
               color="primary"
               min-width="300"
+              append-icon="mdi-account"
             >
-              로그인 <v-icon right> mdi-account </v-icon>
+              로그인
             </v-btn>
           </div>
 
@@ -38,20 +40,34 @@
           </v-card>
 
           <div class="d-flex justify-center mb-3 mt-5">
-            <v-btn rounded="lg" to="/book/list" class="mx-3">
-              글 <v-icon right> mdi-format-list-text </v-icon>
+            <v-btn
+              rounded="lg"
+              to="/book/list"
+              class="mx-3"
+              append-icon="mdi-format-list-text"
+            >
+              글
             </v-btn>
-            <v-btn rounded="lg" to="/class/classes" class="mx-3">
+            <v-btn
+              rounded="lg"
+              to="/class/classes"
+              class="mx-3"
+              append-icon="mdi-school"
+            >
               알림판
-              <v-icon right> mdi-clipboard-multiple </v-icon>
             </v-btn>
           </div>
           <div class="d-flex justify-center">
-            <v-btn rounded="lg" to="/debate/home" class="mr-2">
-              토론 광장 <v-icon right> mdi-lectern </v-icon>
+            <v-btn
+              rounded="lg"
+              to="/debate/home"
+              class="mr-2"
+              append-icon="mdi-lectern"
+            >
+              토론 광장
             </v-btn>
-            <v-btn rounded="lg" to="/blog/home">
-              창작 코너 <v-icon right> mdi-typewriter </v-icon>
+            <v-btn rounded="lg" to="/blog/home" append-icon="mdi-typewriter">
+              창작 코너
             </v-btn>
           </div>
         </div>
@@ -65,9 +81,9 @@
       grow
       class="transparent mt-5"
     >
-      <v-tab>최근 포스트</v-tab>
-      <v-tab @click="FetchLikes">좋아요 많은 포스트</v-tab>
-      <v-tab @click="FetchViews">인기있는 포스트</v-tab>
+      <v-tab>최근 순</v-tab>
+      <v-tab @click="FetchLikes">좋아요 순</v-tab>
+      <v-tab @click="FetchViews">인기 순</v-tab>
     </v-tabs>
 
     <v-window v-model="tab">
@@ -82,7 +98,7 @@
       </v-window-item>
     </v-window>
 
-    <v-card v-if="pin" class="mx-1 my-10" color="#385F73">
+    <v-card v-if="pin" class="mx-3 my-10" color="#385F73">
       <v-card-title>
         핀
         <v-tooltip right>

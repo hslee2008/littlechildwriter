@@ -28,10 +28,9 @@
       "
       size="small"
       class="mt-5"
+      prepend-icon="mdi-arrow-up-bold"
       @click="Upvote()"
     >
-      <v-icon left>mdi-arrow-up</v-icon>
-
       좋은 주제
     </v-btn>
 
@@ -52,9 +51,9 @@
               rounded="lg"
               variant="tonal"
               size="small"
+              prepend-icon="mdi-plus"
               @click=";(side = 'pro'), (write = true)"
             >
-              <v-icon>mdi-plus</v-icon>
               글쓰기
             </v-btn>
           </v-card-title>
@@ -78,14 +77,12 @@
                   <v-menu offset-y>
                     <template #activator="{ props }">
                       <v-btn
-                        icon
+                        icon="mdi-dots-vertical"
                         variant="plain"
                         v-bind="props"
                         cols="1"
                         @click.stop.prevent=""
-                      >
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
+                      />
                     </template>
                     <v-list>
                       <v-list-item
@@ -132,9 +129,9 @@
               rounded="lg"
               variant="tonal"
               size="small"
+              prepend-icon="mdi-plus"
               @click=";(side = 'con'), (write = true)"
             >
-              <v-icon>mdi-plus</v-icon>
               글쓰기
             </v-btn>
           </v-card-title>
@@ -159,14 +156,12 @@
                     <template #activator="{ props }">
                       <v-btn
                         rounded="lg"
-                        icon
+                        icon="mdi-dots-vertical"
                         variant="plain"
                         v-bind="props"
                         cols="1"
                         @click.stop.prevent=""
-                      >
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
+                      />
                     </template>
                     <v-list>
                       <v-list-item
@@ -220,9 +215,9 @@
       v-if="userInfo.loggedIn"
       rounded="lg"
       variant="tonal"
+      prepend-icon="mdi-plus"
       @click="suggestionCard = true"
     >
-      <v-icon>mdi-plus</v-icon>
       제언하기
     </v-btn>
 
@@ -273,9 +268,12 @@
         </div>
 
         <template #append>
-          <v-btn rounded="lg" icon cols="1" @click.stop.prevent="">
-            <v-icon>mdi-dots-vertical</v-icon>
-
+          <v-btn
+            rounded="lg"
+            icon="mdi-dots-vertical"
+            cols="1"
+            @click.stop.prevent=""
+          >
             <v-menu offset-y activator="parent">
               <v-list>
                 <v-list-item @click="DeleteContent('suggestion', i)">
@@ -303,7 +301,7 @@
             v-model="claim"
             variant="outlined"
             label="내용"
-            placeholder="내용을 입력해주세요."
+            placeholder="내용을 입력해 주세요."
             rows="10"
           />
         </v-card-text>

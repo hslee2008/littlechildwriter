@@ -12,7 +12,6 @@
     <v-tabs v-model="tab" center-active grow bg-color="#23262E">
       <v-tab> 홈 </v-tab>
       <v-tab> 게시물 </v-tab>
-      <v-tab v-if="!mobile"> 구독자 </v-tab>
       <v-tab v-if="!mobile" @click="FetchUserStats"> 정보 </v-tab>
       <v-tab v-if="!mobile" @click="FetchUserStats"> 업적 </v-tab>
 
@@ -23,17 +22,16 @@
             rounded="0"
             class="align-self-center me-4"
             height="100%"
+            append-icon="mdi-menu-down"
             v-bind="props"
           >
             더보기
-            <v-icon end> mdi-menu-down </v-icon>
           </v-btn>
         </template>
 
         <v-list ey-li="bg-grey-lighten-3">
-          <v-list-item @click="tab = 2"> 구독자 </v-list-item>
-          <v-list-item @click="tab = 3"> 정보 </v-list-item>
-          <v-list-item @click="tab = 4"> 업적 </v-list-item>
+          <v-list-item @click="tab = 2"> 정보 </v-list-item>
+          <v-list-item @click="tab = 3"> 업적 </v-list-item>
         </v-list>
       </v-menu>
     </v-tabs>
@@ -41,8 +39,10 @@
     <v-window v-model="tab" class="py-5" color="#23262E">
       <v-window-item :value="0">
         <BookSingle
-          v-if="chosenBookData || books[0]"
-          :data="chosenBookData || books[0]"
+          v-if="
+            (chosen || books[0]) && Object.keys(chosen || books[0]).length > 2
+          "
+          :data="chosen || books[0]"
           :target-user="targetUser"
           :colored="false"
         />
@@ -61,12 +61,8 @@
       </v-window-item>
 
       <v-window-item :value="2">
-        <UserSubs :subscription="subscription" />
-      </v-window-item>
-
-      <v-window-item :value="3">
         <UserStats
-          :user="uid"
+          :uid="uid"
           :length="books.length"
           :target-user="targetUser"
           :read-count="readCount"
@@ -75,7 +71,7 @@
         />
       </v-window-item>
 
-      <v-window-item :value="4">
+      <v-window-item :value="3">
         <UserBadge
           :sub-count="subCount"
           :read-count="readCount"
@@ -103,7 +99,6 @@ const targetUser = ref<any>({
   bio: ''
 })
 const books = ref<any>([])
-const privateBooks = ref<any>([])
 const subscription = ref<any>({})
 const subscribed = ref<boolean>(false)
 
@@ -112,7 +107,7 @@ const likeCount = ref<number>(0)
 const readCount = ref<number>(0)
 const avgRating = ref<number>(0)
 
-const chosenBookData = ref<any>({})
+const chosen = ref<any>({})
 const blockSubscribe = ref<number>(0)
 
 onBeforeMount(() => {
@@ -131,20 +126,25 @@ onBeforeMount(() => {
 
         $db
           .ref(`/contents/${featured}`)
-          .on('value', async (s: any) => (chosenBookData.value = await s.val()))
+          .on('value', async (s: any) => (chosen.value = await s.val()))
 
-        subscription.value = subscriber ?? []
         subCount.value = Object.keys(subscriber ?? {}).length
         subscribed.value = Object.keys(subscriber ?? {}).includes(userInfo.uid)
       }
     )
 
-  if (userInfo.uid === uid) {
-    $db.ref(`/private/${uid}/`).on('child_added', async (s: any) => {
-      const data = await s.val()
-      privateBooks.value.unshift(data)
+  $db
+    .ref('/contents/')
+    .orderByChild('uid')
+    .equalTo(uid)
+    .limitToLast(1)
+    .on('child_added', (s: any) => {
+      const data = s.val()
+
+      if (data.uid === uid) {
+        books.value.unshift(data)
+      }
     })
-  }
 })
 
 onMounted(() => {
@@ -166,17 +166,19 @@ onMounted(() => {
 })
 
 const FetchUserStats = () => {
-  $db.ref('/contents/').on('child_added', async (s: any) => {
-    const data = await s.val()
+  $db
+    .ref('/contents/')
+    .orderByChild('uid')
+    .equalTo(uid)
+    .on('child_added', async (s: any) => {
+      const data = await s.val()
 
-    if (data.uid === uid) {
       readCount.value += data.views
       likeCount.value += data.likes
       avgRating.value += data.rating
 
       books.value.unshift(data)
-    }
-  })
+    })
 }
 
 const Subscribe = () => {

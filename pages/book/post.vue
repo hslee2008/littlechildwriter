@@ -12,8 +12,12 @@
           "
           absolute
         >
-          <v-btn rounded="lg" variant="tonal" @click="isbn.upload = true">
-            <v-icon class="ma-auto" left> mdi-book-open-page-variant </v-icon>
+          <v-btn
+            rounded="lg"
+            variant="tonal"
+            prepend-icon="mdi-book-open-page-variant"
+            @click="isbn.upload = true"
+          >
             책 사진 올리기
           </v-btn>
         </v-overlay>
@@ -22,11 +26,9 @@
 
     <v-dialog v-model="isbn.upload" width="500">
       <v-card>
-        <v-card-title> 책 사진 업로드 </v-card-title>
+        <v-card-title class="text-center"> 책 사진 업로드 </v-card-title>
 
-        <br />
-
-        <v-card-text>
+        <v-card-item>
           <v-img :src="post.image" class="rounded-lg mb-2" max-width="150" />
 
           <v-tabs v-model="tab">
@@ -55,15 +57,21 @@
               />
             </v-window-item>
           </v-window>
-        </v-card-text>
+        </v-card-item>
 
         <v-card-actions>
-          <v-btn rounded="lg" variant="tonal" @click="isbn.upload = false">
+          <v-btn
+            rounded="lg"
+            color="primary"
+            variant="tonal"
+            @click="isbn.upload = false"
+          >
             확인
           </v-btn>
           <v-spacer />
           <v-btn
             rounded="lg"
+            color="red"
             variant="tonal"
             @click=";(isbn.upload = false), (post.image = '')"
           >
@@ -285,8 +293,8 @@
       </v-card>
     </v-dialog>
 
-    <v-card-text>
-      <v-row class="my-10">
+    <v-card-item>
+      <v-row class="my-5">
         <v-rating
           v-model="post.rating"
           color="blue"
@@ -311,20 +319,6 @@
         <v-text-field v-model="post.author" variant="outlined" label="작가" />
       </v-row>
 
-      <v-checkbox
-        v-model="post.isPublic"
-        :label="`${post.isPublic ? '' : '(프로필 페이지에서만 공개됨) 비'}공개`"
-        color="blue"
-      />
-
-      <v-textarea
-        v-model="post.content"
-        label="책 소개"
-        clearable
-        counter
-        variant="underlined"
-      />
-
       <v-combobox
         v-model="post.categories"
         :items="post.categories"
@@ -340,15 +334,23 @@
           </v-chip>
         </template>
       </v-combobox>
-    </v-card-text>
+
+      <v-textarea
+        v-model="post.content"
+        label="책 소개"
+        clearable
+        counter
+        variant="underlined"
+      />
+    </v-card-item>
 
     <v-card-actions class="g-10">
       <v-btn rounded="lg" variant="tonal" color="primary" @click="Post">
         업로드
       </v-btn>
 
-      <v-btn rounded="lg" variant="tonal" elevation="0">
-        책 정보 입력 <v-icon right>mdi-chevron-down</v-icon>
+      <v-btn rounded="lg" variant="tonal" append-icon="mdi-chevron-down">
+        책 정보 입력
 
         <v-menu bottom activator="parent">
           <v-list>
@@ -374,8 +376,8 @@
 
     <br />
 
-    <v-snackbar v-model="snackbar">
-      제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해주세요.
+    <v-snackbar v-model="snackbar" color="white">
+      제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해 주세요.
 
       <template #action="{ attrs }">
         <v-btn
@@ -390,7 +392,7 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <v-snackbar v-model="notfound">
+    <v-snackbar v-model="notfound" color="white">
       찾을 수 없었습니다.
 
       <template #action="{ attrs }">
@@ -427,7 +429,6 @@ const post = ref<any>({
   content: '',
   uid: '',
   displayName: '',
-  isPublic: true,
   author: '',
   views: 0,
   time: Date.now()
@@ -582,7 +583,6 @@ const Post = () => {
     image,
     pageCount,
     categories,
-    isPublic,
     author
   } = post.value
 
@@ -596,41 +596,23 @@ const Post = () => {
     return
   }
 
-  if (isPublic) {
-    $db.ref(`/contents/${time}`).set({
-      title,
-      rating,
-      isbn,
-      time,
-      image,
-      pageCount,
-      categories,
-      likes: 1,
-      liked: {
-        [userInfo.uid]: true
-      },
-      views: 0,
-      uid,
-      displayName,
-      content: content.replaceAll('\n', '<br>')
-    })
-  } else {
-    $db.ref(`/private/${uid}/${time}`).set({
-      title,
-      rating,
-      isbn,
-      time,
-      image,
-      pageCount,
-      categories,
-      likes: 0,
-      liked: {},
-      views: 0,
-      uid,
-      displayName,
-      content: content.replaceAll('\n', '<br>')
-    })
-  }
+  $db.ref(`/contents/${time}`).set({
+    title,
+    rating,
+    isbn,
+    time,
+    image,
+    pageCount,
+    categories,
+    likes: 1,
+    liked: {
+      [userInfo.uid]: true
+    },
+    views: 0,
+    uid,
+    displayName,
+    content: content.replaceAll('\n', '<br>')
+  })
 
   Libris(userInfo.uid, parseInt(post.value.pageCount) / 5)
 

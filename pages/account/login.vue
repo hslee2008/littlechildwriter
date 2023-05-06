@@ -46,9 +46,10 @@
             variant="tonal"
             color="primary"
             width="300"
+            prepend-icon="mdi-account"
             @click="onSubmit"
           >
-            <v-icon start> mdi-account </v-icon>로그인
+            로그인
           </v-btn>
         </v-form>
       </div>

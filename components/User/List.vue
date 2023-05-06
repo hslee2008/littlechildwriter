@@ -14,15 +14,14 @@
           <UserPhoto :size="65" :src="item.photoURL" />
         </v-card-text>
 
-        <v-card-subtitle class="text-center">
-          {{ i + 1 }}등
-        </v-card-subtitle>
+        <v-card-subtitle class="text-center"> {{ i + 1 }}등 </v-card-subtitle>
         <v-card-title class="text-center">
           {{ item.displayName }}
         </v-card-title>
       </v-card>
     </v-col>
   </v-row>
+
   <v-list v-if="!limit" nav lines="two">
     <v-list-item
       v-for="(item, i) in lbt.slice(3, -2)"

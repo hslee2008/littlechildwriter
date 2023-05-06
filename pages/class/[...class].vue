@@ -56,9 +56,9 @@
             variant="tonal"
             color="red lighten-2"
             class="delete"
+            prepend-icon="mdi-trash-can"
             @click="DeleteClass"
           >
-            <v-icon start> mdi-trash-can </v-icon>
             삭제하기
           </v-btn>
         </v-card-text>

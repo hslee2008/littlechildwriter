@@ -1,11 +1,3 @@
 html {
   scroll-behavior: smooth;
 }
-
-::-webkit-scrollbar-thumb {
-  background: #23262E;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}

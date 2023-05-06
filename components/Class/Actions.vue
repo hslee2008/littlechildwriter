@@ -1,8 +1,6 @@
 <template>
   <v-card-actions>
-    <v-btn icon cols="1" @click.stop.prevent="">
-      <v-icon>mdi-dots-vertical</v-icon>
-
+    <v-btn cols="1" icon="mdi-dots-vertical" @click.stop.prevent="">
       <v-menu offset-y activator="parent">
         <v-list>
           <v-list-item @click="DeleteContent(title, i)">

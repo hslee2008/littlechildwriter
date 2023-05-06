@@ -39,8 +39,9 @@ const props = defineProps<{
 }>()
 
 onMounted(() => {
-  $db
-    .ref(`contents/${props.data.time}/views`)
-    .transaction((view: any) => view + 1)
+  if (props.data.time)
+    $db
+      .ref(`contents/${props.data.time}/views`)
+      .transaction((views: any) => (views || 0) + 1)
 })
 </script>
