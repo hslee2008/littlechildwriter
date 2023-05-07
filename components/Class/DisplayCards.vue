@@ -7,7 +7,7 @@
       {{ classInfo.name }}
     </h1>
 
-    <v-expansion-panels>
+    <v-expansion-panels variant="popout">
       <v-expansion-panel
         v-for="(category, title) in classInfo.contents"
         :key="title"
@@ -210,7 +210,7 @@
               />
             </v-card>
           </div>
-          <v-card v-else class="mt-5">
+          <v-card v-else class="mt-5" variant="outlined">
             <div class="d-flex">
               <v-avatar size="45" class="ml-3 mt-4">
                 <UserPhoto :size="45" :src="item?.photoURL" />

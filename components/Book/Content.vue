@@ -11,7 +11,7 @@
       </span>
     </v-card-title>
 
-    <v-card-subtitle>
+    <v-card-subtitle v-if="mobile">
       by
       <NuxtLink :to="`/user/${post.uid}`">
         {{ post.displayName }}
@@ -52,6 +52,10 @@
 </template>
 
 <script setup>
+import { useDisplay } from 'vuetify'
+
+const { mobile } = useDisplay()
+
 defineProps({
   post: {
     type: Object,

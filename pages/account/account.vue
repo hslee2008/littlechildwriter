@@ -196,12 +196,14 @@ useAuth(() => {
     .once('value')
     .then(async (s: any) => (featured.value = await s.val().featured))
 
-  $db.ref('/contents/').on('value', async (s: any) => {
-    const data = await s.val()
-
-    for (const key in data)
-      if (userInfo.is(data[key].uid)) books.value.push(data[key])
-  })
+  $db
+    .ref('/contents/')
+    .orderByChild('/uid')
+    .equalTo(userInfo.uid)
+    .on('value', async (s: any) => {
+      const data = await s.val()
+      books.value = data
+    })
 })
 
 const Update = () => {

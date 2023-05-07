@@ -111,8 +111,8 @@
         </v-tooltip>
       </v-card-title>
       <v-card-text>
-        <div v-for="item in pinnedBooks" :key="item.time">
-          <BookSingle :data="item" target-user="" :colored="true" />
+        <div v-for="(item, i) in pinnedBooks" :key="i">
+          <BookSingle :data="item" :colored="true" />
         </div>
       </v-card-text>
     </v-card>
@@ -169,8 +169,8 @@ onBeforeMount(() => {
 
     pin.value = data
 
-    for (let i = 0; i < Object.keys(data).length; i++) {
-      pinnedBooks.value.push(data[Object.keys(data)[i]].book)
+    for (let i = 0; i < 2; i++) {
+      pinnedBooks.value.push(data[Object.keys(data)[i]]?.book)
     }
   })
 

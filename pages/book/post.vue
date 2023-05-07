@@ -25,7 +25,7 @@
     </div>
 
     <v-dialog v-model="isbn.upload" width="500">
-      <v-card>
+      <v-card color="#212121">
         <v-card-title class="text-center"> 책 사진 업로드 </v-card-title>
 
         <v-card-item>
@@ -82,7 +82,7 @@
     </v-dialog>
 
     <v-dialog v-model="isbn.barcode" width="500">
-      <v-card>
+      <v-card color="#212121">
         <v-card-title> IBSN 사진 </v-card-title>
 
         <br />
@@ -131,7 +131,7 @@
     </v-dialog>
 
     <v-dialog v-model="isbn.audio" width="500">
-      <v-card>
+      <v-card color="#212121">
         <v-card-title> 보이스 타이핑 </v-card-title>
 
         <br />
@@ -170,7 +170,7 @@
     </v-dialog>
 
     <v-dialog v-model="isbn.input" width="500">
-      <v-card>
+      <v-card color="#212121">
         <v-progress-linear
           v-if="loading"
           indeterminate
@@ -204,7 +204,7 @@
     </v-dialog>
 
     <v-dialog v-model="isbn.find" width="700">
-      <v-card>
+      <v-card color="#212121">
         <v-progress-linear
           v-if="loading"
           indeterminate
@@ -227,7 +227,7 @@
           />
         </v-card-text>
 
-        <v-list v-if="searched" nav>
+        <v-list v-if="searched" nav bg-color="#212121">
           <div
             v-for="item in searched"
             :key="item.volumeInfo.industryIdentifiers[0].identifier"

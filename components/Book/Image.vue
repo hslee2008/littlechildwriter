@@ -91,10 +91,21 @@
         </v-list>
       </v-menu>
     </v-img>
+
+    <v-card-subtitle v-if="!mobile" class="text-center">
+      by
+      <NuxtLink :to="`/user/${post.uid}`">
+        {{ post.displayName }}
+      </NuxtLink>
+    </v-card-subtitle>
   </div>
 </template>
 
 <script setup>
+import { useDisplay } from 'vuetify'
+
+const { mobile } = useDisplay()
+
 defineProps({
   post: {
     type: Object,

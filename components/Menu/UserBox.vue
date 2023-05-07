@@ -3,8 +3,8 @@
     <v-img alt="User Avatar" :src="userInfo.photoURL" />
   </v-avatar>
   <v-menu right activator="parent">
-    <v-card>
-      <v-card class="d-flex">
+    <v-card color="#212121">
+      <v-card class="d-flex" color="#212121">
         <v-avatar size="60" class="ma-auto ml-6">
           <v-img alt="User Avatar" :src="userInfo.photoURL" />
         </v-avatar>
@@ -15,7 +15,7 @@
         </v-card-text>
       </v-card>
 
-      <v-list nav>
+      <v-list nav bg-color="#212121">
         <v-list-item
           title="로그아웃"
           prepend-icon="mdi-logout"
@@ -23,7 +23,7 @@
         />
       </v-list>
 
-      <v-card class="py-3">
+      <v-card class="py-3" color="#212121">
         <v-btn-toggle block variant="outlined" class="d-flex justify-center">
           <v-btn to="/account/account" icon="mdi-cog-outline"></v-btn>
           <v-btn

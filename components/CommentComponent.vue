@@ -81,12 +81,9 @@
               <span v-text="message.love?.length" />
             </v-btn>
 
-            <v-btn
-              v-if="userInfo.loggedIn"
-              rounded="lg"
-              icon="mdi-dots-vertical"
-              cols="1"
-            >
+            <v-btn v-if="userInfo.loggedIn" icon rounded="lg" cols="1">
+              <v-icon>mdi-dots-vertical</v-icon>
+
               <v-menu offset-y activator="parent">
                 <v-list>
                   <template v-if="userInfo.is(message.uid)">

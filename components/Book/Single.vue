@@ -15,8 +15,8 @@
         <v-card-title>
           {{ data.title }}
         </v-card-title>
-        <v-card-subtitle v-if="targetUser">
-          {{ targetUser.displayName }}님의 책
+        <v-card-subtitle v-if="data">
+          {{ data.displayName }}님의 책
         </v-card-subtitle>
 
         <v-card-text>
@@ -34,7 +34,6 @@ const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
 const props = defineProps<{
   data: any
-  targetUser: any
   colored: any
 }>()
 
