@@ -12,12 +12,6 @@
 
         <v-spacer />
 
-        <v-btn
-          v-if="$route.path !== '/book/post' && userInfo.loggedIn"
-          icon="mdi-plus-circle-outline"
-          to="/book/post"
-        />
-
         <v-btn v-if="userInfo.loggedIn" icon>
           <v-badge
             bordered
@@ -95,7 +89,7 @@
         <MenuNavigation />
       </v-navigation-drawer>
 
-      <v-main :class="$route.path !== '/' ? 'mx-5' : ''">
+      <v-main :class="route.path !== '/' ? 'mx-5' : ''">
         <NuxtPage class="mb-10" />
 
         <v-banner
@@ -123,6 +117,7 @@ import { useDisplay } from 'vuetify'
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
 
+const route = useRoute()
 const userInfo = User()
 userInfo.initUserInfo()
 

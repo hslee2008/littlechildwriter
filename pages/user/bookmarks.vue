@@ -2,8 +2,6 @@
   <div>
     <h1><v-icon start>mdi-bookmark</v-icon> 책갈피</h1>
 
-    <br />
-
     <v-list v-if="bookmarks.length > 0" v-model="bookmarks" nav>
       <v-list-item
         v-for="(item, i) in bookmarks"

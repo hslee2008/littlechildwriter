@@ -27,15 +27,14 @@
           </div>
 
           <v-card
-            class="d-flex justify-center align-center pa-10 rounded-lg ma-auto"
+            class="d-flex justify-center align-center rounded-lg ma-auto text-center"
             height="300"
             max-width="500"
-            :elevation="2"
+            :elevation="5"
           >
             <div>
-              <h1>Little 작가</h1>
-              <br />
-              <p>글을 올리고, 새롭게 배우고, 대화하기!</p>
+              <v-card-title class="text-h4">Little 작가</v-card-title>
+              <v-card-subtitle>Little Child Writer</v-card-subtitle>
             </div>
           </v-card>
 
@@ -129,8 +128,6 @@
         </div>
       </v-card-text>
     </v-card>
-
-    <br />
   </div>
 </template>
 

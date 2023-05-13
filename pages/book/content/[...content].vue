@@ -152,16 +152,6 @@
         </v-dialog>
       </v-btn>
 
-      <v-btn
-        rounded="lg"
-        variant="tonal"
-        class="mx-1"
-        prepend-icon="mdi-share-variant"
-        @click="share"
-      >
-        공유
-      </v-btn>
-
       <BookMore
         :post="post"
         :other-info="otherInfo"
@@ -443,22 +433,6 @@ const Like = () => {
     Libris(userInfo.uid, 0.1)
     Libris(post.value.uid, 0.1)
   }
-}
-
-const share = () => {
-  const { title, content } = post.value
-  const url = `https://libris.kr/book/content/${post.value.time}`
-  const text = `${title} - ${content}`
-
-  if (navigator.canShare()) {
-    navigator.share({
-      title,
-      text,
-      url
-    })
-  }
-
-  Libris(userInfo.uid, 1)
 }
 
 onBeforeMount(async () => {
