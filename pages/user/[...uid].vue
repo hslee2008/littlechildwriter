@@ -19,7 +19,7 @@
       <v-window-item :value="0">
         <BookSingle
           v-if="
-            (chosen || books[0]) && Object.keys(chosen || books[0]).length > 2
+                      (chosen || books[0]) && Keys(chosen || books[0]).length > 2
           "
           :data="chosen || books[0]"
           :target-user="targetUser"
@@ -87,8 +87,8 @@ onBeforeMount(() => {
           .ref(`/contents/${featured}`)
           .on('value', async (s: any) => (chosen.value = await s.val()))
 
-        subCount.value = Object.keys(subscriber ?? {}).length
-        subscribed.value = Object.keys(subscriber ?? {}).includes(userInfo.uid)
+        subCount.value = Keys(subscriber ?? {}).length
+        subscribed.value = Keys(subscriber ?? {}).includes(userInfo.uid)
       }
     )
 
@@ -101,7 +101,7 @@ onBeforeMount(() => {
       const data = snapshot.val()
 
       if (data) {
-        const key = Object.keys(data)[0]
+        const key = Keys(data)[0]
         const value = data[key]
 
         books.value.unshift(value)
@@ -119,7 +119,7 @@ onMounted(() => {
     .then((res: any) => res.val())
     .then((res: any) => {
       if (res) {
-        const key = Object.keys(res)[0]
+        const key = Keys(res)[0]
         const data = res[key]
 
         books.value.unshift(data)

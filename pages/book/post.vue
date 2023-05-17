@@ -1,40 +1,73 @@
 <!-- eslint-disable vue/html-indent -->
 <template>
   <div>
-    <br />
-
     <div class="d-flex justify-center">
-      <v-img :src="post.image" class="rounded-lg" max-width="200">
-        <v-overlay
-          v-if="
-            post.image ===
-            'https://books.google.co.kr/googlebooks/images/no_cover_thumb.gif'
-          "
-          absolute
-        >
-          <v-btn
-            rounded="lg"
-            variant="tonal"
-            prepend-icon="mdi-book-open-page-variant"
-            @click="isbn.upload = true"
-          >
-            책 사진 올리기
-          </v-btn>
-        </v-overlay>
-      </v-img>
+      <v-img :src="post.image" class="rounded-lg mt-2" max-width="150" />
     </div>
+    <v-card-item>
+      <v-row class="my-5">
+        <v-rating
+          v-model="post.rating"
+          color="blue"
+          required
+          ripple
+          hover
+          half-increments
+          class="mx-auto"
+        />
+      </v-row>
+
+      <v-text-field v-model="post.title" variant="outlined" label="제목" />
+
+      <v-row class="g-10" style="margin: 0.5px 0">
+        <v-text-field
+          v-model="post.pageCount"
+          variant="outlined"
+          label="페이지"
+          type="number"
+          :rules="[isPageCountValid]"
+        />
+        <v-text-field v-model="post.author" variant="outlined" label="작가" />
+      </v-row>
+
+      <v-combobox
+        v-model="post.categories"
+        :items="post.categories"
+        chips
+        clearable
+        label="카테고리"
+        multiple
+        variant="outlined"
+      >
+        <template #selection="{ item }">
+          <v-chip close @click:close="remove(item)">
+            <strong>{{ item }}</strong>
+          </v-chip>
+        </template>
+      </v-combobox>
+
+      <v-textarea
+        v-model="post.content"
+        label="책 소개"
+        clearable
+        counter
+        variant="underlined"
+      />
+    </v-card-item>
 
     <v-dialog v-model="isbn.upload" width="500">
       <v-card color="#212121">
         <v-card-title class="text-center"> 책 사진 업로드 </v-card-title>
 
-        <v-card-item>
-          <v-img :src="post.image" class="rounded-lg mb-2" max-width="150" />
+        <v-tabs v-model="tab" grow>
+          <v-tab> 기기에서 업로드 </v-tab>
+          <v-tab> URL로 업로드 </v-tab>
+        </v-tabs>
 
-          <v-tabs v-model="tab">
-            <v-tab> 기기에서 업로드 </v-tab>
-            <v-tab> URL로 업로드 </v-tab>
-          </v-tabs>
+        <v-card-item>
+          <div class="d-flex justify-center">
+            <v-img :src="post.image" class="rounded-lg mb-2" max-width="150" />
+          </div>
 
           <v-window v-model="tab">
             <v-window-item class="pt-3">
@@ -48,34 +81,19 @@
               />
             </v-window-item>
 
-            <v-window-item class="pt-3">
-              <v-text-field
+            <v-window-item class="py-5">
+              <v-textarea
                 v-model="post.image"
                 variant="outlined"
                 label="책 사진의 URL을 입력하세요"
-                prepend-icon="mdi-link"
               />
             </v-window-item>
           </v-window>
         </v-card-item>
 
         <v-card-actions>
-          <v-btn
-            rounded="lg"
-            color="primary"
-            variant="tonal"
-            @click="isbn.upload = false"
-          >
-            확인
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            rounded="lg"
-            color="red"
-            variant="tonal"
-            @click=";(isbn.upload = false), (post.image = '')"
-          >
-            취소
+          <v-btn rounded="lg" variant="tonal" @click="isbn.upload = false">
+            닫기
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -85,14 +103,12 @@
       <v-card color="#212121">
         <v-card-title> IBSN 사진 </v-card-title>
 
-        <br />
+        <v-tabs v-model="tab" grow>
+          <v-tab> 이미지로 </v-tab>
+          <v-tab> 카메라로 </v-tab>
+        </v-tabs>
 
         <v-card-text>
-          <v-tabs v-model="tab">
-            <v-tab> 이미지로 </v-tab>
-            <v-tab> 카메라로 </v-tab>
-          </v-tabs>
-
           <v-window v-model="tab">
             <v-window-item class="pt-3">
               <v-file-input
@@ -293,57 +309,6 @@
       </v-card>
     </v-dialog>
 
-    <v-card-item>
-      <v-row class="my-5">
-        <v-rating
-          v-model="post.rating"
-          color="blue"
-          required
-          ripple
-          hover
-          half-increments
-          class="mx-auto"
-        />
-      </v-row>
-
-      <v-text-field v-model="post.title" variant="outlined" label="제목" />
-
-      <v-row class="g-10" style="margin: 0.5px 0">
-        <v-text-field
-          v-model="post.pageCount"
-          variant="outlined"
-          label="페이지"
-          type="number"
-          :rules="[isPageCountValid]"
-        />
-        <v-text-field v-model="post.author" variant="outlined" label="작가" />
-      </v-row>
-
-      <v-combobox
-        v-model="post.categories"
-        :items="post.categories"
-        chips
-        clearable
-        label="카테고리"
-        multiple
-        variant="outlined"
-      >
-        <template #selection="{ item }">
-          <v-chip close @click:close="remove(item)">
-            <strong>{{ item }}</strong>
-          </v-chip>
-        </template>
-      </v-combobox>
-
-      <v-textarea
-        v-model="post.content"
-        label="책 소개"
-        clearable
-        counter
-        variant="underlined"
-      />
-    </v-card-item>
-
     <v-card-actions class="g-10">
       <v-btn rounded="lg" variant="tonal" color="primary" @click="Post">
         업로드
@@ -373,8 +338,6 @@
         </v-menu>
       </v-btn>
     </v-card-actions>
-
-    <br />
 
     <v-snackbar v-model="snackbar" color="white">
       제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해 주세요.
@@ -413,9 +376,11 @@
 
 <script setup lang="ts">
 import { BrowserBarcodeScanner } from 'browser-barcodescanner'
+import { createToaster } from '@meforma/vue-toaster'
 
 import { useDisplay } from 'vuetify'
 const { $db, $storage } = useNuxtApp()
+const toaster = createToaster({ position: 'top-right', dismissible: true })
 
 const userInfo = User()
 const { mobile } = useDisplay()
@@ -468,6 +433,9 @@ const FetchWithTitle = async () => {
   )
     .then(res => res.json())
     .then(books => (searched.value = books.items))
+    .catch((e: Error) =>
+      toaster.error(`Error while fetching with title info: ${e}`)
+    )
 
   loading.value = false
 }
@@ -483,18 +451,13 @@ const showCamera = () => {
     })
     .then(s => {
       const videoElement = document.querySelector('#video') as HTMLVideoElement
-
       videoElement.srcObject = s
-      videoElement.onloadedmetadata = () => {
-        videoElement.play()
-      }
+      videoElement.onloadedmetadata = () => videoElement.play()
     })
-    .catch(e => {
-      alert(e)
-    })
+    .catch((e: Error) => toaster.error(`Error while showing camera: ${e}`))
 }
 
-const takeISBNVideo = () =>
+const takeISBNVideo = () => {
   BrowserBarcodeScanner(
     ['ean_13'],
     document.querySelector('#video') as HTMLVideoElement,
@@ -504,14 +467,15 @@ const takeISBNVideo = () =>
       fetchi()
     }
   )
+}
 
-const uploadFile = (file: File[]) =>
+const uploadFile = (file: File[]) => {
   BrowserBarcodeScanner(['ean_13'], file[0], (result: { res: string }) => {
     post.value.isbn = result.res
     isbn.value.barcode = false
     fetchi()
   })
-
+}
 const fetchi = () => {
   loading.value = true
 
@@ -529,6 +493,9 @@ const fetchi = () => {
         const categories = await fetch(res.items[0].selfLink)
           .then(cg => cg.json())
           .then(cg => cg.volumeInfo.categories)
+          .catch((e: Error) =>
+            toaster.error(`Error while fetching categories: ${e}`)
+          )
 
         post.value = {
           ...post.value,
@@ -555,9 +522,7 @@ const fetchi = () => {
 
       isbn.value.input = false
     })
-    .catch(() => {
-      notfound.value = true
-    })
+    .catch((e: Error) => toaster.error(`Error while fetching books: ${e}`))
 
   loading.value = false
 }
@@ -565,11 +530,21 @@ const fetchi = () => {
 const uploadImg = (f: File[]) => {
   const storageRef = $storage.ref('bookimages')
   const fileRef = storageRef.child(f[0].name)
-  fileRef.put(f[0]).then(() => {
-    fileRef.getDownloadURL().then((url: any) => {
-      post.value.image = url
+  fileRef
+    .put(f[0])
+    .then(() => {
+      fileRef
+        .getDownloadURL()
+        .then((url: any) => {
+          post.value.image = url
+        })
+        .catch((e: Error) =>
+          toaster.error(`Error while getting url of image: ${e}`)
+        )
     })
-  })
+    .catch((e: Error) =>
+      toaster.error(`Error while saving uploaded image: ${e}`)
+    )
 }
 
 const Post = () => {
@@ -620,7 +595,7 @@ const Post = () => {
     content.value = ''
     navigateTo(`/book/content/${time}`)
   } catch (e) {
-    alert(e)
+    toaster.error(`Error while uploading: ${e}`)
   }
 }
 
@@ -639,7 +614,8 @@ const voiceType = () => {
     recognition.stop()
   }
 
-  recognition.onerror = (e: Error) => alert(e)
+  recognition.onerror = (e: Error) =>
+    toaster.error(`Error during recognition: ${e}`)
 }
 
 const saveAudio = () => {

@@ -170,7 +170,7 @@ const Edit = (i: number) => {
 
 const Update = (i: number) => {
   comments.value[i].edit = false
-  $db.ref(`${props.dbr}/${Object.keys(comments.value)[i]}`).update({
+  $db.ref(`${props.dbr}/${Keys(comments.value)[i]}`).update({
     ...comments.value[i],
     content: updatedcomment.value
   })
@@ -228,7 +228,7 @@ const Comment = () => {
     $db
       .ref(`${props.dbr.replace('/comments', '')}/joined`)
       .once('value', async (s: any) => {
-        const joined = Object.keys(await s.val())
+        const joined = Keys(await s.val())
 
         for (const user in joined) {
           if (userInfo.is(joined[user])) continue

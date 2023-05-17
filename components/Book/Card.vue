@@ -61,7 +61,7 @@
             />
             <span
               class="subheading"
-              v-text="Object.keys(item.liked ?? {}).length"
+              v-text="Keys(item.liked ?? {}).length"
             />
           </v-card-actions>
         </v-card>
@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
@@ -111,7 +111,7 @@ const props = defineProps({
 const bookmarkSnackbar = ref<boolean>(false)
 const bookmarkSnackbarDel = ref<boolean>(false)
 const bookmarked = (i: number) => {
-  return Object.keys(props.items[i].bookmarks ?? {}).includes(userInfo.uid)
+  return Keys(props.items[i].bookmarks ?? {}).includes(userInfo.uid)
 }
 
 onKeyStroke('l', () => {

@@ -79,7 +79,7 @@ const item = computed(() => {
     const query = ref.orderByChild('title').equalTo(searchText.value)
     query.on('value', (snapshot: any) => {
       BooksInner = snapshot.val()
-      BooksInner = Object.keys(BooksInner)?.map((key: any) => BooksInner[key])
+      BooksInner = Keys(BooksInner)?.map((key: any) => BooksInner[key])
     })
   } else {
     BooksInner = books.value.slice((page.value - 1) * 10, page.value * 10)

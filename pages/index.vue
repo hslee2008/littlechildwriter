@@ -132,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
@@ -167,7 +167,7 @@ onBeforeMount(() => {
     pin.value = data
 
     for (let i = 0; i < 2; i++) {
-      pinnedBooks.value.push(data[Object.keys(data)[i]]?.book)
+      pinnedBooks.value.push(data[Keys(data)[i]]?.book)
     }
   })
 
@@ -179,10 +179,10 @@ onBeforeMount(() => {
 
 onMounted(() => {
   setTimeout(() => {
-    for (let i = 0; i < Object.keys(pin.value).length; i++) {
+    for (let i = 0; i < Keys(pin.value).length; i++) {
       // check the value of pin time and delete it if it is over 1 week
       if (Object.values(pin.value)[i].time < new Date().getTime() - 604800000) {
-        $db.ref(`/pin/${Object.keys(pin.value)[i]}`).remove()
+        $db.ref(`/pin/${Keys(pin.value)[i]}`).remove()
       }
     }
   }, 3000)

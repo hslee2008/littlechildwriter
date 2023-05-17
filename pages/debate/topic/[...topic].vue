@@ -43,7 +43,7 @@
             <span>
               찬성
               <span class="text-grey">
-                ({{ Object.keys(content.pro ?? {}).length }})
+                ({{ Keys(content.pro ?? {}).length }})
               </span>
             </span>
             <v-btn
@@ -121,7 +121,7 @@
             <span>
               반대
               <span class="text-grey">
-                ({{ Object.keys(content.con ?? {}).length }})
+                ({{ Keys(content.con ?? {}).length }})
               </span>
             </span>
             <v-btn
@@ -334,7 +334,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
+import { useDisplay } from 'vuetify';
 const { $db } = useNuxtApp()
 
 const { mobile } = useDisplay()

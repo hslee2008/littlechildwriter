@@ -284,7 +284,7 @@ const Content = async () => {
     .once('value')
     .then((r: any) => r.val())
 
-  data !== null && Object.keys(data).length !== 1 && (post.value = data)
+  data !== null && Keys(data).length !== 1 && (post.value = data)
 
   if (data.isbn)
     await fetch(

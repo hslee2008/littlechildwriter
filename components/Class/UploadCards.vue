@@ -14,18 +14,18 @@
         <v-combobox
           v-if="userInfo.is(classInfo.uid)"
           v-model="post.category"
-          :items="Object.keys(classInfo.contents ?? {})"
-          label="Search"
-          outlined
-          hide-selected
-          clearable
-          prepend-inner-icon="mdi-magnify"
-        />
-        <v-select
-          v-else
-          v-model="post.category"
-          variant="outlined"
-          :items="Object.keys(classInfo.contents ?? {})"
+            :items="Keys(classInfo.contents ?? {})"
+            label="Search"
+            outlined
+            hide-selected
+            clearable
+            prepend-inner-icon="mdi-magnify"
+          />
+          <v-select
+            v-else
+            v-model="post.category"
+            variant="outlined"
+            :items="Keys(classInfo.contents ?? {})"
           label="종류 선택"
           outlined
         />

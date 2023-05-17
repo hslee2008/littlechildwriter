@@ -51,7 +51,7 @@
 
         <template #append>
           <v-icon start class="mr-2">mdi-comment-flash</v-icon>
-          {{ Object.keys({ ...item.pro, ...item.con } ?? {}).length }}
+            {{ Keys({ ...item.pro, ...item.con } ?? {}).length }}
 
           <v-list-item-action v-if="userInfo.is(item.uid)">
             <v-btn
@@ -104,7 +104,7 @@ onMounted(() => {
     .equalTo(route.params.uid.toString())
     .on('child_added', async (s: any) => {
       list.value.unshift(await s.val())
-      totalComment.value += Object.keys({
+      totalComment.value += Keys({
         ...s.val().pro,
         ...s.val().con
       }).length
