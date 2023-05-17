@@ -596,28 +596,32 @@ const Post = () => {
     return
   }
 
-  $db.ref(`/contents/${time}`).set({
-    title,
-    rating,
-    isbn,
-    time,
-    image,
-    pageCount,
-    categories,
-    likes: 1,
-    liked: {
-      [userInfo.uid]: true
-    },
-    views: 0,
-    uid,
-    displayName,
-    content: content.replaceAll('\n', '<br>')
-  })
+  try {
+    $db.ref(`/contents/${time}`).set({
+      title,
+      rating,
+      isbn,
+      time,
+      image,
+      pageCount,
+      categories,
+      likes: 1,
+      liked: {
+        [userInfo.uid]: true
+      },
+      views: 0,
+      uid,
+      displayName,
+      content: content.replaceAll('\n', '<br>')
+    })
 
-  Libris(userInfo.uid, parseInt(post.value.pageCount) / 5)
+    Libris(userInfo.uid, parseInt(post.value.pageCount) / 5)
 
-  content.value = ''
-  navigateTo(`/book/content/${time}`)
+    content.value = ''
+    navigateTo(`/book/content/${time}`)
+  } catch (e) {
+    alert(e)
+  }
 }
 
 const voiceType = () => {

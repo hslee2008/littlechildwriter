@@ -5,7 +5,7 @@ export const Libris = (uid: string | string[], incrementBy: number) => {
 
   currentLibris.then(snapshot => {
     const currentLibris = snapshot.val()
-    const newLibris = currentLibris + incrementBy
+    const newLibris = Math.round(currentLibris + incrementBy)
     db.ref(`users/${uid}/libris`).set(newLibris)
   })
 }

@@ -298,8 +298,8 @@ const Content = async () => {
 
 const View = () => {
   $db.ref(`contents/${time}/views`).transaction((view: any) => view + 1)
-  Libris(post.value.uid, 0.1)
-  Libris(userInfo.uid, 0.1)
+  Libris(post.value.uid, 2)
+  Libris(userInfo.uid, 2)
 
   if (userInfo.uid === post.value.uid) {
     $db.ref(`contents/${time}/views`).transaction((view: any) => view - 1)
@@ -404,7 +404,7 @@ const Suggestion = async () => {
 
 const Del = () => {
   $db.ref(`/contents/${post.value.time}`).remove()
-  Libris(userInfo.uid, -(parseInt(post.value.pageCount) / 100))
+  Libris(userInfo.uid, -(parseInt(post.value.pageCount) / 5))
   navigateTo('/book/list')
 }
 
