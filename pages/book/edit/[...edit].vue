@@ -10,11 +10,6 @@
       />
 
       <v-text-field v-model="post.title" variant="outlined" label="제목" />
-      <v-text-field
-        v-model="post.pageCount"
-        variant="outlined"
-        label="페이지"
-      />
       <v-textarea
         v-model="post.content"
         variant="outlined"
@@ -68,15 +63,14 @@ const Post = async () =>
 useAuth(Post)
 
 const Update = () => {
-  const { title, content, image, time, rating, pageCount, isbn } = post.value
+  const { title, content, image, time, rating, isbn } = post.value
 
   $db.ref(`/contents/${time}`).update({
     title,
     content,
     rating,
     isbn,
-    image,
-    pageCount
+    image
   })
 
   navigateTo(`/book/content/${time}`)
