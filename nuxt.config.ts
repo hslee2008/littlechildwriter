@@ -85,7 +85,12 @@ export default defineNuxtConfig({
   ],
   plugins: ['/plugins/firebase'],
   modules: [
-    (_, nuxt) => {
+    (
+      _: any,
+      nuxt: {
+        hooks: { hook: (arg0: string, arg1: (config: any) => any) => void }
+      }
+    ) => {
       nuxt.hooks.hook('vite:extendConfig', (config: any) =>
         config.plugins.push(
           vuetify({
@@ -145,7 +150,8 @@ export default defineNuxtConfig({
 
   experimental: {
     payloadExtraction: true,
-    viewTransition: true
+    viewTransition: true,
+    typedPages: true
   },
 
   gtag: {

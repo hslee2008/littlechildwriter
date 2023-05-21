@@ -103,6 +103,7 @@
               :href="item.url"
               class="d-flex"
               rounded="lg"
+              variant="outlined"
             >
               <template #prepend>
                 <v-icon class="ml-4"> mdi-note </v-icon>

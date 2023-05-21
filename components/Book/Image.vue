@@ -1,8 +1,8 @@
 <template>
   <div class="my-auto ml-3">
     <v-img :src="post.image" width="200" class="ml-5 my-5 rounded-lg pointer">
-      <v-menu v-model="sheet" inset location="bottom" activator="parent">
-        <v-list nav expand>
+      <v-bottom-sheet inset activator="parent" scrollable theme="">
+        <v-list nav expand bg-color="#212121">
           <v-list-item
             target="_blank"
             :href="`https://aladin.co.kr/${
@@ -32,7 +32,7 @@
             <template #prepend>
               <v-avatar size="30">
                 <v-img
-                  src="https://image.yes24.com/sysimage/renew/gnb/yes24.ico"
+                  src="https://cdn6.aptoide.com/imgs/2/7/d/27de865af39ece8b577dd12b40165cc3_icon.png"
                   alt="yes24"
                 />
               </v-avatar>
@@ -89,7 +89,7 @@
             <v-list-item-title>구글</v-list-item-title>
           </v-list-item>
         </v-list>
-      </v-menu>
+      </v-bottom-sheet>
     </v-img>
 
     <v-card-subtitle v-if="!mobile" class="text-center">
@@ -102,6 +102,7 @@
 </template>
 
 <script setup>
+import { VBottomSheet } from 'vuetify/labs/VBottomSheet'
 import { useDisplay } from 'vuetify'
 
 const { mobile } = useDisplay()
@@ -116,8 +117,6 @@ defineProps({
     required: true
   }
 })
-
-const sheet = ref(false)
 </script>
 
 <style scoped>

@@ -51,7 +51,7 @@
             정보
 
             <v-dialog width="700" activator="parent">
-              <v-card>
+              <v-card color="#212121">
                 <v-card-title>
                   {{ post.title }}
                 </v-card-title>

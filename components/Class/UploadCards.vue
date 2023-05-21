@@ -1,121 +1,123 @@
 <template>
   <div class="pt-5">
-    <v-row style="gap: 5px" class="ma-3">
-      <v-select
-        v-model="post.type"
-        variant="outlined"
-        :items="['공지사항', '파일', '링크', '글 제출 (학생)']"
-        label="종류 선택"
-        outlined
-        class="mb-10"
-      />
-
-      <div>
-        <v-combobox
-          v-if="userInfo.is(classInfo.uid)"
-          v-model="post.category"
-            :items="Keys(classInfo.contents ?? {})"
-            label="Search"
-            outlined
-            hide-selected
-            clearable
-            prepend-inner-icon="mdi-magnify"
-          />
-          <v-select
-            v-else
-            v-model="post.category"
-            variant="outlined"
-            :items="Keys(classInfo.contents ?? {})"
-          label="종류 선택"
-          outlined
-        />
-      </div>
-    </v-row>
-
-    <v-card v-if="post.type === '링크'">
-      <v-card-title>링크 업로드</v-card-title>
-      <v-card-text>
-        <v-text-field v-model="post.title" variant="outlined" label="제목" />
-        <v-text-field v-model="post.content" variant="outlined" label="링크" />
-      </v-card-text>
-      <v-card-actions class="ma-2 gap20">
-        <v-btn
-          rounded="lg"
-          variant="tonal"
-          :disabled="post.title === ''"
-          color="primary"
-          @click="Post"
-        >
-          게시
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-card v-else-if="post.type.startsWith('파일')">
-      <v-radio-group v-model="post.type">
-        <v-radio key="숙제" label="파일 (숙제로)" value="파일 (숙제로)" />
-        <v-radio key="파일" label="파일" value="파일" />
-        <v-radio key="사진" label="사진" value="파일 사진" />
-        <v-radio key="비디오" label="비디오" value="파일 비디오" />
-      </v-radio-group>
-
-      <v-overlay v-model="progress">
-        <v-progress-circular indeterminate size="64" />
-      </v-overlay>
-
-      <v-file-input
-        ref="file"
-        v-model="post.file"
-        color="deep-purple accent-4"
-        counter
-        label="File input"
-        multiple
-        variant="underlined"
-        placeholder="Select your files"
-        prepend-icon="mdi-paperclip"
-        outlined
-        :show-size="1000"
-        @update:model-value="UploadFile($event)"
-      >
-        <template #selection="{ index }">
-          <v-chip
-            v-if="index < 2"
-            color="deep-purple accent-4"
-            label
-            size="small"
-          >
-            {{}}
-          </v-chip>
-        </template>
-      </v-file-input>
-
-      <v-btn rounded="lg" variant="tonal" @click="Upload"> 파일 게시 </v-btn>
-    </v-card>
-    <v-card v-else-if="post.type === '글 제출 (학생)'">
-      <v-card-title>숙제 업로드</v-card-title>
-      <v-card-text>
-        <v-text-field v-model="post.title" variant="outlined" label="제목" />
-        <v-textarea v-model="post.content" variant="outlined" label="내용" />
-      </v-card-text>
-      <v-card-actions class="ma-2 gap20">
-        <v-btn
-          rounded="lg"
-          variant="tonal"
-          :disabled="post.title === ''"
-          color="primary"
-          @click="Post"
-        >
-          게시
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-    <CommentComponent
-      v-else-if="post.type === '공지사항'"
-      :link="`/class/${id}`"
-      :dbr="`classes/${id}/contents/${post.category}`"
-      :nocomments="true"
-      :cb="() => updateTab(0)"
-      :uid="userInfo.uid"
+    <v-select
+      v-model="post.type"
+      variant="outlined"
+      :items="['공지사항', '파일', '링크', '글 제출 (학생)']"
+      label="종류 선택"
+      outlined
     />
+    <v-combobox
+      v-if="userInfo.is(classInfo.uid)"
+      v-model="post.category"
+      :items="Keys(classInfo.contents ?? {})"
+      label="Search"
+      outlined
+      hide-selected
+      clearable
+      prepend-inner-icon="mdi-magnify"
+    />
+    <v-select
+      v-else
+      v-model="post.category"
+      variant="outlined"
+      :items="Keys(classInfo.contents ?? {})"
+      label="종류 선택"
+      outlined
+    />
+
+    <v-card variant="outlined" class="pa-3">
+      <v-card v-if="post.type === '링크'">
+        <v-card-title>링크 업로드</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="post.title" variant="outlined" label="제목" />
+          <v-text-field
+            v-model="post.content"
+            variant="outlined"
+            label="링크"
+          />
+        </v-card-text>
+        <v-card-actions class="ma-2 gap20">
+          <v-btn
+            rounded="lg"
+            variant="tonal"
+            :disabled="post.title === ''"
+            color="primary"
+            @click="Post"
+          >
+            게시
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+
+      <v-card v-else-if="post.type.startsWith('파일')">
+        <v-radio-group v-model="post.type">
+          <v-radio key="숙제" label="파일 (숙제로)" value="파일 (숙제로)" />
+          <v-radio key="파일" label="파일" value="파일" />
+          <v-radio key="사진" label="사진" value="파일 사진" />
+          <v-radio key="비디오" label="비디오" value="파일 비디오" />
+        </v-radio-group>
+
+        <v-overlay v-model="progress">
+          <v-progress-circular indeterminate size="64" />
+        </v-overlay>
+
+        <v-file-input
+          ref="file"
+          v-model="post.file"
+          color="deep-purple accent-4"
+          counter
+          label="File input"
+          multiple
+          variant="underlined"
+          placeholder="Select your files"
+          prepend-icon="mdi-paperclip"
+          :show-size="1000"
+          @update:model-value="UploadFile($event)"
+        >
+          <template #selection="{ fileNames }">
+            <v-chip
+              v-for="name in fileNames"
+              :key="name"
+              color="deep-purple accent-4"
+              label
+              size="small"
+            >
+              {{ name }}
+            </v-chip>
+          </template>
+        </v-file-input>
+
+        <v-btn rounded="lg" variant="tonal" @click="Upload"> 파일 게시 </v-btn>
+      </v-card>
+
+      <v-card v-else-if="post.type === '글 제출 (학생)'">
+        <v-card-title>숙제 업로드</v-card-title>
+        <v-card-text>
+          <v-text-field v-model="post.title" variant="outlined" label="제목" />
+          <v-textarea v-model="post.content" variant="outlined" label="내용" />
+        </v-card-text>
+        <v-card-actions class="ma-2 gap20">
+          <v-btn
+            rounded="lg"
+            variant="tonal"
+            :disabled="post.title === ''"
+            color="primary"
+            @click="Post"
+          >
+            게시
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <CommentComponent
+        v-else-if="post.type === '공지사항'"
+        :link="`/class/${id}`"
+        :dbr="`classes/${id}/contents/${post.category}`"
+        :nocomments="true"
+        :cb="() => updateTab(0)"
+        :uid="userInfo.uid"
+      />
+    </v-card>
   </div>
 </template>
 
