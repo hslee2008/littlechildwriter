@@ -59,10 +59,7 @@
               class="mr-2"
               @click="Like(item)"
             />
-            <span
-              class="subheading"
-              v-text="Keys(item.liked ?? {}).length"
-            />
+            <span class="subheading" v-text="Keys(item.liked ?? {}).length" />
           </v-card-actions>
         </v-card>
       </v-card>
@@ -80,7 +77,11 @@
         삭제되었습니다.
 
         <template #actions>
-          <v-btn color="red" variant="text" @click="bookmarkSnackbarDel = false">
+          <v-btn
+            color="red"
+            variant="text"
+            @click="bookmarkSnackbarDel = false"
+          >
             닫기
           </v-btn>
         </template>
@@ -90,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
