@@ -132,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from 'vuetify';
+import { useDisplay } from 'vuetify'
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
@@ -155,7 +155,7 @@ const list = [
 ]
 const image = ref<string>('https://cdn.wallpapersafari.com/0/80/KIiEkW.jpg')
 
-onBeforeMount(() => {
+onMounted(() => {
   $db
     .ref('/contents')
     .limitToLast(mobile.value ? 4 : 5)

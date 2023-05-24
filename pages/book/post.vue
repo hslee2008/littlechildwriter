@@ -342,13 +342,11 @@
     <v-snackbar v-model="snackbar" color="white">
       제목, 작가, 페이지, 책 소개, 카테고리를 모두 입력해 주세요.
 
-      <template #action="{ attrs }">
+      <template #actions>
         <v-btn
           rounded="lg"
           variant="tonal"
           color="pink"
-          text
-          v-bind="attrs"
           @click="snackbar = false"
         >
           Close
@@ -358,13 +356,11 @@
     <v-snackbar v-model="notfound" color="white">
       찾을 수 없었습니다.
 
-      <template #action="{ attrs }">
+      <template #actions>
         <v-btn
           rounded="lg"
           variant="tonal"
           color="pink"
-          text
-          v-bind="attrs"
           @click="notfound = false"
         >
           Close
@@ -591,11 +587,10 @@ const Post = () => {
     })
 
     Libris(userInfo.uid, parseInt(post.value.pageCount) / 5)
-
-    content.value = ''
     navigateTo(`/book/content/${time}`)
   } catch (e) {
     toaster.error(`Error while uploading: ${e}`)
+    Libris(userInfo.uid, -parseInt(post.value.pageCount) / 5)
   }
 }
 
