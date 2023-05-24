@@ -5,6 +5,7 @@ interface PluginsInjections {
   $auth: any
   $storage: any
   $login: any
+  $firestore: any
   BarcodeDetector: any
   webkitSpeechRewcognition: any
   navigateTo: any

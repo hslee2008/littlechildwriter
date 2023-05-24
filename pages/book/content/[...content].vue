@@ -298,8 +298,6 @@ const Content = async () => {
 
 const View = () => {
   $db.ref(`contents/${time}/views`).transaction((view: any) => view + 1)
-  Libris(post.value.uid, 2)
-  Libris(userInfo.uid, 2)
 
   if (userInfo.uid === post.value.uid) {
     $db.ref(`contents/${time}/views`).transaction((view: any) => view - 1)
@@ -416,8 +414,8 @@ const Like = () => {
     $db.ref(`/contents/${post.value.time}/liked/${userInfo.uid}`).set(false)
     $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
 
-    Libris(userInfo.uid, -0.1)
-    Libris(post.value.uid, -0.1)
+    Libris(userInfo.uid, -1)
+    Libris(post.value.uid, -1)
   } else {
     post.value.likes++
 
@@ -430,8 +428,8 @@ const Like = () => {
     $db.ref(`/contents/${post.value.time}/liked/${userInfo.uid}`).set(true)
     $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
 
-    Libris(userInfo.uid, 0.1)
-    Libris(post.value.uid, 0.1)
+    Libris(userInfo.uid, 1)
+    Libris(post.value.uid, 1)
   }
 }
 

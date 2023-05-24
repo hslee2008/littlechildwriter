@@ -131,8 +131,8 @@ const Like = (item: any) => {
     $db.ref(`/contents/${item.time}/liked/${userInfo.uid}`).set(false)
     $db.ref(`/contents/${item.time}/likes`).set(item.likes)
 
-    Libris(userInfo.uid, -0.1)
-    Libris(item.uid, -0.1)
+    Libris(userInfo.uid, -1)
+    Libris(item.uid, -1)
   } else {
     item.likes++
 
@@ -145,8 +145,8 @@ const Like = (item: any) => {
     $db.ref(`/contents/${item.time}/liked/${userInfo.uid}`).set(true)
     $db.ref(`/contents/${item.time}/likes`).set(item.likes)
 
-    Libris(userInfo.uid, 0.1)
-    Libris(item.uid, 0.1)
+    Libris(userInfo.uid, 1)
+    Libris(item.uid, 1)
   }
 }
 
@@ -182,7 +182,7 @@ const Bookmark = (time: string, i: number) => {
       ...props.items[i].bookmarks,
       [userInfo.uid]: true
     }
-    Libris(userInfo.uid, 0.1)
+    Libris(userInfo.uid, 1)
   }
 }
 </script>
