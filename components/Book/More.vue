@@ -31,7 +31,6 @@
                     <v-list-item
                       v-for="tag in post.categories"
                       :key="tag"
-                      to="/"
                       :title="`#${tag}`"
                     />
                   </v-list>

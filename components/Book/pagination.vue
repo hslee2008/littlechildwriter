@@ -1,8 +1,19 @@
 <template>
+  <v-slide-group>
+    <v-slide-group-item v-for="data in books" :key="data.time">
+      <v-card color="grey-lighten-1" class="ma-4" height="135" width="100">
+        <div class="d-flex fill-height align-center justify-center">
+          <v-img :src="data.image" height="200" width="100" />
+        </div>
+      </v-card>
+    </v-slide-group-item>
+  </v-slide-group>
+
   <v-card
+    v-for="data in books"
+    :key="data.time"
     :class="`d-${mobile ? 'block' : 'flex'}`"
     :to="`/book/content/${data.time}`"
-    :color="colored ? '#385F73' : ''"
   >
     <template #prepend>
       <v-avatar size="250" rounded="0">
@@ -18,12 +29,6 @@
         <v-card-subtitle v-if="data">
           {{ data.displayName }}님의 책
         </v-card-subtitle>
-
-        <v-card-text>
-          <p v-for="(p, i) in data.content.split('<br>')" :key="`${p}-${i}`">
-            {{ p }}<br />
-          </p>
-        </v-card-text>
       </div>
     </v-card-text>
   </v-card>
@@ -34,7 +39,6 @@ import { useDisplay } from 'vuetify'
 
 const { mobile } = useDisplay()
 defineProps<{
-  data: any
-  colored: any
+  books: any
 }>()
 </script>

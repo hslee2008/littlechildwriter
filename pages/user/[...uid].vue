@@ -18,9 +18,7 @@
     <v-window v-model="tab" class="py-5" color="#23262E">
       <v-window-item :value="0">
         <BookSingle
-          v-if="
-                      (chosen || books[0]) && Keys(chosen || books[0]).length > 2
-          "
+          v-if="(chosen || books[0]) && Keys(chosen || books[0]).length > 2"
           :data="chosen || books[0]"
           :target-user="targetUser"
           :colored="false"
@@ -91,22 +89,6 @@ onBeforeMount(() => {
         subscribed.value = Keys(subscriber ?? {}).includes(userInfo.uid)
       }
     )
-
-  $db
-    .ref('/contents/')
-    .orderByChild('uid')
-    .equalTo(uid)
-    .limitToLast(1)
-    .once('value', (snapshot: any) => {
-      const data = snapshot.val()
-
-      if (data) {
-        const key = Keys(data)[0]
-        const value = data[key]
-
-        books.value.unshift(value)
-      }
-    })
 })
 
 onMounted(() => {
@@ -114,16 +96,11 @@ onMounted(() => {
     .ref('/contents/')
     .orderByChild('uid')
     .equalTo(uid)
-    .limitToLast(1)
+    .limitToLast(5)
     .once('value')
     .then((res: any) => res.val())
     .then((res: any) => {
-      if (res) {
-        const key = Keys(res)[0]
-        const data = res[key]
-
-        books.value.unshift(data)
-      }
+      books.value = Object.values(res ?? {}).reverse()
     })
 })
 

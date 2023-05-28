@@ -583,7 +583,7 @@ const Post = () => {
       views: 0,
       uid,
       displayName,
-      content: content.replaceAll('\n', '<br>')
+      content: ToHTML(content)
     })
 
     Libris(userInfo.uid, parseInt(post.value.pageCount) / 5)

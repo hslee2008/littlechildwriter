@@ -23,7 +23,7 @@
     <v-card class="my-3">
       <div class="cardy">
         <BookImage :post="post" :other-info="otherInfo" />
-        <BookContent :post="post" :other-info="otherInfo" />
+        <BookContent :post="post" />
       </div>
     </v-card>
 
@@ -175,8 +175,8 @@
 
       <v-row>
         <v-card
-          v-for="(item, i) in suggested"
-          :key="i"
+          v-for="item in suggested"
+          :key="item.title"
           class="mx-auto my-5"
           :href="item.infoLink"
           :width="width < 1264 ? 150 : 210"

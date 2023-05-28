@@ -35,7 +35,6 @@
 
           <v-card-actions>
             <v-btn
-              v-if="(message.love || []).length > 0"
               rounded="lg"
               variant="tonal"
               icon

@@ -22,14 +22,14 @@
     "@vueuse/core": "^10.1.2",
     "@vueuse/nuxt": "^10.1.2",
     "browser-barcodescanner": "^1.0.5",
-    "firebase": "^9.22.0",
+    "firebase": "^9.22.1",
     "firebaseui": "^6.0.2",
     "nuxt-gtag": "^0.5.7",
     "pinia": "^2.1.3",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.4",
     "vue-gtag-next": "^1.14.0",
-    "vuetify": "^3.3.0"
+    "vuetify": "^3.3.1"
   },
   "devDependencies": {
     "@kevinmarrec/nuxt-pwa": "^0.17.0",
@@ -41,7 +41,7 @@
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-nuxt": "4.0.0",
     "firebase-admin": "11.8.0",
-    "nuxt": "^3.5.0",
+    "nuxt": "^3.5.1",
     "sass": "^1.62.1",
     "typescript": "^5.0.4",
     "vue-eslint-parser": "^9.3.0"

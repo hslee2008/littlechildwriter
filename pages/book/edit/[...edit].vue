@@ -57,8 +57,10 @@ const post = ref<any>({
   time: Date.now()
 })
 
-const Post = async () =>
-  (post.value = (await $db.ref(`/contents/${time}`).once('value')).val())
+const Post = async () => {
+  post.value = (await $db.ref(`/contents/${time}`).once('value')).val()
+  post.value.content = ToDisplay(post.value.content)
+}
 
 useAuth(Post)
 
@@ -67,7 +69,7 @@ const Update = () => {
 
   $db.ref(`/contents/${time}`).update({
     title,
-    content,
+    content: ToHTML(content),
     rating,
     isbn,
     image

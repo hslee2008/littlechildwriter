@@ -3,25 +3,62 @@
     <v-card id="profile" class="mb-10" variant="outlined">
       <v-card-title class="text-center">프로필 설정</v-card-title>
 
-      <div class="d-flex ml-5">
+      <div class="mx-auto text-center">
         <v-avatar size="100">
-          <UserPhoto :size="45" :src="userInfo?.photoURL" />
+          <UserPhoto :size="100" :src="userInfo?.photoURL" />
         </v-avatar>
-        <div>
-          <v-card-title>{{ userInfo.displayName }}</v-card-title>
-          <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
-          <v-card-actions>
-            <v-btn
-              rounded="lg"
-              variant="tonal"
-              color="primary"
-              class="ml-3 mt-3"
-              @click="imageEdit = true"
-            >
-              이미지 편집
-            </v-btn>
-          </v-card-actions>
-        </div>
+        <v-card-title>{{ userInfo.displayName }}</v-card-title>
+        <v-card-subtitle>{{ userInfo.email }}</v-card-subtitle>
+        <v-btn rounded="lg" variant="tonal" color="primary" class="ml-3 mt-3">
+          이미지 편집
+
+          <v-dialog v-model="imageEdit" activator="parent" width="500">
+            <v-card>
+              <v-card-title> 이미지 편집 </v-card-title>
+
+              <v-card-text>
+                <div class="text-center mb-3">
+                  <v-avatar size="100">
+                    <v-img :src="tempImage" />
+                  </v-avatar>
+                </div>
+
+                <v-text-field
+                  v-model="tempImage"
+                  variant="outlined"
+                  label="URL"
+                  placeholder="URL"
+                  required
+                  flat
+                  dense
+                  prepend-inner-icon="mdi-camera"
+                />
+              </v-card-text>
+
+              <v-divider />
+
+              <v-card-actions>
+                <v-btn
+                  rounded="lg"
+                  variant="tonal"
+                  color="red"
+                  @click="imageEdit = false"
+                >
+                  취소
+                </v-btn>
+                <v-spacer />
+                <v-btn
+                  rounded="lg"
+                  variant="tonal"
+                  color="primary"
+                  @click="save"
+                >
+                  저장
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-btn>
       </div>
 
       <v-card-text>
@@ -93,11 +130,9 @@
       <v-card-title class="text-center">고급 설정</v-card-title>
 
       <v-card-item>
-        <v-text-field
+        <v-textarea
           v-model="userInfo.uid"
           variant="outlined"
-          label="UID"
-          placeholder="UID"
           flat
           dense
           disabled
@@ -116,48 +151,6 @@
       </v-card-item>
     </v-card>
 
-    <v-dialog v-model="imageEdit" width="500">
-      <v-card>
-        <v-card-title> 이미지 편집 </v-card-title>
-
-        <v-card-text>
-          <div class="text-center mb-3">
-            <v-avatar size="100">
-              <v-img :src="tempImage" />
-            </v-avatar>
-          </div>
-
-          <v-text-field
-            v-model="tempImage"
-            variant="outlined"
-            label="URL"
-            placeholder="URL"
-            required
-            flat
-            dense
-            prepend-inner-icon="mdi-camera"
-          />
-        </v-card-text>
-
-        <v-divider />
-
-        <v-card-actions>
-          <v-btn
-            rounded="lg"
-            variant="tonal"
-            color="red"
-            @click="imageEdit = false"
-          >
-            취소
-          </v-btn>
-          <v-spacer />
-          <v-btn rounded="lg" variant="tonal" color="primary" @click="save">
-            Save
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <v-row justify="center" class="g-10">
       <v-btn
         rounded="lg"
@@ -175,7 +168,7 @@
 <script setup lang="ts">
 const { $db, $auth } = useNuxtApp()
 
-const userInfo = User()
+const userInfo = await User()
 const userDB = ref<any>({ bio: '' })
 const books = ref<any[]>([])
 const imageEdit = ref<boolean>(false)

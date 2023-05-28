@@ -1,10 +1,17 @@
 <template>
   <div class="my-auto ml-3">
-    <v-img :src="post.image" width="200" class="ml-5 my-5 rounded-lg pointer">
+    <v-card-subtitle
+      v-if="otherInfo.volumeInfo?.authors.length > 0"
+      class="text-center"
+    >
+      {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
+    </v-card-subtitle>
+
+    <v-img :src="post.image" width="200" class="mx-auto my-5 rounded-lg pointer">
       <v-bottom-sheet v-model="sheet" inset activator="parent" scrollable>
         <v-card class="pa-5">
           <v-row class="d-flex justify-center align-center">
-            <v-col cols="10" sm="6" md="4" lg="3">
+            <v-col cols="5" sm="6" md="4" lg="2">
               <v-card
                 variant="outlined"
                 :href="`https://aladin.co.kr/${
@@ -16,7 +23,7 @@
                 target="_blank"
               >
                 <v-card-text class="text-center">
-                  <v-avatar size="70" class="mb-4">
+                  <v-avatar size="40" class="mb-4">
                     <v-img
                       src="https://play-lh.googleusercontent.com/R83BmEu0bafVZ4lNC4dNnJ8Xxt9Cn5ZbS7m96SBaCgsxuTYaWINSgexcuSq8jhAvRkU"
                       alt="aladdin"
@@ -29,7 +36,7 @@
               </v-card>
             </v-col>
 
-            <v-col cols="10" sm="6" md="4" lg="3">
+            <v-col cols="5" sm="6" md="4" lg="2">
               <v-card
                 variant="outlined"
                 :href="`https://www.yes24.com/product/search?query=${
@@ -38,7 +45,7 @@
                 target="_blank"
               >
                 <v-card-text class="text-center">
-                  <v-avatar size="70" class="mb-4">
+                  <v-avatar size="40" class="mb-4">
                     <v-img
                       src="https://cdn6.aptoide.com/imgs/2/7/d/27de865af39ece8b577dd12b40165cc3_icon.png"
                       alt="yes24"
@@ -49,7 +56,7 @@
               </v-card>
             </v-col>
 
-            <v-col cols="10" sm="6" md="4" lg="3">
+            <v-col cols="5" sm="6" md="4" lg="2">
               <v-card
                 variant="outlined"
                 :href="`https://www.amazon.com/s?k=${
@@ -58,7 +65,7 @@
                 target="_blank"
               >
                 <v-card-text class="text-center">
-                  <v-avatar size="70" class="mb-4">
+                  <v-avatar size="40" class="mb-4">
                     <v-img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt0-ykzLKIz1DSA5dDvSfrVy21kgN08CfsUw&usqp=CAU"
                       alt="amazon"
@@ -71,7 +78,7 @@
               </v-card>
             </v-col>
 
-            <v-col cols="10" sm="6" md="4" lg="3">
+            <v-col cols="5" sm="6" md="4" lg="2">
               <v-card
                 variant="outlined"
                 :href="`https://search.kyobobook.co.kr/search?keyword=${
@@ -80,7 +87,7 @@
                 target="_blank"
               >
                 <v-card-text class="text-center">
-                  <v-avatar size="70" class="mb-4">
+                  <v-avatar size="40" class="mb-4">
                     <v-img
                       src="https://contents.kyobobook.co.kr/resources/fo/images/common/ink/favicon/apple-touch-icon-144x144-precomposed.png"
                       alt="kyobo"
@@ -93,14 +100,14 @@
               </v-card>
             </v-col>
 
-            <v-col cols="10" sm="6" md="4" lg="3">
+            <v-col cols="5" sm="6" md="4" lg="2">
               <v-card
                 variant="outlined"
                 :href="`https://books.google.co.kr/books?id=${otherInfo?.id}`"
                 target="_blank"
               >
                 <v-card-text class="text-center">
-                  <v-avatar size="70" class="mb-4">
+                  <v-avatar size="40" class="mb-4">
                     <v-img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjzC2JyZDZ_RaWf0qp11K0lcvB6b6kYNMoqtZAQ9hiPZ4cTIOB"
                       alt="google"
