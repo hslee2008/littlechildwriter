@@ -6,4 +6,20 @@ const ToDisplay = (text: string) => {
   return text.replaceAll('<br />', '\n').replaceAll('<br>', '\n')
 }
 
-export { ToHTML, ToDisplay }
+const ToSplit = (text: string) => {
+  return text.split('\n')
+}
+
+const ReduceTitle = (text: string) => {
+  let ModifiedText = text
+
+  const colon = /.*?:/
+  ModifiedText = text.replace(colon, '')
+
+  const paranthesis = /\(([^)]+)\)/g
+  ModifiedText = ModifiedText.replace(paranthesis, '')
+
+  return ModifiedText
+}
+
+export { ToHTML, ToDisplay, ToSplit, ReduceTitle }

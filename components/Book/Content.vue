@@ -2,7 +2,7 @@
 <template>
   <div class="ma-auto">
     <v-card-title class="h1 text-primary text-center title">
-      {{ post.title }}
+      {{ ReduceTitle(post.title) }}
     </v-card-title>
 
     <v-card-subtitle v-if="mobile" class="text-center">
@@ -27,7 +27,10 @@
 
     <v-card-text>
       <div class="my-5">
-        <p v-for="(p, i) in post.content.split('<br>')" :key="`${p}-${i}`">
+        <p
+          v-for="(p, i) in ToSplit(ToDisplay(post.content))"
+          :key="`${p}-${i}`"
+        >
           {{ p }}<br />
         </p>
       </div>

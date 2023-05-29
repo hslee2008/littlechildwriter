@@ -28,7 +28,7 @@
 
           <div v-if="!imageonly">
             <v-card-title class="text-primary text-center">
-              {{ item.title }}
+              {{ ReduceTitle(item.title) }}
             </v-card-title>
 
             <v-card-text class="text-center">

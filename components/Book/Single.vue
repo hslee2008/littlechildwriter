@@ -13,7 +13,7 @@
     <v-card-text class="d-flex justify-center align-center">
       <div>
         <v-card-title>
-          {{ data.title }}
+          {{ ReduceTitle(data.title) }}
         </v-card-title>
         <v-card-subtitle v-if="data">
           {{ data.displayName }}님의 책
