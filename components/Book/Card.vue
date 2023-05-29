@@ -26,23 +26,25 @@
             cover
           />
 
-          <v-card-title class="text-primary text-center">
-            {{ item.title }}
-          </v-card-title>
+          <div v-if="!imageonly">
+            <v-card-title class="text-primary text-center">
+              {{ item.title }}
+            </v-card-title>
 
-          <v-card-text class="text-center">
-            {{ formatter(item.views) }} views ·
-            {{ DateFormatter(new Date(parseInt(item.time)).getTime()) }}
-          </v-card-text>
+            <v-card-text class="text-center">
+              {{ formatter(item.views) }} views ·
+              {{ DateFormatter(new Date(parseInt(item.time)).getTime()) }}
+            </v-card-text>
 
-          <v-card-subtitle class="text-center">
-            <NuxtLink :to="`/user/${item.uid}`">
-              {{ item.displayName }}
-            </NuxtLink>
-          </v-card-subtitle>
+            <v-card-subtitle class="text-center">
+              <NuxtLink :to="`/user/${item.uid}`">
+                {{ item.displayName }}
+              </NuxtLink>
+            </v-card-subtitle>
+          </div>
         </v-card>
 
-        <v-card v-if="!simple">
+        <v-card v-if="!simple && !imageonly">
           <v-card-actions
             v-if="userInfo.loggedIn"
             class="d-flex justify-center"
@@ -106,6 +108,10 @@ const props = defineProps({
     required: true
   },
   simple: {
+    type: Boolean,
+    default: false
+  },
+  imageonly: {
     type: Boolean,
     default: false
   }

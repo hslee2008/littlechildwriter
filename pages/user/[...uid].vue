@@ -17,12 +17,16 @@
 
     <v-window v-model="tab" class="py-5" color="#23262E">
       <v-window-item :value="0">
-        <BookSingle
-          v-if="(chosen || books[0]) && Keys(chosen || books[0]).length > 2"
-          :data="chosen || books[0]"
-          :target-user="targetUser"
-          :colored="false"
-        />
+        <div v-if="(chosen || books[0]) && Keys(chosen || books[0]).length > 2">
+          <BookSingle
+            :data="chosen || books[0]"
+            :target-user="targetUser"
+            :colored="false"
+            class="mb-10"
+          />
+
+          <BookCard :items="books" :imageonly="true" />
+        </div>
         <v-card v-else>
           <v-card-text>
             <v-card-title> 책이 없습니다. </v-card-title>
@@ -38,7 +42,7 @@
       </v-window-item>
 
       <v-window-item :value="2">
-        <UserStats :uid="uid" :target-user="targetUser" />
+        <UserStats :uid="uid" :target-user="targetUser" :book-count="bookCount" />
       </v-window-item>
     </v-window>
   </div>
@@ -59,6 +63,7 @@ const targetUser = ref<any>({
   bio: ''
 })
 const books = ref<any>([])
+const bookCount = ref<number>(0)
 
 const subscription = ref<any>({})
 const subscribed = ref<boolean>(false)
@@ -101,6 +106,16 @@ onMounted(() => {
     .then((res: any) => res.val())
     .then((res: any) => {
       books.value = Object.values(res ?? {}).reverse()
+    })
+
+  $db
+    .ref('/contents/')
+    .orderByChild('uid')
+    .equalTo(uid)
+    .once('value')
+    .then((res: any) => res.val())
+    .then((res: any) => {
+      bookCount.value = Keys(res ?? {}).length
     })
 })
 

@@ -20,7 +20,15 @@
         <v-icon> mdi-card-account-details </v-icon>
       </template>
 
-      <v-list-item-title> UID: {{ uid }} </v-list-item-title>
+      <v-list-item-title> {{ uid }} </v-list-item-title>
+    </v-list-item>
+
+    <v-list-item>
+      <template #prepend>
+        <v-icon> mdi-book </v-icon>
+      </template>
+
+      <v-list-item-title> {{ bookCount }}권 </v-list-item-title>
     </v-list-item>
   </v-list>
 </template>
@@ -33,6 +41,10 @@ defineProps({
   },
   uid: {
     type: String,
+    required: true
+  },
+  bookCount: {
+    type: Number,
     required: true
   }
 })
