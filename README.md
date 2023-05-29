@@ -16,7 +16,3 @@ This website is created in Korean in order for students or even adults to be int
 - Vuetify
 - TypeScript
 - Pinia
-
-# Other Links
-
-To-Do: [./ToDo.md](./TODO.md)

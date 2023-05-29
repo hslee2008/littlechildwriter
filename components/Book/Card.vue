@@ -26,26 +26,27 @@
             cover
           />
 
-          <v-card-title class="text-primary font-weight-black pa-0">
+          <v-card-title class="text-primary text-center">
             {{ item.title }}
           </v-card-title>
 
-          <v-card-subtitle>
+          <v-card-text class="text-center">
+            {{ formatter(item.views) }} views ·
+            {{ DateFormatter(new Date(parseInt(item.time)).getTime()) }}
+          </v-card-text>
+
+          <v-card-subtitle class="text-center">
             <NuxtLink :to="`/user/${item.uid}`">
               {{ item.displayName }}
             </NuxtLink>
           </v-card-subtitle>
-
-          <v-card-text>
-            <span class="text--disabled">
-              {{ formatter(item.views) }} views ·
-              {{ DateFormatter(new Date(parseInt(item.time)).getTime()) }}
-            </span>
-          </v-card-text>
         </v-card>
 
         <v-card v-if="!simple">
-          <v-card-actions v-if="userInfo.loggedIn">
+          <v-card-actions
+            v-if="userInfo.loggedIn"
+            class="d-flex justify-center"
+          >
             <v-btn
               rounded="lg"
               :icon="`mdi-bookmark${bookmarked(i) ? '-check' : '-outline'}`"
@@ -56,7 +57,7 @@
               rounded="lg"
               icon="mdi-thumb-up"
               :color="(item.liked ?? {})[userInfo.uid] ? 'primary' : 'grey'"
-              class="mr-2"
+              class="mr-1"
               @click="Like(item)"
             />
             <span class="subheading" v-text="Keys(item.liked ?? {}).length" />
