@@ -199,7 +199,7 @@ const { width } = useDisplay()
 const userInfo = User()
 
 const route = useRoute()
-const time = route.params.content
+const time = route.params.content.toString().replaceAll(',', '')
 
 const post = ref({
   isbn: '',
@@ -298,11 +298,6 @@ const Content = async () => {
 
 const View = () => {
   $db.ref(`contents/${time}/views`).transaction((view: any) => view + 1)
-
-  if (userInfo.uid === post.value.uid) {
-    $db.ref(`contents/${time}/views`).transaction((view: any) => view - 1)
-    post.value.views--
-  }
 }
 
 const HandleBookInfo = (data: any) => {

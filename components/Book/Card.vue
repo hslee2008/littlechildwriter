@@ -26,7 +26,7 @@
             cover
           />
 
-          <v-card-title class="text-primary font-weight-black">
+          <v-card-title class="text-primary font-weight-black pa-0">
             {{ item.title }}
           </v-card-title>
 
