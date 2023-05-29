@@ -41,7 +41,7 @@
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-nuxt": "4.0.0",
     "firebase-admin": "11.8.0",
-    "nuxt": "^3.5.1",
+    "nuxt": "^3.5.2",
     "sass": "^1.62.1",
     "typescript": "^5.0.4",
     "vue-eslint-parser": "^9.3.0"

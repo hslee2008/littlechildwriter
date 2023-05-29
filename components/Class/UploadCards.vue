@@ -58,17 +58,18 @@
           <v-radio key="비디오" label="비디오" value="파일 비디오" />
         </v-radio-group>
 
-        <v-overlay v-model="progress">
-          <v-progress-circular indeterminate size="64" />
+        <v-overlay
+          v-model="progress"
+          class="d-flex align-center justify-center"
+        >
+          <v-progress-circular indeterminate size="64" color="primary" />
         </v-overlay>
 
         <v-file-input
           ref="file"
           v-model="post.file"
-          color="deep-purple accent-4"
           counter
           label="File input"
-          multiple
           variant="underlined"
           placeholder="Select your files"
           prepend-icon="mdi-paperclip"
@@ -76,13 +77,7 @@
           @update:model-value="UploadFile($event)"
         >
           <template #selection="{ fileNames }">
-            <v-chip
-              v-for="name in fileNames"
-              :key="name"
-              color="deep-purple accent-4"
-              label
-              size="small"
-            >
+            <v-chip v-for="name in fileNames" :key="name" label size="small">
               {{ name }}
             </v-chip>
           </template>

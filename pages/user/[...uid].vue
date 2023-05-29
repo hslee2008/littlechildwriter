@@ -42,14 +42,21 @@
       </v-window-item>
 
       <v-window-item :value="2">
-        <UserStats :uid="uid" :target-user="targetUser" :book-count="bookCount" />
+        <UserStats
+          :uid="uid"
+          :target-user="targetUser"
+          :book-count="bookCount"
+        />
       </v-window-item>
     </v-window>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
 const { $db } = useNuxtApp()
+const { mobile } = useDisplay()
 
 const userInfo = User()
 const route = useRoute()
@@ -78,11 +85,21 @@ onBeforeMount(() => {
     .once('value')
     .then((res: any) => res.val())
     .then(
-      ({ libris, displayName, photoURL, bio, subscriber, featured }: any) => {
+      ({
+        libris,
+        displayName,
+        photoURL,
+        bio,
+        subscribe,
+        subscriber,
+        featured
+      }: any) => {
         targetUser.value = {
           libris,
           displayName,
           photoURL,
+          subscribe,
+          subscriber,
           bio
         }
 
@@ -101,7 +118,7 @@ onMounted(() => {
     .ref('/contents/')
     .orderByChild('uid')
     .equalTo(uid)
-    .limitToLast(5)
+    .limitToLast(mobile ? 4 : 5)
     .once('value')
     .then((res: any) => res.val())
     .then((res: any) => {

@@ -19,7 +19,7 @@
         rounded="lg"
         variant="tonal"
         color="red"
-        class="rounded-xl"
+        class="rounded-xl mt-4"
         @click="subscribe"
       >
         {{ subscribed ? '구독 취소' : '구독' }}

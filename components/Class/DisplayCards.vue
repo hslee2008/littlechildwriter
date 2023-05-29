@@ -11,6 +11,7 @@
       <v-expansion-panel
         v-for="(category, title) in classInfo.contents"
         :key="title"
+        :bg-color="title === '기타' ? 'primary' : ''"
       >
         <v-expansion-panel-title class="elevation-0">
           {{ title.toString().replaceAll('_', ' - ') }}
@@ -245,11 +246,16 @@
 
 <script setup>
 const userInfo = User()
+const other = ref([])
 
-defineProps({
+const props = defineProps({
   classInfo: {
     type: Object,
     required: true
   }
+})
+
+onMounted(async () => {
+  other.value = await props.classInfo.contents.find(({ key }) => key === '기타')
 })
 </script>

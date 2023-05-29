@@ -1,12 +1,17 @@
 <template>
   <div>
-    <v-parallax :src="image" height="500" class="parallax">
+    <v-parallax
+      :src="image"
+      :height="y === 0 ? height - 64 : 450"
+      class="parallax align-center"
+      scale="contain"
+    >
       <v-col class="d-flex justify-center align-center">
         <div>
           <div class="text-center mb-5 mt-3 button">
             <v-btn
               v-if="userInfo.loggedIn"
-              rounded="lg"
+              rounded="xl"
               to="/book/post"
               color="primary"
               min-width="300"
@@ -16,7 +21,7 @@
             </v-btn>
             <v-btn
               v-else
-              rounded="lg"
+              rounded="xl"
               to="/account/login"
               color="primary"
               min-width="300"
@@ -27,9 +32,9 @@
           </div>
 
           <v-card
-            class="d-flex justify-center align-center rounded-lg ma-auto text-center"
-            height="300"
-            max-width="500"
+            class="d-flex justify-center align-center rounded-xl ma-auto text-center"
+            height="250"
+            max-width="450"
             :elevation="5"
           >
             <div>
@@ -56,7 +61,7 @@
               알림판
             </v-btn>
           </div>
-          <div class="d-flex justify-center">
+          <div class="d-flex justify-center mb-10">
             <v-btn
               rounded="lg"
               to="/debate/home"
@@ -97,7 +102,7 @@
       </v-window-item>
     </v-window>
 
-    <v-card v-if="pin" class="mx-3 my-10" color="#385F73">
+    <v-card v-if="pin.length > 0" class="mx-3 my-10" color="#385F73">
       <v-card-title>
         핀
         <v-tooltip right>
@@ -133,9 +138,14 @@
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
+import { useWindowScroll, useWindowSize } from '@vueuse/core'
 
 const { $db } = useNuxtApp()
 const { mobile } = useDisplay()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { x, y } = useWindowScroll()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { width, height } = useWindowSize()
 
 const userInfo = User()
 const time = ref<any>([])
@@ -162,6 +172,8 @@ onMounted(() => {
     .once('value', (s: any) => (time.value = Object.values(s.val()).reverse()))
 
   $db.ref('/pin').once('value', (s: any) => {
+    if (!s.val()) return
+
     const data = s.val()
 
     pin.value = data

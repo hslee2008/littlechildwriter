@@ -1,6 +1,8 @@
 <template>
   <v-app>
     <NuxtLayout>
+      <NuxtLoadingIndicator />
+
       <v-app-bar fixed clipped-left class="px-3">
         <template #prepend>
           <v-app-bar-nav-icon @click="drawer = !drawer" />
@@ -52,13 +54,13 @@
                 </v-list-item>
               </v-list>
               <div v-else>
-                <v-card-text class="text-center text-grey">
-                  알림이 없습니다.
-                </v-card-text>
+                <v-card class="text-center text-grey">
+                  <v-card-text>댓글이 없습니다.</v-card-text>
+                </v-card>
               </div>
 
               <v-card-actions>
-                <v-spacer />
+                <v-divider />
 
                 <v-btn
                   rounded="lg"
