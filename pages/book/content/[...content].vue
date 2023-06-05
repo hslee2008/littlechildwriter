@@ -428,8 +428,19 @@ const Like = () => {
   }
 }
 
+const FixLike = () => {
+  if (
+    post.value.likes !==
+    Keys(Array.from(new Set(Keys(post.value.liked)))).length
+  ) {
+    post.value.likes = Keys(Array.from(new Set(Keys(post.value.liked)))).length
+    $db.ref(`/contents/${post.value.time}/likes`).set(post.value.likes)
+  }
+}
+
 onBeforeMount(async () => {
   await Content()
+  FixLike()
   Suggestion()
 })
 

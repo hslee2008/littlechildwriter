@@ -102,7 +102,7 @@
       </v-window-item>
     </v-window>
 
-    <v-card v-if="pin.length > 0" class="mx-3 my-10" color="#385F73">
+    <v-card class="mx-3 my-10" color="#385F73">
       <v-card-title>
         핀
         <v-tooltip right>
@@ -114,9 +114,16 @@
           <span> 설정에서 Libris를 사용해서 핀을 설정할 수 있습니다. </span>
         </v-tooltip>
       </v-card-title>
-      <v-card-text>
-        <div v-for="(item, i) in pinnedBooks" :key="i">
-          <BookSingle :data="item" :colored="true" />
+
+      <v-card-text v-if="Keys(pin).length > 0">
+        <div v-for="(item, i) in Values(pin)" :key="i">
+          <BookSingle :data="item.book" :colored="true" />
+        </div>
+      </v-card-text>
+      <v-card-text v-else>
+        <div class="text-center">
+          <v-icon size="100">mdi-pin-off-outline</v-icon>
+          <div>핀이 없습니다.</div>
         </div>
       </v-card-text>
     </v-card>
