@@ -83,7 +83,7 @@ export default defineNuxtConfig({
     'vuetify/lib/styles/main.sass',
     '@mdi/font/css/materialdesignicons.min.css'
   ],
-  plugins: ['/plugins/firebase'],
+  plugins: ['/plugins/firebase.ts'],
   modules: [
     (
       _: any,
