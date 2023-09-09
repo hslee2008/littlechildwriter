@@ -267,7 +267,7 @@ const schoolBookSearch = async () => {
   )
 
   await fetch(
-    `https://little-child-writer-school-book-search.onrender.com/?book=${school.value.title}&school=${school.value.name}&local=${school.value.local}`
+    `https://ill-ruby-coyote-yoke.cyclic.cloud/?book=${school.value.title}&school=${school.value.name}&local=${school.value.local}`
   )
     .then(res => res.json())
     .then(json => {
