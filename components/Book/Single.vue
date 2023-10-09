@@ -20,9 +20,7 @@
         </v-card-subtitle>
 
         <v-card-text>
-          <p v-for="(p, i) in data.content.split('<br>')" :key="`${p}-${i}`">
-            {{ p }}<br />
-          </p>
+          {{ ToDisplay(data.content) }}
         </v-card-text>
       </div>
     </v-card-text>

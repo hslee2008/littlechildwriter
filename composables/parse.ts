@@ -3,7 +3,10 @@ const ToHTML = (text: string) => {
 }
 
 const ToDisplay = (text: string) => {
-  return text.replaceAll('<br />', '\n').replaceAll('<br>', '\n')
+  return text
+    .replaceAll('<br />', '\n')
+    .replaceAll('<br>', '\n')
+    .replaceAll('<br/>', '\n')
 }
 
 const ToSplit = (text: string) => {
