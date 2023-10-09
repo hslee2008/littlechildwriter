@@ -38,38 +38,38 @@
         opacity: 0;
         left: 10vw;
         width: 80vw;
-        animation: switch 32s linear infinite;
+        animation: switch 3s linear infinite;
       }
 
       #fly-in div:nth-child(2) {
-        animation-delay: 4s;
+        animation-delay: 0.4s;
       }
       #fly-in div:nth-child(3) {
-        animation-delay: 8s;
+        animation-delay: 0.8s;
       }
       #fly-in div:nth-child(4) {
-        animation-delay: 12s;
+        animation-delay: 1.2s;
       }
       #fly-in div:nth-child(5) {
-        animation-delay: 16s;
+        animation-delay: 1.6s;
       }
       #fly-in div:nth-child(6) {
-        animation-delay: 20s;
+        animation-delay: 2s;
       }
       #fly-in div:nth-child(7) {
-        animation-delay: 24s;
+        animation-delay: 2.4s;
       }
       #fly-in div:nth-child(8) {
-        animation-delay: 28s;
+        animation-delay: 2.8s;
       }
-
+      
       @keyframes switch {
         0% {
           opacity: 0;
           filter: blur(20px);
           transform: scale(12);
         }
-        3% {
+        5% {
           opacity: 1;
           filter: blur(0);
           transform: scale(1);
@@ -79,13 +79,10 @@
           filter: blur(0);
           transform: scale(0.9);
         }
-        13% {
+        15% {
           opacity: 0;
           filter: blur(10px);
           transform: scale(0.1);
-        }
-        80% {
-          opacity: 0;
         }
         100% {
           opacity: 0;
