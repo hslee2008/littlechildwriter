@@ -7,7 +7,11 @@
       {{ (otherInfo.volumeInfo?.authors || []).join(', ') }}
     </v-card-subtitle>
 
-    <v-img :src="post.image" width="200" class="mx-auto my-5 rounded-lg pointer">
+    <v-img
+      :src="post.image"
+      width="200"
+      class="mx-auto my-5 rounded-lg pointer"
+    >
       <v-bottom-sheet v-model="sheet" inset activator="parent" scrollable>
         <v-card class="pa-5">
           <v-row class="d-flex justify-center align-center">
@@ -132,7 +136,6 @@
 </template>
 
 <script setup>
-import { VBottomSheet } from 'vuetify/labs/VBottomSheet'
 import { useDisplay } from 'vuetify'
 
 const { mobile } = useDisplay()
@@ -140,12 +143,12 @@ const { mobile } = useDisplay()
 defineProps({
   post: {
     type: Object,
-    required: true
+    required: true,
   },
   otherInfo: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const sheet = ref(false)
