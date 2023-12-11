@@ -8,6 +8,7 @@ export default defineNuxtConfig({
 
   app: {
     keepalive: true,
+    baseURL: '/',
     head: {
       titleTemplate: '%s',
       title: 'Little 작가',
